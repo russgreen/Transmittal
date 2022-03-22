@@ -1,0 +1,209 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	<PropertyGroup>
+		<Configurations>2019;2020;2021;2022;2023</Configurations>
+		<Platforms>x64</Platforms>
+		<Description>Revit addin to manage drawing sheet transmittals</Description>
+		<Copyright>Copyright © 2022 Russ Green. All rights Reserved</Copyright>
+		<Version>0.0.1</Version>
+		<LangVersion>10</LangVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<!--<PropertyGroup Condition="'$(Configuration)' == '2018'">
+    <TargetFramework>net461</TargetFramework>
+    <Optimize>false</Optimize>
+  </PropertyGroup>-->
+	<PropertyGroup Condition="'$(Configuration)' == '2019'">
+		<TargetFramework>net47</TargetFramework>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == '2020'">
+		<TargetFramework>net471</TargetFramework>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == '2021'">
+		<TargetFramework>net48</TargetFramework>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == '2022'">
+		<TargetFramework>net48</TargetFramework>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == '2023'">
+		<TargetFramework>net48</TargetFramework>
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' &lt;= '2021'">
+		<DefineConstants>DEBUG;REVIT$(Configuration);PREFORGETYPEID</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' &gt;= '2022'">
+		<DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!-- Forcibly set platform to 'x64' and ignore architecture-related problems -->
+		<PlatformTarget>x64</PlatformTarget>
+		<Platforms>x64</Platforms>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+
+		<!-- Force the project to use the legacy debugger engine -->
+		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>
+
+		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
+        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
+		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
+
+		<!-- Multiple targets can cause obj folder locking by concurrent builds -->
+		<BuildInParallel>false</BuildInParallel>
+
+		<!-- Override 'OutputPath'  -->
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)</OutputPath>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="AdWindows">
+			<HintPath>$(Path_DLL_API)\$(Configuration)\AdWindows.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="RevitAPI">
+			<HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPI.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="RevitAPIUI">
+			<HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPIUI.dll</HintPath>
+			<EmbedInteropTypes>false</EmbedInteropTypes>
+			<Private>false</Private>
+		</Reference>
+		<!-- 
+    <Reference Include="UIFramework">
+      <HintPath>$(Path_DLL_API)\$(Configuration)\UIFramework.dll</HintPath>
+      <EmbedInteropTypes>false</EmbedInteropTypes>
+      <Private>false</Private>
+    </Reference>
+    -->
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+		<Reference Include="System.Printing" />
+		<Reference Include="WindowsBase" />
+	</ItemGroup>
+
+	<!--
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
+  </ItemGroup>
+  -->
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)' == '2019'">
+		<PackageReference Include="Revit.ES.Extension" Version="2019.0.7721.26383" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == '2020'">
+		<PackageReference Include="Revit.ES.Extension" Version="2020.0.7721.26815" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == '2021'">
+		<PackageReference Include="Revit.ES.Extension" Version="2021.0.7721.26852" />
+	</ItemGroup>
+	
+	<!--Using a local build of Revit.ES.Extension becuase the NUGET package is not up to date-->
+	<ItemGroup Condition="'$(Configuration)' == '2022'">
+		<Reference Include="Revit.ES.Extension">
+			<HintPath>..\..\VCExtensibleStorageExtension\Revit.ES.Extension\bin\RELEASE 2022\Revit.ES.Extension.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == '2023'">
+		<Reference Include="Revit.ES.Extension">
+			<HintPath>..\..\VCExtensibleStorageExtension\Revit.ES.Extension\bin\RELEASE 2023\Revit.ES.Extension.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+
+	<ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.56" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.56" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Update="Transmittal.addin">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<!-- Build debug manifest at build time -->
+	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
+		<ItemGroup>
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\Transmittal.addin" />
+		</ItemGroup>
+		<ReplaceFileText InputFilename="Transmittal.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>
+
+	<!-- Clean up debug manifest -->
+	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
+		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\Transmittal.addin" />
+	</Target>
+
+	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<InputFilename ParameterType="System.String" Required="true" />
+			<OutputFilename ParameterType="System.String" Required="true" />
+			<MatchExpression ParameterType="System.String" Required="true" />
+			<ReplacementText ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Reference Include="System.Core" />
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Core'" TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<InputFilename ParameterType="System.String" Required="true" />
+			<OutputFilename ParameterType="System.String" Required="true" />
+			<MatchExpression ParameterType="System.String" Required="true" />
+			<ReplacementText ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+</Project>
