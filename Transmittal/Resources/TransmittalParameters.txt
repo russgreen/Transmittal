@@ -1,0 +1,20 @@
+# This is a Revit shared parameter file.
+# Do not edit manually.
+*META	VERSION	MINVERSION
+META	2	1
+*GROUP	ID	NAME
+GROUP	4	Sheet Information
+GROUP	7	Project Parameters
+*PARAM	GUID	NAME	DATATYPE	DATACATEGORY	GROUP	VISIBLE	DESCRIPTION	USERMODIFIABLE	HIDEWHENNOVALUE
+PARAM	dafd0e0e-37a1-4028-966f-6a2060de079d	TransmittalDB	TEXT		7	1		1	0
+PARAM	39a8f82d-9c51-404d-936f-76f8b56876c5	TransmittalFilenameFilter	TEXT		7	1		1	0
+PARAM	8a995d7e-0e5c-40d3-9f67-2252ff309b98	TransmittalUseExtranet	YESNO		7	1		1	0
+PARAM	722d4894-9345-4ca8-9290-b6ccdccc6994	TransmittalSaveLocation	TEXT		7	1		1	0
+PARAM	eb57d296-7d9c-459f-ace1-0bdaf95c3b29	DocumentType	TEXT		4	1		1	0
+PARAM	e45313b7-8419-4803-92f0-68558f9278b2	Originator	TEXT		7	1		1	0
+PARAM	ce8c18ee-3b90-4f42-8938-ae90e3af5a6a	ProjectIdentifier	TEXT		7	1		1	0
+PARAM	67fcb5e8-4ffb-43b8-8ec9-c664fd997267	Role	TEXT		7	1		1	0
+PARAM	e51af162-9025-48a0-bd2c-bc833fab0db0	SheetLevel	TEXT		4	1		1	0
+PARAM	9c16757c-175a-451a-a5d4-c4a6ff291acb	SheetVolume	TEXT		4	1		1	0
+PARAM	3304f169-ceb9-40b9-a69d-d8f3eb0a3fb9	SheetStatus	TEXT		4	1		1	0
+PARAM	4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a	SheetStatusDescription	TEXT		4	1		1	0
