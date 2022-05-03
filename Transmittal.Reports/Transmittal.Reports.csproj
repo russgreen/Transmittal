@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+	  <TargetFramework>net48</TargetFramework>
+	  <UseWindowsForms>true</UseWindowsForms>
+	  <LangVersion>10</LangVersion>
+	  <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Reports\ProjectDirectory.rdlc" />
+    <None Remove="Reports\TransmittalSheet.rdlc" />
+    <None Remove="Reports\TransmittalSheetISO.rdlc" />
+    <None Remove="Reports\TransmittalSummary.rdlc" />
+    <None Remove="Reports\TransmittalSummaryISO.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
+    <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
+    <EmbeddedResource Include="Reports\TransmittalSheetISO.rdlc" />
+    <EmbeddedResource Include="Reports\TransmittalSummary.rdlc" />
+    <EmbeddedResource Include="Reports\TransmittalSummaryISO.rdlc" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1484.0" />
+		<!--<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.15" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+	</ItemGroup>
+	
+</Project>

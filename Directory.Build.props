@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <Company>Russell Green</Company>
+    <!--<PackageVersion>6.0.0</PackageVersion>
+    <VersionPrefix>$(PackageVersion)</VersionPrefix>
+    <VersionSuffix>BETA</VersionSuffix>
+    <ApplicationVersion>$(PackageVersion).0</ApplicationVersion>
+    <FileVersion>$(PackageVersion).0</FileVersion>
+    <InformationalVersion>$(PackageVersion).0</InformationalVersion>-->
+
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+
+    <Authors>Russ Green</Authors>
+    <Title>Transmittal</Title>
+    <Copyright>Copyright © Russ Green</Copyright>
+    
+    <Description>Transmittal is a tool to assist is consistently creating and recording document transmittals</Description>
+    
+    <!--<SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../sn.snk</AssemblyOriginatorKeyFile> -->
+   </PropertyGroup> 
+</Project>

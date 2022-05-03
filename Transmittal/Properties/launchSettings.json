@@ -29,12 +29,6 @@
       "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2019\\Revit.exe",
       "commandLineArgs": "",
       "use64Bit": true
-    },
-    "Revit 2018": {
-      "commandName": "Executable",
-      "executablePath": "%ProgramW6432%\\Autodesk\\Revit 2018\\Revit.exe",
-      "commandLineArgs": "",
-      "use64Bit": true
     }
   }
  }

@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Transmittal.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CommonFormBackColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Control</Value>
+    </Setting>
+    <Setting Name="CommonFormFont" Type="System.Drawing.Font" Scope="Application">
+      <Value Profile="(Default)">Segoe UI, 9pt</Value>
+    </Setting>
+    <Setting Name="CommonFormForeColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 0, 64</Value>
+    </Setting>
+    <Setting Name="CommonSelectionColour" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 114, 198</Value>
+    </Setting>
+    <Setting Name="GridRowHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">21</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

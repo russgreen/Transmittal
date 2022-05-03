@@ -1,8 +1,5 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI.Events;
-using System;
 
 namespace Transmittal;
 internal class AppDocEvents

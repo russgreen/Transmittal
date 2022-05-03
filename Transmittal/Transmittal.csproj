@@ -3,18 +3,17 @@
 		<Configurations>2019;2020;2021;2022;2023</Configurations>
 		<Platforms>x64</Platforms>
 		<Description>Revit addin to manage drawing sheet transmittals</Description>
-		<Copyright>Copyright © 2022 Russ Green. All rights Reserved</Copyright>
-		<Version>0.0.1</Version>
-		<LangVersion>10</LangVersion>
-		<NeutralLanguage>en</NeutralLanguage>
-		<UseWPF>true</UseWPF>
+		<LangVersion>10</LangVersion>		
 		<ImplicitUsings>enable</ImplicitUsings>
+		<!--<NeutralLanguage>en</NeutralLanguage>
+		<UseWPF>true</UseWPF>-->		
+		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
 	<!--<PropertyGroup Condition="'$(Configuration)' == '2018'">
     <TargetFramework>net461</TargetFramework>
     <Optimize>false</Optimize>
-  </PropertyGroup>-->
+    </PropertyGroup>-->
 	<PropertyGroup Condition="'$(Configuration)' == '2019'">
 		<TargetFramework>net47</TargetFramework>
 		<Optimize>false</Optimize>
@@ -68,7 +67,20 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>bin\$(Configuration)</OutputPath>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<TargetFramework>net48</TargetFramework>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Add.png" />
+	  <None Remove="Resources\Archive_Button.png" />
+	  <None Remove="Resources\ContactDetails.png" />
+	  <None Remove="Resources\DataMerge.png" />
+	  <None Remove="Resources\Delete.png" />
+	  <None Remove="Resources\Directory_Button.png" />
+	  <None Remove="Resources\GreenCheck.png" />
+	  <None Remove="Resources\Report.png" />
+	  <None Remove="Resources\Settings_Button.png" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="AdWindows">
@@ -98,6 +110,7 @@
 	<ItemGroup>
 		<Reference Include="PresentationCore" />
 		<Reference Include="PresentationFramework" />
+		<Reference Include="System.ComponentModel.DataAnnotations" />
 		<Reference Include="System.Printing" />
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
@@ -110,6 +123,15 @@
   -->
 
 	<ItemGroup>
+		<EmbeddedResource Include="Resources\Add.png" />
+		<EmbeddedResource Include="Resources\Archive_Button.png" />
+		<EmbeddedResource Include="Resources\ContactDetails.png" />
+		<EmbeddedResource Include="Resources\DataMerge.png" />
+		<EmbeddedResource Include="Resources\Delete.png" />
+		<EmbeddedResource Include="Resources\Directory_Button.png" />
+		<EmbeddedResource Include="Resources\GreenCheck.png" />
+		<EmbeddedResource Include="Resources\Report.png" />
+		<EmbeddedResource Include="Resources\Settings_Button.png" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 	</ItemGroup>
 
@@ -137,21 +159,58 @@
 
 
 	<ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.3" />
-    <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.56" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.56" />
+    <PackageReference Include="Krypton.Toolkit.Suite.Extended.Wizard" Version="65.22.4.94" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="20.1.0.50" />
+    <PackageReference Include="Syncfusion.Tools.Windows" Version="20.1.0.50" />
   </ItemGroup>
 
+
 	<ItemGroup>
+	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Properties\Settings.settings">
+		  <Generator>SettingsSingleFileGenerator</Generator>
+		  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
 		<None Update="Transmittal.addin">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+	
 	<!-- Build debug manifest at build time -->
 	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
 		<ItemGroup>
