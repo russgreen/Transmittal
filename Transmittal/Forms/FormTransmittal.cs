@@ -151,7 +151,7 @@ public partial class FormTransmittal : System.Windows.Forms.Form, IStatusRequest
 
     private void wizardControl1_FinishButton_Click(object sender, EventArgs e)
     {
-        Stream _imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Transmittal.Resources.GreenCheck.png");
+        System.IO.Stream _imageStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Transmittal.Resources.GreenCheck.png");
         try
         {
             // disable the finish button so its not clicked again.
