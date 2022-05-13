@@ -11,7 +11,6 @@ using Transmittal.Library.Services;
 using Transmittal.Models;
 using Transmittal.Requesters;
 using Transmittal.Services;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Transmittal.ViewModels;
 
@@ -635,6 +634,7 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                             }
 
                             DrawingSheetsProcessed += 1;
+                            
 
                             // to allow cancel button working
                             Application.DoEvents();

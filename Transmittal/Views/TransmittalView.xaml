@@ -10,8 +10,12 @@
         x:Class="Transmittal.Views.TransmittalView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Height="620" Width="860" 
-        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="860" MinHeight="620" WindowStyle="SingleBorderWindow">
+        Title="{Binding WindowTitle}"  
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" 
+        Height="620" Width="860" 
+        MinHeight="620" MinWidth="860" 
+        WindowStyle="SingleBorderWindow">
     <Window.DataContext>
         <viewModels:TransmittalViewModel />
     </Window.DataContext>
@@ -43,6 +47,8 @@
             </Setter>
         </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
+        <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
     </Window.Resources>
 
     <Grid>
@@ -302,7 +308,7 @@
                             IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
                             Click="Button_AddToDirectory_Click" >
                         <Button.Background>
-                            <ImageBrush ImageSource="/Transmittal;component/Resources/Add.png"/>
+                            <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
                         </Button.Background>
                     </Button>
 
@@ -392,16 +398,16 @@
                     <TextBlock Text="{Binding SheetTaskProgressLabel}"/>
 
                     <TextBlock Text="Step 1 - Generate drawing files / printing" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Margin="2,25,0,0" />
-                    <Image Width="40" Height="40" 
-                           Source="/Transmittal;component/Resources/GreenCheck.png"
+                    <Image x:Name="ImageStepOne"  Width="40" Height="40" 
+                           Source="{Binding Mode=OneWay, Source={StaticResource GreenCheckImage}}"
                            Visibility="{Binding StepOneComplete, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Text="Step 2 - Add transmittal to database" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" />
-                    <Image Width="40" Height="40" 
-                           Source="/Transmittal;component/Resources/GreenCheck.png"
+                    <Image x:Name="ImageStepTwo" Width="40" Height="40" 
+                           Source="{Binding Mode=OneWay, Source={StaticResource GreenCheckImage}}"
                            Visibility="{Binding StepTwoComplete, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Text="Step 3 - Generate transmittal sheet" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" />
-                    <Image Width="40" Height="40" 
-                           Source="/Transmittal;component/Resources/GreenCheck.png"
+                    <Image  x:Name="ImageStepThree" Width="40" Height="40" 
+                           Source="{Binding Mode=OneWay, Source={StaticResource GreenCheckImage}}"
                            Visibility="{Binding StepThreeComplete, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
             </syncfusion:WizardPage>

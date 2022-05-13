@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Windows;
 using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
 using System;
@@ -25,12 +26,12 @@ namespace Transmittal.Views;
 /// </summary>
 public partial class TransmittalView : Window
 {
-    private ViewModels.TransmittalViewModel _viewModel;
+    private readonly ViewModels.TransmittalViewModel _viewModel;
 
     public TransmittalView()
     {
         InitializeComponent();
-
+           
         _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
 
@@ -78,19 +79,19 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
     {
-        TaskDialogButton yesButton = new TaskDialogButton(ButtonType.Yes);
-        TaskDialogButton noButton = new TaskDialogButton(ButtonType.No);
+        Ookii.Dialogs.Wpf.TaskDialogButton yesButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Yes);
+        Ookii.Dialogs.Wpf.TaskDialogButton noButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.No);
 
         Ookii.Dialogs.Wpf.TaskDialog dialog = new Ookii.Dialogs.Wpf.TaskDialog()
         {
             WindowTitle = "Cancel Transmittal",
             MainInstruction = "Are you sure you want to cancel?",
-            MainIcon = TaskDialogIcon.Information,
+            MainIcon = Ookii.Dialogs.Wpf.TaskDialogIcon.Information,
             ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.Standard,
             Buttons = { yesButton, noButton }
         };
 
-        TaskDialogButton button = dialog.ShowDialog(this);
+        Ookii.Dialogs.Wpf.TaskDialogButton button = dialog.ShowDialog(this);
         if (button == yesButton)
         {
             _viewModel.AbortFlag = true;
