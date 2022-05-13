@@ -351,3 +351,8 @@ MigrationBackup/
 
 # Syncfusion License Key 
 SyncfusionKey.txt
+
+# Advanced Installer
+Installer/*.back.aip
+Installer/Transmittal-cache/*
+Installer/Transmittal-SetupFiles/*

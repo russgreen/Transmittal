@@ -5,6 +5,7 @@ using System.Reflection;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
+using System.IO;
 
 namespace Transmittal.Reports
 {

@@ -11,8 +11,11 @@ internal class CommandTransmittalsArchive : IExternalCommand
     {
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
-        var form = new Forms.FormArchive(commandData);
-        form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+        //var form = new Forms.FormArchive(commandData);
+        //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+
+        var newView = new Views.ArchiveView();
+        newView.ShowDialog();
 
         return Result.Succeeded;
     }

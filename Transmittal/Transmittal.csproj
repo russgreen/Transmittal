@@ -1,46 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 	<PropertyGroup>
-		<Configurations>2019;2020;2021;2022;2023</Configurations>
+		<Configurations>Debug R22;Debug R23</Configurations>
+		<Configurations>$(Configurations);Release R22;Release R23</Configurations>
 		<Platforms>x64</Platforms>
 		<Description>Revit addin to manage drawing sheet transmittals</Description>
 		<LangVersion>10</LangVersion>		
 		<ImplicitUsings>enable</ImplicitUsings>
-		<!--<NeutralLanguage>en</NeutralLanguage>
-		<UseWPF>true</UseWPF>-->		
+		<NeutralLanguage>en</NeutralLanguage>
+		<UseWPF>true</UseWPF>		
 		<UseWindowsForms>true</UseWindowsForms>
+		<TargetFramework>net48</TargetFramework>
 	</PropertyGroup>
 
-	<!--<PropertyGroup Condition="'$(Configuration)' == '2018'">
-    <TargetFramework>net461</TargetFramework>
-    <Optimize>false</Optimize>
-    </PropertyGroup>-->
-	<PropertyGroup Condition="'$(Configuration)' == '2019'">
-		<TargetFramework>net47</TargetFramework>
-		<Optimize>false</Optimize>
+	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == '2020'">
-		<TargetFramework>net471</TargetFramework>
-		<Optimize>false</Optimize>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == '2021'">
-		<TargetFramework>net48</TargetFramework>
-		<Optimize>false</Optimize>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == '2022'">
-		<TargetFramework>net48</TargetFramework>
-		<Optimize>false</Optimize>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == '2023'">
-		<TargetFramework>net48</TargetFramework>
-		<Optimize>false</Optimize>
+	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
+		<Optimize>true</Optimize>
+		<DebugType>none</DebugType>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)' &lt;= '2021'">
-		<DefineConstants>DEBUG;REVIT$(Configuration);PREFORGETYPEID</DefineConstants>
+	<PropertyGroup Condition="$(Configuration.Contains('R22'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2022</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2022</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
+		<RevitVersion>2023</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)' &gt;= '2022'">
-		<DefineConstants>DEBUG;REVIT$(Configuration)</DefineConstants>
+	<PropertyGroup>
+		<AssemblyName>Transmittal_$(RevitVersion)</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -48,13 +40,13 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<!-- Forcibly set platform to 'x64' and ignore architecture-related problems -->
+		<!-- Forcibly set platform to 'x64' and ignore architecture-related problems 
 		<PlatformTarget>x64</PlatformTarget>
 		<Platforms>x64</Platforms>
-		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>-->
 
-		<!-- Force the project to use the legacy debugger engine -->
-		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>
+		<!-- Force the project to use the legacy debugger engine 
+		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>-->
 
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
         e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
@@ -65,11 +57,47 @@
 
 		<!-- Override 'OutputPath'  -->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>bin\$(Configuration)</OutputPath>
+		<!--<OutputPath>bin\$(RevitVersion)</OutputPath>-->
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<TargetFramework>net48</TargetFramework>
+		
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Forms\FormArchive.cs" />
+	  <Compile Remove="Forms\FormArchive.Designer.cs" />
+	  <Compile Remove="Forms\FormDirectory.cs" />
+	  <Compile Remove="Forms\FormDirectory.Designer.cs" />
+	  <Compile Remove="Forms\FormNewCompany.cs" />
+	  <Compile Remove="Forms\FormNewCompany.Designer.cs" />
+	  <Compile Remove="Forms\FormNewPerson.cs" />
+	  <Compile Remove="Forms\FormNewPerson.Designer.cs" />
+	  <Compile Remove="Forms\FormProjectDirectoryNew.cs" />
+	  <Compile Remove="Forms\FormProjectDirectoryNew.Designer.cs" />
+	  <Compile Remove="Forms\FormRevisionNew.cs" />
+	  <Compile Remove="Forms\FormRevisionNew.Designer.cs" />
+	  <Compile Remove="Forms\FormRevisions.cs" />
+	  <Compile Remove="Forms\FormRevisions.Designer.cs" />
+	  <Compile Remove="Forms\FormSettings.cs" />
+	  <Compile Remove="Forms\FormSettings.Designer.cs" />
+	  <Compile Remove="Forms\FormStatus.cs" />
+	  <Compile Remove="Forms\FormStatus.Designer.cs" />
+	  <Compile Remove="Forms\FormTransmittal.cs" />
+	  <Compile Remove="Forms\FormTransmittal.Designer.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="Forms\FormArchive.resx" />
+	  <EmbeddedResource Remove="Forms\FormDirectory.resx" />
+	  <EmbeddedResource Remove="Forms\FormNewCompany.resx" />
+	  <EmbeddedResource Remove="Forms\FormNewPerson.resx" />
+	  <EmbeddedResource Remove="Forms\FormProjectDirectoryNew.resx" />
+	  <EmbeddedResource Remove="Forms\FormRevisionNew.resx" />
+	  <EmbeddedResource Remove="Forms\FormRevisions.resx" />
+	  <EmbeddedResource Remove="Forms\FormSettings.resx" />
+	  <EmbeddedResource Remove="Forms\FormStatus.resx" />
+	  <EmbeddedResource Remove="Forms\FormTransmittal.resx" />
+	</ItemGroup>
+	
 	<ItemGroup>
 	  <None Remove="Resources\Add.png" />
 	  <None Remove="Resources\Archive_Button.png" />
@@ -80,21 +108,22 @@
 	  <None Remove="Resources\GreenCheck.png" />
 	  <None Remove="Resources\Report.png" />
 	  <None Remove="Resources\Settings_Button.png" />
+	  <None Remove="Resources\Transmittal.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="AdWindows">
-			<HintPath>$(Path_DLL_API)\$(Configuration)\AdWindows.dll</HintPath>
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\AdWindows.dll</HintPath>
 			<EmbedInteropTypes>false</EmbedInteropTypes>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="RevitAPI">
-			<HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPI.dll</HintPath>
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPI.dll</HintPath>
 			<EmbedInteropTypes>false</EmbedInteropTypes>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="RevitAPIUI">
-			<HintPath>$(Path_DLL_API)\$(Configuration)\RevitAPIUI.dll</HintPath>
+			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
 			<EmbedInteropTypes>false</EmbedInteropTypes>
 			<Private>false</Private>
 		</Reference>
@@ -115,55 +144,27 @@
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
 
-	<!--
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
-  </ItemGroup>
-  -->
-
 	<ItemGroup>
-		<EmbeddedResource Include="Resources\Add.png" />
+		<Resource Include="Resources\Add.png" />
 		<EmbeddedResource Include="Resources\Archive_Button.png" />
-		<EmbeddedResource Include="Resources\ContactDetails.png" />
-		<EmbeddedResource Include="Resources\DataMerge.png" />
-		<EmbeddedResource Include="Resources\Delete.png" />
+		<Resource Include="Resources\ContactDetails.png" />
+		<Resource Include="Resources\DataMerge.png" />
+		<Resource Include="Resources\Delete.png" />
 		<EmbeddedResource Include="Resources\Directory_Button.png" />
-		<EmbeddedResource Include="Resources\GreenCheck.png" />
-		<EmbeddedResource Include="Resources\Report.png" />
+		<Resource Include="Resources\GreenCheck.png" />
+		<Resource Include="Resources\Report.png" />
 		<EmbeddedResource Include="Resources\Settings_Button.png" />
+		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == '2019'">
-		<PackageReference Include="Revit.ES.Extension" Version="2019.0.7721.26383" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)' == '2020'">
-		<PackageReference Include="Revit.ES.Extension" Version="2020.0.7721.26815" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)' == '2021'">
-		<PackageReference Include="Revit.ES.Extension" Version="2021.0.7721.26852" />
-	</ItemGroup>
-	
-	<!--Using a local build of Revit.ES.Extension becuase the NUGET package is not up to date-->
-	<ItemGroup Condition="'$(Configuration)' == '2022'">
-		<Reference Include="Revit.ES.Extension">
-			<HintPath>..\..\VCExtensibleStorageExtension\Revit.ES.Extension\bin\RELEASE 2022\Revit.ES.Extension.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)' == '2023'">
-		<Reference Include="Revit.ES.Extension">
-			<HintPath>..\..\VCExtensibleStorageExtension\Revit.ES.Extension\bin\RELEASE 2023\Revit.ES.Extension.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-
 	<ItemGroup>
-    <PackageReference Include="Krypton.Toolkit.Suite.Extended.Wizard" Version="65.22.4.94" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="20.1.0.50" />
-    <PackageReference Include="Syncfusion.Tools.Windows" Version="20.1.0.50" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.52" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.52" />
   </ItemGroup>
 
 
@@ -199,8 +200,12 @@
 		  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
 		</None>
 		<None Update="Transmittal.addin">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Forms\" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
@@ -214,7 +219,7 @@
 	<!-- Build debug manifest at build time -->
 	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
 		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\Transmittal.addin" />
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
 		</ItemGroup>
 		<ReplaceFileText InputFilename="Transmittal.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
@@ -223,7 +228,7 @@
 
 	<!-- Clean up debug manifest -->
 	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
-		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(Configuration)\Transmittal.addin" />
+		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
 	</Target>
 
 	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">

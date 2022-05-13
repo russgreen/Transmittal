@@ -1,10 +1,12 @@
 ﻿using Autodesk.Revit.DB;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transmittal.Extensions;
+using Transmittal.Models;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Services;
@@ -35,10 +37,15 @@ internal class ExportDWGService : IExportDWGService
                 lviews.Add(View.Id);
             }
 
+            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString());
+            
+            if (Directory.Exists(folderPath) == false)
+            {
+                Directory.CreateDirectory(folderPath);
+            }
 
             // export the sheet
-            exportDocument.Export(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString()), 
-                exportFileName, lviews, dwgExportOptions);
+            exportDocument.Export(folderPath, exportFileName, lviews, dwgExportOptions);
 
             if (dwgExportOptions.SharedCoords == true)
             {
@@ -65,12 +72,10 @@ internal class ExportDWGService : IExportDWGService
                     // export the view
 #if REVIT2018
                         string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                        exportDocument.Export(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName("DWG"), 
-                        ViewFileName, lviews, dwgExportOptions);
+                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #else
                     string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
-                    exportDocument.Export(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString()), 
-                        ViewFileName, lviews, dwgExportOptions);
+                    exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #endif
                 }
             }
@@ -83,5 +88,16 @@ internal class ExportDWGService : IExportDWGService
         {
             trans.RollBack();
         }
+    }
+
+    public List<DWGLayerMappingModel> GetDWGLayerMappings()
+    {
+        return new()
+        {
+            new DWGLayerMappingModel() { Id = 0, Name = "BS1192" },
+            new DWGLayerMappingModel() { Id = 1, Name = "AIA" },
+            new DWGLayerMappingModel() { Id = 2, Name = "CP83" },
+            new DWGLayerMappingModel() { Id = 3, Name = "ISO13567" }
+        };
     }
 }

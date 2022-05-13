@@ -27,9 +27,9 @@ internal class ExportDWFService : IExportDWFService
             var failOpt = trans.GetFailureHandlingOptions();
             failOpt.SetFailuresPreprocessor(new WarningSwallower());
             trans.SetFailureHandlingOptions(failOpt);
-            
-            string fullPath = Path.Combine(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString()), 
-                exportFileName);
+
+            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString());
+            string fullPath = Path.Combine(folderPath, exportFileName);
             
             if (File.Exists(fullPath) == true)
             {
@@ -47,8 +47,7 @@ internal class ExportDWFService : IExportDWFService
 
             dwfExportOptions.PaperFormat = sheetsize;
 
-            exportDocument.Export(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString()), 
-                exportFileName, views, dwfExportOptions);
+            exportDocument.Export(folderPath, exportFileName, views, dwfExportOptions);
 
         }
         catch (Exception ex)

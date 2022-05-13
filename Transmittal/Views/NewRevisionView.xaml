@@ -1,0 +1,50 @@
+﻿<Window x:Class="Transmittal.Views.NewRevisionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
+        xmlns:local="clr-namespace:Transmittal.Views"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:NewRevisionViewModel, IsDesignTimeCreatable=True}"
+        Title="New Revision" Height="300" Width="345" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Topmost="True">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0">Date</TextBlock>
+        <DatePicker Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  SelectedDate="{Binding RevisionDate}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0">Description</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding Description}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0">Type</TextBlock>
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
+                  ItemsSource="{Binding RevisionSequences}" 
+                  DisplayMemberPath="Name"
+                  SelectedValuePath="Id"
+                  SelectedValue="{Binding RevisionSequenceID}"
+                  SelectedItem="{Binding RevisionSequence}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0">Issued by</TextBlock>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Text="{Binding IssuedBy}"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0">Issued to</TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" Text="{Binding IssuedTo}"/>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0" Height="23" >
+            <Button Content="OK" Width="70" Command="{Binding SendRevisionCommand}" IsDefault="True" />
+            <Button Content="Cancel" Width="70" Margin="5,0,0,0" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

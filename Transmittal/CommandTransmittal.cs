@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using Transmittal.Services;
@@ -10,14 +11,14 @@ namespace Transmittal;
 [Transaction(TransactionMode.Manual)]
 public class CommandTransmittal : IExternalCommand
 {
-    private ISettingsServiceRvt _settingsServiceRvt;
+    private ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
     
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {        
         UIApplication uiapp = commandData.Application;
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
-        _settingsServiceRvt = App.ServiceProvider.GetRequiredService<ISettingsServiceRvt>();
+        //_settingsServiceRvt = App.ServiceProvider.GetRequiredService<ISettingsServiceRvt>();
 
         try
         {
@@ -50,13 +51,17 @@ public class CommandTransmittal : IExternalCommand
 
             if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
             {
-                var form = new Forms.FormSettings(commandData);
-                form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+                //var form = new Forms.FormSettings(commandData);
+                //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+                var settingsView = new Views.SettingsView();
+                settingsView.ShowDialog();
             }
             else
             {
-                var form = new Forms.FormTransmittal(commandData);
-                form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+                //var form = new Forms.FormTransmittal(commandData);
+                //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+                var transmittalView = new Views.TransmittalView();
+                transmittalView.ShowDialog();
             }
 
             return Result.Succeeded;            

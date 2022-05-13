@@ -11,8 +11,11 @@ internal class CommandDirectory : IExternalCommand
     {
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
-        var form = new Forms.FormDirectory(commandData);
-        form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+        //var form = new Forms.FormDirectory(commandData);
+        //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
+
+        var newView = new Views.DirectoryView();
+        newView.ShowDialog();
 
         return Result.Succeeded;
     }

@@ -6,6 +6,8 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/IsolateWarnings)
 
+Transmittal adds a wizard interface to Revit to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and product transmittal reports and historic document issue sheets.
+
 ## Building the Solution
 
 The UI used Syncfusion controls and so a license key should be obtained (free community versions are available). The key should be stored in a text file in the route of the repo called SyncfusionKey.txt (excluded from Git). 
@@ -20,7 +22,8 @@ Assembly File Version   $(VersionPrefix).0
 
 ## Roadmap
 
-- [x] Build UI - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
+- [x] Migrate UI from older project - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
+- [ ] WPF UI with .NET CommunityToolkit.Mvvm
 - [x] Build template SQLite database
 - [x] Create ribbon buttons and test UI
 - [x] Load projects sheets to datagrid

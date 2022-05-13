@@ -3,7 +3,7 @@
 namespace Transmittal.Library.Models;
 public class TransmittalItemModel : BaseModel
 {
-    public int ID { get; set; }
+    public int TransItemID { get; set; }
     public int TransID { get; set; }
     [Required]
     [StringLength(120)]

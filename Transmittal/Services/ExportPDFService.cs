@@ -31,10 +31,15 @@ internal class ExportPDFService : IExportPDFService
             failOpt.SetFailuresPreprocessor(new WarningSwallower());
             trans.SetFailureHandlingOptions(failOpt);
             trans.Start();
-            
+
             // configure filename path for final PDF save location
-            string fullPath = Path.Combine(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()), 
-                exportFileName);
+            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString());
+            string fullPath = Path.Combine(folderPath, exportFileName);
+
+            if(Directory.Exists(folderPath) == false)
+            {
+                Directory.CreateDirectory(folderPath);
+            }
             
             if (File.Exists(fullPath) == true)
             {
@@ -86,7 +91,7 @@ internal class ExportPDFService : IExportPDFService
                 pdfExportOptions.PaperOrientation = PageOrientationType.Portrait;
             }
 
-            App.RevitDocument.Export(_settingsService.GlobalSettings.DrawingIssueStore, viewIDs, pdfExportOptions);
+            App.RevitDocument.Export(folderPath, viewIDs, pdfExportOptions);
         }
         
         catch (Exception ex)

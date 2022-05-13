@@ -3,7 +3,7 @@
 namespace Transmittal.Library.Models;
 public class TransmittalDistributionModel : ProjectDirectoryModel
 {
-    public int ID { get; set; }
+    public int TransDistID { get; set; }
     public int TransID { get; set; }
     [Required]
     [StringLength(10)]

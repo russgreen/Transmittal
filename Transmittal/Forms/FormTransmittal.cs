@@ -236,14 +236,8 @@ public partial class FormTransmittal : System.Windows.Forms.Form, IStatusRequest
 
     private void wizardControl1_CancelButton_Click(object sender, EventArgs e)
     {
-        if (MessageBox.Show("Are you sure you wan to cancel the operation and close the wizard?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-        {
-            _abortFlag = true;
-            if (_processingsheets == false)
-            {   
-                Close();
-            }
-        }
+
+
     }
 
 

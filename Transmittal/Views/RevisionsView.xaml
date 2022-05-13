@@ -1,0 +1,43 @@
+﻿<Window x:Class="Transmittal.Views.RevisionsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
+        Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="ButtonAddRevision" Grid.Row="0" Width="95" 
+                Content="Add Revision"
+                HorizontalAlignment="Left" 
+                Click="ButtonAddRevision_Click"/>
+
+        <syncfusion:SfDataGrid Grid.Row="1" Margin="0,10,0,0"
+                               x:Name="sfDataGridRevisions"
+                               ItemsSource="{Binding Revisions}" 
+                               SelectedItem="{Binding SelectedRevision}"
+                               AutoGenerateColumns="False" 
+                               AllowGrouping="False" 
+                               AllowResizingColumns="True" 
+                               AllowFiltering="False"
+                               NavigationMode="Row" 
+                               SelectionMode="Single" 
+                               RowSelectionBrush="#9993B8D9" 
+                               GridValidationMode="InView" >
+        </syncfusion:SfDataGrid>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="2" >
+            <Button Content="Apply to Selected Sheets" Padding="5,0,5,0" Command="{Binding SendRevisionCommand}" IsEnabled="{Binding IsRevisionSelected}" Margin="0,0,-2,0" />
+            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>
