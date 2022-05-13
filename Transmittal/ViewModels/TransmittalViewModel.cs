@@ -514,8 +514,6 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                         //TODO - test if this check is required.....left in for now...
                         if (sheet.CanBePrinted == true)
                         {
-                            SheetTaskProcessed = 0;
-
                             var views = new ViewSet();
                             views.Insert(sheet);
 
@@ -534,14 +532,10 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                                  Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
                                  Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
 
-                            DrawingSheetProgressLabel = fileName;
-                            SheetTaskProgressLabel = "";
-
-                            //ExportFormatCount = 0;
-                            //if (_exportPDF == true) { ExportFormatCount += 1; }
-                            //if (_exportDWG == true) { ExportFormatCount += 1; }
-                            //if (_exportDWF == true) { ExportFormatCount += 1; }
-
+                            DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                            SheetTaskProcessed = 0;
+                            SheetTaskProgressLabel = string.Empty;
+                            //Application.DoEvents();
 
                             if (_exportPDF == true)
                             {
