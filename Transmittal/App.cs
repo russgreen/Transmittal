@@ -21,7 +21,7 @@ public class App : IExternalApplication
     public static UIControlledApplication CachedUiCtrApp;
     public static UIApplication CachedUiApp;
     public static ControlledApplication CtrApp;
-    public static Autodesk.Revit.DB.Document RevitDocument;
+    public static Autodesk.Revit.DB.Document RevitDocument;  
 
     public static IServiceProvider ServiceProvider;
 
@@ -34,27 +34,9 @@ public class App : IExternalApplication
         CachedUiCtrApp = application;
         CtrApp = application.ControlledApplication;
 
-        // setup dependancy injection - probably not really worth bothering with in this case
-        //IHostBuilder builder = new HostBuilder()
-        //    .ConfigureServices((_, services) =>
-        //    {
-        //        services.AddSingleton<ISettingsServiceRvt, SettingsServiceRvt>();
-        //        services.AddSingleton<ISettingsService, SettingsService>();
-        //        services.AddTransient<IDataConnection, SQLiteDataAccess>();
-        //        services.AddTransient<IExportPDFService, ExportPDFService>();
-        //        services.AddTransient<IExportDWGService, ExportDWGService>();
-        //        services.AddTransient<IExportDWFService, ExportDWFService>();
-        //        services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
-        //        services.AddTransient<ITransmittalService, TransmittalService>();
-        //    });
-
-        //IHost host = builder.Build();
-        //IServiceScope scope = host.Services.CreateScope();
-        //ServiceProvider = scope.ServiceProvider;
-
         Ioc.Default.ConfigureServices(new ServiceCollection()
-            .AddSingleton<ISettingsServiceRvt, SettingsServiceRvt>()
             .AddSingleton<ISettingsService, SettingsService>()
+            .AddTransient<ISettingsServiceRvt, SettingsServiceRvt>()
             .AddTransient<IDataConnection, SQLiteDataAccess>()
             .AddTransient<IExportPDFService, ExportPDFService>()
             .AddTransient<IExportDWGService, ExportDWGService>()
