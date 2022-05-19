@@ -11,4 +11,15 @@ public class DocumentStatusModel
             return $"{Code} - {Description}";
         }
     }
+
+    public DocumentStatusModel()
+    {
+
+    }
+
+    public DocumentStatusModel(string Code, string Description)
+    {
+        this.Code = Code;
+        this.Description = Description;
+    }
 }
