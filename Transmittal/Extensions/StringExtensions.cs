@@ -12,6 +12,7 @@ public static class NamingExtensions
     /// <returns></returns>
     public static string ParseFolderName(this string path, string format)
     {
+        path = path.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
         path = path.Replace("<DateDD>", DateTime.Now.ToStringDD());
         path = path.Replace("<DateMM>", DateTime.Now.ToStringMM());
         path = path.Replace("<DateYY>", DateTime.Now.ToStringYY());
@@ -87,9 +88,9 @@ public static class NamingExtensions
         return RemoveIllegalCharacters(fileName);
     }
 
-    private static string RemoveIllegalCharacters(string StringStart)
+    public static string RemoveIllegalCharacters(this string illegalString)
     {
-        string retval = StringStart;
+        string retval = illegalString;
         // this function will remove these characters \ / : * ? < > | 
         // from string and replace them a space
         retval = retval.Replace(@"\", " ");
