@@ -23,10 +23,18 @@ public class ISO19650
         documentStatuses.Add(new DocumentStatusModel() { Code = "D3", Description = "FOR CONTRACTOR DESIGN" }); // old BS1192 but useful
 
         // contractual status codes
-        documentStatuses.Add(new DocumentStatusModel() { Code = "A4", Description = "FOR CONSTRUCTION" });
-        documentStatuses.Add(new DocumentStatusModel() { Code = "A5", Description = "FOR CONSTRUCTION" });
-        documentStatuses.Add(new DocumentStatusModel() { Code = "B4", Description = "FOR CONSTRUCTION(PARTIAL)" });
-        documentStatuses.Add(new DocumentStatusModel() { Code = "B5", Description = "FOR CONSTRUCTION(PARTIAL)" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A3", Description = "CONTRACTUAL STAGE 3" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A4", Description = "CONTRACTUAL STAGE 4" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A5", Description = "CONTRACTUAL STAGE 5" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A6", Description = "CONTRACTUAL STAGE 6" });
+
+        // partial contractual status codes - should be on preliminary revision
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B3", Description = "PARTIAL STAGE 3" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B4", Description = "PARTIAL STAGE 4" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B5", Description = "PARTIAL STAGE 5" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B6", Description = "PARTIAL STAGE 6" });
+
+        // contractual status code
         documentStatuses.Add(new DocumentStatusModel() { Code = "CR", Description = "AS BUILT" });
 
         return documentStatuses;
