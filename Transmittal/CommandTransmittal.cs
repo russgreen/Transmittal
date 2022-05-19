@@ -18,8 +18,6 @@ public class CommandTransmittal : IExternalCommand
         UIApplication uiapp = commandData.Application;
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
-        //_settingsServiceRvt = App.ServiceProvider.GetRequiredService<ISettingsServiceRvt>();
-
         try
         {
             //first check if the document is saved as a large publish job might crash revit
@@ -51,15 +49,11 @@ public class CommandTransmittal : IExternalCommand
 
             if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
             {
-                //var form = new Forms.FormSettings(commandData);
-                //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
                 var settingsView = new Views.SettingsView();
                 settingsView.ShowDialog();
             }
             else
             {
-                //var form = new Forms.FormTransmittal(commandData);
-                //form.ShowDialog(new WindowHandle(commandData.Application.MainWindowHandle));
                 var transmittalView = new Views.TransmittalView();
                 transmittalView.ShowDialog();
             }
