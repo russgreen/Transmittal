@@ -26,6 +26,7 @@ public class SQLiteDataAccess : IDataConnection
     {
         using (var dbConnection = new SqliteConnection(dbFilePath))
         {
+            dbConnection.Open();
             var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
 
             //establish Id parameter of T (will not be the same name in every model)
