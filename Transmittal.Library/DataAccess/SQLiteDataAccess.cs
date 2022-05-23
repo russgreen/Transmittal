@@ -24,10 +24,15 @@ public class SQLiteDataAccess : IDataConnection
 
     public T CreateData<T, U>(string dbFilePath, string sqlStatement, T model, U parameters, string keyPropertyName)
     {
+        WaitForLockFileToClear(dbFilePath);
+        CreateLockFile(dbFilePath);
+        
         using (var dbConnection = new SqliteConnection(dbFilePath))
         {
             dbConnection.Open();
             var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
+
+            DeleteLockFile(dbFilePath);
 
             //establish Id parameter of T (will not be the same name in every model)
             model.GetType().GetProperty(keyPropertyName).SetValue(model, recordId);
@@ -48,10 +53,39 @@ public class SQLiteDataAccess : IDataConnection
 
     public void SaveData<T>(string dbFilePath, string sqlStatement, T data)
     {
+        WaitForLockFileToClear(dbFilePath);
+        CreateLockFile(dbFilePath);
+        
         using (IDbConnection dbConnection = new SqliteConnection(dbFilePath))
         {
             dbConnection.Open();
             dbConnection.Execute(sqlStatement, data);
         }
+
+        DeleteLockFile(dbFilePath);
+    }
+
+    
+    // To prevent concurrent write attempts on the database a lock file will be created
+    private void WaitForLockFileToClear(string dbFilePath)
+    {
+        var lockFilePath = $"{dbFilePath}.lock";
+        while (File.Exists(lockFilePath))
+        {
+            Thread.Sleep(100);
+        }
+    }
+
+    private void CreateLockFile(string dbFilePath)
+    {
+        var lockFilePath = $"{dbFilePath}.lock";
+        File.Create(lockFilePath);
+        File.WriteAllText(lockFilePath, $"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
+    }
+
+    private void DeleteLockFile(string dbFilePath)
+    {
+        var lockFilePath = $"{dbFilePath}.lock";
+        File.Delete(lockFilePath);
     }
 }
