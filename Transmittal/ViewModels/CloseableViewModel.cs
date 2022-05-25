@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Transmittal.ViewModels;
 
-namespace Transmittal.ViewModels;
 public abstract class CloseableViewModel
 {
     public event EventHandler ClosingRequest;

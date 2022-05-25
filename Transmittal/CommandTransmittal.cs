@@ -15,7 +15,8 @@ public class CommandTransmittal : IExternalCommand
     
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {        
-        UIApplication uiapp = commandData.Application;
+        //UIApplication uiapp = commandData.Application;
+        App.CachedUiApp = commandData.Application;
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
         try
@@ -32,7 +33,7 @@ public class CommandTransmittal : IExternalCommand
             var taskDialogResult = td.Show();
             if (taskDialogResult == TaskDialogResult.CommandLink1)
             {
-                uiapp.ActiveUIDocument.Document.Save();
+                App.CachedUiApp.ActiveUIDocument.Document.Save();
             }
             else if (taskDialogResult == TaskDialogResult.CommandLink2)
             {
@@ -45,7 +46,7 @@ public class CommandTransmittal : IExternalCommand
             }
 
             // add a showdialog watcher
-            uiapp.DialogBoxShowing += AppDialogShowing;
+            App.CachedUiApp.DialogBoxShowing += AppDialogShowing;
 
             if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
             {
@@ -68,7 +69,7 @@ public class CommandTransmittal : IExternalCommand
         }
         finally
         {
-            uiapp.DialogBoxShowing -= AppDialogShowing;
+            App.CachedUiApp.DialogBoxShowing -= AppDialogShowing;
         }
 
     }

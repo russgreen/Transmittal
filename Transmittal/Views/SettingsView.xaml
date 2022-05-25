@@ -1,19 +1,294 @@
-﻿<Window x:Class="Transmittal.Views.SettingsView"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Views"
-        xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels"    
+        xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" 
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:Converters="clr-namespace:Transmittal.Converters" 
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+        x:Class="Transmittal.Views.SettingsView" 
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModels:SettingsViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Height="300" Width="600" 
-        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen">
+        d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}"  Height="650" Width="800" 
+        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="650" >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Transmittal_2022;component/Views/AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Window.DataContext>
         <viewModels:SettingsViewModel />
     </Window.DataContext>
-    
-    <Grid>
-        
+
+    <Grid Margin="10" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
+            <StackPanel>
+                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBox}" >
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                       Text="Filename filter/rule" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,5,5"
+                                     Text="{Binding FileNameFilter}" />
+                            <ComboBox Grid.Row="0" Grid.Column="4" Margin="0,0,0,5"
+                                      x:Name="comboBoxFileNameParts" 
+                                      ItemsSource="{Binding Settings.FileNameParts, Mode=OneWay}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="DropDownClosed">
+                                        <b:InvokeCommandAction Command="{Binding AppendToFileNameFilterCommand, Mode=OneWay}" 
+                                                               CommandParameter="{Binding SelectedValue, ElementName=comboBoxFileNameParts}"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" 
+                                       Text="Output location" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                     Text="{Binding DrawingIssueStore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ComboBox Grid.Row="1" Grid.Column="3" Margin="0,0,5,5"
+                                      x:Name="comboBoxFolderNameParts" 
+                                      ItemsSource="{Binding Settings.FolderNameParts, Mode=OneWay}" >
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="DropDownClosed">
+                                        <b:InvokeCommandAction Command="{Binding AppendToFolderPathCommand, Mode=OneWay}" 
+                                                               CommandParameter="{Binding SelectedValue, ElementName=comboBoxFolderNameParts}"/>
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                            </ComboBox>
+                            <Button Grid.Row="1" Grid.Column="4" Margin="0,0,0,5"
+                                    x:Name="buttonFolderBrowse"
+                                    Content="..." 
+                                    Click="buttonFolderBrowse_Click" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,0,5"
+                                       Text="{Binding SampleFolderName}" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0"
+                                       Text="Date format string" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,5,5"
+                                     Text="{Binding DateFormatString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Grid.Row="3" Grid.Column="2"
+                                       Text="{Binding SampleDateString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <CheckBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                      Content="Enforce ISO19650 parameter values"
+                                      IsChecked="{Binding UseISO19650}" />
+
+                            <CheckBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                      Content="Use extranet"
+                                      IsChecked="{Binding UseExtranet}" 
+                                      IsEnabled="False"/>
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="200" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                       Text="Issue Formats" />
+                            <syncfusion:SfDataGrid x:Name="sfDataGridFormats" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0"
+                                                   ItemsSource="{Binding IssueFormats}"
+                                                   AutoGenerateColumns="False" 
+                                                   AllowGrouping="False" 
+                                                   AllowResizingColumns="True" 
+                                                   NavigationMode="Row" 
+                                                   SelectionMode="Single"                                               
+                                                   RowSelectionBrush="#9993B8D9" 
+                                                   AllowEditing="True" 
+                                                   AllowDeleting="True" 
+                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill"/>
+
+                            <TextBlock Grid.Row="0" Grid.Column="1" 
+                                       Text="Document Statuses" />
+                            <syncfusion:SfDataGrid x:Name="sfDataGridStatuses" Grid.Row="1" Grid.Column="1" 
+                                                   ItemsSource="{Binding DocumentStatuses}"
+                                                   AutoGenerateColumns="False" 
+                                                   AllowGrouping="False" 
+                                                   AllowResizingColumns="True" 
+                                                   NavigationMode="Row" 
+                                                   SelectionMode="Single"                                               
+                                                   RowSelectionBrush="#9993B8D9" 
+                                                   AllowEditing="True" 
+                                                   AllowDeleting="True" 
+                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill"/>
+                            
+                            </Grid>
+                        </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Database" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="40" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
+                                   x:Name="UseDatabase" Content="Use Project Database" 
+                                   IsChecked="{Binding RecordTransmittals}" Margin="0,0,0,5"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
+                                   Text="Template database" 
+                                   IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,5,5"
+                                 Text="{Binding DatabaseTemplateFile}"
+                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
+                        <Button Grid.Row="1" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonTemplateDatabaseBrowse"
+                                Content="..." 
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
+                                Click="buttonTemplateDatabaseBrowse_Click"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
+                                   Text="Project database"
+                                   IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,5,5"
+                                 Text="{Binding DatabaseFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
+                                 BorderBrush="{Binding DatabaseNotFound, Converter={StaticResource BrushColorConverter}}"/>
+                        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonDatabaseBrowse"
+                                Content="..." 
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
+                                Click="buttonDatabaseBrowse_Click"/>
+
+                        <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
+                                   Text="Project database file not found!" Foreground="Red" 
+                                   Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Advanced Settings" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                            <!--<ColumnDefinition Width="40" />-->
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Width="350" 
+                                HorizontalAlignment="Left" Margin="0,0,0,5" 
+                                x:Name="buttonAddStandardParaemetersToProject"
+                                Content="Add Standard Transmittal Parameters to Project" 
+                                Command="{Binding AddParametersToProjectCommand}"
+                                IsEnabled="{Binding UseCustomSharedParameters, Converter={StaticResource InverseBooleanConverter}}"/>
+
+                        <CheckBox Grid.Row="0" Grid.Column="1" Margin="155,0,0,0" 
+                                  x:Name="checkBoxUseCustomParameters"
+                                  Content="Use your own custom shared parameters"
+                                  IsChecked="{Binding UseCustomSharedParameters}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5"
+                                   Text="Shared Parameter GUIDs - Paramaters should be attached to Project Information Category" FontFamily="Segoe UI" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" 
+                                   Text="Project Identifier" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding ProjectIdentifierParamGuid}" 
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="Originator"  />
+                        <TextBox Grid.Row="3" Grid.Column="1"  Margin="0,0,0,5"
+                                 Text="{Binding OriginatorParamGuid}"
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" 
+                                   Text="Role" />
+                        <TextBox Grid.Row="4" Grid.Column="1"  Margin="0,0,0,5"
+                                 Text="{Binding RoleParamGuid}"
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5"
+                                   Text="Shared Parameter GUIDs - Paramaters should be attached to Sheets Category" FontFamily="Segoe UI" />
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" 
+                                   Text="Sheet Volume"  />
+                        <TextBox Grid.Row="6" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding SheetVolumeParamGuid}" 
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="7" Grid.Column="0" 
+                                   Text="Sheet Level" />
+                        <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding SheetLevelParamGuid}" 
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" 
+                                   Text="Document Type"  />
+                        <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding DocumentTypeParamGuid}"  
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="9" Grid.Column="0" 
+                                   Text="Sheet Status Code"  />
+                        <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding SheetStatusParamGuid}" 
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <TextBlock Grid.Row="10" Grid.Column="0" 
+                                   Text="Sheet Status Description"  />
+                        <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,0,5"
+                                 Text="{Binding SheetStatusDescriptionParamGuid}"  
+                                 IsEnabled="{Binding UseCustomSharedParameters}"/>
+                    </Grid>
+                </GroupBox>
+                
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="2" >
+            <Button Content="Save Settings" Padding="5,0,5,0" Command="{Binding SaveSettingsCommand}" />
+            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+        </StackPanel>
     </Grid>
+
 </Window>

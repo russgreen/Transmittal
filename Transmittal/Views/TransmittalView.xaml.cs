@@ -79,6 +79,7 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
     {
+       
         Ookii.Dialogs.Wpf.TaskDialogButton yesButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Yes);
         Ookii.Dialogs.Wpf.TaskDialogButton noButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.No);
 
@@ -90,7 +91,7 @@ public partial class TransmittalView : Window
             ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.Standard,
             Buttons = { yesButton, noButton }
         };
-
+        
         Ookii.Dialogs.Wpf.TaskDialogButton button = dialog.ShowDialog(this);
         if (button == yesButton)
         {
@@ -100,8 +101,9 @@ public partial class TransmittalView : Window
                 this.Close();
             }
         }
-    }    
-    
+        //TODO stop the main window closing if the no button is clicked
+    }
+
     private void sfDataGridSheets_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
     {
         // couldn't get the databinding to work on the selecteditems property.

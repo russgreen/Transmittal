@@ -151,6 +151,8 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
+
+        _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
         
         WireUpSheetsPage();
 
@@ -486,168 +488,168 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
         trans.Commit();
     }
 
+    
     [ICommand]
     private void ProcessSheets()
     {
         IsBackEnabled = false;
         IsFinishEnabled = false;
-        //Application.DoEvents();
-
+        
         try
-        {
-            var sheets = new FilteredElementCollector(App.RevitDocument);
-            sheets.OfClass(typeof(ViewSheet));
-
-            foreach (DrawingSheetModel drawingSheet in _selectedDrawingSheets)
             {
-                foreach (ViewSheet sheet in sheets)
+                var sheets = new FilteredElementCollector(App.RevitDocument);
+                sheets.OfClass(typeof(ViewSheet));
+
+                foreach (DrawingSheetModel drawingSheet in _selectedDrawingSheets)
                 {
-                    // abort if cancel was clicked
-                    if (_abortFlag == true)
+                    foreach (ViewSheet sheet in sheets)
                     {
-                        this.OnClosingRequest();
-                        return;
-                    }
-
-                    if (drawingSheet.DrgNumber == sheet.SheetNumber)
-                    {
-                        //TODO - test if this check is required.....left in for now...
-                        if (sheet.CanBePrinted == true)
+                        // abort if cancel was clicked
+                        if (_abortFlag == true)
                         {
-                            var views = new ViewSet();
-                            views.Insert(sheet);
+                            this.OnClosingRequest();
+                            return;
+                        }
 
-                            // build the filename
-                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
-                                 _settingsService.GlobalSettings.ProjectIdentifier,
-                                 _settingsService.GlobalSettings.ProjectName,
-                                 _settingsService.GlobalSettings.Originator,
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetVolumeParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid),
-                                 _settingsService.GlobalSettings.Role,
-                                 sheet.SheetNumber,
-                                 sheet.Name,
-                                 sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString(),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
+                        if (drawingSheet.DrgNumber == sheet.SheetNumber)
+                        {
+                            //TODO - test if this check is required.....left in for now...
+                            if (sheet.CanBePrinted == true)
+                            {
+                                var views = new ViewSet();
+                                views.Insert(sheet);
 
-                            DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
-                            SheetTaskProcessed = 0;
-                            SheetTaskProgressLabel = string.Empty;
-                            //Application.DoEvents();
+                                // build the filename
+                                string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                                     _settingsService.GlobalSettings.ProjectIdentifier,
+                                     _settingsService.GlobalSettings.ProjectName,
+                                     _settingsService.GlobalSettings.Originator,
+                                     Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetVolumeParamGuid),
+                                     Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid),
+                                     Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid),
+                                     _settingsService.GlobalSettings.Role,
+                                     sheet.SheetNumber,
+                                     sheet.Name,
+                                     sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString(),
+                                     Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
+                                     Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
+
+                                DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                                SheetTaskProcessed = 0;
+                                SheetTaskProgressLabel = string.Empty;
+                                DispatcherHelper.DoEvents();
 
                             if (_exportPDF == true)
-                            {
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-                                _exportPDFService.ExportPDF($"{fileName}.pdf", 
-                                App.revitDocument, 
-                                sheet);
-#else
-                                _exportPDFService.ExportPDF(fileName,
-                                    App.RevitDocument,
-                                    views,
-                                    PdfExportOptions);
-#endif
+                                {
+    #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
+                                    _exportPDFService.ExportPDF($"{fileName}.pdf", 
+                                    App.revitDocument, 
+                                    sheet);
+    #else
+                                    _exportPDFService.ExportPDF(fileName,
+                                        App.RevitDocument,
+                                        views,
+                                        PdfExportOptions);
+    #endif
 
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported PDF";
-                                SheetTaskProcessed += 1;
+                                    //TODO - actually check if the export worked OK
+                                    SheetTaskProgressLabel = "Exported PDF";
+                                    SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
 
                            
 
-                            if (_abortFlag == true)
-                            {
-                                this.OnClosingRequest();
-                                return;
-                            }
+                                if (_abortFlag == true)
+                                {
+                                    this.OnClosingRequest();
+                                    return;
+                                }
 
-                            if (_exportDWG == true)
-                            {
-                                DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
-                                DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
+                                if (_exportDWG == true)
+                                {
+                                    DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+                                    DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
 
-                                _exportDWGService.ExportDWG($"{fileName}.dwg",
-                                    DwgExportOptions,
-                                    views,
-                                    App.RevitDocument);
+                                    _exportDWGService.ExportDWG($"{fileName}.dwg",
+                                        DwgExportOptions,
+                                        views,
+                                        App.RevitDocument);
 
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported DWG";
-                                SheetTaskProcessed += 1;
+                                    //TODO - actually check if the export worked OK
+                                    SheetTaskProgressLabel = "Exported DWG";
+                                    SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
 
                             
 
-                            if (_abortFlag == true)
-                            {
-                                this.OnClosingRequest();
-                                return;
-                            }
+                                if (_abortFlag == true)
+                                {
+                                    this.OnClosingRequest();
+                                    return;
+                                }
 
-                            if (_exportDWF == true)
-                            {
-                                var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
+                                if (_exportDWF == true)
+                                {
+                                    var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
 
-                                _exportDWFService.ExportDWF($"{fileName}.dwf",
-                                    argsheetsize,
-                                    _printSetup,
-                                    DwfExportOptions,
-                                    App.RevitDocument,
-                                    views);
+                                    _exportDWFService.ExportDWF($"{fileName}.dwf",
+                                        argsheetsize,
+                                        _printSetup,
+                                        DwfExportOptions,
+                                        App.RevitDocument,
+                                        views);
 
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported DWF";
-                                SheetTaskProcessed += 1;
+                                    //TODO - actually check if the export worked OK
+                                    SheetTaskProgressLabel = "Exported DWF";
+                                    SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
                                                         
 
-                            if (_abortFlag == true)
-                            {
-                                this.OnClosingRequest();
-                                return;
-                            }
+                                if (_abortFlag == true)
+                                {
+                                    this.OnClosingRequest();
+                                    return;
+                                }
 
-                            if (RecordTransmittal == true)
-                            {
-                                // Mark sheets issued date.
-                                SetIssueDate(sheet);
+                                if (RecordTransmittal == true)
+                                {
+                                    // Mark sheets issued date.
+                                    SetIssueDate(sheet);
 
-                                // Mark revisions issued
-                                SetRevisionsIssued(sheet);
-                            }
+                                    // Mark revisions issued
+                                    SetRevisionsIssued(sheet);
+                                }
 
-                            DrawingSheetsProcessed += 1;
-                            
+                                DrawingSheetsProcessed += 1;
+
 
                             // to allow cancel button working
-                            Application.DoEvents();
+                            DispatcherHelper.DoEvents();
+                        }
                         }
                     }
                 }
+
+                this.OnClosingRequest();
+                return;
             }
-
-            this.OnClosingRequest();
-            return;
-        }
-        catch (Exception ex)
-        {
-            //TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", TaskDialogCommonButtons.Ok);
-            this.OnClosingRequest();
-            return;
-        }
+            catch (Exception ex)
+            {
+                //TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", TaskDialogCommonButtons.Ok);
+                this.OnClosingRequest();
+                return;
+            }
     }
-
+    
     private void SetRevisionsIssued(ViewSheet sheet)
     {
         try
@@ -783,6 +785,5 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
 
 
     #endregion
-
 
 }

@@ -162,6 +162,9 @@
 		  <Generator>SettingsSingleFileGenerator</Generator>
 		  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
 		</None>
+		<None Update="Resources\TransmittalParameters.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Transmittal.addin">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>

@@ -23,7 +23,7 @@ Assembly File Version   $(VersionPrefix).0
 ## Roadmap
 
 - [x] Migrate UI from older project - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
-- [ ] WPF UI with .NET CommunityToolkit.Mvvm
+- [ ] WPF UI with .NET CommunityToolkit.MVVM
 - [x] Build template SQLite database
 - [x] Create ribbon buttons and test UI
 - [x] Load projects sheets to datagrid
@@ -31,10 +31,8 @@ Assembly File Version   $(VersionPrefix).0
 - [x] Create revisions
 - [x] Apply revisions to sheets
 - [x] Export files to PDF, DWG, etc with settings
-- [ ] Save and load settings in using shared parameters.  dbPath; filenamefilter; sharedparametersfilepath; parameters to use for StatusCode, StatusDescription, ???
-- [ ] Save and load settings in extensible storage instead of parameters.  dbPath; filenamefilter; sharedparametersfilepath; parameters to use for StatusCode, StatusDescription, ???
-- [ ] Check if model has already been configured to use transmittal
-- [ ] Create new SQLite database from template
+- [x] Save and load settings in extensible storage.  
+- [x] Create new SQLite database from template
 - [ ] Get current SharedParameter file....replace with custom file....set back to original
 - [ ] Create, edit, save project directory in database
 - [ ] Load project directory from db
@@ -43,4 +41,4 @@ Assembly File Version   $(VersionPrefix).0
 - [ ] Merge and edit transmittal history
 - [ ] Display reports
 - [ ] Build and test installer
-- [ ] Desktop app to manage transmittal hiostory outside of Revit and issue non-Revit documents
+- [ ] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents

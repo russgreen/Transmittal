@@ -1,50 +1,80 @@
 ﻿namespace Transmittal.Library.Models;
 
-public class SettingsModel
+public partial class SettingsModel : BaseModel
 {
     public string DateFormatString { get; set; } = "dd.MM.yy";
 
     public string ProjectNumber { get; set; }
     public string ProjectIdentifier { get; set; }
     public string ProjectName { get; set; }
-    public string Originator { get; set; }    
+    public string Originator { get; set; }
     public string Role { get; set; }
-
 
     public bool RecordTransmittals { get; set; } = false;
     public string DatabaseFile { get; set; } = "[NONE]";
     public string DatabaseTemplateFile { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Data\TemplateDatabase.tdb";
 
-    public string DrawingIssueStore { get; set; }
+    public List<string> FolderNameParts => new List<string>{ "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%" };
+    public string DrawingIssueStore { get; set; } = @"%UserProfile%\Documents\Transmittal\DrawingIssues";
     public string IssueSheetStore { get; set; }
     public string DirectoryStore { get; set; }
     public string ReportStore { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Reports\";
 
-
+    public List<string> FileNameParts => new List<string>{ "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
     public string FileNameFilter { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
     public bool UseExtranet { get; set; } = false;
     public bool UseISO19650 { get; set; } = false;
 
-    public List<IssueFormatModel> IssueFormats;
-    public List<DocumentStatusModel> DocumentStatuses;
+    public List<IssueFormatModel> IssueFormats { get; set; } = new List<IssueFormatModel>()
+    {
+        new IssueFormatModel() { Code = "P", Description = "Paper" },
+        new IssueFormatModel() { Code = "C", Description = "Cloud" },
+        new IssueFormatModel() { Code = "E", Description = "Email" },
+    };
+    public List<DocumentStatusModel> DocumentStatuses { get; set; } = new List<DocumentStatusModel>()
+    {
+        new DocumentStatusModel() { Code = "S0", Description = "PRELIMINARY WIP" },
+        new DocumentStatusModel() { Code = "S1", Description = "FOR CO-ORDINATION" },
+        new DocumentStatusModel() { Code = "S2", Description = "FOR INFORMATION" },
+        new DocumentStatusModel() { Code = "S3", Description = "FOR REVIEW AND COMMENT" },
+        new DocumentStatusModel() { Code = "S4", Description = "FOR STAGE APPROVAL" },
+        new DocumentStatusModel() { Code = "S6", Description = "FOR PIM AUTHORIZATION" },
+        new DocumentStatusModel() { Code = "S7", Description = "FOR AIM AUTHORIZATION" },
+        new DocumentStatusModel() { Code = "D1", Description = "SUITABLE FOR COSTING" }, // old BS1192 but useful
+        new DocumentStatusModel() { Code = "D2", Description = "SUITABLE FOR TENDER" }, // old BS1192 but useful
+        new DocumentStatusModel() { Code = "D3", Description = "FOR CONTRACTOR DESIGN" }, // old BS1192 but useful
+
+        new DocumentStatusModel() { Code = "A3", Description = "CONTRACTUAL STAGE 3" },
+        new DocumentStatusModel() { Code = "A4", Description = "CONTRACTUAL STAGE 4" },
+        new DocumentStatusModel() { Code = "A5", Description = "CONTRACTUAL STAGE 5" },
+        new DocumentStatusModel() { Code = "A6", Description = "CONTRACTUAL STAGE 6" },
+
+        new DocumentStatusModel() { Code = "B3", Description = "PARTIAL STAGE 3" },
+        new DocumentStatusModel() { Code = "B4", Description = "PARTIAL STAGE 4" },
+        new DocumentStatusModel() { Code = "B5", Description = "PARTIAL STAGE 5" },
+        new DocumentStatusModel() { Code = "B6", Description = "PARTIAL STAGE 6" },
+
+        new DocumentStatusModel() { Code = "CR", Description = "AS BUILT" },
+    };
 
     // names and guids of used shared parameters.  Allowing these to be changed means existing shared parameters can be used on projects.
+    public bool UseCustomSharedParameters { get; set; } = false;
     // project paramaters
-    public string ProjectIdentifierParamName { get; set; } = "Project Identifier";
-    public string ProjectIdentifierParamGuid { get; set; } = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
-    public string OriginatorParamName { get; set; } = "Originator";
-    public string OriginatorParamGuid { get; set; } = "e45313b7-8419-4803-92f0-68558f9278b2";
-    public string RoleParamName { get; set; } = "Role";
-    public string RoleParamGuid { get; set; } = "67fcb5e8-4ffb-43b8-8ec9-c664fd997267";
+    public string ProjectIdentifierParamName { get; set; } 
+    public string ProjectIdentifierParamGuid { get; set; } 
+    public string OriginatorParamName { get; set; } 
+    public string OriginatorParamGuid { get; set; }
+    public string RoleParamName { get; set; }
+    public string RoleParamGuid { get; set; }
     // sheet parameters
-    public string SheetVolumeParamName { get; set; } = "Sheet Volume";
-    public string SheetVolumeParamGuid { get; set; } = "9c16757c-175a-451a-a5d4-c4a6ff291acb";
-    public string SheetLevelParamName { get; set; } = "Sheet Level";
-    public string SheetLevelParamGuid { get; set; } = "e51af162-9025-48a0-bd2c-bc833fab0db0";
-    public string DocumentTypeParamName { get; set; } = "Document Type";
-    public string DocumentTypeParamGuid { get; set; } = "eb57d296-7d9c-459f-ace1-0bdaf95c3b29";
-    public string SheetStatusParamName { get; set; } = "Sheet Status";
-    public string SheetStatusParamGuid { get; set; } = "3304f169-ceb9-40b9-a69d-d8f3eb0a3fb9";
-    public string SheetStatusDescriptionParamName { get; set; } = "Sheet Status Description";
-    public string SheetStatusDescriptionParamGuid { get; set; } = "4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a";
+    public string SheetVolumeParamName { get; set; }
+    public string SheetVolumeParamGuid { get; set; }
+    public string SheetLevelParamName { get; set; }
+    public string SheetLevelParamGuid { get; set; }
+    public string DocumentTypeParamName { get; set; }
+    public string DocumentTypeParamGuid { get; set; }
+    public string SheetStatusParamName { get; set; }
+    public string SheetStatusParamGuid { get; set; }
+    public string SheetStatusDescriptionParamName { get; set; }
+    public string SheetStatusDescriptionParamGuid { get; set; }
 }

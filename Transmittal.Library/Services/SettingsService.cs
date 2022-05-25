@@ -1,42 +1,41 @@
-﻿using Transmittal.Library.Models;
+﻿using Transmittal.Library.DataAccess;
+using Transmittal.Library.Models;
 
 namespace Transmittal.Library.Services;
 
 public class SettingsService : ISettingsService
 {
+    private readonly IDataConnection _dataConnection;
+
     public SettingsModel GlobalSettings { get; set; }
 
-    public SettingsService()
+    public SettingsService(IDataConnection dataConnection)
     {
+        _dataConnection = dataConnection;        
+        
         GlobalSettings = new();
 
-        GlobalSettings.IssueFormats = GetIssueFormats();
-        GlobalSettings.DrawingIssueStore = GetDrawingIssueStore();
-        GlobalSettings.DocumentStatuses = GetDocumentStatuses();      
+        GetSettings();
     }
 
     public void GetSettings()
     {
-        GlobalSettings.RecordTransmittals = true;
-
-
+        //this is where additonal settings related to reported are pulled form the project DB.
+        
+        //GlobalSettings.IssueFormats = GetIssueFormats();
+        //GlobalSettings.DocumentStatuses = GetDocumentStatuses();
     }
 
     public void UpdateSettings()
     {
        //throw new NotImplementedException();
     }
-    
+
     private List<IssueFormatModel> GetIssueFormats()
     {
         //build the issue formats list  
         //TODO - get from the database if one exists
-        var issueFormats = new List<IssueFormatModel>
-        {
-            new IssueFormatModel() { Code = "E", Description = "Email" },
-            new IssueFormatModel() { Code = "C", Description = "Cloud" },
-            new IssueFormatModel() { Code = "P", Description = "Paper" }
-        };
+        List<IssueFormatModel> issueFormats = new();
 
         return issueFormats;
     }
@@ -44,7 +43,7 @@ public class SettingsService : ISettingsService
     private List<DocumentStatusModel> GetDocumentStatuses()
     {
         // TODO - check if there is a database and load from there else use the standards
-        List<DocumentStatusModel> documentStatuses = Standards.ISO19650.GetDocumentStatuses();
+        List<DocumentStatusModel> documentStatuses = new();
 
         return documentStatuses;
     } 
