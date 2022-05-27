@@ -8,7 +8,7 @@ public class SQLiteDataAccess : IDataConnection
 {
     public bool CheckConnection(string dbFilePath)
     {
-        using (IDbConnection dbConnection = new SqliteConnection(dbFilePath))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
         {
             try
             {
@@ -27,7 +27,7 @@ public class SQLiteDataAccess : IDataConnection
         WaitForLockFileToClear(dbFilePath);
         CreateLockFile(dbFilePath);
         
-        using (var dbConnection = new SqliteConnection(dbFilePath))
+        using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
         {
             dbConnection.Open();
             var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
@@ -43,7 +43,7 @@ public class SQLiteDataAccess : IDataConnection
 
     public IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters)
     {
-        using (IDbConnection dbConnection = new SqliteConnection(dbFilePath))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
         {
             dbConnection.Open();
             var rows = dbConnection.Query<T>(sqlStatement, parameters);
@@ -56,7 +56,7 @@ public class SQLiteDataAccess : IDataConnection
         WaitForLockFileToClear(dbFilePath);
         CreateLockFile(dbFilePath);
         
-        using (IDbConnection dbConnection = new SqliteConnection(dbFilePath))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
         {
             dbConnection.Open();
             dbConnection.Execute(sqlStatement, data);

@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	  	<LangVersion>10</LangVersion>
-	<ImplicitUsings>enable</ImplicitUsings>	 
-	  
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+	<TargetFramework>net48</TargetFramework>
+	<LangVersion>10</LangVersion>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>  
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.5" />
+	<PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.0-preview.4.22229.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
