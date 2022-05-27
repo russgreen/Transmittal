@@ -5,14 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"    
-        xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" 
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:Converters="clr-namespace:Transmittal.Converters" 
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         x:Class="Transmittal.Views.SettingsView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Height="650" Width="800" 
+        Title="{Binding WindowTitle}"  Width="800" Height="650" 
         FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="650" >
     <Window.Resources>
         <ResourceDictionary>
