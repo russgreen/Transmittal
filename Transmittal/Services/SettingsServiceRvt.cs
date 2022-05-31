@@ -350,23 +350,32 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private Schema GetSchema()
     {
-        Schema schema = null;
-        IList<Schema> schemas = Schema.ListSchemas();
-        if (schemas != null && schemas.Count > 0)
-        {
-            // get schema
-            foreach (Schema s in schemas)
-            {
-                if (s.SchemaName == _schemaName)
-                {
-                    schema = s;
-                    break;
-                }
-            }
-        }
-        return schema;
+        //Schema schema = null;
+        //IList<Schema> schemas = Schema.ListSchemas();
+        //if (schemas != null && schemas.Count > 0)
+        //{
+        //    // get schema
+        //    foreach (Schema s in schemas)
+        //    {
+        //        if (s.SchemaName == _schemaName)
+        //        {
+        //            schema = s;
+        //            break;
+        //        }
+        //    }
+        //}
+        //return schema;
 
-        //return Schema.Lookup(new Guid(_schemaGuid));
+        Schema s = Schema.ListSchemas().FirstOrDefault(q => q.SchemaName == _schemaName);
+        //if (s == null)
+        //{
+        //    // no schema found, create one
+        //}
+        //else
+        //{
+        //    // schema found, use it
+        //}
+        return s;        
     }
 
     private bool SchemaExists()
