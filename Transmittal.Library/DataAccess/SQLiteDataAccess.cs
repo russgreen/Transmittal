@@ -79,8 +79,23 @@ public class SQLiteDataAccess : IDataConnection
     private void CreateLockFile(string dbFilePath)
     {
         var lockFilePath = $"{dbFilePath}.lock";
-        File.Create(lockFilePath);
-        File.WriteAllText(lockFilePath, $"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
+
+        if (!File.Exists(lockFilePath))
+        {
+            using (FileStream fs = File.Create(lockFilePath))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine($"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
+                }
+            }
+        }
+        
+        //var myLockFile = File.Create(lockFilePath);
+
+        //File.WriteAllText(lockFilePath, $"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
+
+        //myLockFile.Close();
     }
 
     private void DeleteLockFile(string dbFilePath)
