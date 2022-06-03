@@ -1448,21 +1448,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Image Name="Logo">
-              <Source>External</Source>
-              <Value>=Parameters!parImagePath.Value</Value>
-              <Sizing>FitProportional</Sizing>
-              <Top>0.30969cm</Top>
-              <Left>33.9796cm</Left>
-              <Height>2cm</Height>
-              <Width>6cm</Width>
-              <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
             <Textbox Name="Textbox2">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1484,7 +1469,7 @@
               <Top>2.38025cm</Top>
               <Height>0.6cm</Height>
               <Width>18.54729cm</Width>
-              <ZIndex>2</ZIndex>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

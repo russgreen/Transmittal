@@ -6,13 +6,12 @@ using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using System.IO;
+using System.Linq;
 
 namespace Transmittal.Reports
 {
     public class Reports
     {
-        private string _logoPath;
-
         private MapperConfiguration _configDirectory;
         private MapperConfiguration _configTransmittal;
         private MapperConfiguration _configTransmittalItem;
@@ -27,14 +26,27 @@ namespace Transmittal.Reports
             _settingsService = serviceProvider.GetRequiredService<ISettingsService>();
             _contactDirectoryService = serviceProvider.GetRequiredService<IContactDirectoryService>();
             _transmittalService = serviceProvider.GetRequiredService<ITransmittalService>();
-            
+
             //GetLogoPath(); - no longer used RDLC files should just be customised
+
+            //_settingsService.GetSettings();
 
             ConfigureDataModelMapping();
 
         }
 
-        public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
+        public Reports(ISettingsService settingsService, 
+            IContactDirectoryService contactDirectoryService, 
+            ITransmittalService transmittalService)
+        {
+            _settingsService = settingsService;
+            _contactDirectoryService = contactDirectoryService;
+            _transmittalService = transmittalService;          
+
+            ConfigureDataModelMapping();
+        }
+
+        public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory) //, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
         {
             //var report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.ProjectDirectory.rdlc");
             //report.Seek(0L, SeekOrigin.Begin);
@@ -43,7 +55,7 @@ namespace Transmittal.Reports
             var paraList = new List<ReportParameter>
             {
                 //new ReportParameter("parImagePath", _logoPath),
-                new ReportParameter("parProject", $"{projectIdentifier} {projectName}")
+                new ReportParameter("parProject", $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}")
             };
 
             FormReportViewer frm = NewReportViewer(
@@ -51,7 +63,7 @@ namespace Transmittal.Reports
                 paraList,
                 report,
                 _settingsService.GlobalSettings.DirectoryStore,
-                $"{projectIdentifier}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-DY-{_settingsService.GlobalSettings.Role}-0001-ProjectDirectory");
+                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-DY-{_settingsService.GlobalSettings.Role}-0001-ProjectDirectory");
 
             //we need to pass in a list<T> to the datasets
             //List<CompanyModel> companies = new List<CompanyModel>
@@ -65,7 +77,7 @@ namespace Transmittal.Reports
             //};
 
             List<Models.ProjectDirectoryReportModel> projectDirectoryReportModels = new();
-            var filteredProjectDirectory = projectDirectory.Where(x => x.ShowInReport == true).ToList();
+            var filteredProjectDirectory = projectDirectory.Where(x => x.Person.ShowInReport == true).ToList();
 
             //map to the derived model type
             IMapper iMapper = _configDirectory.CreateMapper();
@@ -83,22 +95,23 @@ namespace Transmittal.Reports
 
             frm.reportViewer1.RefreshReport();
             frm.ShowDialog();
+            //frm.Show();
         }
 
-        public void ShowTransmittalReport(int transmittalID, bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalReport(int transmittalID) //, bool useISO, string projectIdentifier, string projectName)
         {
             Stream report;
-            if (useISO == true)
-            {
-                //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSheet1192.rdlc");
-                report = GetReport("TransmittalSheetISO.rdlc");
-            }
-            else
-            {
-                //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSheet.rdlc");
-                report = GetReport("TransmittalSheet.rdlc");
-            }
-            //report.Seek(0L, SeekOrigin.Begin);
+            //if (useISO == true)
+            //{
+            //    //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSheet1192.rdlc");
+            //    report = GetReport("TransmittalSheetISO.rdlc");
+            //}
+            //else
+            //{
+            //    //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSheet.rdlc");
+            //    report = GetReport("TransmittalSheet.rdlc");
+            //}
+            report = GetReport("TransmittalSheetISO.rdlc");
 
             var paraList = new List<ReportParameter>
             {
@@ -113,12 +126,12 @@ namespace Transmittal.Reports
                 paraList,
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore,
-                $"{projectIdentifier}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
+                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
 
             //map to the derived model type
             IMapper iMapper = _configTransmittal.CreateMapper();
             var transmittalReport = iMapper.Map<TransmittalModel, Models.TransmittalReportModel>(transmittal);
-            transmittalReport.Project = $"{projectIdentifier} {projectName}";
+            transmittalReport.Project = $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}";
 
             //we need to pass in a list<T> to the datasets
             List<Models.TransmittalReportModel> transmittals = new List<Models.TransmittalReportModel>
@@ -145,19 +158,20 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
-        public void ShowTransmittalSummaryReport(bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalSummaryReport()//bool useISO, string projectIdentifier, string projectName)
         {
             Stream report;
-            if (useISO == true)
-            {
-                //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSummary1192.rdlc");
-                report = GetReport(  "TransmittalSummaryISO.rdlc");
-            }
-            else
-            {
-                //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSummary.rdlc");
-                report = GetReport("TransmittalSummary.rdlc");
-            }
+            //if (useISO == true)
+            //{
+            //    //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSummary1192.rdlc");
+            //    report = GetReport(  "TransmittalSummaryISO.rdlc");
+            //}
+            //else
+            //{
+            //    //report = Assembly.GetExecutingAssembly().GetManifestResourceStream("eProject.Reporting.Reports.TransmittalSummary.rdlc");
+            //    report = GetReport("TransmittalSummary.rdlc");
+            //}
+            report = GetReport(  "TransmittalSummaryISO.rdlc");
             //report.Seek(0L, SeekOrigin.Begin);
 
             var paraList = new List<ReportParameter>
@@ -172,7 +186,7 @@ namespace Transmittal.Reports
                 paraList,
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore,
-                $"{projectIdentifier}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-MX-{_settingsService.GlobalSettings.Role}-0001-TransmittalSummary");
+                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-MX-{_settingsService.GlobalSettings.Role}-0001-TransmittalSummary");
 
             List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();
 
@@ -186,7 +200,7 @@ namespace Transmittal.Reports
                 foreach (var item in transmittal.TransmittalItems)
                 {
                     var newItem = iMapper.Map<TransmittalItemModel, Models.TransmittalItemReportModel>(item);
-                    newItem.Project = $"{projectIdentifier} {projectName}";
+                    newItem.Project = $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}";
                     newItem.TransDate = transmittal.TransDate;
                     transmittalItems.Add(newItem);
                 }
@@ -223,6 +237,7 @@ namespace Transmittal.Reports
             {
                 Text = windowTitle
             };
+            
             frm.reportViewer1.Reset();
 
             frm.reportViewer1.LocalReport.LoadReportDefinition(report);
@@ -235,18 +250,6 @@ namespace Transmittal.Reports
             frm.reportViewer1.LocalReport.DataSources.Clear();
 
             return frm;
-        }
-
-        private void GetLogoPath()
-        {
-            if (_settingsService.GlobalSettings.ReportStore.EndsWith(@"\"))
-            {
-                _logoPath = $@"file:///{_settingsService.GlobalSettings.ReportStore.TrimEnd(@"\"[0])}\logo.jpg";
-            }
-            else
-            {
-                _logoPath = $@"file:///{_settingsService.GlobalSettings.ReportStore}\logo.jpg";
-            }
         }
 
         private void ConfigureDataModelMapping()
@@ -291,7 +294,7 @@ namespace Transmittal.Reports
             }
             else
             {
-                var report = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{nameof(Transmittal)}.{nameof(Transmittal.Reports)}.{nameof(Transmittal)}.{nameof(Transmittal.Reports.Reports)}.{reportName}");
+                var report = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{nameof(Transmittal)}.{nameof(Transmittal.Reports)}.{nameof(Transmittal.Reports.Reports)}.{reportName}");
                 report.Seek(0L, SeekOrigin.Begin);
                 return report;
             }

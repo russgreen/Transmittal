@@ -10,6 +10,14 @@ public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDir
         }
     }
 
+    public string Role
+    {
+        get
+        {
+            return Company.Role;
+        }
+    }
+
     public string Address
     {
         get
@@ -79,6 +87,14 @@ public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDir
         get
         {
             return Person.Mobile;
+        }
+    }
+
+    public string Position
+    {
+        get
+        {
+            return Person.Position;
         }
     }
 }

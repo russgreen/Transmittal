@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,21 +23,7 @@ public partial class FormReportViewer : Form
     public FormReportViewer(string folderPath, string fileName)
     {
         InitializeComponent();
-
-        if (!System.IO.Directory.Exists(folderPath))
-        {
-            try
-            {
-                System.IO.Directory.CreateDirectory(folderPath);
-            }
-            catch (System.IO.IOException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        //overwrite the default value
+        
         _filePathName = System.IO.Path.Combine(folderPath, fileName);
     }
 
@@ -66,7 +53,9 @@ public partial class FormReportViewer : Form
                         out encoding, out fileNameExtension, out streams, out warnings);
 
         var path = $@"{_filePathName}.{fileNameExtension}";
-
+        System.IO.FileInfo file = new System.IO.FileInfo(path);
+        file.Directory.Create();
+        
         try
         {
             System.IO.File.WriteAllBytes(path, bytes);
