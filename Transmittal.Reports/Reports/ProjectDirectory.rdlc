@@ -11,7 +11,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="ProjectDirectory">
+    <DataSet Name="dsProjectDirectory">
       <Query>
         <DataSourceName>DummyDataSource</DataSourceName>
         <CommandText />
@@ -63,6 +63,26 @@
         </Field>
         <Field Name="Position">
           <DataField>Position</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="dsProject">
+      <Query>
+        <DataSourceName>DummyDataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="ProjectIdentifier">
+          <DataField>ProjectIdentifier</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProjectNumber">
+          <DataField>ProjectNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProjectName">
+          <DataField>ProjectName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -225,7 +245,7 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>ProjectDirectory</DataSetName>
+            <DataSetName>dsProjectDirectory</DataSetName>
             <Top>0.31862cm</Top>
             <Height>1.07125cm</Height>
             <Width>18.5cm</Width>
@@ -269,7 +289,10 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!parProject.Value</Value>
+                      <Value>=
+IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")), 
+First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.Value, "dsProject")) 
++ " " + First(Fields!ProjectName.Value, "dsProject")</Value>
                       <Style>
                         <FontFamily>fira Sans</FontFamily>
                         <FontSize>12pt</FontSize>
@@ -382,12 +405,6 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParameters>
-    <ReportParameter Name="parProject">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
