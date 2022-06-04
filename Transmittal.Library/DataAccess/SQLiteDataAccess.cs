@@ -90,12 +90,6 @@ public class SQLiteDataAccess : IDataConnection
                 }
             }
         }
-        
-        //var myLockFile = File.Create(lockFilePath);
-
-        //File.WriteAllText(lockFilePath, $"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
-
-        //myLockFile.Close();
     }
 
     private void DeleteLockFile(string dbFilePath)

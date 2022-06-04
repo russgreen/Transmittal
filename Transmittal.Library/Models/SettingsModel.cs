@@ -16,8 +16,8 @@ public partial class SettingsModel : BaseModel
 
     public List<string> FolderNameParts => new List<string>{ "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%" };
     public string DrawingIssueStore { get; set; } = @"%UserProfile%\Documents\Transmittal\DrawingIssues";
-    public string IssueSheetStore { get; set; }
-    public string DirectoryStore { get; set; }
+    public string IssueSheetStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
+    public string DirectoryStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "Directory");
     public string ReportStore { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Reports\";
 
     public List<string> FileNameParts => new List<string>{ "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };

@@ -1,0 +1,133 @@
+﻿<Window x:Class="Transmittal.Desktop.Views.DirectoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Desktop.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:DirectoryViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}"  Width="800" Height="450" 
+        FontSize="12" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="450">
+    <Window.DataContext>
+        <viewModels:DirectoryViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0" Background="White" >
+            <Button x:Name="ExportVCardButton" 
+                    IsEnabled="{Binding ItemSelected}"
+                    Command="{Binding ExportVCardCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/ContactDetails.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Export vCard</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DirectoryReportButton"
+                    IsEnabled="{Binding HasDatabase}"
+                    Command="{Binding ShowDirectoryReportCommand}" >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Directory Report</TextBlock>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+
+        <TabControl Grid.Row="1" Margin="5" >
+            <TabItem Header="People" >
+                <syncfusion:SfDataGrid x:Name="sfDataGridPeople"  Margin="5" 
+                                       ColumnSizer="AutoLastColumnFill" 
+                                       SelectionMode="Single"
+                                       ItemsSource="{Binding People, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       SelectedItem="{Binding SelectedPerson}" 
+                                       AllowEditing="True" 
+                                       AllowFiltering="True" 
+                                       AutoGenerateColumns="False" 
+                                       AddNewRowPosition="Bottom"
+                                       AddNewRowText="Click here to add a new person to the directory"
+                                       GridValidationMode="InEdit">
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridCheckBoxColumn MappingName="ShowInReport" HeaderText="Print" Width="50" />
+                        <syncfusion:GridComboBoxColumn Width="350" 
+                                                       HeaderText="Company" 
+                                                       ItemsSource="{Binding Companies}" 
+                                                       DisplayMemberPath="CompanyName" 
+                                                       SelectedValuePath="ID" 
+                                                       MappingName="CompanyID" />                                                       
+                        <syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="Email" HeaderText="Email" Width="200" />
+                        <syncfusion:GridTextColumn MappingName="Tel" HeaderText="DDI" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="Position" HeaderText="Position" Width="150" />
+                        <syncfusion:GridTemplateColumn MappingName="Notes" HeaderText="Notes" TextWrapping="Wrap" Width="250"  >
+                            <syncfusion:GridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Notes}"  TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </syncfusion:GridTemplateColumn.CellTemplate>
+
+                            <syncfusion:GridTemplateColumn.EditTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Notes, Mode=TwoWay}"
+                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                             syncfusion:FocusManagerHelper.FocusedElement="True"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </syncfusion:GridTemplateColumn.EditTemplate>   
+                        </syncfusion:GridTemplateColumn>
+                    </syncfusion:SfDataGrid.Columns>
+                </syncfusion:SfDataGrid>
+            </TabItem>
+            <TabItem Header="Companies" >
+                <syncfusion:SfDataGrid x:Name="sfDataGridCompanies"  Margin="5" 
+                                       ColumnSizer="AutoLastColumnFill" 
+                                       SelectionMode="Single"
+                                       ItemsSource="{Binding Companies, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                       SelectedItem="{Binding SelectedCompany}"
+                                       AllowEditing="True" 
+                                       AllowFiltering="True" 
+                                       AutoGenerateColumns="False" 
+                                       AddNewRowPosition="Bottom" 
+                                       AddNewRowText="Click here to add a new company to the directory"
+                                       GridValidationMode="InEdit">
+                  
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridTextColumn MappingName="CompanyName" HeaderText="Company Name" Width="350" />
+                        <syncfusion:GridTextColumn MappingName="Role" HeaderText="Role" Width="150" />
+                        <syncfusion:GridTemplateColumn MappingName="Address" HeaderText="Address" TextWrapping="Wrap" Width="200"  >
+                            <syncfusion:GridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Address}"  TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </syncfusion:GridTemplateColumn.CellTemplate>
+
+                            <syncfusion:GridTemplateColumn.EditTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Address, Mode=TwoWay}"
+                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                             syncfusion:FocusManagerHelper.FocusedElement="True"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"/>
+                                </DataTemplate>
+                            </syncfusion:GridTemplateColumn.EditTemplate>
+                        </syncfusion:GridTemplateColumn>
+                        <syncfusion:GridTextColumn MappingName="Tel" HeaderText="Tel" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="Fax" HeaderText="Fax" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="Website" HeaderText="Website" MinimumWidth="200" />
+                        <syncfusion:GridNumericColumn MappingName="Contacts.Count" HeaderText="People" Width="50" NumberDecimalDigits="0" AllowEditing="False" />
+                    </syncfusion:SfDataGrid.Columns>
+                </syncfusion:SfDataGrid>
+
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Window>

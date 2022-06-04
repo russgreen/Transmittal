@@ -1,18 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class CompanyModel
+
+public class CompanyModel : BaseModel
 {
     public int ID { get; set; }
-    [Required]
-    [StringLength(50)]
+    [Required(ErrorMessage = "A company name is required")]
     public string CompanyName { get; set; }
-    public string Address { get; set; }
-    [StringLength(50)]
-    public string Tel { get; set; }
-    [StringLength(50)]
-    public string Fax { get; set; }
-    [StringLength(250)]
-    public string Website { get; set; }
-    public List<PersonModel> Contacts { get; set; }
+    public string? Role { get; set; }
+    public string? Address { get; set; }
+    public string? Tel { get; set; }
+    public string? Fax { get; set; }
+    public string? Website { get; set; }
+    public List<PersonModel>? Contacts { get; set; }
 }
