@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class TransmittalDistributionModel : BaseModel
+public class TransmittalDistributionModel : ProjectDirectoryModel
 {
     public int TransDistID { get; set; }
     public int TransID { get; set; }
