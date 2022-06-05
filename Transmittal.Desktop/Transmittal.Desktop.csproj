@@ -54,7 +54,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.57" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
   </ItemGroup>
 
   <ItemGroup>
