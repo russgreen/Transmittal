@@ -40,12 +40,12 @@ public class SettingsService : ISettingsService
                     GlobalSettings.IssueSheetStore = dbSettings.IssueSheetStore;
                     GlobalSettings.ReportStore = dbSettings.ReportStore;
                     GlobalSettings.DirectoryStore = dbSettings.DirectoryStore;
-                    GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;
-                    GlobalSettings.ProjectIdentifier = dbSettings.ProjectIdentifier;
-                    GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
-                    GlobalSettings.ProjectName = dbSettings.ProjectName;
+                    GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;                    
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
+                    GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
+                    GlobalSettings.ProjectName = dbSettings.ProjectName;
+                    GlobalSettings.ProjectIdentifier = dbSettings.ProjectIdentifier;
                     GlobalSettings.Originator = dbSettings.Originator;
                     GlobalSettings.Role = dbSettings.Role;
                 }
