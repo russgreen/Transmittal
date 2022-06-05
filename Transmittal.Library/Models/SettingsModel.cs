@@ -13,14 +13,12 @@ public partial class SettingsModel : BaseModel
     public bool RecordTransmittals { get; set; } = false;
     public string DatabaseFile { get; set; } = "[NONE]";
     public string DatabaseTemplateFile { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Data\TemplateDatabase.tdb";
-
-    public List<string> FolderNameParts => new List<string>{ "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%" };
+        
     public string DrawingIssueStore { get; set; } = @"%UserProfile%\Documents\Transmittal\DrawingIssues";
     public string IssueSheetStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
     public string DirectoryStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "Directory");
     public string ReportStore { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Reports\";
-
-    public List<string> FileNameParts => new List<string>{ "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
+        
     public string FileNameFilter { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
     public bool UseExtranet { get; set; } = false;
     public bool UseISO19650 { get; set; } = false;
