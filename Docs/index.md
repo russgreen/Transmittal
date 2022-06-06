@@ -1,3 +1,0 @@
-# Transmittal Revit addin
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis libero malesuada, ornare lectus eu, tincidunt mi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin id purus sit amet urna elementum imperdiet non et nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec viverra tristique consectetur. Praesent feugiat lectus turpis, eget auctor urna molestie sed. Sed pulvinar lacus nec massa venenatis efficitur. Donec sit amet tortor neque. Proin odio nisl, accumsan aliquet molestie eu, consequat quis orci.
