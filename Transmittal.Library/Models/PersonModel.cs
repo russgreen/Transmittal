@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class PersonModel
+public class PersonModel : BaseModel
 {
     public int ID { get; set; }
-    [Required]
-    [StringLength(50)]
-    public string LastName { get; set; }
-    [StringLength(50)]
-    public string FirstName { get; set; }
+    [Required(ErrorMessage = "Last name is required")]
+    [MinLength(2)]
+    public string LastName { get; set; } = String.Empty; 
+    [Required(ErrorMessage = "At least provide an intial")]
+    [MinLength(1)]
+    public string FirstName { get; set; } = String.Empty;
     /// <summary>
     /// FirstName LastName
     /// </summary>
@@ -17,15 +18,15 @@ public class PersonModel
     /// Lastname, Firstname
     /// </summary>
     public string FullNameReversed => $"{LastName}, {FirstName}";
-    [StringLength(50)]
-    [RegularExpressionAttribute(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
-    public string Email { get; set; }
-    [StringLength(50)]
-    public string Tel { get; set; }
-    [StringLength(50)]
-    public string Mobile { get; set; }
+    [EmailAddress]
+    //[RegularExpressionAttribute(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")]
+    public string? Email { get; set; }
+    public string? Tel { get; set; }
+    public string? Mobile { get; set; }
+    public string? Position { get; set; }
+    public string? Notes { get; set; }
     [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a company for the person")]
     public int CompanyID { get; set; }
-    public string Position { get; set; }
-    public string Notes { get; set; }
+    public bool ShowInReport { get; set; } = true;
 }

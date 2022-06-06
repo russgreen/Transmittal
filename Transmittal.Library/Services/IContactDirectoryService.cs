@@ -1,4 +1,5 @@
-﻿using Transmittal.Library.Models;
+﻿using System.Collections.ObjectModel;
+using Transmittal.Library.Models;
 
 namespace Transmittal.Library.Services;
 public interface IContactDirectoryService
@@ -7,7 +8,7 @@ public interface IContactDirectoryService
     /// Get a list of all companies 
     /// </summary>
     /// <returns>A list of CompanyModel</returns>
-    List<CompanyModel> GeCompanies_All();
+    List<CompanyModel> GetCompanies_All();
     /// <summary>
     /// Get a single company
     /// </summary>
@@ -29,7 +30,12 @@ public interface IContactDirectoryService
     /// </summary>
     /// <param name="companyID"></param>
     /// <returns>A list of PersonModel</returns>
-    List<PersonModel> GetContacts_ByCompany(int companyID);
+    List<PersonModel> GetPeople_ByCompany(int companyID);
+    /// <summary>
+    /// Get a list of all people
+    /// </summary>
+    /// <returns>A list of PersonModel</returns>
+    List<PersonModel> GetPeople_All();
     /// <summary>
     /// Get a single approved list contact 
     /// </summary>
@@ -46,28 +52,11 @@ public interface IContactDirectoryService
     /// </summary>
     /// <param name="model"></param>
     void UpdatePerson(PersonModel model);
-    
 
-    /// <summary>
-    /// Get the project directory list 
-    /// </summary>
-    /// <returns>List of ProjectDirectoryModel</returns>
+    
+    ///// <summary>
+    ///// Get the project directory list 
+    ///// </summary>
+    ///// <returns>List of ProjectDirectoryModel</returns>
     List<ProjectDirectoryModel> GetProjectDirectory();
-    /// <summary>
-    /// Create a new entry in the project directory
-    /// </summary>
-    /// <param name="model"></param>
-    void CreateProjectDirectory(ProjectDirectoryModel model);
-    /// <summary>
-    /// Update an entry in the project directoruy
-    /// </summary>
-    /// <param name="model"></param>
-    /// <remarks>should only be changing the ShowInReport entry else use UpdatePerson()</remarks>
-    void UpdateProjectDirectory(ProjectDirectoryModel model);
-    /// <summary>
-    /// Delete an entry from the project directory.
-    /// </summary>
-    /// <param name="model"></param>
-    /// <remarks>cannot delete an entry if documents have been issued to them</remarks>
-    void DeleteProjectDirectory(ProjectDirectoryModel model);
 }

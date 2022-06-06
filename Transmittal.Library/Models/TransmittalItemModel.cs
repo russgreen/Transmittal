@@ -20,9 +20,9 @@ public class TransmittalItemModel : BaseModel
     public string DrgScale { get; set; }
     [Required]
     [StringLength(120)]
-    public string DrgDrawn { get; set; } = "NN";//= DefaultUserInitials();
+    public string DrgDrawn { get; set; } = "-";//= DefaultUserInitials();
     [StringLength(120)]
-    public string DrgChecked { get; set; }
+    public string DrgChecked { get; set; } = "-";
     [Required]
     [StringLength(10)]
     public string DrgProj { get; set; } = "0000";

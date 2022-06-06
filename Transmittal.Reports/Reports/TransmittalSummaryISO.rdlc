@@ -155,6 +155,26 @@
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="dsProject">
+      <Query>
+        <DataSourceName>DummyDataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="ProjectIdentifier">
+          <DataField>ProjectIdentifier</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProjectNumber">
+          <DataField>ProjectNumber</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ProjectName">
+          <DataField>ProjectName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -1408,7 +1428,10 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!Project.Value, "dsSummaryItems")</Value>
+                      <Value>=
+IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")), 
+First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.Value, "dsProject")) 
++ " " + First(Fields!ProjectName.Value, "dsProject")</Value>
                       <Style>
                         <FontFamily>fira sans</FontFamily>
                         <FontSize>12pt</FontSize>
@@ -1448,21 +1471,6 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Image Name="Logo">
-              <Source>External</Source>
-              <Value>=Parameters!parImagePath.Value</Value>
-              <Sizing>FitProportional</Sizing>
-              <Top>0.30969cm</Top>
-              <Left>33.9796cm</Left>
-              <Height>2cm</Height>
-              <Width>6cm</Width>
-              <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
             <Textbox Name="Textbox2">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1484,7 +1492,7 @@
               <Top>2.38025cm</Top>
               <Height>0.6cm</Height>
               <Width>18.54729cm</Width>
-              <ZIndex>2</ZIndex>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>

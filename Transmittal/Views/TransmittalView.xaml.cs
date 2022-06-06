@@ -1,24 +1,7 @@
-﻿using Autodesk.Revit.DB;
-using Autodesk.Windows;
-using Ookii.Dialogs.Wpf;
+﻿using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Transmittal.Library.Models;
 using Transmittal.Models;
-using Transmittal.Requesters;
 
 namespace Transmittal.Views;
 /// <summary>
@@ -34,42 +17,6 @@ public partial class TransmittalView : Window
            
         _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
-
-        BuildSheetsDataGrid();
-        BuildDirectoryDataGrids();
-    }
-
-    private void BuildSheetsDataGrid()
-    {
-        this.sfDataGridSheets.Columns.Clear();
-        this.sfDataGridSheets.Columns.Add(new GridCheckBoxSelectorColumn() { MappingName = "SelectorColumn", HeaderText = string.Empty, AllowCheckBoxOnHeader = false, Width = 34}); //, CheckBoxSize = new Size(14, 14) 
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgNumber", HeaderText = "Number", Width = 100 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgRev", HeaderText = "Revision", Width = 50 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgName", HeaderText = "Name", Width = 250 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgVolume", HeaderText = "Volume", Width = 50 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgLevel", HeaderText = "Level", Width = 50 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgType", HeaderText = "Type", Width = 50 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgStatus", HeaderText = "Status", Width = 50 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "StatusDescription", HeaderText = "Status Description", Width = 120 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgPaper", HeaderText = "Paper", Width = 75 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgScale", HeaderText = "Scale", Width = 75 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "IssueDate", HeaderText = "Issue Date", Width = 100 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgDrawn", HeaderText = "Dr", Width = 75 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "DrgChecked", HeaderText = "Ch", Width = 75 });
-        this.sfDataGridSheets.Columns.Add(new GridTextColumn() { MappingName = "RevNotes", HeaderText = "Rev Notes", MinimumWidth = 300 });
-    }
-
-    private void BuildDirectoryDataGrids()
-    {
-        this.sfDataGridDirectory.Columns.Clear();
-        this.sfDataGridDirectory.Columns.Add(new GridTextColumn() { MappingName = "ApprovedListModel.CompanyName", HeaderText = "Company" });
-        this.sfDataGridDirectory.Columns.Add(new GridTextColumn() { MappingName = "ApprovedListContactModel.FullNameReversed", HeaderText = "Person" });
-
-        this.sfDataGridDistribution.Columns.Clear();
-        this.sfDataGridDistribution.Columns.Add(new GridTextColumn() { MappingName = "ApprovedListModel.CompanyName", HeaderText = "Company" });
-        this.sfDataGridDistribution.Columns.Add(new GridTextColumn() { MappingName = "ApprovedListContactModel.FullNameReversed", HeaderText = "Person" });
-        this.sfDataGridDistribution.Columns.Add(new GridTextColumn() { MappingName = "TransCopies", HeaderText = "Copies", Width = 60 });
-        this.sfDataGridDistribution.Columns.Add(new GridTextColumn() { MappingName = "TransFormat", HeaderText = "Format", Width = 60 });
     }
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
@@ -79,6 +26,7 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
     {
+       
         Ookii.Dialogs.Wpf.TaskDialogButton yesButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Yes);
         Ookii.Dialogs.Wpf.TaskDialogButton noButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.No);
 
@@ -90,7 +38,7 @@ public partial class TransmittalView : Window
             ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.Standard,
             Buttons = { yesButton, noButton }
         };
-
+        
         Ookii.Dialogs.Wpf.TaskDialogButton button = dialog.ShowDialog(this);
         if (button == yesButton)
         {
@@ -100,8 +48,9 @@ public partial class TransmittalView : Window
                 this.Close();
             }
         }
-    }    
-    
+        //TODO stop the main window closing if the no button is clicked
+    }
+
     private void sfDataGridSheets_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
     {
         // couldn't get the databinding to work on the selecteditems property.
@@ -138,5 +87,13 @@ public partial class TransmittalView : Window
     private void Button_AddToDirectory_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void RecordIssue_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if(this.RecordIssue.IsChecked == false)
+        {
+            _viewModel.SelectedProjectDirectory.Clear();
+        }
     }
 }

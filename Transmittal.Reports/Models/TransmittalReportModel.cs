@@ -4,5 +4,5 @@ namespace Transmittal.Reports.Models;
 
 public class TransmittalReportModel : TransmittalModel
 {
-    public string Project { get; set; }
+    //there used to be additional parameters here in an earlier version of the application.  
 }

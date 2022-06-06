@@ -2,13 +2,14 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Transmittal.Library.Models;
+using Transmittal.Library.ViewModels;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
 
 namespace Transmittal.ViewModels;
 
-[INotifyPropertyChanged]
-internal partial class StatusViewModel : CloseableViewModel
+//[INotifyPropertyChanged]
+internal partial class StatusViewModel : BaseViewModel
 {
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly IStatusRequester _callingViewModel;

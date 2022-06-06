@@ -14,7 +14,7 @@
     <Assembly>C:\Program Files\Transmittal\Transmittal_2023.dll</Assembly>
     <ClientId>A8DCC200-6A73-4EDF-BA81-8BEC385AEDF3</ClientId>
     <FullClassName>Transmittal.App</FullClassName>
-    <VendorId>ARBG</VendorId>
+    <VendorId>Transmittal</VendorId>
 	<VisibilityMode>NotVisibleInFamily</VisibilityMode>
 	<VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
   </AddIn>

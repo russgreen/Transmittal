@@ -7,14 +7,16 @@
 		<LangVersion>10</LangVersion>		
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NeutralLanguage>en</NeutralLanguage>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<UseWPF>true</UseWPF>		
-		<UseWindowsForms>true</UseWindowsForms>
 		<TargetFramework>net48</TargetFramework>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
+		<DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
 		<Optimize>true</Optimize>
@@ -49,53 +51,21 @@
 		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>-->
 
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
-        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
-		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
+        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015
+		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions> -->
 
-		<!-- Multiple targets can cause obj folder locking by concurrent builds -->
-		<BuildInParallel>false</BuildInParallel>
+		<!-- Multiple targets can cause obj folder locking by concurrent builds 
+		<BuildInParallel>false</BuildInParallel>-->
 
 		<!-- Override 'OutputPath'  -->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<!--<OutputPath>bin\$(RevitVersion)</OutputPath>-->
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<!--<OutputPath>bin\$(RevitVersion)</OutputPath>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>-->
 		
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Forms\FormArchive.cs" />
-	  <Compile Remove="Forms\FormArchive.Designer.cs" />
-	  <Compile Remove="Forms\FormDirectory.cs" />
-	  <Compile Remove="Forms\FormDirectory.Designer.cs" />
-	  <Compile Remove="Forms\FormNewCompany.cs" />
-	  <Compile Remove="Forms\FormNewCompany.Designer.cs" />
-	  <Compile Remove="Forms\FormNewPerson.cs" />
-	  <Compile Remove="Forms\FormNewPerson.Designer.cs" />
-	  <Compile Remove="Forms\FormProjectDirectoryNew.cs" />
-	  <Compile Remove="Forms\FormProjectDirectoryNew.Designer.cs" />
-	  <Compile Remove="Forms\FormRevisionNew.cs" />
-	  <Compile Remove="Forms\FormRevisionNew.Designer.cs" />
-	  <Compile Remove="Forms\FormRevisions.cs" />
-	  <Compile Remove="Forms\FormRevisions.Designer.cs" />
-	  <Compile Remove="Forms\FormSettings.cs" />
-	  <Compile Remove="Forms\FormSettings.Designer.cs" />
-	  <Compile Remove="Forms\FormStatus.cs" />
-	  <Compile Remove="Forms\FormStatus.Designer.cs" />
-	  <Compile Remove="Forms\FormTransmittal.cs" />
-	  <Compile Remove="Forms\FormTransmittal.Designer.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Remove="Forms\FormArchive.resx" />
-	  <EmbeddedResource Remove="Forms\FormDirectory.resx" />
-	  <EmbeddedResource Remove="Forms\FormNewCompany.resx" />
-	  <EmbeddedResource Remove="Forms\FormNewPerson.resx" />
-	  <EmbeddedResource Remove="Forms\FormProjectDirectoryNew.resx" />
-	  <EmbeddedResource Remove="Forms\FormRevisionNew.resx" />
-	  <EmbeddedResource Remove="Forms\FormRevisions.resx" />
-	  <EmbeddedResource Remove="Forms\FormSettings.resx" />
-	  <EmbeddedResource Remove="Forms\FormStatus.resx" />
-	  <EmbeddedResource Remove="Forms\FormTransmittal.resx" />
+	  <Compile Remove="ViewModels\BaseViewModel.cs" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -146,16 +116,16 @@
 
 	<ItemGroup>
 		<Resource Include="Resources\Add.png" />
-		<EmbeddedResource Include="Resources\Archive_Button.png" />
 		<Resource Include="Resources\ContactDetails.png" />
 		<Resource Include="Resources\DataMerge.png" />
-		<Resource Include="Resources\Delete.png" />
-		<EmbeddedResource Include="Resources\Directory_Button.png" />
+		<Resource Include="Resources\Delete.png" />		
 		<Resource Include="Resources\GreenCheck.png" />
 		<Resource Include="Resources\Report.png" />
-		<EmbeddedResource Include="Resources\Settings_Button.png" />
 		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
+		<EmbeddedResource Include="Resources\Archive_Button.png" />
+		<EmbeddedResource Include="Resources\Directory_Button.png" />
+		<EmbeddedResource Include="Resources\Settings_Button.png" />		
 	</ItemGroup>
 
 	<ItemGroup>
@@ -163,13 +133,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.52" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.52" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
   </ItemGroup>
 
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+	  <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
 	</ItemGroup>
 
 
@@ -199,13 +170,12 @@
 		  <Generator>SettingsSingleFileGenerator</Generator>
 		  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
 		</None>
+		<None Update="Resources\TransmittalParameters.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Transmittal.addin">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Forms\" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">

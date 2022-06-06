@@ -1,5 +1,5 @@
 ﻿namespace Transmittal.Library.Models;
-public class SharedParamaterModel
+public class SharedParamaterModel 
 {
     public SharedParamaterModel(string name, string guid)
     {

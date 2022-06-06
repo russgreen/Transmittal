@@ -23,7 +23,7 @@ Assembly File Version   $(VersionPrefix).0
 ## Roadmap
 
 - [x] Migrate UI from older project - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
-- [ ] WPF UI with .NET CommunityToolkit.Mvvm
+- [x] WPF UI with .NET CommunityToolkit.MVVM
 - [x] Build template SQLite database
 - [x] Create ribbon buttons and test UI
 - [x] Load projects sheets to datagrid
@@ -31,16 +31,15 @@ Assembly File Version   $(VersionPrefix).0
 - [x] Create revisions
 - [x] Apply revisions to sheets
 - [x] Export files to PDF, DWG, etc with settings
-- [ ] Save and load settings in using shared parameters.  dbPath; filenamefilter; sharedparametersfilepath; parameters to use for StatusCode, StatusDescription, ???
-- [ ] Save and load settings in extensible storage instead of parameters.  dbPath; filenamefilter; sharedparametersfilepath; parameters to use for StatusCode, StatusDescription, ???
-- [ ] Check if model has already been configured to use transmittal
-- [ ] Create new SQLite database from template
-- [ ] Get current SharedParameter file....replace with custom file....set back to original
-- [ ] Create, edit, save project directory in database
-- [ ] Load project directory from db
-- [ ] Assign users to transmittal
-- [ ] Record transmittal in database
-- [ ] Merge and edit transmittal history
-- [ ] Display reports
-- [ ] Build and test installer
-- [ ] Desktop app to manage transmittal hiostory outside of Revit and issue non-Revit documents
+- [x] Save and load settings in extensible storage.  
+- [x] Create new SQLite database from template
+- [x] Get current SharedParameter file....replace with custom file....set back to original
+- [x] Create, edit, save project directory in database
+- [x] Load project directory from db
+- [x] Assign people to transmittal
+- [x] Record transmittal in database
+- [x] Merge and edit transmittal history
+- [x] Display reports
+- [x] Build and test installer
+- [x] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents
+- [ ] Add people to directory from revit wizard

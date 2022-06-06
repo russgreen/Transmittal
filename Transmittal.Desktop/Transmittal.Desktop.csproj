@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <OutputType>WinExe</OutputType>
+	  <TargetFramework>net48</TargetFramework>
+	  <!--<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>-->
+	  <Nullable>enable</Nullable>
+	  <UseWPF>true</UseWPF>
+	  <LangVersion>10</LangVersion>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <NeutralLanguage>en</NeutralLanguage>
+	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	  <Platforms>x64</Platforms>
+	  <ApplicationIcon>Transmittal.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Add.png" />
+    <None Remove="Resources\ContactDetails.png" />
+    <None Remove="Resources\DataEdit.png" />
+    <None Remove="Resources\DataMerge.png" />
+    <None Remove="Resources\Delete.png" />
+    <None Remove="Resources\Reload.png" />
+    <None Remove="Resources\Report.png" />
+    <None Remove="Transmittal.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Transmittal.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Add.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ContactDetails.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\DataEdit.png" />
+    <Resource Include="Resources\DataMerge.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Delete.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Reload.png" />
+    <Resource Include="Resources\Report.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+    <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Transmittal.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ArchiveView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\DirectoryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ArchiveView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DirectoryView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+
+</Project>

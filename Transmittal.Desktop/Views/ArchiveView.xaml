@@ -1,0 +1,144 @@
+﻿<Window x:Class="Transmittal.Desktop.Views.ArchiveView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Desktop.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels" 
+        xmlns:converters="clr-namespace:Transmittal.Desktop.Converters" 
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:ArchiveViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}"  Width="800" Height="450" 
+        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="450">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:AddNewRowPositionConverter x:Key="AddNewRowPositionConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Window.DataContext>
+        <viewModels:ArchiveViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="White" >
+            <Button Command="{Binding LoadDataCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Reload.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Reload Data</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button IsEnabled="{Binding ItemSelected}"
+                    Command="{Binding ShowTransmittalReportCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Transmittal Report</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button IsEnabled="{Binding HasDatabase}"
+                    Command="{Binding ShowSummaryReportCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Summary Report</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button IsEnabled="{Binding CanMergeTransmittals}"
+                    Command="{Binding MergeTransmittalsCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/DataMerge.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Merge Transmittals</TextBlock>
+                </StackPanel>
+            </Button>
+            <ToggleButton x:Name="EnableEditButton" 
+                          IsEnabled="{Binding ItemSelected}" >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/DataEdit.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Enable Editing</TextBlock>
+                </StackPanel>
+            </ToggleButton>
+        </ToolBar>
+
+        <syncfusion:SfDataGrid x:Name="sfDataGridTransmittals" Grid.Column="0" Grid.Row="1" Margin="5" 
+                               AutoGenerateColumns="False"                                
+                               ColumnSizer="AutoWithLastColumnFill"
+                               AllowSorting="True"
+                               AllowFiltering="True"
+                               SelectionMode="Extended"
+                               SelectedItems="{Binding SelectedTransmittals,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               ItemsSource="{Binding Transmittals}">
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridDateTimeColumn HeaderText="Transmittal Date" MappingName = "TransDate" 
+                                               IsReadOnly="True" 
+                                               TextAlignment="Left" 
+                                               Pattern="LongDate" />
+            </syncfusion:SfDataGrid.Columns>
+        </syncfusion:SfDataGrid>
+
+        <TabControl Grid.Column="1" Grid.Row="1" Margin="5" >
+            <TabItem Header="Documents / Sheets" >
+                <syncfusion:SfDataGrid x:Name="sfDataGridTransmittalItems" 
+                                       AutoGenerateColumns="False"
+                                       AllowFiltering="True"
+                                       SelectionMode="Single"                                      
+                                       AllowEditing="{Binding IsChecked, ElementName=EnableEditButton}"
+                                       EditTrigger="OnDoubleTap"
+                                       AddNewRowPosition="{Binding IsChecked, ElementName=EnableEditButton, Converter={StaticResource AddNewRowPositionConverter}}"
+                                       AddNewRowText="Click here to add a new item to the transmittal record"
+                                       GridValidationMode="InEdit"
+                                       ColumnSizer="AutoLastColumnFill"
+                                       ItemsSource="{Binding TransmittalItems}"
+                                       SelectedItem="{Binding SelectedTransmittalItem}" AddNewRowInitiating="sfDataGridTransmittalItems_AddNewRowInitiating">
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridTextColumn MappingName="DrgProj" HeaderText="Project" />
+                        <syncfusion:GridTextColumn MappingName="DrgOriginator" HeaderText="Originator" />
+                        <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume" />
+                        <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level" />
+                        <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" />
+                        <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" />
+                        <syncfusion:GridTextColumn MappingName="DrgRole" HeaderText="Role"  />
+                        <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" />
+                        <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" />
+                        <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" ColumnSizer="AutoLastColumnFill" />
+                        <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" />
+                        <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" />
+                        <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" />
+                        <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" />
+                    </syncfusion:SfDataGrid.Columns>
+                </syncfusion:SfDataGrid>
+            </TabItem>
+            <TabItem Header="Distribution" >
+                <syncfusion:SfDataGrid x:Name="sfDataGridTransmittalDistribution" 
+                                       AutoGenerateColumns="False" 
+                                       AllowFiltering="True"
+                                       AllowEditing="{Binding IsChecked, ElementName=EnableEditButton}"
+                                       EditTrigger="OnDoubleTap"
+                                       AddNewRowPosition="{Binding IsChecked, ElementName=EnableEditButton, Converter={StaticResource AddNewRowPositionConverter}}"
+                                       ColumnSizer="AutoLastColumnFill"
+                                       ItemsSource="{Binding TransmittalDistribution}"
+                                       SelectedItem="{Binding SelectedTransmittalDistribution}">
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridComboBoxColumn HeaderText="Contact" 
+                                                       ColumnSizer="AutoLastColumnFill"
+                                                       ItemsSource="{Binding ProjectDirectory}" 
+                                                       DisplayMemberPath="DisplayName" 
+                                                       SelectedValuePath="Person.ID" 
+                                                       MappingName="PersonID" />
+                        <syncfusion:GridTextColumn MappingName="TransFormat" HeaderText="Format" />
+                        <syncfusion:GridTextColumn MappingName="TransCopies" HeaderText="Copies" />
+                    </syncfusion:SfDataGrid.Columns>
+                </syncfusion:SfDataGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

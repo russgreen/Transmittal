@@ -4,9 +4,65 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        Title="NewPersonView" Height="450" Width="800">
-    <Grid>
-        
+        d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}" Height="450" Width="400">
+    <Window.DataContext>
+        <viewModels:NewPersonViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="First Name" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FirstName}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Last Name" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Company" />
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
+                  ItemsSource="{Binding Companies}"
+                  SelectedItem="{Binding Company}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Email" />
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Telephone" />
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Telephone}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Mobile" />
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Mobile}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Position" />
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Position}" Margin="0,0,0,5" />
+
+        <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" 
+                  Content="Show in project directory report" 
+                  IsChecked="{Binding ShowInReport}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Notes" />
+        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Notes}" Margin="0,0,0,5" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="9" Grid.Column="2" >
+            <Button Content="Save" Padding="5,0,5,0" Command="{Binding SavePersonCommand}" />
+            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+        </StackPanel>
     </Grid>
 </Window>

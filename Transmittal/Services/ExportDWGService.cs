@@ -47,6 +47,13 @@ internal class ExportDWGService : IExportDWGService
             // export the sheet
             exportDocument.Export(folderPath, exportFileName, lviews, dwgExportOptions);
 
+            //delete the PCP file
+            var pcpFile = Path.Combine(folderPath, exportFileName.ToLower().Replace(".dwg" , ".pcp"));
+            if (File.Exists(pcpFile))
+            {
+                File.Delete(pcpFile);
+            }
+
             if (dwgExportOptions.SharedCoords == true)
             {
                 // export each view as dwg to support shared coordinates
@@ -77,6 +84,12 @@ internal class ExportDWGService : IExportDWGService
                     string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
                     exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #endif
+
+                    pcpFile = Path.Combine(folderPath, ViewFileName.ToLower().Replace(".dwg", ".pcp"));
+                    if (File.Exists(pcpFile))
+                    {
+                        File.Delete(pcpFile);
+                    }
                 }
             }
         }

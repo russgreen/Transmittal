@@ -7,15 +7,17 @@ using System.Collections.Specialized;
 using System.Reflection;
 using Transmittal.Extensions;
 using Transmittal.Library.Models;
+using Transmittal.Library.ViewModels;
 using Transmittal.Library.Services;
 using Transmittal.Models;
 using Transmittal.Requesters;
 using Transmittal.Services;
+using System.Diagnostics;
 
 namespace Transmittal.ViewModels;
 
-[INotifyPropertyChanged]
-internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequester, IRevisionRequester
+//[INotifyPropertyChanged]
+internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, IRevisionRequester
 {
     private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>(); 
@@ -112,12 +114,12 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
     [ObservableProperty]
+    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
     private ObservableCollection<TransmittalDistributionModel> _distribution;
     [ObservableProperty]
-    private ObservableCollection<ProjectDirectoryModel> _selectedProjectDirectory;
+    private ObservableCollection<object> _selectedProjectDirectory;
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
-    private ObservableCollection<TransmittalDistributionModel> _selectedDistribution;
+    private ObservableCollection<object> _selectedDistribution;
     [ObservableProperty]
     private bool _hasDirectoryEntriesSelected = false;
     [ObservableProperty]
@@ -151,6 +153,8 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
+
+        _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
         
         WireUpSheetsPage();
 
@@ -218,7 +222,6 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
             SelectedDistribution.CollectionChanged += SelectedDistribution_CollectionChanged;
         }
     }
-
 
     #region Drawing Sheets
 
@@ -485,13 +488,118 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
 
         trans.Commit();
     }
+   
+
+    #endregion
+
+    #region Export Formats
+    [ICommand]
+    private void GetFormatCount()
+    {
+        bool[] formats = { _exportPDF, _exportDWG, _exportDWF };
+
+        ExportFormatCount = formats.Sum(x => x ? 1 : 0);
+    }
+
+    [ICommand]
+    private void SetDwgVersion()
+    {
+        DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+    }
+
+    #endregion
+
+    #region Distribution
+    private bool ValidateDistribution()
+    {
+        if (_recordTransmittal == true && (_distribution is null || _distribution.Count == 0))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        
+    }
+
+    private void Distribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(IsDistributionValid));
+    }
+
+    private void SelectedProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        HasDirectoryEntriesSelected = true;
+
+        if (_selectedProjectDirectory == null || _selectedProjectDirectory.Count == 0)
+        {
+            HasDirectoryEntriesSelected = false;
+        }
+    }
+
+    private void SelectedDistribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        HasDistributionEntriesSelected = true;
+
+        if (_selectedDistribution == null || _selectedDistribution.Count == 0)
+        {
+            HasDistributionEntriesSelected = false;
+        }
+    }
+
+    [ICommand]
+    private void AddToDistribition()
+    {
+        foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
+        {
+            if (directoryContact != null)
+            {
+                TransmittalDistributionModel distributionRecord = new()
+                {
+                    
+                    Company = directoryContact.Company,
+                    Person = directoryContact.Person,
+                    PersonID = directoryContact.Person.ID,
+                    TransCopies = _copies,
+                    TransFormat = _issueFormat.Code
+                };
+
+                _projectDirectory.Remove(directoryContact);
+                _distribution.Add(distributionRecord);
+            }
+        }
+    }
+
+    [ICommand]
+    private void RemoveFromDistribution()
+    {
+        foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
+        {
+            if (distributionRecord != null)
+            {
+                ProjectDirectoryModel directoryContact = new()
+                {
+                    Company = distributionRecord.Company,
+                    Person = distributionRecord.Person
+                };
+
+                _distribution.Remove(distributionRecord);
+                _projectDirectory.Add(directoryContact);
+            }
+        }
+    }
+
+
+    #endregion
 
     [ICommand]
     private void ProcessSheets()
     {
         IsBackEnabled = false;
         IsFinishEnabled = false;
-        //Application.DoEvents();
 
         try
         {
@@ -514,8 +622,6 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                         //TODO - test if this check is required.....left in for now...
                         if (sheet.CanBePrinted == true)
                         {
-                            SheetTaskProcessed = 0;
-
                             var views = new ViewSet();
                             views.Insert(sheet);
 
@@ -534,21 +640,17 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                                  Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
                                  Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
 
-                            DrawingSheetProgressLabel = fileName;
-                            SheetTaskProgressLabel = "";
-
-                            //ExportFormatCount = 0;
-                            //if (_exportPDF == true) { ExportFormatCount += 1; }
-                            //if (_exportDWG == true) { ExportFormatCount += 1; }
-                            //if (_exportDWF == true) { ExportFormatCount += 1; }
-
+                            DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                            SheetTaskProcessed = 0;
+                            SheetTaskProgressLabel = string.Empty;
+                            DispatcherHelper.DoEvents();
 
                             if (_exportPDF == true)
                             {
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-                                _exportPDFService.ExportPDF($"{fileName}.pdf", 
-                                App.revitDocument, 
-                                sheet);
+                                    _exportPDFService.ExportPDF($"{fileName}.pdf", 
+                                    App.revitDocument, 
+                                    sheet);
 #else
                                 _exportPDFService.ExportPDF(fileName,
                                     App.RevitDocument,
@@ -561,10 +663,10 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                                 SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
 
-                           
+
 
                             if (_abortFlag == true)
                             {
@@ -587,10 +689,10 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                                 SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
 
-                            
+
 
                             if (_abortFlag == true)
                             {
@@ -614,9 +716,9 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                                 SheetTaskProcessed += 1;
 
                                 // to allow cancel button working
-                                Application.DoEvents();
+                                DispatcherHelper.DoEvents();
                             }
-                                                        
+
 
                             if (_abortFlag == true)
                             {
@@ -634,14 +736,23 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
                             }
 
                             DrawingSheetsProcessed += 1;
-                            
+
 
                             // to allow cancel button working
-                            Application.DoEvents();
+                            DispatcherHelper.DoEvents();
                         }
                     }
                 }
             }
+
+            StepOneComplete = true;
+            RecordTransmittalInDatabase();
+            StepTwoComplete = true;
+            LaunchTransmittalReport();
+            StepThreeComplete = true;
+
+            //just pause before closing the window
+            Thread.Sleep(5000);
 
             this.OnClosingRequest();
             return;
@@ -715,80 +826,67 @@ internal partial class TransmittalViewModel : CloseableViewModel, IStatusRequest
             trans.RollBack();
         }
     }
-    #endregion
 
-    #region Export Formats
-    [ICommand]
-    private void GetFormatCount()
+    private void RecordTransmittalInDatabase()
     {
-        bool[] formats = { _exportPDF, _exportDWG, _exportDWF };
-
-        ExportFormatCount = formats.Sum(x => x ? 1 : 0);
-    }
-
-    [ICommand]
-    private void SetDwgVersion()
-    {
-        DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
-    }
-
-    #endregion
-
-    #region Distribution
-    private bool ValidateDistribution()
-    {
-        if (_recordTransmittal == true && (_distribution is null || _distribution.Count == 0))
+        if(RecordTransmittal == false)
         {
-            return false;
+            return;
         }
 
-        return true;
-    }
+        _newTransmittal.TransDate = DateTime.Now;
+        _transmittalService.CreateTransmittal(_newTransmittal);
 
-    private void ProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        
-    }
-
-    private void Distribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        
-    }
-
-    private void SelectedProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        HasDirectoryEntriesSelected = true;
-
-        if (_selectedProjectDirectory == null || _selectedProjectDirectory.Count == 0)
+        foreach (TransmittalItemModel item in _selectedDrawingSheets)
         {
-            HasDirectoryEntriesSelected = false;
+            item.TransID = _newTransmittal.ID;
+
+            //check if we're using the project identifier on this project
+            if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
+            {
+                item.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
+            }
+            else
+            {
+                item.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
+            }
+
+            item.DrgOriginator = _settingsService.GlobalSettings.Originator;
+            item.DrgRole = _settingsService.GlobalSettings.Role;
+            _transmittalService.CreateTransmittalItem(item);
+        }
+
+        foreach (TransmittalDistributionModel dist in _distribution)
+        {
+            dist.TransID = _newTransmittal.ID;
+            _transmittalService.CreateTransmittalDist(dist);
         }
     }
 
-    private void SelectedDistribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void LaunchTransmittalReport()
     {
-        HasDistributionEntriesSelected = true;
-
-        if (_selectedDistribution == null || _selectedDistribution.Count == 0)
+        if (RecordTransmittal == false)
         {
-            HasDistributionEntriesSelected = false;
+            return;
         }
+
+        //get the database file from the current model
+        var dbFile = _settingsService.GlobalSettings.DatabaseFile;
+
+        //launch the desktop UI
+#if DEBUG
+        var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\..\"));
+
+        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\x64\Debug\net48", "Transmittal.Desktop.exe");
+#else
+        var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
+#endif
+
+        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+        processStartInfo.FileName = pathToExe;
+        processStartInfo.Arguments = $"--transmittal={_newTransmittal.ID} \"--database={dbFile}\"";
+
+        Process.Start(processStartInfo);        
     }
-
-    [ICommand]
-    private void AddToDistribition()
-    {
-
-    }
-
-    [ICommand]
-    private void RemoveFromDistribution()
-    {
-
-    }
-
-
-    #endregion
-
-
 }
