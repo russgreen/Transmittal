@@ -4,7 +4,7 @@
 ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg)
 [![AppStore](https://img.shields.io/badge/Autodesk-AppStore-blue)](https://apps.autodesk.com/en/Publisher/PublisherHomepage?ID=200910140805021)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/IsolateWarnings)
+![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/Transmittal)
 
 Transmittal adds a wizard interface to Revit to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and product transmittal reports and historic document issue sheets.
 
@@ -23,7 +23,7 @@ Assembly File Version   $(VersionPrefix).0
 ## Roadmap
 
 - [x] Migrate UI from older project - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
-- [ ] WPF UI with .NET CommunityToolkit.MVVM
+- [x] WPF UI with .NET CommunityToolkit.MVVM
 - [x] Build template SQLite database
 - [x] Create ribbon buttons and test UI
 - [x] Load projects sheets to datagrid
@@ -33,12 +33,13 @@ Assembly File Version   $(VersionPrefix).0
 - [x] Export files to PDF, DWG, etc with settings
 - [x] Save and load settings in extensible storage.  
 - [x] Create new SQLite database from template
-- [ ] Get current SharedParameter file....replace with custom file....set back to original
-- [ ] Create, edit, save project directory in database
-- [ ] Load project directory from db
-- [ ] Assign users to transmittal
-- [ ] Record transmittal in database
-- [ ] Merge and edit transmittal history
-- [ ] Display reports
-- [ ] Build and test installer
-- [ ] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents
+- [x] Get current SharedParameter file....replace with custom file....set back to original
+- [x] Create, edit, save project directory in database
+- [x] Load project directory from db
+- [x] Assign people to transmittal
+- [x] Record transmittal in database
+- [x] Merge and edit transmittal history
+- [x] Display reports
+- [x] Build and test installer
+- [x] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents
+- [ ] Add people to directory from revit wizard
