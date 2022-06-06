@@ -16,7 +16,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Transmittal_2022;component/Views/AppStyles.xaml" />
+                <ResourceDictionary Source="AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
@@ -59,7 +59,7 @@
                                      Text="{Binding FileNameFilter}" />
                             <ComboBox Grid.Row="0" Grid.Column="4" Margin="0,0,0,5"
                                       x:Name="comboBoxFileNameParts" 
-                                      ItemsSource="{Binding Settings.FileNameParts, Mode=OneWay}">
+                                      ItemsSource="{Binding FileNameParts, Mode=OneWay}">
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="DropDownClosed">
                                         <b:InvokeCommandAction Command="{Binding AppendToFileNameFilterCommand, Mode=OneWay}" 
@@ -74,7 +74,7 @@
                                      Text="{Binding DrawingIssueStore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <ComboBox Grid.Row="1" Grid.Column="3" Margin="0,0,5,5"
                                       x:Name="comboBoxFolderNameParts" 
-                                      ItemsSource="{Binding Settings.FolderNameParts, Mode=OneWay}" >
+                                      ItemsSource="{Binding FolderNameParts, Mode=OneWay}" >
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="DropDownClosed">
                                         <b:InvokeCommandAction Command="{Binding AppendToFolderPathCommand, Mode=OneWay}" 
@@ -129,7 +129,12 @@
                                                    RowSelectionBrush="#9993B8D9" 
                                                    AllowEditing="True" 
                                                    AllowDeleting="True" 
-                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill"/>
+                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill">
+                                <syncfusion:SfDataGrid.Columns>
+                                    <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
+                                    <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
+                                </syncfusion:SfDataGrid.Columns>
+                            </syncfusion:SfDataGrid>
 
                             <TextBlock Grid.Row="0" Grid.Column="1" 
                                        Text="Document Statuses" />
@@ -143,7 +148,12 @@
                                                    RowSelectionBrush="#9993B8D9" 
                                                    AllowEditing="True" 
                                                    AllowDeleting="True" 
-                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill"/>
+                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill">
+                                <syncfusion:SfDataGrid.Columns>
+                                    <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
+                                    <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
+                                </syncfusion:SfDataGrid.Columns>
+                            </syncfusion:SfDataGrid>
                             
                             </Grid>
                         </StackPanel>

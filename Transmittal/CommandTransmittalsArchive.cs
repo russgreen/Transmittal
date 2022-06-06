@@ -20,7 +20,7 @@ internal class CommandTransmittalsArchive : IExternalCommand
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
-        //get the database file from the current model
+         //get the database file from the current model
         var dbFile = _settingsService.GlobalSettings.DatabaseFile;
 
         //if database is found the launch the UI

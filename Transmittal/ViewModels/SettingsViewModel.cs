@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using System.Reflection;
 using Transmittal.Library.Models;
+using Transmittal.Library.ViewModels;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 using Transmittal.Extensions;
@@ -12,17 +13,17 @@ using System.Windows.Controls;
 
 namespace Transmittal.ViewModels;
 
-[INotifyPropertyChanged]
-internal partial class SettingsViewModel : CloseableViewModel
+//[INotifyPropertyChanged]
+internal partial class SettingsViewModel : BaseViewModel
 {
     public string WindowTitle { get; private set; }
     
     private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
 
-    //[ObservableProperty]
-    //private SettingsModel _settings;
-
+    public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%" };
+    public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
+    
     public string ProjectNumber;
     public string Originator;
     public string Role;
@@ -55,21 +56,14 @@ internal partial class SettingsViewModel : CloseableViewModel
     [ObservableProperty]
     private List<DocumentStatusModel> _documentStatuses;
 
-
-
     [ObservableProperty]
     private bool _recordTransmittals;
-
     [ObservableProperty]
     private string _databaseFile;
-    
     [ObservableProperty]
     private string _databaseTemplateFile;
-
     [ObservableProperty]
-    private bool _databaseNotFound;
-    
-
+    private bool _databaseNotFound; //used to control visibility of error message in UI
     [ObservableProperty]
     private bool _useCustomSharedParameters;
 
@@ -103,7 +97,6 @@ internal partial class SettingsViewModel : CloseableViewModel
         Role = _settingsService.GlobalSettings.Role;
 
         //Settings = _settingsService.GlobalSettings;
-
         CheckForDatabaseFile();
 
         //BASIC SETTINGS
@@ -117,16 +110,14 @@ internal partial class SettingsViewModel : CloseableViewModel
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
 
-
         //DATABASE SETTINGS
         RecordTransmittals = _settingsService.GlobalSettings.RecordTransmittals;
         DatabaseFile = _settingsService.GlobalSettings.DatabaseFile;
         DatabaseTemplateFile = _settingsService.GlobalSettings.DatabaseTemplateFile;
 
-
         //ADVANCED SETTINGS
         UseCustomSharedParameters = _settingsService.GlobalSettings.UseCustomSharedParameters;
-        // project paramaters
+        // project parameters
         ProjectIdentifierParamGuid = _settingsService.GlobalSettings.ProjectIdentifierParamGuid;
         OriginatorParamGuid = _settingsService.GlobalSettings.OriginatorParamGuid;
         RoleParamGuid = _settingsService.GlobalSettings.RoleParamGuid;
@@ -169,6 +160,12 @@ internal partial class SettingsViewModel : CloseableViewModel
         _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid = SheetStatusDescriptionParamGuid;
 
         _settingsServiceRvt.UpdateSettingsRvt();
+
+        if (_recordTransmittals == true)
+        {
+            // we have a database file so save a copy of settings to the database for use by desktop.exe
+            _settingsService.UpdateSettings();
+        }
 
         this.OnClosingRequest();
     }
@@ -292,18 +289,6 @@ internal partial class SettingsViewModel : CloseableViewModel
             }
         }
     }
-
-    //private static ValidationResult ValidateDatabase(string value, ValidationContext context)
-    //{
-    //    SettingsViewModel instance = (SettingsViewModel)context.ObjectInstance;
-
-    //    if (value == null || instance._settingsServiceRvt.CheckDatabaseFileExists(value, false) == false)
-    //    {
-    //        return new ValidationResult("Database file is required");
-    //    }
-
-    //    return ValidationResult.Success;
-    //}
 
     private void BindSharedParameter(Definition definition, Category category, BuiltInParameterGroup parameterGroup)
     {

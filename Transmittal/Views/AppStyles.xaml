@@ -10,8 +10,12 @@
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     <converters:BrushColorConverter x:Key="BrushColorConverter"/>
     <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
+    <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
+    <BitmapImage x:Key="MergeImage" UriSource="../Resources/DataMerge.png" />
+    <BitmapImage x:Key="ContactImage" UriSource="../Resources/ContactDetails.png" />
+    <BitmapImage x:Key="ReportImage" UriSource="../Resources/Report.png" />
     <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
-    
+        
     <Style x:Key="GroupBox" TargetType="{x:Type GroupBox}">
         <!--<Setter Property="BorderBrush" Value="#D5DFE5" />
         <Setter Property="BorderThickness" Value="1" />-->

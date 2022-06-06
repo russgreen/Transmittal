@@ -1,5 +1,4 @@
 ﻿using Ookii.Dialogs.Wpf;
-using Syncfusion.UI.Xaml.Grid;
 using System.IO;
 using System.Windows;
 using Transmittal.ViewModels;
@@ -16,23 +15,10 @@ public partial class SettingsView : Window
     {
         InitializeComponent();
         
-        BuildDataGrids();
-
         _viewModel = (ViewModels.SettingsViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
     
-    private void BuildDataGrids()
-    {
-        this.sfDataGridFormats.Columns.Clear();
-        this.sfDataGridFormats.Columns.Add(new GridTextColumn() { MappingName = "Code", HeaderText = "Code", Width = 50 }); //, CheckBoxSize = new Size(14, 14) 
-        this.sfDataGridFormats.Columns.Add(new GridTextColumn() { MappingName = "Description", HeaderText = "Description" });
-
-        this.sfDataGridStatuses.Columns.Clear();
-        this.sfDataGridStatuses.Columns.Add(new GridTextColumn() { MappingName = "Code", HeaderText = "Code", Width = 50}); //, CheckBoxSize = new Size(14, 14) 
-        this.sfDataGridStatuses.Columns.Add(new GridTextColumn() { MappingName = "Description", HeaderText = "Description" });        
-    }
-
     private void buttonFolderBrowse_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new VistaFolderBrowserDialog

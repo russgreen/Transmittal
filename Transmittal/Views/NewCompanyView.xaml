@@ -4,9 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        Title="NewCompanyView" Height="450" Width="800">
-    <Grid>
-        
+        d:DataContext="{d:DesignInstance {x:Type viewModels:NewCompanyViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}" Height="250" Width="400">
+    <Window.DataContext>
+        <viewModels:NewCompanyViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="23"/>
+            <RowDefinition />
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="23"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Company Name" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CompanyName}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Address" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Address}" Margin="0,0,0,5" AcceptsReturn="True" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Telephone" />
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Telephone}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Fax" />
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Fax}" Margin="0,0,0,5" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Website" />
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Website}" Margin="0,0,0,5" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="5" Grid.Column="2" >
+            <Button Content="Save" Padding="5,0,5,0" Command="{Binding SaveCompanyCommand}" />
+            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+        </StackPanel>
     </Grid>
 </Window>

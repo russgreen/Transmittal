@@ -1,6 +1,8 @@
-﻿namespace Transmittal.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public abstract class CloseableViewModel
+namespace Transmittal.ViewModels;
+
+public abstract class BaseViewModel : ObservableObject
 {
     public event EventHandler ClosingRequest;
 

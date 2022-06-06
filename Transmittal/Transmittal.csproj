@@ -7,8 +7,10 @@
 		<LangVersion>10</LangVersion>		
 		<ImplicitUsings>enable</ImplicitUsings>
 		<NeutralLanguage>en</NeutralLanguage>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<UseWPF>true</UseWPF>		
 		<TargetFramework>net48</TargetFramework>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
@@ -49,18 +51,22 @@
 		<DebugEngines>{351668CC-8477-4fbf-BFE3-5F1006E4DB1F}</DebugEngines>-->
 
 		<!-- Define handy symbols to use in the code in order to accommodate different Revit versions,
-        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015 -->
-		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions>
+        e.g. by wrapping legacy / deprecated API calls with #if REVIT2014 | REVIT2015
+		<PreprocessorDefinitions>$(DefineConstants)</PreprocessorDefinitions> -->
 
-		<!-- Multiple targets can cause obj folder locking by concurrent builds -->
-		<BuildInParallel>false</BuildInParallel>
+		<!-- Multiple targets can cause obj folder locking by concurrent builds 
+		<BuildInParallel>false</BuildInParallel>-->
 
 		<!-- Override 'OutputPath'  -->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<!--<OutputPath>bin\$(RevitVersion)</OutputPath>-->
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<!--<OutputPath>bin\$(RevitVersion)</OutputPath>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>-->
 		
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="ViewModels\BaseViewModel.cs" />
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <None Remove="Resources\Add.png" />
@@ -110,16 +116,16 @@
 
 	<ItemGroup>
 		<Resource Include="Resources\Add.png" />
-		<EmbeddedResource Include="Resources\Archive_Button.png" />
 		<Resource Include="Resources\ContactDetails.png" />
 		<Resource Include="Resources\DataMerge.png" />
-		<Resource Include="Resources\Delete.png" />
-		<EmbeddedResource Include="Resources\Directory_Button.png" />
+		<Resource Include="Resources\Delete.png" />		
 		<Resource Include="Resources\GreenCheck.png" />
 		<Resource Include="Resources\Report.png" />
-		<EmbeddedResource Include="Resources\Settings_Button.png" />
 		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
+		<EmbeddedResource Include="Resources\Archive_Button.png" />
+		<EmbeddedResource Include="Resources\Directory_Button.png" />
+		<EmbeddedResource Include="Resources\Settings_Button.png" />		
 	</ItemGroup>
 
 	<ItemGroup>
@@ -127,13 +133,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.52" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.52" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
   </ItemGroup>
 
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+	  <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
 	</ItemGroup>
 
 

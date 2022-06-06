@@ -7,6 +7,7 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
         x:Class="Transmittal.Views.TransmittalView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
@@ -23,7 +24,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Transmittal_2022;component/Views/AppStyles.xaml" />
+                <ResourceDictionary Source="AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -88,7 +89,25 @@
                                            SelectionMode="Multiple" 
                                            RowSelectionBrush="#9993B8D9" 
                                            GridValidationMode="InView" 
-                                           SelectionChanged="sfDataGridSheets_SelectionChanged" />
+                                           SelectionChanged="sfDataGridSheets_SelectionChanged" >
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34" />
+                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" />
+                            <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
+                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="StatusDescription" HeaderText="Status Description" Width="120" />
+                            <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
+                            <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
             <syncfusion:WizardPage x:Name="wizardPage2" 
@@ -301,12 +320,19 @@
                                            AllowFiltering="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
-                                           RowSelectionBrush="#9993B8D9" />
+                                           RowSelectionBrush="#9993B8D9" 
+                                           ColumnSizer="AutoLastColumnFill" >
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
+                            <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
 
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" >
                         <CheckBox x:Name="RecordIssue" HorizontalAlignment="Center"
                                   IsEnabled="{Binding CanRecordTransmittal}"
-                                  IsChecked="{Binding RecordTransmittal}"/>
+                                  IsChecked="{Binding RecordTransmittal}" 
+                                  Unchecked="RecordIssue_Unchecked"/>
                         <TextBlock Text="Record issue and generate issue sheet"    
                                    Width="150"
                                    HorizontalAlignment="Center" 
@@ -339,6 +365,7 @@
 
                     <Button Grid.Row="4" Grid.Column="1" Width="150" Margin="5"
                             Content="Add to distribution"
+                            ToolTip="Add new contact to the project directory"
                             IsEnabled="{Binding HasDirectoryEntriesSelected}"
                             Command="{Binding AddToDistribitionCommand}"/>
 
@@ -358,7 +385,15 @@
                                            AllowFiltering="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
-                                           RowSelectionBrush="#9993B8D9" />
+                                           RowSelectionBrush="#9993B8D9" 
+                                           ColumnSizer="AutoLastColumnFill">
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
+                            <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
+                            <syncfusion:GridTextColumn HeaderText="Copies" MappingName="TransCopies" />
+                            <syncfusion:GridTextColumn HeaderText="Format" MappingName="TransFormat" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
             <syncfusion:WizardPage x:Name="wizardPage4" 
