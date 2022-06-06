@@ -55,6 +55,7 @@ public static class NamingExtensions
         // <ProjName>
         // <SheetNo>
         // <SheetName>
+        // <SheetName2>
         // <Status>
         // <StatusDescription>
         // <Rev>
@@ -76,7 +77,8 @@ public static class NamingExtensions
         fileName = fileName.Replace("<ProjNo>", projNo);
         fileName = fileName.Replace("<ProjName>", projName);
         fileName = fileName.Replace("<SheetNo>", sheetNo);
-        fileName = fileName.Replace("<SheetName>", sheetName.Dehumanize()); //System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(SheetName).Replace(" ", "")) ; 
+        fileName = fileName.Replace("<SheetName>", sheetName.Dehumanize()); 
+        fileName = fileName.Replace("<SheetName2>", sheetName);
         fileName = fileName.Replace("<Rev>", rev);
         fileName = fileName.Replace("<Status>", status);
         fileName = fileName.Replace("<StatusDescription>", statusDescription);
