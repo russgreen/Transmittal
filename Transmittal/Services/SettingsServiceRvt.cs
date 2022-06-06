@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
 using System.Windows.Controls;
 using System.Xml.Linq;
@@ -20,12 +21,12 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
 
 
-    private Autodesk.Revit.DB.ProjectInfo _projectInfo = null;
+    private Autodesk.Revit.DB.ProjectInfo? _projectInfo = null;
 
     private readonly ISettingsService _settingsService;
     private readonly IDataConnection _dataConnection;
 
-    private Schema _schema = null;
+    private Schema? _schema = null;
 
     public SettingsServiceRvt(IDataConnection dataConnection, ISettingsService settingsService)
     {
@@ -37,40 +38,40 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     
     public bool GetSettingsRvt(Document rvtDoc)
     {
+        //first get the project information 
+        _projectInfo = rvtDoc.ProjectInformation;
+
         //reset the global settings to handle switching between models
         _settingsService.GlobalSettings = new();
 
         //set the default parameter values
         SetParameters();
 
-        // first get the project information 
-        _projectInfo = rvtDoc.ProjectInformation;
-        _settingsService.GlobalSettings.ProjectNumber = _projectInfo.Number;
-        _settingsService.GlobalSettings.ProjectName = _projectInfo.Name;
-
-        // check for the schema and load data from it if it exists
-        _schema = GetSchema();
+        //check for the schema and load data from it if it exists
+        if (SchemaExists())
+        {
+            _schema = GetSchema();
+        }
+        
         if (_schema != null)
         {
-            // get the settings from the schema
+            //get the settings from the schema
             GetSettingsFromSchema();
         }
         else
         {           
-            // create the schema and load the settings from it
+            //create the schema and load the settings from it
             CreateSchema();
             SaveSettingsToSchema(); //saves the default settings only at this point
             GetSettingsFromSchema(); //don't really need this call but its here to help debugging
         }
 
-        // if the value is not empty try and open the database and read the settings
-        if(_settingsService.GlobalSettings.RecordTransmittals == true)
+        //if the value is not empty try and open the database and read the settings
+        if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
             if (CheckDatabaseFileExists(_settingsService.GlobalSettings.DatabaseFile))
             {
                 _settingsService.GetSettings();
-
-                return true;
             }
             else
             {
@@ -87,6 +88,16 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 }             
             }            
         }
+
+        //we always want to load project information from the revit parameters
+        //and then save back to the DB for use by the desktop app....revit is primary
+        _settingsService.GlobalSettings.ProjectNumber = _projectInfo.Number;
+        _settingsService.GlobalSettings.ProjectName = _projectInfo.Name;
+
+        //get some project data from shared parameters
+        _settingsService.GlobalSettings.ProjectIdentifier = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.ProjectIdentifierParamGuid); 
+        _settingsService.GlobalSettings.Originator = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.OriginatorParamGuid);
+        _settingsService.GlobalSettings.Role = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.RoleParamGuid);
 
         return true;
     }
@@ -285,7 +296,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
             storeData.Commit();
         }
-
     }
     
     private void GetSettingsFromSchema()
@@ -350,43 +360,47 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private Schema GetSchema()
     {
-        //Schema schema = null;
-        //IList<Schema> schemas = Schema.ListSchemas();
-        //if (schemas != null && schemas.Count > 0)
-        //{
-        //    // get schema
-        //    foreach (Schema s in schemas)
-        //    {
-        //        if (s.SchemaName == _schemaName)
-        //        {
-        //            schema = s;
-        //            break;
-        //        }
-        //    }
-        //}
-        //return schema;
-
         Schema s = Schema.ListSchemas().FirstOrDefault(q => q.SchemaName == _schemaName);
-        //if (s == null)
-        //{
-        //    // no schema found, create one
-        //}
-        //else
-        //{
-        //    // schema found, use it
-        //}
-        return s;        
+
+        return s;
     }
 
     private bool SchemaExists()
     {
-        bool result = false;
-        if (GetSchema() != null)
+        IList<Schema> schemas = Schema.ListSchemas();
+        if (schemas.Count == 0)
         {
-            result = true;
+             return false;           
         }
-        return result;
+        else
+        {
+            foreach (Schema schema in schemas)
+            {
+                if(schema.SchemaName == _schemaName)
+                {
+                    List<ElementId> ids = ElementsWithStorage(App.RevitDocument, schema);
+                    if (ids.Count > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
+    
+     /// <summary>
+    /// Returns a list of ElementIds that contain extensible storage of a given schema using
+    /// the ExtensibleStorageFilter ElementQuickFilter.
+    /// </summary>
+    private static List<ElementId> ElementsWithStorage(Document doc, Schema schema)
+    {
+        List<ElementId> ids = new List<ElementId>();
+        FilteredElementCollector collector = new FilteredElementCollector(doc);
+        collector.WherePasses(new ExtensibleStorageFilter(schema.GUID));
+        ids.AddRange(collector.ToElementIds());
+        return ids;
+    }   
 
     private IDictionary<string, string> ListOfIssueFormatToDictionary(List<IssueFormatModel> listToConvert)
     {
