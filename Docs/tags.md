@@ -16,7 +16,8 @@ Value replace from |
 | <Role> | &check; |  | Custom parameter for ISO19650 role (Project Information) |
 | <ProjName> | &check; |  | The Revit project name paramater  |
 | <SheetNo> | &check; |  | The Revit sheet number paramater  |
-| <SheetName> | &check; |  | The Revit sheet name paramater  |
+| <SheetName> | &check; |  | The Revit sheet name paramater in PascalCase |
+| <SheetName2> | &check; |  | The Revit sheet name paramater unchanged |
 | <Status> | &check; |  | Custom parameter for ISO19650 status code (Sheet)  |
 | <StatusDescription> | &check; |  | Custom parameter for status description  (Sheet)  |
 | <Rev> | &check; |  | The Revit current sheet revision value |
