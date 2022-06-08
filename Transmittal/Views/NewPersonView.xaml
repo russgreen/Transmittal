@@ -7,61 +7,82 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}" Height="450" Width="400">
-    <Window.DataContext>
+        Title="New Person" Height="450" Width="400">
+    <!--<Window.DataContext>
         <viewModels:NewPersonViewModel />
-    </Window.DataContext>
+    </Window.DataContext>-->
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="130" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="25" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
-            <RowDefinition Height="23"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="28"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="First Name" />
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FirstName}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Last Name" />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Company" />
-        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,5,5" 
                   ItemsSource="{Binding Companies}"
-                  SelectedItem="{Binding Company}"/>
+                  DisplayMemberPath="CompanyName"
+                  SelectedValuePath="ID"
+                  SelectedValue="{Binding CompanyID, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
+                  SelectedIndex="0"/>
+        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5" 
+                x:Name="Button_AddCompany" Click="Button_AddCompany_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
+            </Button.Background>
+        </Button>
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Email" />
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Telephone" />
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Telephone}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Person.Tel}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Mobile" />
-        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Mobile}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Person.Mobile}" Margin="0,0,0,5" />
 
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Position" />
-        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Position}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Person.Position}" Margin="0,0,0,5" />
 
         <CheckBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" 
                   Content="Show in project directory report" 
-                  IsChecked="{Binding ShowInReport}" />
+                  IsChecked="{Binding Person.ShowInReport}" />
 
         <TextBlock Grid.Row="8" Grid.Column="0" Text="Notes" />
-        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Notes}" Margin="0,0,0,5" />
+        <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Person.Notes}" Margin="0,0,0,5"
+                 AcceptsReturn="True"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="9" Grid.Column="2" >
-            <Button Content="Save" Padding="5,0,5,0" Command="{Binding SavePersonCommand}" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  >
+            <Button Content="Save" Padding="5,0,5,0" 
+                    Command="{Binding SendPersonCommand}" 
+                    IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}"/>
             <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
     </Grid>

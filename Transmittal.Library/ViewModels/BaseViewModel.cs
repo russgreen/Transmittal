@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Transmittal.Library.ViewModels;
-public class BaseViewModel : ObservableObject
+public class BaseViewModel : ObservableValidator
 {
     public event EventHandler ClosingRequest;
 

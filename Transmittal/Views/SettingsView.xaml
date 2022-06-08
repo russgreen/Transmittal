@@ -18,7 +18,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <!--<Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>-->
         </ResourceDictionary>
     </Window.Resources>
 
