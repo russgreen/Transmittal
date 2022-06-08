@@ -86,7 +86,9 @@ public partial class TransmittalView : Window
 
     private void Button_AddToDirectory_Click(object sender, RoutedEventArgs e)
     {
-
+        Views.NewPersonView dialog = new Views.NewPersonView(_viewModel);
+        dialog.Owner = this;
+        dialog.ShowDialog();
     }
 
     private void RecordIssue_Unchecked(object sender, RoutedEventArgs e)

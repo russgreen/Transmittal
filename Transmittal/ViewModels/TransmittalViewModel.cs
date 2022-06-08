@@ -17,7 +17,7 @@ using System.Diagnostics;
 namespace Transmittal.ViewModels;
 
 //[INotifyPropertyChanged]
-internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, IRevisionRequester
+internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, IRevisionRequester, IPersonRequester
 {
     private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>(); 
@@ -369,7 +369,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         enumerator.Reset();
 
         while (enumerator.MoveNext())
-            m_paramList.Add(enumerator.Current as Parameter);
+            m_paramList.Add((Parameter)enumerator.Current);
 
         foreach (Parameter m_param in m_paramList)
         {
@@ -510,6 +510,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     #endregion
 
     #region Distribution
+    
+    public void PersonComplete(PersonModel model)
+    {
+        _contactDirectoryService.CreatePerson(model);
+
+        ProjectDirectoryModel projectDirectoryModel = new()
+        {
+            Person = model,
+            Company = _contactDirectoryService.GetCompany(model.CompanyID)
+        };
+
+        ProjectDirectory.Add(projectDirectoryModel);
+    }
+    
     private bool ValidateDistribution()
     {
         if (_recordTransmittal == true && (_distribution is null || _distribution.Count == 0))
@@ -746,10 +760,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
             StepOneComplete = true;
+            DispatcherHelper.DoEvents();
             RecordTransmittalInDatabase();
             StepTwoComplete = true;
+            DispatcherHelper.DoEvents();
             LaunchTransmittalReport();
             StepThreeComplete = true;
+            DispatcherHelper.DoEvents();            
 
             //just pause before closing the window
             Thread.Sleep(5000);
@@ -889,4 +906,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         Process.Start(processStartInfo);        
     }
+
+
 }

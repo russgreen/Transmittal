@@ -7,7 +7,7 @@
                     xmlns:converters="clr-namespace:Transmittal.Converters">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>  
     <converters:BrushColorConverter x:Key="BrushColorConverter"/>
     <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
     <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
