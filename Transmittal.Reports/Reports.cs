@@ -86,7 +86,7 @@ namespace Transmittal.Reports
 
         public void ShowTransmittalReport(int transmittalID) //, bool useISO, string projectIdentifier, string projectName)
         {
-            Stream report = GetReport("TransmittalSheetISO.rdlc");
+            Stream report = GetReport("TransmittalSheet.rdlc");
 
             TransmittalModel transmittal = _transmittalService.GetTransmittal(transmittalID);
 
@@ -139,7 +139,7 @@ namespace Transmittal.Reports
 
         public void ShowTransmittalSummaryReport()//bool useISO, string projectIdentifier, string projectName)
         {
-            Stream report = GetReport(  "TransmittalSummaryISO.rdlc");
+            Stream report = GetReport(  "TransmittalSummary.rdlc");
 
             FormReportViewer frm = NewReportViewer(
                 "Transmittal Record",

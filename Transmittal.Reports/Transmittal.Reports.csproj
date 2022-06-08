@@ -12,17 +12,15 @@
   <ItemGroup>
     <None Remove="Reports\ProjectDirectory.rdlc" />
     <None Remove="Reports\TransmittalSheet.rdlc" />
-    <None Remove="Reports\TransmittalSheetISO.rdlc" />
+    <None Remove="Reports\TransmittalSheet_Alternative.rdlc" />
     <None Remove="Reports\TransmittalSummary.rdlc" />
-    <None Remove="Reports\TransmittalSummaryISO.rdlc" />
+    <None Remove="Reports\TransmittalSummary_Alternative.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
-    <EmbeddedResource Include="Reports\TransmittalSheetISO.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSummary.rdlc" />
-    <EmbeddedResource Include="Reports\TransmittalSummaryISO.rdlc" />
   </ItemGroup>
 
 	<ItemGroup>

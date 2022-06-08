@@ -81,34 +81,6 @@
           <DataField>TransItemID</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="DrgProj">
-          <DataField>DrgProj</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgOriginator">
-          <DataField>DrgOriginator</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgVolume">
-          <DataField>DrgVolume</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgLevel">
-          <DataField>DrgLevel</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgType">
-          <DataField>DrgType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgRole">
-          <DataField>DrgRole</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DrgStatus">
-          <DataField>DrgStatus</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
     </DataSet>
     <DataSet Name="dsTransmittal">
@@ -160,16 +132,19 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>6.56104cm</Width>
+                  <Width>3.34667cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>8.60021cm</Width>
+                  <Width>2.05021cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.81208cm</Width>
+                  <Width>8.81188cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.57396cm</Width>
+                  <Width>2.5cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.83854cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -185,7 +160,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Document ID</Value>
+                                  <Value>Number</Value>
                                   <Style>
                                     <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -212,6 +187,40 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Rev</Value>
+                                  <Style>
+                                    <FontFamily>fira sans</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>LightGrey</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox8">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -219,7 +228,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Description</Value>
+                                  <Value>Name</Value>
                                   <Style>
                                     <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -326,16 +335,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Label>XXXX-XXX-XX-XX-XX-X-XXXX-XXX-XXX</Label>
-                                  <Value>=Fields!DrgProj.Value+IIF(Fields!DrgProj.Value Is Nothing,"","-")
-+Fields!DrgOriginator.Value+IIF(Fields!DrgOriginator.Value Is Nothing,"","-")
-+Fields!DrgVolume.Value+IIF(Fields!DrgVolume.Value Is Nothing,"","-")
-+Fields!DrgLevel.Value+IIF(Fields!DrgLevel.Value Is Nothing,"","-")
-+Fields!DrgType.Value+IIF(Fields!DrgType.Value Is Nothing,"","-")
-+Fields!DrgRole.Value+IIF(Fields!DrgRole.Value Is Nothing,"","-")
-+Fields!DrgNumber.Value+IIF(Fields!DrgStatus.Value Is Nothing,"","-")
-+Fields!DrgStatus.Value+IIF(Fields!DrgRev.Value Is Nothing,"","-")
-+Fields!DrgRev.Value</Value>
+                                  <Value>=Fields!DrgNumber.Value</Value>
                                   <Style>
                                     <FontFamily>lato</FontFamily>
                                   </Style>
@@ -345,6 +345,38 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>DrgNumber</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DrgRev">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DrgRev.Value</Value>
+                                  <Style>
+                                    <FontFamily>lato</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DrgRev</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -464,6 +496,7 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -473,27 +506,13 @@
                 </TablixMember>
                 <TablixMember>
                   <Group Name="Details" />
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!DrgType.Value</Value>
-                    </SortExpression>
-                    <SortExpression>
-                      <Value>=Fields!DrgVolume.Value</Value>
-                    </SortExpression>
-                    <SortExpression>
-                      <Value>=Fields!DrgLevel.Value</Value>
-                    </SortExpression>
-                    <SortExpression>
-                      <Value>=Fields!DrgNumber.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsTransmittalItems</DataSetName>
-            <Top>0.33315cm</Top>
+            <Top>0.41308cm</Top>
             <Height>1.2cm</Height>
-            <Width>18.54729cm</Width>
+            <Width>18.5473cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -742,7 +761,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>dsTransmittalDistribution</DataSetName>
-            <Top>1.97412cm</Top>
+            <Top>2.29162cm</Top>
             <Height>1.2cm</Height>
             <Width>18.54729cm</Width>
             <ZIndex>1</ZIndex>
@@ -753,13 +772,13 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.48942in</Height>
+        <Height>1.67708in</Height>
         <Style />
       </Body>
       <Width>7.33522in</Width>
       <Page>
         <PageHeader>
-          <Height>3.29627cm</Height>
+          <Height>2.66099cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -783,8 +802,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=
-IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")), 
+                      <Value>=IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")), 
 First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.Value, "dsProject")) 
 + " " + First(Fields!ProjectName.Value, "dsProject")</Value>
                       <Style>
@@ -835,38 +853,6 @@ Report date: </Value>
               <Width>12.47951cm</Width>
               <Style>
                 <Border />
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Document ID format: &lt;Project&gt;-&lt;Originator&gt;-&lt;Volume&gt;-&lt;Level&gt;-&lt;Type&gt;-&lt;Role&gt;-&lt;DocNo&gt;-&lt;Status&gt;-&lt;Rev&gt;</Value>
-                      <Style>
-                        <FontFamily>Lato</FontFamily>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>2.69627cm</Top>
-              <Height>0.6cm</Height>
-              <Width>18.54729cm</Width>
-              <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
