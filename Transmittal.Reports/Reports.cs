@@ -247,7 +247,14 @@ namespace Transmittal.Reports
 
         private Stream GetReport(string reportName)
         {
-            string reportFilePath = Path.Combine(_settingsService.GlobalSettings.ReportStore, reportName);
+            var folder = string.Empty;
+
+            if(_settingsService.GlobalSettings.ReportStore != null)
+            {
+                folder = _settingsService.GlobalSettings.ReportStore;   
+            }
+
+            string reportFilePath = Path.Combine(folder, reportName);
             var dir = Path.GetDirectoryName(reportFilePath);
 
             if (dir != string.Empty.ToString() ||
