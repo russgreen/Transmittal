@@ -1,13 +1,8 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using System;
-using System.Windows.Controls;
-using System.Xml.Linq;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
-using Transmittal.Models;
 
 namespace Transmittal.Services;
 
@@ -20,7 +15,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private const string _paramTransmittalDBTemplateName = "TransmittalDBTemplate";
     private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
-
 
     private Autodesk.Revit.DB.ProjectInfo? _projectInfo = null;
 
@@ -432,7 +426,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         _settingsService.GlobalSettings.DateFormatString = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.DateFormatString)));
 
-
         _settingsService.GlobalSettings.IssueFormats = DictionaryToListOfIssueFormat(
             entity.Get<IDictionary<string, string>>(schema.GetField(nameof(_settingsService.GlobalSettings.IssueFormats))));
         _settingsService.GlobalSettings.DocumentStatuses = DictionaryToListOfDocumentStatus(
@@ -513,10 +506,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         return collector.FirstElement() as DataStorage;
     }
 
-    /// <summary>
-    /// Returns a list of ElementIds that contain extensible storage of a given schema using
-    /// the ExtensibleStorageFilter ElementQuickFilter.
-    /// </summary>
     private List<ElementId> ElementsWithStorage(Document doc, Schema schema)
     {
         List<ElementId> ids = new List<ElementId>();
