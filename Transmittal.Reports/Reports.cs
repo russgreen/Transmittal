@@ -247,17 +247,18 @@ namespace Transmittal.Reports
 
         private Stream GetReport(string reportName)
         {
-            string reportFilePath;
-            if (_settingsService.GlobalSettings.ReportStore.EndsWith(@"\"))
+            var folder = string.Empty;
+
+            if(_settingsService.GlobalSettings.ReportStore != null)
             {
-                reportFilePath = $@"{_settingsService.GlobalSettings.ReportStore.TrimEnd(@"\"[0])}\{reportName}";
-            }
-            else
-            {
-                reportFilePath = $@"{_settingsService.GlobalSettings.ReportStore}\{reportName}";
+                folder = _settingsService.GlobalSettings.ReportStore;   
             }
 
-            if (File.Exists(reportFilePath))
+            string reportFilePath = Path.Combine(folder, reportName);
+            var dir = Path.GetDirectoryName(reportFilePath);
+
+            if (dir != string.Empty.ToString() ||
+                File.Exists(reportFilePath))
             {
                 var report = File.OpenRead(reportFilePath);
                 return report;

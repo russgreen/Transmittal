@@ -1,25 +1,20 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using System;
-using System.Windows.Controls;
-using System.Xml.Linq;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
-using Transmittal.Models;
 
 namespace Transmittal.Services;
 
 internal class SettingsServiceRvt : ISettingsServiceRvt
 {
-    private const string _schemaName = "TransmittalSettings";
-    private const string _schemaGuid = "E9E8F8E9-F8E9-4F8E-8E9F-E9E8F8E9F8E9";
+    private const string _dataStorageElementName = "TransmittalSettings";
+    private const string _schemaName = "TransmittalAppSettings";
+    private const string _schemaGuid = "302151AE-3986-46F5-A172-0E327D0D191E";
     private const string _vendorID = "Transmittal";
 
     private const string _paramTransmittalDBTemplateName = "TransmittalDBTemplate";
     private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
-
 
     private Autodesk.Revit.DB.ProjectInfo? _projectInfo = null;
 
@@ -35,7 +30,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
         _schema = null;
     }
-    
+
     public bool GetSettingsRvt(Document rvtDoc)
     {
         //first get the project information 
@@ -52,16 +47,17 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             _schema = GetSchema();
         }
-        
+
         if (_schema != null)
         {
             //get the settings from the schema
             GetSettingsFromSchema();
         }
         else
-        {           
+        {
             //create the schema and load the settings from it
-            CreateSchema();
+            //CreateSchema();
+            CreateAndSaveSchemaToRvt();
             SaveSettingsToSchema(); //saves the default settings only at this point
             GetSettingsFromSchema(); //don't really need this call but its here to help debugging
         }
@@ -85,8 +81,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                     _settingsService.GlobalSettings.DatabaseTemplateFile = templateDB;
 
                     return false;
-                }             
-            }            
+                }
+            }
         }
 
         //we always want to load project information from the revit parameters
@@ -95,14 +91,14 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         _settingsService.GlobalSettings.ProjectName = _projectInfo.Name;
 
         //get some project data from shared parameters
-        _settingsService.GlobalSettings.ProjectIdentifier = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.ProjectIdentifierParamGuid); 
+        _settingsService.GlobalSettings.ProjectIdentifier = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.ProjectIdentifierParamGuid);
         _settingsService.GlobalSettings.Originator = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.OriginatorParamGuid);
         _settingsService.GlobalSettings.Role = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.RoleParamGuid);
 
         return true;
     }
 
-    public void UpdateSettingsRvt()  
+    public void UpdateSettingsRvt()
     {
         SaveSettingsToSchema();
     }
@@ -128,25 +124,25 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         _settingsService.GlobalSettings.SheetStatusDescriptionParamName = "SheetStatusDescription";
         _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid = "4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a";
     }
-    
+
     public bool CheckDatabaseFileExists(string filepath, bool checkConnection = true)
     {
-        if(filepath != "[NONE]" || filepath != null)
+        if (filepath != "[NONE]" || filepath != null)
         {
             if (System.IO.File.Exists(filepath))
             {
-                if(checkConnection == true)
+                if (checkConnection == true)
                 {
                     return _dataConnection.CheckConnection(filepath);
-                }                
+                }
             }
 
-            return System.IO.File.Exists(filepath); 
+            return System.IO.File.Exists(filepath);
         }
 
         return false;
     }
-    
+
     private List<IssueFormatModel> GetIssueFormats()
     {
         //build the issue formats list  
@@ -159,108 +155,126 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
         return issueFormats;
     }
-        
-    private void CreateSchema()
+
+
+    private Schema CreateSchema()
     {
+        //build the schema
+        SchemaBuilder schemaBuilder = new SchemaBuilder(new Guid(_schemaGuid));
+        schemaBuilder.SetReadAccessLevel(AccessLevel.Public); // allow anyone to read the object
+        schemaBuilder.SetWriteAccessLevel(AccessLevel.Public); // TODO why does it not work when we restrict writing to this vendor only
+        schemaBuilder.SetVendorId(_vendorID); // required because of restricted write-access
+        schemaBuilder.SetSchemaName(_schemaName);
+
+        FieldBuilder fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.FileNameFilter), typeof(string));
+        fieldBuilder.SetDocumentation("The filename filter rule for transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DrawingIssueStore), typeof(string));
+        fieldBuilder.SetDocumentation("The location to save the transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseISO19650), typeof(bool));
+        fieldBuilder.SetDocumentation("Use the ISO19650 for transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseExtranet), typeof(bool));
+        fieldBuilder.SetDocumentation("Use the extranet for transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DateFormatString), typeof(string));
+        fieldBuilder.SetDocumentation("The date format string for revisions exports");
+
+
+        fieldBuilder = schemaBuilder.AddMapField(nameof(_settingsService.GlobalSettings.IssueFormats), typeof(string), typeof(string));
+        fieldBuilder.SetDocumentation("The issue formats for transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddMapField(nameof(_settingsService.GlobalSettings.DocumentStatuses), typeof(string), typeof(string));
+        fieldBuilder.SetDocumentation("The document statuses for transmittal exports");
+
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.RecordTransmittals), typeof(bool));
+        fieldBuilder.SetDocumentation("Record transmittals in the database");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DatabaseTemplateFile), typeof(string));
+        fieldBuilder.SetDocumentation("The location of the template database");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DatabaseFile), typeof(string));
+        fieldBuilder.SetDocumentation("The location of the database");
+
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.IssueSheetStore), typeof(string));
+        fieldBuilder.SetDocumentation("The location to save the transmittal reports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DirectoryStore), typeof(string));
+        fieldBuilder.SetDocumentation("The location to save the directory reports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ReportStore), typeof(string));
+        fieldBuilder.SetDocumentation("The location of customised report templates");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseCustomSharedParameters), typeof(bool));
+        fieldBuilder.SetDocumentation("Use custom shared parameters");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ProjectIdentifierParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The project identifier parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.OriginatorParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The originator parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.RoleParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The role parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetVolumeParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The sheet volume parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetLevelParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The sheet level parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DocumentTypeParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The document type parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetStatusParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The sheet status parameter guid");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetStatusDescriptionParamGuid), typeof(string));
+        fieldBuilder.SetDocumentation("The sheet status description parameter guid");
+
+        _schema = schemaBuilder.Finish(); // register the Schema object
+
+        return _schema;
+    }
+
+    private void CreateAndSaveSchemaToRvt()
+    {
+        _schema = CreateSchema(); 
+        DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, _schema);
+        
         using (Transaction createSchema = new Transaction(App.RevitDocument, "TransmittalSettings"))
         {
             createSchema.Start();
-            
-            //build the schema
-            SchemaBuilder schemaBuilder = new SchemaBuilder(new Guid(_schemaGuid));
-            schemaBuilder.SetReadAccessLevel(AccessLevel.Public); // allow anyone to read the object
-            schemaBuilder.SetWriteAccessLevel(AccessLevel.Public); // TODO why does it not work when we restrict writing to this vendor only
-            schemaBuilder.SetVendorId(_vendorID); // required because of restricted write-access
-            schemaBuilder.SetSchemaName(_schemaName);
-            
-            FieldBuilder fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.FileNameFilter), typeof(string));   
-            fieldBuilder.SetDocumentation("The filename filter rule for transmittal exports");
 
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DrawingIssueStore), typeof(string));
-            fieldBuilder.SetDocumentation("The location to save the transmittal exports");   
+            if (dataStorageElement == null)
+            {
+                dataStorageElement = DataStorage.Create(App.RevitDocument);
+                dataStorageElement.Name = _dataStorageElementName;
+            }
 
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseISO19650), typeof(bool));
-            fieldBuilder.SetDocumentation("Use the ISO19650 for transmittal exports");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseExtranet), typeof(bool));
-            fieldBuilder.SetDocumentation("Use the extranet for transmittal exports");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DateFormatString), typeof(string));
-            fieldBuilder.SetDocumentation("The date format string for revisions exports");
-            
-
-            fieldBuilder = schemaBuilder.AddMapField(nameof(_settingsService.GlobalSettings.IssueFormats), typeof(string), typeof(string));
-            fieldBuilder.SetDocumentation("The issue formats for transmittal exports");
-
-            fieldBuilder = schemaBuilder.AddMapField(nameof(_settingsService.GlobalSettings.DocumentStatuses), typeof(string), typeof(string));
-            fieldBuilder.SetDocumentation("The document statuses for transmittal exports");
-            
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.RecordTransmittals), typeof(bool));
-            fieldBuilder.SetDocumentation("Record transmittals in the database");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DatabaseTemplateFile), typeof(string));
-            fieldBuilder.SetDocumentation("The location of the template database");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(  nameof(_settingsService.GlobalSettings.DatabaseFile), typeof(string));
-            fieldBuilder.SetDocumentation("The location of the database");
-            
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.IssueSheetStore), typeof(string));
-            fieldBuilder.SetDocumentation("The location to save the transmittal reports");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DirectoryStore), typeof(string));
-            fieldBuilder.SetDocumentation("The location to save the directory reports");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ReportStore), typeof(string));
-            fieldBuilder.SetDocumentation("The location of customised report templates");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseCustomSharedParameters), typeof(bool));
-            fieldBuilder.SetDocumentation("Use custom shared parameters");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ProjectIdentifierParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The project identifier parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.OriginatorParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The originator parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.RoleParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The role parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetVolumeParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The sheet volume parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetLevelParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The sheet level parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DocumentTypeParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The document type parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetStatusParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The sheet status parameter guid");
-
-            fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.SheetStatusDescriptionParamGuid), typeof(string));
-            fieldBuilder.SetDocumentation("The sheet status description parameter guid");
-
-            _schema = schemaBuilder.Finish(); // register the Schema object
-            
             Entity entity = new Entity(_schema); // create an entity (object) for this schema (class)
-                                                
-            App.RevitDocument.ProjectInformation.SetEntity(entity); // store the entity in the element
+
+            dataStorageElement.SetEntity(entity);
+            //App.RevitDocument.ProjectInformation.SetEntity(entity); // store the entity in the element
 
             createSchema.Commit();
         }
     }
+
     
     private void SaveSettingsToSchema()
     {
+        _schema = GetSchema();
+        DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, _schema);
+
         using (Transaction storeData = new Transaction(App.RevitDocument, "TransmittalSettings"))
         {
             storeData.Start();
 
-            _schema = GetSchema();
-            
-            Entity entity = App.RevitDocument.ProjectInformation.GetEntity(_schema);
+            Entity entity = dataStorageElement.GetEntity(_schema);// App.RevitDocument.ProjectInformation.GetEntity(_schema);
 
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)), _settingsService.GlobalSettings.FileNameFilter);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DrawingIssueStore)), _settingsService.GlobalSettings.DrawingIssueStore);
@@ -292,7 +306,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusParamGuid)), _settingsService.GlobalSettings.SheetStatusParamGuid);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)), _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
 
-            App.RevitDocument.ProjectInformation.SetEntity(entity);
+            //App.RevitDocument.ProjectInformation.SetEntity(entity);
+            dataStorageElement.SetEntity(entity);
 
             storeData.Commit();
         }
@@ -301,8 +316,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private void GetSettingsFromSchema()
     {
         Schema schema = GetSchema();
-
-        Entity entity = App.RevitDocument.ProjectInformation.GetEntity(schema);
+        DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
+        Entity entity = dataStorageElement.GetEntity(_schema);// App.RevitDocument.ProjectInformation.GetEntity(schema);
 
         _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -316,7 +331,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
         _settingsService.GlobalSettings.DateFormatString = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.DateFormatString)));
-
 
         _settingsService.GlobalSettings.IssueFormats = DictionaryToListOfIssueFormat(
             entity.Get<IDictionary<string, string>>(schema.GetField(nameof(_settingsService.GlobalSettings.IssueFormats))));
@@ -388,12 +402,17 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             return false;
         }
     }
-    
-     /// <summary>
-    /// Returns a list of ElementIds that contain extensible storage of a given schema using
-    /// the ExtensibleStorageFilter ElementQuickFilter.
-    /// </summary>
-    private static List<ElementId> ElementsWithStorage(Document doc, Schema schema)
+
+    private DataStorage FindDataStorageElement(Document doc, Schema schema)
+    {
+        FilteredElementCollector collector = new FilteredElementCollector(doc);
+        collector.OfClass(typeof(DataStorage));
+        collector.WherePasses(new ExtensibleStorageFilter(schema.GUID));
+
+        return collector.FirstElement() as DataStorage;
+    }
+
+    private List<ElementId> ElementsWithStorage(Document doc, Schema schema)
     {
         List<ElementId> ids = new List<ElementId>();
         FilteredElementCollector collector = new FilteredElementCollector(doc);

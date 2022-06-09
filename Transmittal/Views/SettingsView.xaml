@@ -176,6 +176,10 @@
                         <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
                                    x:Name="UseDatabase" Content="Use Project Database" 
                                    IsChecked="{Binding RecordTransmittals}" Margin="0,0,0,5"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
+                                   Text="Project database file not found!" Foreground="Red" 
+                                   Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        
                         <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Template database" 
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
@@ -201,9 +205,17 @@
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
                                 Click="buttonDatabaseBrowse_Click"/>
 
-                        <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
-                                   Text="Project database file not found!" Foreground="Red" 
-                                   Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"
+                                   Text="Report templates"
+                                   IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,5,5"
+                                 Text="{Binding ReportTemplatePath}"
+                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                        <Button Grid.Row="3" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonReportPathBrowse"
+                                Content="..." 
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonReportPathBrowse_Click" />
+
                     </Grid>
                 </GroupBox>
 
