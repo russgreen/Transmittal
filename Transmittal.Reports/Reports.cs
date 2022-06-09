@@ -257,7 +257,8 @@ namespace Transmittal.Reports
                 reportFilePath = $@"{_settingsService.GlobalSettings.ReportStore}\{reportName}";
             }
 
-            if (File.Exists(reportFilePath))
+            if (_settingsService.GlobalSettings.ReportStore.Trim() != string.Empty.ToString() ||
+                File.Exists(reportFilePath))
             {
                 var report = File.OpenRead(reportFilePath);
                 return report;

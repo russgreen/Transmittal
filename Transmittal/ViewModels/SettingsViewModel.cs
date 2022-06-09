@@ -65,6 +65,9 @@ internal partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private bool _databaseNotFound; //used to control visibility of error message in UI
     [ObservableProperty]
+    private string _reportTemplatePath;
+    
+    [ObservableProperty]
     private bool _useCustomSharedParameters;
 
     [ObservableProperty]
@@ -114,6 +117,7 @@ internal partial class SettingsViewModel : BaseViewModel
         RecordTransmittals = _settingsService.GlobalSettings.RecordTransmittals;
         DatabaseFile = _settingsService.GlobalSettings.DatabaseFile;
         DatabaseTemplateFile = _settingsService.GlobalSettings.DatabaseTemplateFile;
+        ReportTemplatePath = _settingsService.GlobalSettings.ReportStore;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = _settingsService.GlobalSettings.UseCustomSharedParameters;
@@ -146,7 +150,7 @@ internal partial class SettingsViewModel : BaseViewModel
         _settingsService.GlobalSettings.RecordTransmittals = RecordTransmittals;
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
         _settingsService.GlobalSettings.DatabaseTemplateFile = DatabaseTemplateFile;
-
+        _settingsService.GlobalSettings.ReportStore = ReportTemplatePath;
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = UseCustomSharedParameters;
         
