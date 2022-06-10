@@ -8,10 +8,10 @@
     <ROW Property="ARPPRODUCTICON" Value="Transmittal.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/transmittal/"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{21BB60A9-68D0-4C19-AC46-D25FFDB09CBD} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{F7B04D14-0290-4C22-A8B9-ECF077356D78} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="0.0.4" Type="32"/>
+    <ROW Property="ProductVersion" Value="0.0.5" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
