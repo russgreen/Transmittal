@@ -5,6 +5,8 @@ permalink: /settings/
 ---
 ## Basic Settings
 
+Settings for Transmittal are stored in the Revit model in extensisible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.
+
 ### Filename filter/rule
 The rule used to construct the filename of exported sheet files.  The [available tags](/Transmittal/settings/tags) get replaced with parameter values. The filename rule should not include file extensions.
 
@@ -22,6 +24,9 @@ Selecting this option will prevent sheets with missing values from being issued.
 
 ### Use extranet
 Feature not enabled yet. See roadmap.
+
+### Issue Formats and Document Statuses
+
 
 ## Database
 
