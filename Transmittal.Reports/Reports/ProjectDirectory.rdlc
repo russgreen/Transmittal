@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -7,7 +7,8 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:DataSourceID>5b37c4f4-740c-4238-89de-078acea890c5</rd:DataSourceID>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>6c34c856-7e4d-4524-9ae0-893086665d85</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -96,12 +97,12 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>10.60167cm</Width>
+                  <Width>10.60979cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>1.07125cm</Height>
+                  <Height>1.05833cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -128,11 +129,14 @@
                                   <Style />
                                 </Paragraph>
                               </Paragraphs>
-                              <rd:DefaultName>Textbox19</rd:DefaultName>
+                              <Top>0in</Top>
+                              <Left>0in</Left>
                               <Height>0.6cm</Height>
                               <Width>10.60167cm</Width>
                               <Style>
-                                <Border />
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
                                 <PaddingLeft>2pt</PaddingLeft>
                                 <PaddingRight>2pt</PaddingRight>
                                 <PaddingTop>2pt</PaddingTop>
@@ -175,7 +179,7 @@
                     </SortExpression>
                   </SortExpressions>
                   <TablixHeader>
-                    <Size>7.89833cm</Size>
+                    <Size>7.88458cm</Size>
                     <CellContents>
                       <Textbox Name="CompanyName">
                         <CanGrow>true</CanGrow>
@@ -221,7 +225,6 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
                             <Style />
                           </Paragraph>
                         </Paragraphs>
-                        <rd:DefaultName>CompanyName</rd:DefaultName>
                         <Style>
                           <Border>
                             <Style>None</Style>
@@ -247,8 +250,9 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
             </TablixRowHierarchy>
             <DataSetName>dsProjectDirectory</DataSetName>
             <Top>0.31862cm</Top>
-            <Height>1.07125cm</Height>
-            <Width>18.5cm</Width>
+            <Left>0in</Left>
+            <Height>1.05833cm</Height>
+            <Width>18.49437cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -269,7 +273,7 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Textbox Name="Textbox23">
+            <Textbox Name="PageHeader">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -321,7 +325,6 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>Textbox23</rd:DefaultName>
               <Top>0.27cm</Top>
               <Left>0.03389cm</Left>
               <Height>2cm</Height>
@@ -372,7 +375,6 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <rd:DefaultName>PageNumber</rd:DefaultName>
               <Top>0.17639cm</Top>
               <Left>0.03389cm</Left>
               <Height>0.6cm</Height>
@@ -409,15 +411,8 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
       <NumberOfRows>2</NumberOfRows>
-      <CellDefinitions>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>parProject</ParameterName>
-        </CellDefinition>
-      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>878795c0-abcf-4fbf-84b1-3db8b4ddb35a</rd:ReportID>
+  <rd:ReportID>a9a463ac-1ecd-423a-b882-6c22aef993bd</rd:ReportID>
 </Report>
