@@ -1,3 +1,6 @@
 title: Transmittal
   
 theme: minima
+
+header_pages: 
+- settings.md
