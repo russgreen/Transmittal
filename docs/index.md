@@ -1,4 +1,6 @@
-# Transmittal Revit addin
+---
+layout: home
+---
 
 Transmittal adds a wizard interface to Revit to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and produce transmittal reports and historic document issue sheets.
 
