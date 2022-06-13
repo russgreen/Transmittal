@@ -1,0 +1,32 @@
+---
+layout: default
+title: "404: Page not found"
+permalink: 404.html
+---
+
+<div class="page">
+  <h1 class="page-title">Oops, we've hit a dead end</h1>
+  <p class="lead">Sorry, looks like I've misplaced that URL or it's pointing to something that doesn't exist. <a href="{{ site.baseurl }}">Head back home</a> to try finding it again.</p>
+</div>
+
+<script type="text/javascript">
+	var allposts = [];
+	function redirectToCorrectPage() {
+		{% for post in site.posts %}
+			allposts.push("{{ site.url }}{{ post.url }}");
+		{% endfor %}
+		var url = window.location.toString();
+		if (url.slice(-1) === "/") {
+			 url = url.slice(0, -1);
+		}
+		var allpostsUpperCase = allposts.map(function(value) {
+			return value.toUpperCase();
+		});
+		var i = allpostsUpperCase.indexOf(url.toUpperCase());
+		if (i != -1) {
+			console.log(allposts[i]);
+			window.location = allposts[i];
+		}
+	}
+	window.onload = redirectToCorrectPage;
+</script>
