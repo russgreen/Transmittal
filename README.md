@@ -45,7 +45,7 @@ Assembly File Version   $(VersionPrefix).0
 - [x] Build and test installer
 - [x] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents
 - [x] Add people to directory from revit wizard
-- [ ] Generate a copy of the issued files with revision information stripped from filename
+- [ ] Generate a copy of the issued files with revision information stripped from filename as this is a requirement for some extranet services
 - [ ] Associate .tdb files with Transmittal.Desktop.exe so database files can be opened by double clicking
 - [ ] Create transmittal wizard inside Transmittal.Desktop.exe for recording non-revit document transmittals
 
