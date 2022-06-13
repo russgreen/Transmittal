@@ -23,7 +23,7 @@ Sheet parameters with missing values shown on the sheets list with red warning f
 Selecting this option will prevent sheets with missing values from being issued.
 
 ### Use extranet
-Feature not enabled yet. See roadmap.
+Feature not enabled yet. See [roadmap](https://github.com/russgreen/Transmittal#roadmap).
 
 ### Issue Formats and Document Statuses
 
