@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Settings
-permalink: /settings/
+permalink: /transmittal/settings/
 ---
 ## Basic Settings
 
