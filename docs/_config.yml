@@ -2,5 +2,8 @@ title: Transmittal
   
 theme: minima
 
-header_pages: 
+header_pages:
+- transmittal-revit.md
+- directory.md
+- archive.md
 - settings.md
