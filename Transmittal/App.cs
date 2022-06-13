@@ -96,6 +96,7 @@ public class App : IExternalApplication
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittal)}"));
         buttonTransmittal.ToolTip = "Execute the Transmittal command";
         buttonTransmittal.LargeImage = PngImageSource("Transmittal.Resources.Transmittal_Button.png");
+        buttonTransmittal.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/transmittal/"));
 
         PushButton buttonDirectory = (PushButton)panel.AddItem(
             new PushButtonData(
@@ -105,15 +106,17 @@ public class App : IExternalApplication
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandDirectory)}"));
         buttonDirectory.ToolTip = "Edit the the project directory";
         buttonDirectory.LargeImage = PngImageSource("Transmittal.Resources.Directory_Button.png");
+        buttonDirectory.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/directory/"));
 
-        PushButton buttonTransmittalHistory = (PushButton)panel.AddItem(
+        PushButton buttonTransmittalArchive = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.CommandTransmittalsArchive),
                 "Transmittal Archive",
                 Assembly.GetExecutingAssembly().Location,
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittalsArchive)}"));
-        buttonTransmittalHistory.ToolTip = "View the transmittal archive";
-        buttonTransmittalHistory.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
+        buttonTransmittalArchive.ToolTip = "View the transmittal archive";
+        buttonTransmittalArchive.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
+        buttonTransmittalArchive.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
 
         PushButton buttonSettings = (PushButton)panel.AddItem(
             new PushButtonData(
@@ -123,6 +126,7 @@ public class App : IExternalApplication
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandSettings)}"));
         buttonSettings.ToolTip = "Edit the settings";
         buttonSettings.LargeImage = PngImageSource("Transmittal.Resources.Settings_Button.png");
+        buttonSettings.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
 
         return panel;
     }
