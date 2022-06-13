@@ -7,3 +7,5 @@ header_pages:
 - directory.md
 - archive.md
 - settings.md
+
+breadcrumbs: true # disabled by default
