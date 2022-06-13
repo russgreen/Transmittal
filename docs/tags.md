@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Tags in name filters
-permalink: /Transmittal/settings/tags
+permalink: /settings/tags
 ---
 Transmittal allows folder and file naming rules to be stored as filters made up of text with optional tags.  The available tags are listed below.
 
