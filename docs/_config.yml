@@ -7,7 +7,3 @@ header_pages:
 - directory.md
 - archive.md
 - settings.md
-
-logo: "/logo.png"
-
-breadcrumbs: true # disabled by default
