@@ -8,4 +8,6 @@ header_pages:
 - archive.md
 - settings.md
 
+logo: "/logo.png"
+
 breadcrumbs: true # disabled by default
