@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Customise Reports
-permalink: /settings/reports
+permalink: /transmittal/settings/reports
 ---
 Reports used by the addin default to embedded report templates.  Reports can be customised and placed in a shared location where multiple users can use the same report templates.
 
