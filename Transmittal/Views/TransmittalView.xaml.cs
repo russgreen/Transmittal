@@ -21,7 +21,7 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/transmittal/");
+        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/transmittal/");
     }
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
