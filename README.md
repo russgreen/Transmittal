@@ -10,6 +10,8 @@ Transmittal adds a wizard interface to Revit to assist with setting revisions an
 
 ![Screenshot 2022-06-06 064221](https://user-images.githubusercontent.com/1886088/172102241-c7e597ad-ac73-45c0-ad63-7f65f5f0eddb.png)
 
+<a href="https://russgreen.github.io/Transmittal/"><img src="https://img.shields.io/badge/-READ%20MORE-blue" /></a>
+
 ## Building the Solution
 
 The UI used Syncfusion controls and so a license key should be obtained (free community versions are available). The key should be stored in a text file in the route of the repo called SyncfusionKey.txt (excluded from Git). 
