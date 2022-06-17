@@ -26,8 +26,23 @@ Selecting this option will prevent sheets with missing values from being issued.
 Feature not enabled yet. See [roadmap](https://github.com/russgreen/Transmittal#roadmap).
 
 ### Issue Formats and Document Statuses
-
+Lists of transmittal types and status codes used in the transmittal process
 
 ## Database
+### Use Project Database 
+Enables transmittals to be recorded so transmittal issue sheets can be generated. 
+
+### Template database
+The template database defaults to the C:\Program Files\Transmittal\Data folder.  At the current time this should be left.
+
+### Project database 
+Location of the project database file. Each project should have its own database but where multiple Revit files are used on a project they should all be set to use the same database.  
+
+The database engine used by Transmittal is [SQLite](https://www.sqlite.org/index.html) which allows concurrent reads of the dataabse but not concurrent writes.  To protect the database from this during write operations a lock file is generated in the same location as the database. The lock file should only exist momentarily.
+
+if required the database can be opened and edited in [DB Browser for SQLite](https://sqlitebrowser.org/).
+
+### Report templates
+The default report templates are embedded in the application but it is possible to customise the report templates and share them on a network location. [For more information on reports](/Transmittal/settings/reports/).
 
 ## Advanced Settings
