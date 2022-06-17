@@ -34,7 +34,7 @@
                                 Background="WhiteSmoke"                                
                                 BorderBrush="#FF93B8D9"                                
                                 BorderThickness="1"
-                                CornerRadius="2,2,0,0"                                >
+                                CornerRadius="2,2,0,0" >
                             <ContentPresenter Margin="4"
                                               ContentSource="Header"
                                               RecognizesAccessKey="True"
