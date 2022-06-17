@@ -16,12 +16,12 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private const string _paramTransmittalDBTemplateName = "TransmittalDBTemplate";
     private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
 
-    private Autodesk.Revit.DB.ProjectInfo? _projectInfo = null;
+    private Autodesk.Revit.DB.ProjectInfo _projectInfo = null;
 
     private readonly ISettingsService _settingsService;
     private readonly IDataConnection _dataConnection;
 
-    private Schema? _schema = null;
+    private Schema _schema = null;
 
     public SettingsServiceRvt(IDataConnection dataConnection, ISettingsService settingsService)
     {

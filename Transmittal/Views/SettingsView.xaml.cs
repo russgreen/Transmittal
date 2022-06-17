@@ -14,7 +14,9 @@ public partial class SettingsView : Window
     public SettingsView()
     {
         InitializeComponent();
-        
+
+        var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
+
         _viewModel = (ViewModels.SettingsViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }

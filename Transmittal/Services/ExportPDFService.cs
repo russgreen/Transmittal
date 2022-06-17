@@ -94,7 +94,7 @@ internal class ExportPDFService : IExportPDFService
             App.RevitDocument.Export(folderPath, viewIDs, pdfExportOptions);
         }
         
-        catch (Exception ex)
+        catch
         {
             //TODO - report crashes
         }

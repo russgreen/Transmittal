@@ -774,7 +774,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             this.OnClosingRequest();
             return;
         }
-        catch (Exception ex)
+        catch
         {
             //TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", TaskDialogCommonButtons.Ok);
             this.OnClosingRequest();
@@ -838,7 +838,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(issueDate);
             trans.Commit();
         }
-        catch (Exception ex)
+        catch
         {
             trans.RollBack();
         }
