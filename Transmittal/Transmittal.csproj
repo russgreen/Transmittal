@@ -84,6 +84,7 @@
 	</ItemGroup>-->
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
 		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
@@ -106,7 +107,6 @@
 	<ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
