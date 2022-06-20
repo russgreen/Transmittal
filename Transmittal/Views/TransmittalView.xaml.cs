@@ -14,7 +14,9 @@ public partial class TransmittalView : Window
     public TransmittalView()
     {
         InitializeComponent();
-           
+
+        var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
+
         _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
