@@ -14,14 +14,16 @@ public partial class TransmittalView : Window
     public TransmittalView()
     {
         InitializeComponent();
-           
+
+        var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
+
         _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/transmittal/");
+        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/transmittal/");
     }
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)

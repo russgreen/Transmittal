@@ -50,7 +50,7 @@ internal class ExportDWFService : IExportDWFService
             exportDocument.Export(folderPath, exportFileName, views, dwfExportOptions);
 
         }
-        catch (Exception ex)
+        catch
         {
             //TODO - report crashes
         }

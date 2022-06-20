@@ -28,7 +28,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     private string _firstName;
     [ObservableProperty]
     [EmailAddress]
-    private string? _email;
+    private string _email;
     [ObservableProperty]
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Please select a company for the person")]
@@ -52,7 +52,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
         Companies.Add(model);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SendPerson()
     {
         _person.FirstName = _firstName;

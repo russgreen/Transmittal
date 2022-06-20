@@ -7,6 +7,7 @@
 	  <LangVersion>10</LangVersion>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	  <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

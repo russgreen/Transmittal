@@ -35,7 +35,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public List<DrawingSheetModel> DrawingSheets { get; private set; }
     
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsSheetsSelected))]
+    [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
     private ObservableCollection<DrawingSheetModel> _selectedDrawingSheets;
 
     [ObservableProperty]
@@ -57,7 +57,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _exportDWF = false;
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsExportFormatSelected))]
+    [NotifyPropertyChangedFor(nameof(IsExportFormatSelected))]
     private int _exportFormatCount = 1;
     
     public bool IsExportFormatSelected => _exportFormatCount > 0;
@@ -96,7 +96,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public Array DwgVersions { get; private set; }
     [ObservableProperty]
-    [AlsoNotifyCanExecuteFor(nameof(SetDwgVersionCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetDwgVersionCommand))]
     private ACADVersion _dwgVersion;
 
     /// DISTRIBUTION
@@ -105,7 +105,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public bool IsDistributionValid => ValidateDistribution();
 
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
+    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
     private bool _recordTransmittal = false;
     [ObservableProperty]
     private int _copies = 1;
@@ -114,7 +114,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
+    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
     private ObservableCollection<TransmittalDistributionModel> _distribution;
     [ObservableProperty]
     private ObservableCollection<object> _selectedProjectDirectory;
@@ -493,7 +493,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     #endregion
 
     #region Export Formats
-    [ICommand]
+    [RelayCommand]
     private void GetFormatCount()
     {
         bool[] formats = { _exportPDF, _exportDWG, _exportDWF };
@@ -501,7 +501,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ExportFormatCount = formats.Sum(x => x ? 1 : 0);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SetDwgVersion()
     {
         DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
@@ -564,7 +564,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddToDistribition()
     {
         foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
@@ -587,7 +587,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void RemoveFromDistribution()
     {
         foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
@@ -609,7 +609,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     #endregion
 
-    [ICommand]
+    [RelayCommand]
     private void ProcessSheets()
     {
         IsBackEnabled = false;
@@ -774,7 +774,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             this.OnClosingRequest();
             return;
         }
-        catch (Exception ex)
+        catch
         {
             //TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", TaskDialogCommonButtons.Ok);
             this.OnClosingRequest();
@@ -838,7 +838,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(issueDate);
             trans.Commit();
         }
-        catch (Exception ex)
+        catch
         {
             trans.RollBack();
         }

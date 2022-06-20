@@ -93,7 +93,7 @@ internal class ExportDWGService : IExportDWGService
                 }
             }
         }
-        catch (Exception ex)
+        catch
         {
             //TODO - report crashes
         }

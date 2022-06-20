@@ -26,7 +26,7 @@ namespace Transmittal.ViewModels
         }
 
 
-        [ICommand]
+        [RelayCommand]
         private void SendCompany()
         {
             _company.CompanyName = _companyName;
