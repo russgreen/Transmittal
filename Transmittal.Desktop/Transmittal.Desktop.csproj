@@ -4,7 +4,7 @@
       <OutputType>WinExe</OutputType>
 	  <TargetFramework>net48</TargetFramework>
 	  <!--<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>-->
-	  <Nullable>enable</Nullable>
+	  <!--<Nullable>enable</Nullable>-->
 	  <UseWPF>true</UseWPF>
 	  <LangVersion>10</LangVersion>
 	  <ImplicitUsings>enable</ImplicitUsings>
@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
