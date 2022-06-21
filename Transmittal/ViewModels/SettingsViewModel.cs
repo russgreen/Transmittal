@@ -10,6 +10,7 @@ using Transmittal.Extensions;
 using System.ComponentModel.DataAnnotations;
 using Autodesk.Revit.DB;
 using System.Windows.Controls;
+using Transmittal.Library.Extensions;
 
 namespace Transmittal.ViewModels;
 
@@ -21,7 +22,7 @@ internal partial class SettingsViewModel : BaseViewModel
     private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
 
-    public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%" };
+    public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
     
     public string ProjectNumber;
@@ -285,11 +286,14 @@ internal partial class SettingsViewModel : BaseViewModel
     {
         DatabaseNotFound = false;
         
-        if (_recordTransmittals)
+        if(DatabaseFile != null)
         {
-            if(!_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile, false))
+            if (_recordTransmittals)
             {
-                DatabaseNotFound = true;
+                if(!_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile, false))
+                {
+                    DatabaseNotFound = true;
+                }
             }
         }
     }
