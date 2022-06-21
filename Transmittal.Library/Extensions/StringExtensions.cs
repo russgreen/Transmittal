@@ -1,7 +1,7 @@
 ﻿using Humanizer;
-using Transmittal.Library.Extensions;
 
-namespace Transmittal.Extensions;
+namespace Transmittal.Library.Extensions;
+
 public static class NamingExtensions
 {
     /// <summary>
@@ -12,13 +12,32 @@ public static class NamingExtensions
     /// <returns></returns>
     public static string ParseFolderName(this string path, string format)
     {
-        path = path.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+        path = path.ParsePathWithEnvironmentVariables();
+        //path.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+        //path = path.Replace("%OneDriveConsumer%", Environment.GetEnvironmentVariable("OneDriveConsumer"));
+        //path = path.Replace("%OneDriveCommercial%", Environment.GetEnvironmentVariable("OneDriveCommercial"));
+
         path = path.Replace("<DateDD>", DateTime.Now.ToStringDD());
         path = path.Replace("<DateMM>", DateTime.Now.ToStringMM());
         path = path.Replace("<DateYY>", DateTime.Now.ToStringYY());
         path = path.Replace("<DateYYYY>", DateTime.Now.Year.ToString());
 
         path = path.Replace("<Format>", format);
+
+        return path;
+    }
+
+    /// <summary>
+    /// Parses out folder paths that contain optional environment variables tags, %UserProfile%, %OneDriveConsumer%, %OneDriveCommercial%
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string ParsePathWithEnvironmentVariables(this string path)
+    {
+        path = path.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+
+        path = path.Replace("%OneDriveConsumer%", Environment.GetEnvironmentVariable("OneDriveConsumer"));
+        path = path.Replace("%OneDriveCommercial%", Environment.GetEnvironmentVariable("OneDriveCommercial"));
 
         return path;
     }
