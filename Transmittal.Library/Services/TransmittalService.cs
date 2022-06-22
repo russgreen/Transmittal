@@ -20,7 +20,7 @@ public class TransmittalService : ITransmittalService
 
     public void CreateTransmittal(TransmittalModel model)
     {
-        string sql = "INSERT INTO Transmittal (TransDate) VALUES (@TransDate);" +
+        string sql = "INSERT INTO Transmittal (TransDate) VALUES (@TransDate); " +
             "SELECT last_insert_rowid();";
 
         model.ID = _connection.CreateData<TransmittalModel, dynamic>(
@@ -34,7 +34,7 @@ public class TransmittalService : ITransmittalService
     public void CreateTransmittalDist(TransmittalDistributionModel model)
     {
         string sql = "INSERT INTO TransmittalDistribution (TransID, PersonID, TransFormat, TransCopies) " +
-            "VALUES (@TransID, @PersonID, @TransFormat, @TransCopies);" +
+            "VALUES (@TransID, @PersonID, @TransFormat, @TransCopies); " +
             "SELECT last_insert_rowid();";
 
         model.TransDistID = _connection.CreateData<TransmittalDistributionModel, dynamic>(
@@ -51,7 +51,7 @@ public class TransmittalService : ITransmittalService
     public void CreateTransmittalItem(TransmittalItemModel model)
     {
         string sql = "INSERT INTO TransmittalItems ( TransID, DrgProj, DrgOriginator, DrgVolume, DrgLevel, DrgType, DrgRole, DrgNumber, DrgStatus, DrgRev, DrgName, DrgPaper, DrgScale, DrgDrawn, DrgChecked ) " +
-            "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked );" +
+            "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked ); " +
             "SELECT last_insert_rowid();";
 
         model.TransItemID = _connection.CreateData<TransmittalItemModel, dynamic>(
