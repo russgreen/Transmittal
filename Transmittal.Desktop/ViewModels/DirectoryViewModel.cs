@@ -158,7 +158,7 @@ internal partial class DirectoryViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
+    [ICommand]
     private void RemovePerson()
     {
         //TODO impement method
@@ -172,7 +172,7 @@ internal partial class DirectoryViewModel : BaseViewModel
         //remoe the person from the project directory
     }
 
-    [RelayCommand]
+    [ICommand]
     private void ExportVCard()
     {
         ProjectDirectoryModel projectDirectoryModel = new()
@@ -184,7 +184,7 @@ internal partial class DirectoryViewModel : BaseViewModel
         Library.Helpers.VCardHelper.ExportVard(projectDirectoryModel);
     }
 
-    [RelayCommand]
+    [ICommand]
     private void ShowDirectoryReport()
     {
         BuildProjectDirectory();

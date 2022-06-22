@@ -36,7 +36,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public List<DrawingSheetModel> DrawingSheets { get; private set; }
     
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
+    [AlsoNotifyChangeFor(nameof(IsSheetsSelected))]
     private ObservableCollection<DrawingSheetModel> _selectedDrawingSheets;
 
     [ObservableProperty]
@@ -58,7 +58,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _exportDWF = false;
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsExportFormatSelected))]
+    [AlsoNotifyChangeFor(nameof(IsExportFormatSelected))]
     private int _exportFormatCount = 1;
     
     public bool IsExportFormatSelected => _exportFormatCount > 0;
@@ -97,7 +97,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public Array DwgVersions { get; private set; }
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SetDwgVersionCommand))]
+    [AlsoNotifyCanExecuteFor(nameof(SetDwgVersionCommand))]
     private ACADVersion _dwgVersion;
 
     /// DISTRIBUTION
@@ -106,7 +106,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public bool IsDistributionValid => ValidateDistribution();
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
+    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
     private bool _recordTransmittal = false;
     [ObservableProperty]
     private int _copies = 1;
@@ -115,7 +115,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
+    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
     private ObservableCollection<TransmittalDistributionModel> _distribution;
     [ObservableProperty]
     private ObservableCollection<object> _selectedProjectDirectory;
@@ -433,7 +433,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         sheets.OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
-        foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
+        foreach (DrawingSheetModel sheetModel in _selectedDrawingSheets)
         {
             foreach (ViewSheet sheet in sheets)
             {
@@ -494,7 +494,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     #endregion
 
     #region Export Formats
-    [RelayCommand]
+    [ICommand]
     private void GetFormatCount()
     {
         bool[] formats = { _exportPDF, _exportDWG, _exportDWF };
@@ -502,7 +502,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ExportFormatCount = formats.Sum(x => x ? 1 : 0);
     }
 
-    [RelayCommand]
+    [ICommand]
     private void SetDwgVersion()
     {
         DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
@@ -565,7 +565,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    [RelayCommand]
+    [ICommand]
     private void AddToDistribition()
     {
         foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
@@ -588,7 +588,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    [RelayCommand]
+    [ICommand]
     private void RemoveFromDistribution()
     {
         foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
@@ -610,7 +610,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     #endregion
 
-    [RelayCommand]
+    [ICommand]
     private void ProcessSheets()
     {
         IsBackEnabled = false;

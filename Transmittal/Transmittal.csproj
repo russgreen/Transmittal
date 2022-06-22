@@ -10,6 +10,7 @@
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<UseWPF>true</UseWPF>		
 		<TargetFramework>net48</TargetFramework>
+		<!--<Nullable>enable</Nullable>-->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
 
@@ -52,11 +53,11 @@
 	  <None Remove="Resources\Transmittal.ico" />
 	</ItemGroup>
 
-	<!-- 
+	<!--
 	<PropertyGroup>
 		<Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
-	</PropertyGroup>	
-	
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Reference Include="AdWindows">
 			<HintPath>$(Path_DLL_API)\$(RevitVersion)\AdWindows.dll</HintPath>
@@ -72,16 +73,10 @@
 			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
 			<EmbedInteropTypes>false</EmbedInteropTypes>
 			<Private>false</Private>
-		</Reference>
-		
-    <Reference Include="UIFramework">
-      <HintPath>$(Path_DLL_API)\$(Configuration)\UIFramework.dll</HintPath>
-      <EmbedInteropTypes>false</EmbedInteropTypes>
-      <Private>false</Private>
-    </Reference>
-    
-	</ItemGroup>-->
-
+		</Reference>   
+	</ItemGroup>
+	-->
+	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
@@ -104,17 +99,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.5.22301.12" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
   </ItemGroup>
 
-
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
-	  <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
 	</ItemGroup>
 
 

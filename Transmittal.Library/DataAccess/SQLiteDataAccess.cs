@@ -30,7 +30,8 @@ public class SQLiteDataAccess : IDataConnection
         using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
         {
             dbConnection.Open();
-            var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
+            //var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
+            var recordId = dbConnection.QuerySingle<int>(sqlStatement, parameters);
 
             DeleteLockFile(dbFilePath);
 
@@ -40,7 +41,7 @@ public class SQLiteDataAccess : IDataConnection
             return model;
         }
     }
-
+     
     public IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters)
     {
         using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))

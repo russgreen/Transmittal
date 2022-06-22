@@ -21,7 +21,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
     private ObservableCollection<RevisionDataModel> _revisions;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsRevisionSelected))]
+    [AlsoNotifyChangeFor(nameof(IsRevisionSelected))]
     private RevisionDataModel _selectedRevision;
 
     public bool IsRevisionSelected => _selectedRevision != null;
@@ -90,7 +90,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         LoadRevisions();
     }
 
-    [RelayCommand]
+    [ICommand]
     private void SendRevision()
     {
         _callingViewModel.RevisionComplete(_selectedRevision);

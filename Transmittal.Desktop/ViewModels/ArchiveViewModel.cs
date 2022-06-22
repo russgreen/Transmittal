@@ -165,7 +165,7 @@ internal partial class ArchiveViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
+    [ICommand]
     private void LoadData()
     {
         ProjectDirectory = new ObservableCollection<ProjectDirectoryModel>(_contactDirectoryService.GetProjectDirectory());
@@ -176,7 +176,7 @@ internal partial class ArchiveViewModel : BaseViewModel
         SelectedTransmittals.CollectionChanged += SelectedTransmittals_CollectionChanged;
     }
 
-    [RelayCommand]
+    [ICommand]
     private void MergeTransmittals()
     {
         List<TransmittalModel> transmittalsToMerge = _selectedTransmittals.Cast<TransmittalModel>().ToList();
@@ -191,14 +191,14 @@ internal partial class ArchiveViewModel : BaseViewModel
         CanMergeTransmittals = false;
     }
 
-    [RelayCommand]
+    [ICommand]
     private void ShowSummaryReport()
     {
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalSummaryReport();
     }
 
-    [RelayCommand]
+    [ICommand]
     private void ShowTransmittalReport()
     {
         TransmittalModel transmittalModel = _selectedTransmittals.First() as TransmittalModel;
