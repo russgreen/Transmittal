@@ -251,7 +251,7 @@ namespace Transmittal.Reports
 
             if(_settingsService.GlobalSettings.ReportStore != null)
             {
-                folder = _settingsService.GlobalSettings.ReportStore;   
+                folder = _settingsService.GlobalSettings.ReportStore.ParsePathWithEnvironmentVariables();   
             }
 
             string reportFilePath = Path.Combine(folder, reportName);

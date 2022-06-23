@@ -103,6 +103,7 @@ internal partial class SettingsViewModel : BaseViewModel
         //Settings = _settingsService.GlobalSettings;
         CheckForDatabaseFile();
 
+
         //BASIC SETTINGS
         FileNameFilter = _settingsService.GlobalSettings.FileNameFilter;
         DrawingIssueStore = _settingsService.GlobalSettings.DrawingIssueStore;
@@ -137,9 +138,9 @@ internal partial class SettingsViewModel : BaseViewModel
     [ICommand]
     private void SaveSettings()
     {
-        _settingsService.GlobalSettings.FileNameFilter = FileNameFilter;
-        _settingsService.GlobalSettings.DrawingIssueStore = DrawingIssueStore;
-        _settingsService.GlobalSettings.DateFormatString = DateFormatString;
+        _settingsService.GlobalSettings.FileNameFilter = FileNameFilter.Trim();
+        _settingsService.GlobalSettings.DrawingIssueStore = DrawingIssueStore.Trim();
+        _settingsService.GlobalSettings.DateFormatString = DateFormatString.Trim();
 
         _settingsService.GlobalSettings.UseISO19650 = UseISO19650;
         _settingsService.GlobalSettings.UseExtranet = UseExtranet;
@@ -151,7 +152,7 @@ internal partial class SettingsViewModel : BaseViewModel
         _settingsService.GlobalSettings.RecordTransmittals = RecordTransmittals;
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
         _settingsService.GlobalSettings.DatabaseTemplateFile = DatabaseTemplateFile;
-        _settingsService.GlobalSettings.ReportStore = ReportTemplatePath;
+        _settingsService.GlobalSettings.ReportStore = ReportTemplatePath.Trim();
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = UseCustomSharedParameters;
         

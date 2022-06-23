@@ -775,9 +775,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             this.OnClosingRequest();
             return;
         }
-        catch
+        catch(Exception ex)
         {
-            //TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", TaskDialogCommonButtons.Ok);
+            Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
             this.OnClosingRequest();
             return;
         }
