@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.Reflection;
 using Transmittal.Library.DataAccess;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 
 namespace Transmittal.Library.Services;
@@ -25,7 +26,7 @@ public class SettingsService : ISettingsService
 
         if (GlobalSettings.DatabaseFile != "[NONE]" || GlobalSettings.DatabaseFile != null)
         {
-            if (File.Exists(GlobalSettings.DatabaseFile))
+            if (File.Exists(GlobalSettings.DatabaseFile.ParsePathWithEnvironmentVariables()))
             {
                 string sql = "SELECT * FROM Settings WHERE ID = 1;";
 

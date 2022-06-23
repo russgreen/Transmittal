@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
 using System.Data;
+using Transmittal.Library.Extensions;
 
 namespace Transmittal.Library.DataAccess;
 
@@ -27,10 +28,11 @@ public class SQLiteDataAccess : IDataConnection
         WaitForLockFileToClear(dbFilePath);
         CreateLockFile(dbFilePath);
         
-        using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
+        using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
         {
             dbConnection.Open();
-            var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
+            //var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
+            var recordId = dbConnection.QuerySingle<int>(sqlStatement, parameters);
 
             DeleteLockFile(dbFilePath);
 
@@ -40,10 +42,10 @@ public class SQLiteDataAccess : IDataConnection
             return model;
         }
     }
-
+     
     public IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters)
     {
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
         {
             dbConnection.Open();
             var rows = dbConnection.Query<T>(sqlStatement, parameters);
@@ -56,7 +58,7 @@ public class SQLiteDataAccess : IDataConnection
         WaitForLockFileToClear(dbFilePath);
         CreateLockFile(dbFilePath);
         
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
         {
             dbConnection.Open();
             dbConnection.Execute(sqlStatement, data);
@@ -69,7 +71,7 @@ public class SQLiteDataAccess : IDataConnection
     // To prevent concurrent write attempts on the database a lock file will be created
     private void WaitForLockFileToClear(string dbFilePath)
     {
-        var lockFilePath = $"{dbFilePath}.lock";
+        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
         while (File.Exists(lockFilePath))
         {
             Thread.Sleep(100);
@@ -78,7 +80,7 @@ public class SQLiteDataAccess : IDataConnection
 
     private void CreateLockFile(string dbFilePath)
     {
-        var lockFilePath = $"{dbFilePath}.lock";
+        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
 
         if (!File.Exists(lockFilePath))
         {
@@ -94,7 +96,7 @@ public class SQLiteDataAccess : IDataConnection
 
     private void DeleteLockFile(string dbFilePath)
     {
-        var lockFilePath = $"{dbFilePath}.lock";
+        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
         File.Delete(lockFilePath);
     }
 }

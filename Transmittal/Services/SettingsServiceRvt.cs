@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Transmittal.Library.DataAccess;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 
@@ -129,15 +130,15 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         if (filepath != "[NONE]" || filepath != null)
         {
-            if (System.IO.File.Exists(filepath))
+            if (System.IO.File.Exists(filepath.ParsePathWithEnvironmentVariables()))
             {
                 if (checkConnection == true)
                 {
-                    return _dataConnection.CheckConnection(filepath);
+                    return _dataConnection.CheckConnection(filepath.ParsePathWithEnvironmentVariables());
                 }
             }
 
-            return System.IO.File.Exists(filepath);
+            return System.IO.File.Exists(filepath.ParsePathWithEnvironmentVariables());
         }
 
         return false;

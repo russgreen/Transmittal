@@ -37,7 +37,7 @@ public class ContactDirectoryService : IContactDirectoryService
     public void CreatePerson(PersonModel model)
     {
         string sql = "INSERT INTO Person (LastName, FirstName, Email, Tel, Mobile, Position, Notes, CompanyID, ShowInReport) " +
-            "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport);" +
+            "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport); " +
             "SELECT last_insert_rowid();";
 
         model.ID = _connection.CreateData<PersonModel, dynamic>(

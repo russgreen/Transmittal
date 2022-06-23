@@ -47,7 +47,7 @@ internal partial class NewRevisionViewModel : BaseViewModel
         _revisionSequence = RevisionSequences.FirstOrDefault();
     }
 
-    [RelayCommand]
+    [ICommand]
     private void SendRevision()
     {
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021

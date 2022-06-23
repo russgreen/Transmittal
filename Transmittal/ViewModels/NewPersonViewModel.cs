@@ -21,7 +21,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     [ObservableProperty]
     [Required(ErrorMessage = "Last name is required")]
     [MinLength(2)]
-    private string _lastName = String.Empty;
+    private string _lastName;
     [ObservableProperty]
     [Required(ErrorMessage = "At least provide an intial")]
     [MinLength(1)]
@@ -52,7 +52,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
         Companies.Add(model);
     }
 
-    [RelayCommand]
+    [ICommand]
     private void SendPerson()
     {
         _person.FirstName = _firstName;

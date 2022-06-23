@@ -28,3 +28,6 @@ Tag strings are case sensitive
 | \<DateMM> | &#10003; | &#10003; | The issue date as a 2 digit month number |
 | \<DateDD> | &#10003; | &#10003; | The issue date as a 2 digit day of the month |
 | \<Format> |  | &#10003; | The format of the export e.g PDF, DWG, DWF  |
+| %UserProfile% |  | &#10003; | The path to use the users profile folder.  e.g. C:\Users\my_username  |
+| %OneDriveConsumer% |  | &#10003; | The path to use the users private One Drive folder.  e.g. C:\Users\my_username\OneDrive  |
+| %OneDriveCommercial% |  | &#10003; | The path to use the users commercial One Drive folder.  e.g. C:\Users\my_username\OneDrive - COMPANY |

@@ -2,6 +2,7 @@
 using System.IO;
 using Transmittal.Extensions;
 using Transmittal.Library.Services;
+using Transmittal.Library.Extensions;
 
 namespace Transmittal.Services;
 internal class ExportPDFService : IExportPDFService

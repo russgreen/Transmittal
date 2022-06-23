@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using Transmittal.Desktop.Views;
 using Transmittal.Library.DataAccess;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop;
@@ -38,7 +39,7 @@ public partial class App : Application
                 {
                     string databaseFilePath = arg.Substring(arg.IndexOf("=") + 1);
                     // set the database filepath string to the value after the --database argument
-                    if (File.Exists(databaseFilePath))
+                    if (File.Exists(databaseFilePath.ParsePathWithEnvironmentVariables()))
                     {
                         var settings = Ioc.Default.GetService<ISettingsService>();
                         settings.GlobalSettings.DatabaseFile = databaseFilePath;
@@ -52,7 +53,7 @@ public partial class App : Application
                         TaskDialog dialog = new TaskDialog()
                         {
                             WindowTitle = "Transmittal Database",
-                            MainInstruction = @$"{databaseFilePath} was not found",
+                            MainInstruction = @$"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
                             MainIcon = TaskDialogIcon.Error,
                             ButtonStyle = TaskDialogButtonStyle.Standard,
                             Buttons = { okButon }
