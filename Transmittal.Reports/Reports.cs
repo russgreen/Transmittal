@@ -48,7 +48,7 @@ namespace Transmittal.Reports
             FormReportViewer frm = NewReportViewer(
                 "Project Directory",
                 report,
-                _settingsService.GlobalSettings.DirectoryStore,
+                _settingsService.GlobalSettings.DirectoryStore.ParsePathWithEnvironmentVariables(),
                 $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-DY-{_settingsService.GlobalSettings.Role}-0001-ProjectDirectory");
 
             List<Models.ProjectDirectoryReportModel> projectDirectoryReportModels = new();
@@ -93,7 +93,7 @@ namespace Transmittal.Reports
             FormReportViewer frm = NewReportViewer(
                 "Transmittal Record",
                 report,
-                _settingsService.GlobalSettings.IssueSheetStore,
+                _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
 
             //map to the derived model type
@@ -144,7 +144,7 @@ namespace Transmittal.Reports
             FormReportViewer frm = NewReportViewer(
                 "Transmittal Record",
                 report,
-                _settingsService.GlobalSettings.IssueSheetStore,
+                _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-MX-{_settingsService.GlobalSettings.Role}-0001-TransmittalSummary");
 
             List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();

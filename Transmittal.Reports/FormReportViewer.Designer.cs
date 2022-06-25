@@ -39,6 +39,7 @@ partial class FormReportViewer
             this.reportViewer1.ServerReport.BearerToken = null;
             this.reportViewer1.Size = new System.Drawing.Size(933, 519);
             this.reportViewer1.TabIndex = 0;
+            this.reportViewer1.ReportExport += new Microsoft.Reporting.WinForms.ExportEventHandler(this.reportViewer1_ReportExport);
             // 
             // FormReportViewer
             // 

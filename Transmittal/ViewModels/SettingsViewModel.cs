@@ -67,7 +67,11 @@ internal partial class SettingsViewModel : BaseViewModel
     private bool _databaseNotFound; //used to control visibility of error message in UI
     [ObservableProperty]
     private string _reportTemplatePath;
-    
+    [ObservableProperty]
+    private string _issueSheetStorePath;
+    [ObservableProperty]
+    private string _directoryStorePath;
+
     [ObservableProperty]
     private bool _useCustomSharedParameters;
 
@@ -103,7 +107,6 @@ internal partial class SettingsViewModel : BaseViewModel
         //Settings = _settingsService.GlobalSettings;
         CheckForDatabaseFile();
 
-
         //BASIC SETTINGS
         FileNameFilter = _settingsService.GlobalSettings.FileNameFilter;
         DrawingIssueStore = _settingsService.GlobalSettings.DrawingIssueStore;
@@ -120,6 +123,8 @@ internal partial class SettingsViewModel : BaseViewModel
         DatabaseFile = _settingsService.GlobalSettings.DatabaseFile;
         DatabaseTemplateFile = _settingsService.GlobalSettings.DatabaseTemplateFile;
         ReportTemplatePath = _settingsService.GlobalSettings.ReportStore;
+        IssueSheetStorePath = _settingsService.GlobalSettings.IssueSheetStore;
+        DirectoryStorePath = _settingsService.GlobalSettings.DirectoryStore;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = _settingsService.GlobalSettings.UseCustomSharedParameters;
@@ -138,9 +143,9 @@ internal partial class SettingsViewModel : BaseViewModel
     [ICommand]
     private void SaveSettings()
     {
-        _settingsService.GlobalSettings.FileNameFilter = FileNameFilter.Trim();
-        _settingsService.GlobalSettings.DrawingIssueStore = DrawingIssueStore.Trim();
-        _settingsService.GlobalSettings.DateFormatString = DateFormatString.Trim();
+        _settingsService.GlobalSettings.FileNameFilter = FileNameFilter?.Trim();
+        _settingsService.GlobalSettings.DrawingIssueStore = DrawingIssueStore?.Trim();
+        _settingsService.GlobalSettings.DateFormatString = DateFormatString?.Trim();
 
         _settingsService.GlobalSettings.UseISO19650 = UseISO19650;
         _settingsService.GlobalSettings.UseExtranet = UseExtranet;
@@ -152,7 +157,9 @@ internal partial class SettingsViewModel : BaseViewModel
         _settingsService.GlobalSettings.RecordTransmittals = RecordTransmittals;
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
         _settingsService.GlobalSettings.DatabaseTemplateFile = DatabaseTemplateFile;
-        _settingsService.GlobalSettings.ReportStore = ReportTemplatePath.Trim();
+        _settingsService.GlobalSettings.ReportStore = ReportTemplatePath?.Trim();
+        _settingsService.GlobalSettings.IssueSheetStore = IssueSheetStorePath?.Trim();
+        _settingsService.GlobalSettings.DirectoryStore = DirectoryStorePath?.Trim();
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = UseCustomSharedParameters;
         
