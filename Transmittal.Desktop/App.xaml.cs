@@ -99,8 +99,8 @@ public partial class App : Application
             }            
         }
 
-        TransmittalView transmittalView = new();
-        transmittalView.Show();
+        MainView mainView = new();
+        mainView.Show();
         return;
     }
 

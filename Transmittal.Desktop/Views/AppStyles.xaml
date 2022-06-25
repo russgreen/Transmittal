@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="d"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" >
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
+    <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
+    <BitmapImage x:Key="MergeImage" UriSource="../Resources/DataMerge.png" />
+    <BitmapImage x:Key="ContactImage" UriSource="../Resources/ContactDetails.png" />
+    <BitmapImage x:Key="ReportImage" UriSource="../Resources/Report.png" />
+    <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
+        
+    <Style x:Key="WizardControlStyle1" TargetType="{x:Type syncfusion:WizardControl}">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#FF93B8D9"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid IsItemsHost="True" SnapsToDevicePixels="True"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type syncfusion:WizardControl}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ItemsPresenter x:Name="PART_PagesPresenter"/>
+                        <syncfusion:WizardNavigationArea Background="White" Grid.Row="1"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -109,6 +109,8 @@ public class SettingsService : ISettingsService
             });
     }
 
+    //TODO save document statuses and issue formats to the database
+
     private List<IssueFormatModel> GetIssueFormats()
     {
         //build the issue formats list  
@@ -125,17 +127,6 @@ public class SettingsService : ISettingsService
 
         return documentStatuses;
     } 
-
-    private string GetDrawingIssueStore()
-    {
-       //get the current windows user documents folder
-       var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);       
-        
-       //if the issuestore parameter does not exist use the users documents folder
-       //TODO get the value from the paramater in the project
-
-       return documentsFolder;
-    }
 
 
 }
