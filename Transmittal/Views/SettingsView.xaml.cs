@@ -124,11 +124,41 @@ public partial class SettingsView : Window
             Description = "Please select the folder where report templates are stored.",
             UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
             RootFolder = Environment.SpecialFolder.MyComputer
-    };
+        };
 
         if ((bool)dialog.ShowDialog(this))
         {
             _viewModel.ReportTemplatePath = dialog.SelectedPath;
+        }
+    }
+
+    private void buttonIssueSheetStorePathBrowse_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new VistaFolderBrowserDialog
+        {
+            Description = "Please select the folder where transmittal sheets are stored.",
+            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
+            RootFolder = Environment.SpecialFolder.MyComputer
+        };
+
+        if ((bool)dialog.ShowDialog(this))
+        {
+            _viewModel.IssueSheetStorePath = dialog.SelectedPath;
+        }
+    }
+
+    private void buttonDirectoryStorePathBrowse_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new VistaFolderBrowserDialog
+        {
+            Description = "Please select the folder where directory reports are stored.",
+            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
+            RootFolder = Environment.SpecialFolder.MyComputer
+        };
+
+        if ((bool)dialog.ShowDialog(this))
+        {
+            _viewModel.DirectoryStorePath = dialog.SelectedPath;
         }
     }
 }

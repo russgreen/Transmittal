@@ -35,8 +35,20 @@ public partial class ArchiveView : Window
 
     private void sfDataGridTransmittalItems_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
     {
+        var projectIdentifier = string.Empty;
+
+        //check if we're using the project identifier on this project
+        if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
+        {
+            projectIdentifier = _settingsService.GlobalSettings.ProjectNumber;
+        }
+        else
+        {
+            projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
+        }
+
         TransmittalItemModel itemModel = e.NewObject as TransmittalItemModel;
-        itemModel.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
+        itemModel.DrgProj = projectIdentifier;
         itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
         itemModel.DrgRole = _settingsService.GlobalSettings.Role;
     }

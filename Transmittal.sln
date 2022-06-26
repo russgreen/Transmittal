@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Reports", "Tran
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Desktop", "Transmittal.Desktop\Transmittal.Desktop.csproj", "{F0665B9A-18BE-41CB-846C-1B970E352BBE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssociateFileExtensions", "AssociateFileExtensions\AssociateFileExtensions.csproj", "{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug 2022|x64 = Debug 2022|x64
@@ -76,6 +78,14 @@ Global
 		{F0665B9A-18BE-41CB-846C-1B970E352BBE}.Release 2023|x64.Build.0 = Release|x64
 		{F0665B9A-18BE-41CB-846C-1B970E352BBE}.Release|x64.ActiveCfg = Release|x64
 		{F0665B9A-18BE-41CB-846C-1B970E352BBE}.Release|x64.Build.0 = Release|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Debug 2022|x64.ActiveCfg = Debug|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Debug 2023|x64.ActiveCfg = Debug|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Debug|x64.ActiveCfg = Debug|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Debug|x64.Build.0 = Debug|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Release 2022|x64.ActiveCfg = Release|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Release 2023|x64.ActiveCfg = Release|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Release|x64.ActiveCfg = Release|x64
+		{D70A9953-69F3-41C7-A85E-2CD1CDB2979D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

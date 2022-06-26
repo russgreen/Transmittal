@@ -762,12 +762,16 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             StepOneComplete = true;
             DispatcherHelper.DoEvents();
-            RecordTransmittalInDatabase();
-            StepTwoComplete = true;
-            DispatcherHelper.DoEvents();
-            LaunchTransmittalReport();
-            StepThreeComplete = true;
-            DispatcherHelper.DoEvents();            
+
+            if(RecordTransmittal == true)
+            {
+                RecordTransmittalInDatabase();
+                StepTwoComplete = true;
+                DispatcherHelper.DoEvents();
+                LaunchTransmittalReport();
+                StepThreeComplete = true;
+                DispatcherHelper.DoEvents();     
+            }
 
             //just pause before closing the window
             Thread.Sleep(5000);

@@ -131,7 +131,7 @@ internal partial class ArchiveViewModel : BaseViewModel
         CanMergeTransmittals = false;
         ItemSelected = (_selectedTransmittals.Count == 1);
 
-        if (_selectedTransmittals.Count == 0)
+        if (_selectedTransmittals.Count == 0 & TransmittalItems != null)
         {
             TransmittalItems.Clear();
             TransmittalDistribution.Clear();

@@ -4,9 +4,208 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
+        xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        Title="TransmittalView" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}" 
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" 
+        Height="620" Width="860" 
+        MinHeight="620" MinWidth="860" 
+        WindowStyle="SingleBorderWindow">
+    <Window.DataContext>
+        <viewModels:TransmittalViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
-        
+        <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
+                                  BackEnabled="{Binding IsBackEnabled}" 
+                                  NextEnabled="True" 
+                                  CancelButtonCancelsWindow="True"
+                                  Help="WizardControl_Help" 
+                                  Cancel="WizardControl_Cancel">
+            <interactivity:Interaction.Triggers>
+                <interactivity:EventTrigger EventName="Finish">
+                    <interactivity:InvokeCommandAction Command="{Binding ProcessDocumentsCommand}"  />
+                </interactivity:EventTrigger>
+            </interactivity:Interaction.Triggers>
+
+            <syncfusion:WizardPage x:Name="wizardPage1" 
+                Title="Documents" 
+                Description="Drag and drop files onto the grid below to record transmittals in the database." 
+                FinishVisible="False" 
+                NextEnabled="{Binding HasDocuments}"
+                BackVisible="False" 
+                BannerBackground="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <syncfusion:SfDataGrid Grid.Row="0" Margin="0,10,0,0" 
+                                           x:Name="sfDataGridDocuments"
+                                           ItemsSource="{Binding Documents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           AutoGenerateColumns="False" 
+                                           AllowEditing="True" 
+                                           AllowDeleting="True" 
+                                           AllowGrouping="False" 
+                                           AllowDrop="True"
+                                           AllowResizingColumns="True"
+                                           RowSelectionBrush="#9993B8D9" 
+                                           GridValidationMode="InView"                                            
+                                           AddNewRowPosition="Bottom" 
+                                           AddNewRowText="Click here to add a new document to the transmittal"
+                                           DragEnter="sfDataGridDocuments_DragEnter" 
+                                           Drop="sfDataGridDocuments_Drop"
+                                           AddNewRowInitiating="sfDataGridDocuments_AddNewRowInitiating" 
+                                           ColumnSizer="AutoWithLastColumnFill" >
+                        <syncfusion:SfDataGrid.Columns>
+                            <!--<syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34" />-->
+                            <syncfusion:GridTextColumn MappingName="FileName" HeaderText="File" MinimumWidth="350" AllowEditing="False"/>
+                            <syncfusion:GridTextColumn MappingName="DrgProj" HeaderText="Project" Width="80" />
+                            <syncfusion:GridTextColumn MappingName="DrgOriginator" HeaderText="Originator" Width="80" />
+                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume" Width="80" />
+                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level" Width="80" />
+                            <!--<syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />-->
+                            <syncfusion:GridComboBoxColumn MappingName="DrgType"
+                                                           HeaderText="Type"
+                                                           SelectedValuePath="Code"
+                                                           DisplayMemberPath="DisplayName"
+                                                           ItemsSource="{Binding DocumentTypes}"
+                                                           MinimumWidth="200"/>
+                            <syncfusion:GridTextColumn MappingName="DrgRole" HeaderText="Role" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" />
+                            <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
+                            <!--<syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" />-->
+                            <syncfusion:GridComboBoxColumn MappingName="DrgStatus"
+                                                           HeaderText="Status"
+                                                           SelectedValuePath="Code"
+                                                           DisplayMemberPath="DisplayName"
+                                                           ItemsSource="{Binding DocumentStatuses}"
+                                                           MinimumWidth="200"/>
+                            <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="50" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
+                </Grid>
+            </syncfusion:WizardPage>
+            
+            <syncfusion:WizardPage x:Name="wizardPage2" 
+                                   Title="Distribution" 
+                                   Description="Select recipients of the document transmittal" 
+                                   NextVisible="False"
+                                   FinishVisible="True" 
+                                   FinishEnabled="{Binding IsDistributionValid}"
+                                   BannerBackground="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            Click="Button_AddToDirectory_Click">
+                        <Button.Background>
+                            <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
+                        </Button.Background>
+                    </Button>
+
+                    <syncfusion:SfDataGrid x:Name="sfDataGridDirectory" Grid.Row="1" Grid.Column="0" Grid.RowSpan="7" 
+                                           ItemsSource="{Binding ProjectDirectory}"
+                                           SelectedItems="{Binding SelectedProjectDirectory}"
+                                           AutoGenerateColumns="False" 
+                                           AllowGrouping="False" 
+                                           AllowResizingColumns="True" 
+                                           AllowFiltering="True"
+                                           NavigationMode="Row" 
+                                           SelectionMode="Multiple" 
+                                           RowSelectionBrush="#9993B8D9" 
+                                           ColumnSizer="AutoLastColumnFill" >
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
+                            <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
+
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" >
+                        <TextBlock Text="Copies:" HorizontalAlignment="Center" />
+                        <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
+                                           MinValue="1"
+                                           Value="{Binding Copies}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" >
+                        <TextBlock Text="Issue format:" HorizontalAlignment="Center" />
+                        <ComboBox Width="154"
+                                  ItemsSource="{Binding IssueFormats}"
+                                  SelectedItem="{Binding IssueFormat}"
+                                  SelectedIndex="0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Description}" HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <Button Grid.Row="4" Grid.Column="1" Width="150" Margin="5"
+                            Content="Add to distribution"
+                            ToolTip="Add new contact to the project directory"
+                            IsEnabled="{Binding HasDirectoryEntriesSelected}"
+                            Command="{Binding AddToDistribitionCommand}"/>
+
+                    <Button Grid.Row="5" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
+                            IsEnabled="{Binding HasDistributionEntriesSelected}"
+                            Command="{Binding RemoveFromDistributionCommand}">
+                        <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
+                    </Button>
+
+                    <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
+                                           ItemsSource="{Binding Distribution}"
+                                           SelectedItems="{Binding SelectedDistribution}"
+                                           AutoGenerateColumns="False" 
+                                           AllowGrouping="False" 
+                                           AllowResizingColumns="True" 
+                                           AllowFiltering="True"
+                                           NavigationMode="Row" 
+                                           SelectionMode="Multiple" 
+                                           RowSelectionBrush="#9993B8D9" 
+                                           ColumnSizer="AutoLastColumnFill">
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
+                            <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
+                            <syncfusion:GridTextColumn HeaderText="Copies" MappingName="TransCopies" />
+                            <syncfusion:GridTextColumn HeaderText="Format" MappingName="TransFormat" />
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
+                </Grid>
+            </syncfusion:WizardPage>
+
+        </syncfusion:WizardControl>
+
     </Grid>
 </Window>

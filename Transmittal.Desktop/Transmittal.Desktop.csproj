@@ -16,17 +16,28 @@
 
   <ItemGroup>
     <None Remove="Resources\Add.png" />
+    <None Remove="Resources\Archive_Button.png" />
     <None Remove="Resources\ContactDetails.png" />
     <None Remove="Resources\DataEdit.png" />
     <None Remove="Resources\DataMerge.png" />
     <None Remove="Resources\Delete.png" />
+    <None Remove="Resources\Directory_Button.png" />
+    <None Remove="Resources\GreenCheck.png" />
     <None Remove="Resources\Reload.png" />
     <None Remove="Resources\Report.png" />
+    <None Remove="Resources\Transmittal_Button.png" />
     <None Remove="Transmittal.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Transmittal.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Archive_Button.png" />
+    <Resource Include="Resources\Directory_Button.png" />
+    <Resource Include="Resources\GreenCheck.png" />
+    <Resource Include="Resources\Transmittal_Button.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +63,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.5.22301.12" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.1.0.58" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="20.1.0.58" />
@@ -76,6 +88,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\AppStyles.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
     <Page Update="Views\ArchiveView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

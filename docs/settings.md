@@ -45,4 +45,15 @@ if required the database can be opened and edited in [DB Browser for SQLite](htt
 ### Report templates
 The default report templates are embedded in the application but it is possible to customise the report templates and share them on a network location. [For more information on reports](/Transmittal/settings/reports/).
 
+### Issue sheet store
+The path to the folder where transmittal reports should be saved when exported from the report viewer.
+
+### Directory store
+The path to the folder where the contract directory report should be saved when exported from the report viewer.
+
 ## Advanced Settings
+### Add standard transmittal parameters to your project
+Adds the default shared parameters required by Transmittal into your project. These can be added into a Revit template to avoid the need to do these on all new projects. The shared parameters are supplied in C:\Program Files\Transmittal\Resources\TransmittalParameters.txt so that can be manually edited as required.
+
+### Use your own custom shared parameters
+Where shared parameters are already in use the GUID's of the paramaters can be entered in each box. Transmittal will then use the existing paramaters instead of the defaults. These settings can be configured and saved into a Revit template.
