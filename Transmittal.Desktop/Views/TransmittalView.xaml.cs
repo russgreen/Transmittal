@@ -59,9 +59,9 @@ public partial class TransmittalView : Window
 
     private void Button_AddToDirectory_Click(object sender, RoutedEventArgs e)
     {
-        //Views.NewPersonView dialog = new Views.NewPersonView(_viewModel);
-        //dialog.Owner = this;
-        //dialog.ShowDialog();
+        Views.NewPersonView dialog = new Views.NewPersonView(_viewModel);
+        dialog.Owner = this;
+        dialog.ShowDialog();
     }
 
     private void sfDataGridDocuments_DragEnter(object sender, DragEventArgs e)
