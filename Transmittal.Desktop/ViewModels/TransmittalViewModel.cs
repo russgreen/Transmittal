@@ -36,7 +36,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(IsDistributionValid))]
+    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
     private ObservableCollection<TransmittalDistributionModel> _distribution;
     [ObservableProperty]
     private ObservableCollection<object> _selectedProjectDirectory;
@@ -150,7 +150,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddToDistribition()
     {
         foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
@@ -173,7 +173,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void RemoveFromDistribution()
     {
         foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
@@ -195,7 +195,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
     #endregion
 
-    [ICommand]
+    [RelayCommand]
     private void ProcessDocuments()
     {
         IsBackEnabled = false;

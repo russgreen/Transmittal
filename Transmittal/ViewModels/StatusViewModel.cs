@@ -31,7 +31,7 @@ internal partial class StatusViewModel : BaseViewModel
         _callingViewModel = caller;
     }
     
-    [ICommand]
+    [RelayCommand]
     private void SendStatus()
     {
         _callingViewModel.StatusComplete(_selectedDocumentStatus);

@@ -52,7 +52,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
         Companies.Add(model);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SendPerson()
     {
         _person.FirstName = _firstName;
