@@ -230,9 +230,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
             projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
         }
 
-        Documents.Add(Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
+        var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
             _settingsService.GlobalSettings.Originator,
-            _settingsService.GlobalSettings.Role));
+            _settingsService.GlobalSettings.Role);
+
+        if (!Documents.Any(x => x.FileName == documentModel.FileName))
+        {
+            Documents.Add(documentModel);
+        }
     }
 
     private void RecordTransmittalInDatabase()
