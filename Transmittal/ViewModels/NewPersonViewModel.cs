@@ -19,10 +19,12 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     private PersonModel _person = new();
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required(ErrorMessage = "Last name is required")]
     [MinLength(2)]
     private string _lastName;
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required(ErrorMessage = "At least provide an intial")]
     [MinLength(1)]
     private string _firstName;
@@ -30,6 +32,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     [EmailAddress]
     private string _email;
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Please select a company for the person")]
     private int _companyID;

@@ -15,6 +15,7 @@ namespace Transmittal.Desktop.ViewModels
         private CompanyModel _company = new();
 
         [ObservableProperty]
+        [NotifyDataErrorInfo]
         [Required(ErrorMessage = "A company name is required")]
         public string _companyName;
 
