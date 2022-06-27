@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel.DataAnnotations;
 using Transmittal.Library.Models;
 using Transmittal.Library.ViewModels;
-using Transmittal.Requesters;
+using Transmittal.Desktop.Requesters;
 
-namespace Transmittal.ViewModels
+namespace Transmittal.Desktop.ViewModels
 {
     public partial class NewCompanyViewModel : BaseViewModel
     {

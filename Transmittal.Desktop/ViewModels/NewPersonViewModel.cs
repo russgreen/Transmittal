@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
-using Transmittal.Requesters;
+using Transmittal.Desktop.Requesters;
 
-namespace Transmittal.ViewModels;
+namespace Transmittal.Desktop.ViewModels;
 
 internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
 {

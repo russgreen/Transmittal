@@ -1,7 +1,7 @@
 ﻿using Transmittal.Library.Models;
 
 namespace Transmittal.Desktop.Requesters;
-public interface IPersonRequester
+public interface ICompanyRequester
 {
-    void PersonComplete(PersonModel model);
+    void CompanyComplete(CompanyModel model);
 }

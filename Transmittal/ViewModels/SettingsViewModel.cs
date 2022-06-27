@@ -140,7 +140,7 @@ internal partial class SettingsViewModel : BaseViewModel
         SheetStatusDescriptionParamGuid = _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid;
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SaveSettings()
     {
         _settingsService.GlobalSettings.FileNameFilter = FileNameFilter?.Trim();
@@ -183,7 +183,7 @@ internal partial class SettingsViewModel : BaseViewModel
         this.OnClosingRequest();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AppendToFileNameFilter(string filter)
     {
         if (filter != null && !_fileNameFilter.Contains(filter))
@@ -192,7 +192,7 @@ internal partial class SettingsViewModel : BaseViewModel
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AppendToFolderPath(string filter)
     {   
         if(filter == "%UserProfile%")
@@ -220,7 +220,7 @@ internal partial class SettingsViewModel : BaseViewModel
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddParametersToProject()
     {
         using var t = new Transaction(App.RevitDocument);
