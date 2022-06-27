@@ -29,6 +29,8 @@ public partial class App : Application
         //register the syncfusion license
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
 
+        var settings = Ioc.Default.GetService<ISettingsService>();
+
         // If no command line arguments were provided, don't process them if (e.Args.Length == 0) return;  
         if (e.Args.Length > 0)
         {
@@ -41,7 +43,6 @@ public partial class App : Application
                     // set the database filepath string to the value after the --database argument
                     if (File.Exists(databaseFilePath.ParsePathWithEnvironmentVariables()))
                     {
-                        var settings = Ioc.Default.GetService<ISettingsService>();
                         settings.GlobalSettings.DatabaseFile = databaseFilePath;
                         settings.GlobalSettings.RecordTransmittals = true;
                         settings.GetSettings(); 
@@ -97,6 +98,28 @@ public partial class App : Application
                     return;
                 }
             }            
+        }
+
+        if(settings.GlobalSettings.DatabaseFile == "[NONE]" || settings.GlobalSettings.DatabaseFile == string.Empty)
+        {
+            //not using ookii file dilaog because it doesn't implement initialDirectory correctly
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Transmittal Database File (*.tdb)|*.tdb",
+                Title = "Select the Project Transmittal Database  File",
+                InitialDirectory = Path.GetDirectoryName(Environment.SpecialFolder.MyComputer.ToString())
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                if (dialog.CheckFileExists)
+                {
+                    settings.GlobalSettings.DatabaseFile = dialog.FileName;
+                    settings.GlobalSettings.RecordTransmittals = true;
+                    settings.GetSettings();
+                }
+            }
+
         }
 
         MainView mainView = new();

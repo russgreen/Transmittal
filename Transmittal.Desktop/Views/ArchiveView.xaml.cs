@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
@@ -51,5 +52,26 @@ public partial class ArchiveView : Window
         itemModel.DrgProj = projectIdentifier;
         itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
         itemModel.DrgRole = _settingsService.GlobalSettings.Role;
+    }
+
+    private void Button_MergeTransmittals_Click(object sender, RoutedEventArgs e)
+    {
+        //Command="{Binding MergeTransmittalsCommand}"
+        Ookii.Dialogs.Wpf.TaskDialogButton mergeButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Merge the selected transmittal records into a single transmittal record. This action cannot be undone.");
+        Ookii.Dialogs.Wpf.TaskDialogButton noMergeButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Do not merge the selected transmittal records.");
+        Ookii.Dialogs.Wpf.TaskDialogButton cancelButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Cancel);
+
+        Ookii.Dialogs.Wpf.TaskDialog taskDialog = new Ookii.Dialogs.Wpf.TaskDialog()
+        {
+            WindowTitle = "Merge Transmittals",
+            ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.CommandLinks,
+            Buttons = { mergeButton, noMergeButton, cancelButton }
+        };
+
+        Ookii.Dialogs.Wpf.TaskDialogButton button = taskDialog.ShowDialog(this);
+        if (button == mergeButton)
+        {
+            _viewModel.MergeTransmittalsCommand.Execute(null);
+        }
     }
 }
