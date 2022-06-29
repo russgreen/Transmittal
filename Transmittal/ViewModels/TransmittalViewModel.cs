@@ -150,6 +150,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _isBackEnabled = true;
 
+    private List<System.IO.FileInfo> _exportedFiles = new();
+
     public TransmittalViewModel()
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -763,15 +765,17 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             StepOneComplete = true;
             DispatcherHelper.DoEvents();
 
-            if(RecordTransmittal == true)
+            if (RecordTransmittal == true)
             {
                 RecordTransmittalInDatabase();
                 StepTwoComplete = true;
                 DispatcherHelper.DoEvents();
                 LaunchTransmittalReport();
                 StepThreeComplete = true;
-                DispatcherHelper.DoEvents();     
+                DispatcherHelper.DoEvents();
             }
+
+            OpenExporerToExportedFilesLocations();
 
             //just pause before closing the window
             Thread.Sleep(5000);
@@ -779,11 +783,32 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             this.OnClosingRequest();
             return;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
             this.OnClosingRequest();
             return;
+        }
+    }
+
+    private void OpenExporerToExportedFilesLocations()
+    {
+        if (_exportDWG == true)
+        {
+            Process.Start("explorer.exe",
+                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString())}");
+        }
+
+        if (_exportDWF == true)
+        {
+            Process.Start("explorer.exe",
+                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString())}");
+        }
+
+        if (_exportPDF == true)
+        {
+            Process.Start("explorer.exe",
+                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString())}");
         }
     }
 
