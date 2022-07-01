@@ -20,6 +20,7 @@ public partial class SettingsModel : BaseModel
     public string ReportStore { get; set; } //= $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Reports\";
         
     public string FileNameFilter { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
+    public string FileNameFilter2 { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>";
     public bool UseExtranet { get; set; } = false;
     public bool UseISO19650 { get; set; } = false;
 

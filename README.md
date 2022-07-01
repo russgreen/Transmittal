@@ -23,30 +23,3 @@ Major.Minor.Build
 InformationalVersion	$(Version) (this is a combination of VersionPrefix and VersionSuffix)
 Assembly Version        $(VersionPrefix).0
 Assembly File Version   $(VersionPrefix).0
-
-## Roadmap
-
-- [x] Migrate UI from older project - transmittal wizard UI, revisions, status, settings, project directory, transmittal history
-- [x] WPF UI with .NET CommunityToolkit.MVVM
-- [x] Build template SQLite database
-- [x] Create ribbon buttons and test UI
-- [x] Load projects sheets to datagrid
-- [x] Set status of sheets
-- [x] Create revisions
-- [x] Apply revisions to sheets
-- [x] Export files to PDF, DWG, etc with settings
-- [x] Save and load settings in extensible storage.  
-- [x] Create new SQLite database from template
-- [x] Get current SharedParameter file....replace with custom file....set back to original
-- [x] Create, edit, save project directory in database
-- [x] Load project directory from db
-- [x] Assign people to transmittal
-- [x] Record transmittal in database
-- [x] Merge and edit transmittal history
-- [x] Display reports
-- [x] Build and test installer
-- [x] Desktop app to manage transmittal history outside of Revit and record issue of non-Revit documents
-- [x] Add people to directory from revit wizard
-- [ ] Generate a copy of the issued files with revision information stripped from filename as this is a requirement for some extranet services
-- [x] Associate .tdb files with Transmittal.Desktop.exe so database files can be opened by double clicking
-- [x] Create transmittal wizard inside Transmittal.Desktop.exe for recording non-revit document transmittals

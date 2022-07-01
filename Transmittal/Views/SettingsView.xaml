@@ -51,6 +51,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" 
@@ -102,9 +103,26 @@
                                       IsChecked="{Binding UseISO19650}" />
 
                             <CheckBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
-                                      Content="Use extranet"
-                                      IsChecked="{Binding UseExtranet}" 
-                                      IsEnabled="False"/>
+                                      x:Name="UseExtranet"
+                                      Content="Create copies for extranet using the filename rule below"
+                                      IsChecked="{Binding UseExtranet}" />
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" 
+                                       Text="Filename filter/rule" />
+                            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,5,5"
+                                     Text="{Binding FileNameFilter2}" 
+                                     IsEnabled="{Binding IsChecked, ElementName=UseExtranet}"/>
+                            <ComboBox Grid.Row="6" Grid.Column="4" Margin="0,0,0,5"
+                                      x:Name="comboBoxFileName2Parts" 
+                                      ItemsSource="{Binding FileNameParts, Mode=OneWay}"
+                                      IsEnabled="{Binding IsChecked, ElementName=UseExtranet}">
+                                <interactivity:Interaction.Triggers>
+                                    <interactivity:EventTrigger EventName="DropDownClosed">
+                                        <interactivity:InvokeCommandAction Command="{Binding AppendToFileNameFilter2Command, Mode=OneWay}" 
+                                                               CommandParameter="{Binding SelectedValue, ElementName=comboBoxFileName2Parts}"/>
+                                    </interactivity:EventTrigger>
+                                </interactivity:Interaction.Triggers>
+                            </ComboBox>
                         </Grid>
 
                         <Grid>
@@ -330,7 +348,9 @@
         </ScrollViewer>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="2" >
-            <Button Content="Save Settings" Padding="5,0,5,0" Command="{Binding SaveSettingsCommand}" />
+            <Button Content="Save Settings" Padding="5,0,5,0" 
+                    Command="{Binding SaveSettingsCommand}" 
+                    IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}" />
             <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
     </Grid>

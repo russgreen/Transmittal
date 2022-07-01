@@ -1,4 +1,5 @@
-﻿using Transmittal.Library.Validation;
+﻿using System.Reflection;
+using Transmittal.Library.Validation;
 
 namespace Transmittal.Library.Models;
 public class DocumentModel : TransmittalItemModel
@@ -10,4 +11,47 @@ public class DocumentModel : TransmittalItemModel
     public string FileName { get; set; }
 
     public DocumentTypeModel DocumentType { get; set; }
+
+    public DocumentModel()
+    {
+
+    }
+
+    public DocumentModel(DocumentModel model)
+    {
+        DrgNumber = model.DrgNumber;
+        DrgRev = model.DrgRev;
+        DrgName = model.DrgName;
+        DrgPaper = model.DrgPaper;
+        DrgScale = model.DrgScale;
+        DrgDrawn = model.DrgDrawn;
+        DrgChecked = model.DrgChecked;
+        DrgProj = model.DrgProj;
+        DrgOriginator = model.DrgOriginator;
+        DrgVolume = model.DrgVolume;
+        DrgLevel = model.DrgLevel;
+        DrgType = model.DrgType;
+        DrgRole = model.DrgRole;
+        DrgStatus = model.DrgStatus;
+        DrgStatusDescription = model.DrgStatusDescription;
+    }
+
+    public DocumentModel(TransmittalItemModel model)
+    { 
+        DrgNumber = model.DrgNumber;
+        DrgRev = model.DrgRev;
+        DrgName = model.DrgName;
+        DrgPaper = model.DrgPaper;
+        DrgScale = model.DrgScale;
+        DrgDrawn = model.DrgDrawn;
+        DrgChecked = model.DrgChecked;
+        DrgProj = model.DrgProj;
+        DrgOriginator = model.DrgOriginator;
+        DrgVolume = model.DrgVolume;
+        DrgLevel = model.DrgLevel;
+        DrgType = model.DrgType;
+        DrgRole = model.DrgRole;
+        DrgStatus = model.DrgStatus;
+        DrgStatusDescription = model.DrgStatusDescription;
+     }
 }

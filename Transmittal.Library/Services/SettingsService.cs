@@ -50,7 +50,13 @@ public class SettingsService : ISettingsService
                     GlobalSettings.Originator = dbSettings.Originator;
                     GlobalSettings.Role = dbSettings.Role;
                 }
-                    
+
+                //get status and issue formats from database
+                GlobalSettings.DocumentStatuses.Clear();
+                GlobalSettings.DocumentStatuses = GetDocumentStatuses();
+
+                GlobalSettings.IssueFormats.Clear();
+                GlobalSettings.IssueFormats = GetIssueFormats();
             }
         }
     }
@@ -107,6 +113,9 @@ public class SettingsService : ISettingsService
                 SheetStatusParamGuid = GlobalSettings.SheetStatusParamGuid,
                 SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid
             });
+
+        SaveIssueFormats();
+        SaveDocumentStatuses();
     }
 
     //TODO save document statuses and issue formats to the database
@@ -114,20 +123,54 @@ public class SettingsService : ISettingsService
     private List<IssueFormatModel> GetIssueFormats()
     {
         //build the issue formats list  
-        //TODO - get from the database if one exists
-        List<IssueFormatModel> issueFormats = new();
+        string sql = "SELECT * FROM IssueFormat;";
+
+        List<IssueFormatModel> issueFormats = _connection.LoadData<IssueFormatModel, dynamic>(
+            GlobalSettings.DatabaseFile,
+            sql, null).ToList();
 
         return issueFormats;
     }
 
     private List<DocumentStatusModel> GetDocumentStatuses()
     {
-        // TODO - check if there is a database and load from there else use the standards
-        List<DocumentStatusModel> documentStatuses = new();
+        string sql = "SELECT * FROM DocumentStatus;";
+
+        List<DocumentStatusModel> documentStatuses = _connection.LoadData<DocumentStatusModel, dynamic>(
+            GlobalSettings.DatabaseFile,
+            sql, null).ToList();
 
         return documentStatuses;
     } 
 
+    private void SaveIssueFormats()
+    {
+        //clear the records in the table
+        string sql = "DELETE FROM IssueFormat;";
+        _connection.SaveData(
+            GlobalSettings.DatabaseFile,
+            sql, new { });
 
+        //save the new records
+        sql = "INSERT INTO IssueFormat (Code, Description) VALUES (@Code, @Description )";
+        _connection.SaveData(
+    GlobalSettings.DatabaseFile,
+    sql, GlobalSettings.IssueFormats);
+    }
+
+    private void SaveDocumentStatuses()
+    {
+        //clear the records in the table
+        string sql = "DELETE FROM DocumentStatus;";
+        _connection.SaveData(
+    GlobalSettings.DatabaseFile,
+    sql, new { });
+
+        //save the new records
+        sql = "INSERT INTO DocumentStatus  (Code, Description) VALUES (@Code, @Description )";
+        _connection.SaveData(
+    GlobalSettings.DatabaseFile,
+    sql, GlobalSettings.DocumentStatuses);
+    }
 }
     

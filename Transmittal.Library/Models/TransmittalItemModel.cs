@@ -40,4 +40,5 @@ public class TransmittalItemModel : BaseModel
     /// </summary>
     [Required]
     public string DrgStatus { get; set; } = "S0";
+    public string DrgStatusDescription { get; set; }
 }

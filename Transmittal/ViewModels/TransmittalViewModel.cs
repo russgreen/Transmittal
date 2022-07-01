@@ -14,6 +14,7 @@ using Transmittal.Models;
 using Transmittal.Requesters;
 using Transmittal.Services;
 using System.Diagnostics;
+using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.ViewModels;
 
@@ -150,7 +151,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _isBackEnabled = true;
 
-    private List<System.IO.FileInfo> _exportedFiles = new();
+    private List<DocumentModel> _exportedFiles = new();
 
     public TransmittalViewModel()
     {
@@ -182,7 +183,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         _printManager = App.RevitDocument.PrintManager;
         PrintSetup = _printManager.PrintSetup;
-        
+        PrintSetup.CurrentPrintSetting.PrintParameters.HideUnreferencedViewTags = true;
+        _pdfExportOptions.HideUnreferencedViewTags = true;
+
         RasterQualities = Enum.GetValues(typeof(RasterQualityType));
         Colors = Enum.GetValues(typeof(ColorDepthType));
         DwfImageQualities = Enum.GetValues(typeof(DWFImageQuality));
@@ -198,7 +201,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         DwgLayerMapping = DwgLayerMappings.FirstOrDefault();
 
         DwgVersions = Enum.GetValues(typeof(ACADVersion));
-        DwgVersion = ACADVersion.Default;
+        DwgVersion = ACADVersion.Default;        
     }
 
     private void WireUpDistributionPage()
@@ -261,7 +264,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             drawingSheet.DrgLevel = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid);
             drawingSheet.DrgType = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid);
             drawingSheet.DrgStatus = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid);
-            drawingSheet.StatusDescription = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
+            drawingSheet.DrgStatusDescription = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
 
             drawingSheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
             drawingSheet.DrgRole = _settingsService.GlobalSettings.Role;
@@ -344,7 +347,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             //set the model values
             sheetModel.DrgStatus = model.Code;
-            sheetModel.StatusDescription = model.Description;
+            sheetModel.DrgStatusDescription = model.Description;
 
             //update the sheet status in revit
             foreach (ViewSheet sheet in sheets)
@@ -643,19 +646,36 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             views.Insert(sheet);
 
                             // build the filename
-                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                            //string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                            //    _settingsService.GlobalSettings.ProjectNumber,
+                            //    _settingsService.GlobalSettings.ProjectIdentifier,
+                            //    _settingsService.GlobalSettings.ProjectName,
+                            //    _settingsService.GlobalSettings.Originator,
+                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetVolumeParamGuid),
+                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid),
+                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid),
+                            //    _settingsService.GlobalSettings.Role,
+                            //    sheet.SheetNumber,
+                            //    sheet.Name,
+                            //    sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString(),
+                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
+                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
+
+                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                                 _settingsService.GlobalSettings.ProjectNumber,
                                  _settingsService.GlobalSettings.ProjectIdentifier,
                                  _settingsService.GlobalSettings.ProjectName,
-                                 _settingsService.GlobalSettings.Originator,
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetVolumeParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid),
-                                 _settingsService.GlobalSettings.Role,
+                                 drawingSheet.DrgOriginator,
+                                 drawingSheet.DrgVolume,
+                                 drawingSheet.DrgLevel,
+                                 drawingSheet.DrgType,
+                                 drawingSheet.DrgRole,
                                  sheet.SheetNumber,
-                                 sheet.Name,
-                                 sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString(),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
-                                 Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
+                                 drawingSheet.DrgName, 
+                                 drawingSheet.DrgRev,
+                                 drawingSheet.DrgStatus,
+                                 drawingSheet.DrgStatusDescription);
+
 
                             DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
                             SheetTaskProcessed = 0;
@@ -669,10 +689,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                     App.revitDocument, 
                                     sheet);
 #else
-                                _exportPDFService.ExportPDF(fileName,
+                                var filePath = _exportPDFService.ExportPDF(fileName,
                                     App.RevitDocument,
                                     views,
                                     PdfExportOptions);
+
+                                DocumentModel pdf = new DocumentModel(drawingSheet);
+                                pdf.FilePath = filePath;
+                                _exportedFiles.Add(pdf);
 #endif
 
                                 //TODO - actually check if the export worked OK
@@ -696,10 +720,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
                                 DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
 
-                                _exportDWGService.ExportDWG($"{fileName}.dwg",
+                                var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
                                     DwgExportOptions,
                                     views,
                                     App.RevitDocument);
+
+                                DocumentModel dwg = new DocumentModel(drawingSheet);
+                                dwg.FilePath = filePath;
+                                _exportedFiles.Add(dwg);
 
                                 //TODO - actually check if the export worked OK
                                 SheetTaskProgressLabel = "Exported DWG";
@@ -721,12 +749,16 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             {
                                 var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
 
-                                _exportDWFService.ExportDWF($"{fileName}.dwf",
+                                var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
                                     argsheetsize,
                                     _printSetup,
                                     DwfExportOptions,
                                     App.RevitDocument,
                                     views);
+
+                                DocumentModel dwf = new DocumentModel(drawingSheet);
+                                dwf.FilePath = filePath;
+                                _exportedFiles.Add(dwf);
 
                                 //TODO - actually check if the export worked OK
                                 SheetTaskProgressLabel = "Exported DWF";
@@ -775,6 +807,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 DispatcherHelper.DoEvents();
             }
 
+            if(_settingsService.GlobalSettings.UseExtranet == true)
+            {
+                CopyFilesForExtranet();
+            }
+
             OpenExporerToExportedFilesLocations();
 
             //just pause before closing the window
@@ -789,6 +826,54 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             this.OnClosingRequest();
             return;
         }
+    }
+
+    private void CopyFilesForExtranet()
+    {
+        var extranetFolderName = "Extranet";
+
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName);
+
+        if (!_settingsService.GlobalSettings.DrawingIssueStore.Contains("<Format>"))
+        {
+            folderPath = System.IO.Path.Combine(folderPath, extranetFolderName);
+        }
+
+        if (!System.IO.Directory.Exists(folderPath))
+        {
+            System.IO.Directory.CreateDirectory(folderPath);
+        }
+
+        foreach (var document in _exportedFiles)
+        {
+            var fileInfo = new System.IO.FileInfo(document.FilePath);
+
+            string fileName = _settingsService.GlobalSettings.FileNameFilter2.ParseFilename(
+                                _settingsService.GlobalSettings.ProjectNumber,
+                                _settingsService.GlobalSettings.ProjectIdentifier,
+                                _settingsService.GlobalSettings.ProjectName,
+                                document.DrgOriginator,
+                                document.DrgVolume,
+                                document.DrgLevel,
+                                document.DrgType,
+                                document.DrgRole,
+                                document.DrgNumber,
+                                document.DrgName,
+                                document.DrgRev,
+                                document.DrgStatus,
+                                document.DrgStatusDescription);
+
+
+
+            var fullPath = System.IO.Path.Combine(folderPath, fileName + fileInfo.Extension);
+
+            fileInfo.CopyTo(fullPath, true);
+
+        }
+
+        Process.Start("explorer.exe",
+    $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName)}");
+
     }
 
     private void OpenExporerToExportedFilesLocations()
@@ -811,7 +896,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString())}");
         }
     }
-
+        
     private void SetRevisionsIssued(ViewSheet sheet)
     {
         try

@@ -19,8 +19,10 @@ internal class ExportPDFService : IExportPDFService
         throw new NotImplementedException();
     }
 
-    public void ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
+    public string ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
+        var fullPath = string.Empty;
+
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
         //we've not using this method 
 #else
@@ -34,8 +36,8 @@ internal class ExportPDFService : IExportPDFService
             trans.Start();
 
             // configure filename path for final PDF save location
-            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString());
-            string fullPath = Path.Combine(folderPath, exportFileName);
+            var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString());
+            fullPath = Path.Combine(folderPath, exportFileName);
 
             if(Directory.Exists(folderPath) == false)
             {
@@ -50,8 +52,10 @@ internal class ExportPDFService : IExportPDFService
                 }
                 catch (Exception)
                 {
-                    fullPath = Path.Combine(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()), 
-                        exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf"));
+                    exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf");
+                    fullPath = Path.Combine(folderPath, exportFileName);
+                    //fullPath = Path.Combine(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()), 
+                    //    exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf"));
                 }
             }
 
@@ -104,5 +108,11 @@ internal class ExportPDFService : IExportPDFService
             trans.RollBack();
         }
 #endif
+        if (!fullPath.EndsWith(".pdf"))
+        {
+            fullPath = $"{fullPath}.pdf";
+        }
+
+        return fullPath;
     }
 }
