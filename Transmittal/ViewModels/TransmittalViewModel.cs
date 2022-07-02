@@ -813,7 +813,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
             OpenExporerToExportedFilesLocations();
-
+             
             //just pause before closing the window
             Thread.Sleep(5000);
 
