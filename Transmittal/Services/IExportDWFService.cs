@@ -3,5 +3,15 @@
 namespace Transmittal.Services;
 internal interface IExportDWFService
 {
-    void ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views);
+    /// <summary>
+    /// DWF export
+    /// </summary>
+    /// <param name="exportFileName"></param>
+    /// <param name="sheetsize"></param>
+    /// <param name="printSetup"></param>
+    /// <param name="dwfExportOptions"></param>
+    /// <param name="exportDocument"></param>
+    /// <param name="views"></param>
+    /// <returns>full path to the exported file</returns>
+    string ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views);
 }

@@ -20,8 +20,10 @@ internal class ExportDWGService : IExportDWGService
         _settingsService = settingsService;
     }
     
-    public void ExportDWG(string exportFileName, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
+    public string ExportDWG(string exportFileName, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
     {
+        var fullPath = string.Empty;
+
         Transaction trans = null;
         try
         {
@@ -39,10 +41,24 @@ internal class ExportDWGService : IExportDWGService
             }
 
             string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString());
-            
+            fullPath = Path.Combine(folderPath, exportFileName);
+
             if (Directory.Exists(folderPath) == false)
             {
                 Directory.CreateDirectory(folderPath);
+            }
+
+            if (File.Exists(fullPath) == true)
+            {
+                try
+                {
+                    File.Delete(fullPath);
+                }
+                catch (Exception)
+                {
+                    exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                    fullPath = Path.Combine(folderPath, exportFileName);
+                }
             }
 
             // export the sheet
@@ -102,6 +118,8 @@ internal class ExportDWGService : IExportDWGService
         {
             trans.RollBack();
         }
+
+        return fullPath;
     }
 
     public List<DWGLayerMappingModel> GetDWGLayerMappings()

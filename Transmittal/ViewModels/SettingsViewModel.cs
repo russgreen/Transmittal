@@ -31,15 +31,21 @@ internal partial class SettingsViewModel : BaseViewModel
         
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _fileNameFilter;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _drawingIssueStore;
 
     [ObservableProperty]
     private string _sampleFolderName;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _dateFormatString;
 
     [ObservableProperty]
@@ -50,6 +56,11 @@ internal partial class SettingsViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool _useExtranet;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
+    private string _fileNameFilter2;
 
     [ObservableProperty]
     private List<IssueFormatModel> _issueFormats;
@@ -114,6 +125,7 @@ internal partial class SettingsViewModel : BaseViewModel
 
         UseISO19650 = _settingsService.GlobalSettings.UseISO19650;
         UseExtranet = _settingsService.GlobalSettings.UseExtranet;
+        FileNameFilter2 = _settingsService.GlobalSettings.FileNameFilter2;
 
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
@@ -149,6 +161,7 @@ internal partial class SettingsViewModel : BaseViewModel
 
         _settingsService.GlobalSettings.UseISO19650 = UseISO19650;
         _settingsService.GlobalSettings.UseExtranet = UseExtranet;
+        _settingsService.GlobalSettings.FileNameFilter2 = FileNameFilter2?.Trim();
 
         _settingsService.GlobalSettings.IssueFormats = IssueFormats;
         _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses;
@@ -189,6 +202,15 @@ internal partial class SettingsViewModel : BaseViewModel
         if (filter != null && !_fileNameFilter.Contains(filter))
         {
             FileNameFilter += $"{filter}";
+        }
+    }
+
+    [RelayCommand]
+    private void AppendToFileNameFilter2(string filter)
+    {
+        if (filter != null && !_fileNameFilter2.Contains(filter))
+        {
+            FileNameFilter2 += $"{filter}";
         }
     }
 

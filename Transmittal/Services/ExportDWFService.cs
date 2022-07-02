@@ -19,8 +19,10 @@ internal class ExportDWFService : IExportDWFService
         _settingsService = settingsService;
     }    
     
-    public void ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
+    public string ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
     {
+        var fullPath = string.Empty;
+
         Transaction trans = null;
         try
         {
@@ -29,9 +31,14 @@ internal class ExportDWFService : IExportDWFService
             failOpt.SetFailuresPreprocessor(new WarningSwallower());
             trans.SetFailureHandlingOptions(failOpt);
 
-            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString());
-            string fullPath = Path.Combine(folderPath, exportFileName);
-            
+            var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString());
+            fullPath = Path.Combine(folderPath, exportFileName);
+
+            if (Directory.Exists(folderPath) == false)
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
             if (File.Exists(fullPath) == true)
             {
                 try
@@ -41,6 +48,7 @@ internal class ExportDWFService : IExportDWFService
                 catch (Exception)
                 {
                     exportFileName.Replace(".dwf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwf");
+                    fullPath = Path.Combine(folderPath, exportFileName);
                 }
             }
 
@@ -59,5 +67,7 @@ internal class ExportDWFService : IExportDWFService
         {
             trans.RollBack();
         }
+
+        return fullPath;
     }
 }
