@@ -23,7 +23,14 @@ Sheet parameters with missing values shown on the sheets list with red warning f
 Selecting this option will prevent sheets with missing values from being issued.
 
 ### Use extranet
-Feature not enabled yet. See [roadmap](https://github.com/russgreen/Transmittal#roadmap).
+When this options is selected copies of the exported sheet files are mading using a seperate filename rule that can conform to project extranet requirements and making it easier to follow internal and external filename standards. If the output location rule includes the <Format> tag then the format is replaced with "Extranet".  If the <Format> tag is not used then an Extranet sub-folder is created in the output path. e.g.
+```
+Rule:   P:\ProjectFolder\Output\<Format>\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\Extranet\220702
+
+Rule:   P:\ProjectFolder\Output\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\220702\Extranet
+```
 
 ### Issue Formats and Document Statuses
 Lists of transmittal types and status codes used in the transmittal process
