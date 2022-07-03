@@ -3,7 +3,7 @@ layout: page
 title: Project Directory
 permalink: /directory/
 ---
-The project directory screen is where database records can be created or edited. 
+The project directory screen is where database records can be created or edited for the people being recorded as having received transmittals. 
 
 Records can be exported as vCards into Outlook.
 
