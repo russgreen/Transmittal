@@ -70,6 +70,7 @@ namespace Transmittal.Reports
                 ProjectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier,
                 ProjectNumber = _settingsService.GlobalSettings.ProjectNumber,
                 ProjectName = _settingsService.GlobalSettings.ProjectName,
+                ClientName = _settingsService.GlobalSettings.ClientName,
             };
             List<Models.ProjectModel> projects = new List<Models.ProjectModel>
             {
@@ -122,6 +123,7 @@ namespace Transmittal.Reports
                 ProjectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier,
                 ProjectNumber = _settingsService.GlobalSettings.ProjectNumber,
                 ProjectName = _settingsService.GlobalSettings.ProjectName,
+                ClientName = _settingsService.GlobalSettings.ClientName,
             };
             List<Models.ProjectModel> projects = new List<Models.ProjectModel>
             {
@@ -181,6 +183,7 @@ namespace Transmittal.Reports
                 ProjectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier,
                 ProjectNumber = _settingsService.GlobalSettings.ProjectNumber,
                 ProjectName = _settingsService.GlobalSettings.ProjectName,
+                ClientName = _settingsService.GlobalSettings.ClientName,
             };
             List<Models.ProjectModel> projects = new List<Models.ProjectModel>
             {
