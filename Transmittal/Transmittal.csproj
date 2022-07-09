@@ -9,7 +9,6 @@
 		<NeutralLanguage>en</NeutralLanguage>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<UseWPF>true</UseWPF>		
-		<TargetFramework>net48</TargetFramework>
 		<!--<Nullable>enable</Nullable>-->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
@@ -31,6 +30,7 @@
 		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
+		<TargetFramework>net48</TargetFramework>
 		<RevitVersion>2023</RevitVersion>
 		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
 		<DefineConstants>$(DefineConstants);REVIT2023_OR_GREATER</DefineConstants>
