@@ -7,6 +7,8 @@ public partial class SettingsModel : BaseModel
     public string ProjectNumber { get; set; }
     public string ProjectIdentifier { get; set; }
     public string ProjectName { get; set; }
+    public string ClientName { get; set; }
+
     public string Originator { get; set; }
     public string Role { get; set; }
 
