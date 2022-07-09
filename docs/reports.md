@@ -5,7 +5,7 @@ permalink: /settings/reports/
 ---
 Reports used by the addin default to embedded report templates.  Reports can be customised and placed in a shared location where multiple users can use the same report templates.
 
-Sample report templates can be found in C:\Program Files\Transmittal\Reports when installed or on the [Github repo](https://github.com/russgreen/Transmittal/tree/main/Transmittal.Reports/Reports).
+Sample report templates can be found in C:\Program Files\Transmittal\Reports when installed or on the [Github repo](https://github.com/russgreen/Transmittal/tree/main/SampleReports).
 
 Report names __must__ be:
 ProjectDirectory.rdlc
