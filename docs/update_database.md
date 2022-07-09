@@ -15,7 +15,7 @@ Right click on the Settings table and click Modify Table
 
 ![image](https://user-images.githubusercontent.com/1886088/178101647-e648e24b-0099-4c74-9685-57b6e97b0949.png)
 
-Add a TEXT column called ClientName
+Add a TEXT column called ClientName (use correct casing)
 
 ![image](https://user-images.githubusercontent.com/1886088/178101691-6dd4c523-0626-4a96-bf55-0ea4d5a13caa.png)
 
