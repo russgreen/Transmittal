@@ -104,6 +104,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         //and then save back to the DB for use by the desktop app....revit is primary
         _settingsService.GlobalSettings.ProjectNumber = _projectInfo.Number;
         _settingsService.GlobalSettings.ProjectName = _projectInfo.Name;
+        _settingsService.GlobalSettings.ClientName = _projectInfo.ClientName;
 
         //get some project data from shared parameters
         _settingsService.GlobalSettings.ProjectIdentifier = Util.GetParameterValueString(_projectInfo, _settingsService.GlobalSettings.ProjectIdentifierParamGuid);
