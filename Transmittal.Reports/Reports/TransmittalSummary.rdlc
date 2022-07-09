@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -7,6 +7,7 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>e001f4e0-9b0a-4ec9-a520-2a11184dda7f</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -17,9 +18,17 @@
         <CommandText />
       </Query>
       <Fields>
+        <Field Name="Name">
+          <DataField>ContactName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="CompanyName">
           <DataField>CompanyName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PersonName">
+          <DataField>PersonName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
         <Field Name="TransFormat">
           <DataField>TransFormat</DataField>
@@ -36,10 +45,6 @@
         <Field Name="TransDate">
           <DataField>TransDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="Name">
-          <DataField>ContactName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ProjectID">
           <DataField>ProjectID</DataField>
@@ -172,6 +177,10 @@
         <Field Name="ProjectName">
           <DataField>ProjectName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClientName">
+          <DataField>ClientName</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>

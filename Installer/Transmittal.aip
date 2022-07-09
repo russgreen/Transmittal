@@ -16,10 +16,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{33E3B6AC-B9E5-4E13-8095-0F16C7AE6B87} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{ABC9D48C-FB32-41EF-AB5C-2FBBE6DB21AA} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.1.0"/>
+    <ROW Property="ProductVersion" Value="1.2.0"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -159,9 +159,7 @@
     <ROW File="Transmittal.Desktop.exe.config" Component_="TransmittalParameters.txt" FileName="TRANSM~1.CON|Transmittal.Desktop.exe.config" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Desktop.exe.config" SelfReg="false"/>
     <ROW File="ProjectDirectory.rdlc" Component_="ProjectDirectory.rdlc" FileName="PROJEC~1.RDL|ProjectDirectory.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\ProjectDirectory.rdlc" SelfReg="false"/>
     <ROW File="TransmittalSheet.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~1.RDL|TransmittalSheet.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSheet.rdlc" SelfReg="false"/>
-    <ROW File="TransmittalSheet_Alternative.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~2.RDL|TransmittalSheet_Alternative.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSheet_Alternative.rdlc" SelfReg="false"/>
     <ROW File="TransmittalSummary.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~3.RDL|TransmittalSummary.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSummary.rdlc" SelfReg="false"/>
-    <ROW File="TransmittalSummary_Alternative.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~4.RDL|TransmittalSummary_Alternative.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSummary_Alternative.rdlc" SelfReg="false"/>
     <ROW File="Transmittal.Desktop.pdb" Component_="Transmittal.Desktop.exe" FileName="TRANSM~1.PDB|Transmittal.Desktop.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Desktop.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Reports.pdb" SelfReg="false"/>

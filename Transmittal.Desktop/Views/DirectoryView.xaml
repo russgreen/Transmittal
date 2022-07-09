@@ -43,14 +43,16 @@
                 <syncfusion:SfDataGrid x:Name="sfDataGridPeople"  Margin="5" 
                                        ColumnSizer="AutoLastColumnFill" 
                                        SelectionMode="Single"
+                                       ShowRowHeader="True"
+                                       EditorSelectionBehavior="MoveLast"
                                        ItemsSource="{Binding People, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        SelectedItem="{Binding SelectedPerson}" 
                                        AllowEditing="True" 
                                        AllowFiltering="True" 
                                        AutoGenerateColumns="False" 
                                        AddNewRowPosition="Bottom"
-                                       AddNewRowText="Click here to add a new person to the directory"
-                                       GridValidationMode="InEdit">
+                                       AddNewRowText="Click here to add a new person to the directory"                                      
+                                       GridValidationMode="InEdit" EditTrigger="OnTap">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridCheckBoxColumn MappingName="ShowInReport" HeaderText="Print" Width="50" />
                         <syncfusion:GridComboBoxColumn Width="350" 
@@ -89,6 +91,8 @@
                 <syncfusion:SfDataGrid x:Name="sfDataGridCompanies"  Margin="5" 
                                        ColumnSizer="AutoLastColumnFill" 
                                        SelectionMode="Single"
+                                       ShowRowHeader="True"
+                                       EditorSelectionBehavior="MoveLast"
                                        ItemsSource="{Binding Companies, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                        SelectedItem="{Binding SelectedCompany}"
                                        AllowEditing="True" 
@@ -96,7 +100,7 @@
                                        AutoGenerateColumns="False" 
                                        AddNewRowPosition="Bottom" 
                                        AddNewRowText="Click here to add a new company to the directory"
-                                       GridValidationMode="InEdit">
+                                       GridValidationMode="InEdit" EditTrigger="OnTap">
                   
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn MappingName="CompanyName" HeaderText="Company Name" Width="350" />

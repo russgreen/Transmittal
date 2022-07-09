@@ -47,6 +47,7 @@ public class SettingsService : ISettingsService
                     GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
                     GlobalSettings.ProjectName = dbSettings.ProjectName;
                     GlobalSettings.ProjectIdentifier = dbSettings.ProjectIdentifier;
+                    GlobalSettings.ClientName = dbSettings.ClientName;
                     GlobalSettings.Originator = dbSettings.Originator;
                     GlobalSettings.Role = dbSettings.Role;
                 }
@@ -73,6 +74,7 @@ public class SettingsService : ISettingsService
             "ProjectIdentifier = @ProjectIdentifier, " +
             "ProjectNumber = @ProjectNumber, " +           
             "ProjectName = @ProjectName, " +
+            "ClientName = @ClientName, " +
             "UseExtranet = @UseExtranet, " +
             "UseISO19650 = @UseISO19650, " +
             "Originator = @Originator, " +
@@ -99,7 +101,8 @@ public class SettingsService : ISettingsService
                 FileNameFilter = GlobalSettings.FileNameFilter,
                 ProjectIdentifier = GlobalSettings.ProjectIdentifier,
                 ProjectNumber = GlobalSettings.ProjectNumber,
-                ProjectName = GlobalSettings.ProjectName,                
+                ProjectName = GlobalSettings.ProjectName,
+                ClientName = GlobalSettings.ClientName,
                 UseExtranet = GlobalSettings.UseExtranet,
                 UseISO19650 = GlobalSettings.UseISO19650,
                 Originator = GlobalSettings.Originator,

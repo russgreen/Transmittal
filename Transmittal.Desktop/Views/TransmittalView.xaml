@@ -67,6 +67,9 @@
                                            AddNewRowText="Click here to add a new document to the transmittal"
                                            DragEnter="sfDataGridDocuments_DragEnter" 
                                            Drop="sfDataGridDocuments_Drop"
+                                           ShowRowHeader="True"
+                                           EditorSelectionBehavior="MoveLast"
+                                           EditTrigger="OnTap"
                                            AddNewRowInitiating="sfDataGridDocuments_AddNewRowInitiating" 
                                            ColumnSizer="AutoWithLastColumnFill" >
                         <syncfusion:SfDataGrid.Columns>

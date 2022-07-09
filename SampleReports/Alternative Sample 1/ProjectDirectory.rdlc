@@ -343,6 +343,21 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Image Name="Image1">
+              <Source>Embedded</Source>
+              <Value>Transmittal_Button</Value>
+              <Sizing>FitProportional</Sizing>
+              <Top>0.27cm</Top>
+              <Left>16.50187cm</Left>
+              <Height>1.95792cm</Height>
+              <Width>1.98438cm</Width>
+              <ZIndex>1</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Image>
           </ReportItems>
           <Style>
             <Border>
@@ -417,6 +432,13 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
       <NumberOfRows>2</NumberOfRows>
     </GridLayoutDefinition>
   </ReportParametersLayout>
+  <EmbeddedImages>
+    <EmbeddedImage Name="Transmittal_Button">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAABGdBTUEAALGPC/xhBQAAAMNQTFRFAHLGF37KwdrsNo/R2Obx6/D0UZ3W5O309/f38/X2cK7cj7/jBHTHrtDpDHnJxdzt3OnyJ4fOQpbTD3rJI4XNPpPSVaDXXaTYmsXli73iOpHRH4PMWaLYnsfl1OTwf7bf7/P1qs7oCHbIbKzbvdjsSZnU4OvzZKjZ0OLvosnmudbrE3zJfLXfyd7upsznTZvV6O/0g7ngeLPeMo3QstLqLovPRZfTh7vhaKradLDdKojOG4DLtdPqk8HkzeHvl8TlYKXY2V1ZFAAAAAlwSFlzAAAuIwAALiMBeKU/dgAAA1NJREFUaEPtmGlD4jAQhiu2kkpBkaNyylERFBHB9djFXf//r9q2eXskTSKUdr9sny+mM9MZbCYzSbSCgoKCgv+IE/zNjdIpBnmhG2cY5USZmOcY5gNxqVh4yAMvAKnW8JQDfgBykV8y0QDkso7nzEEAYlxBkB2NZqtt2/BPiGlDLuAadM7b3R5kShr9wRB+Y9xAmwQGlNG4r86JydQxYcsxkKUr9CGjwS00SSbTGawEOA1YcUAdp9SFjuNO4d5l3oQdC7QsC4HtSRVKKfewZIGSY5SoMWdlqKQ4DzBlgTbBgJ3tJcRyZLMMdZLHWNJaFQjlSPMUegHD8CdNVhBJUaw0WAh4goVmfet/3YKpAJgkeYaByL+xqmxs2w7mXd+j2lnNlv08xwseTviB+O9vLp4mVKNTQWn/er2tjOg7ZBa+xOfPyw8oggCrgzpO3fFfMsMC/MrWHqMPuYcf4O3QnvnuefzAg9Zbe05Chj8h93EDmHcYH0DXICsMtdojPFMc9mvoxHjF8CDq96Gfa3imcP41fRbNRzru4JnC+9fGx7b7U2aC54mCf+j08jxcwrXP7BfEmWHt4NrHlHShI2BX2BTS7HiFZ0qYuJnRYzrY8KBysA/WBVz7
+GMwCzoQBXFMUG7eU3MAzpQNpdkzhmbI7dkElYP0PJVs2TftMOfXn8EyJJrjWxiBA/51mddfYCkqireqYX206SVFOm2wHIBvI6coOdwI+bsMx5FtlIY23oCmDBRSadus/r+L7Q69lmu942Iduh22Q8QSqG1RSjp29adPvqJNsGfCnylRnn6jF1KItze4MuxYEIGNlMlEbMfPoezB79/Ln11XT/d0IoD7IwkZEbEP1zeZatbWDiYBd9J9vIZKiOMjCIskiPncbCKWYX7BMAAMeg8u+NpJIjuyAADVHKfFRT9UnQJdFkFws0DKsN4LU7i2glfICSxYoY6yXkvJ5Fd/eJ5mJL9igDTCdD2l11qwPxUzMJRcRUHush4O++CgaUuuPuWIVcC/7XS2w3esmxKXxVR0mg0ivKlJysn2KndEIWUKeMUEtUl0XHQUCGIpD7HHQAPscYlPiB8jx0tEPoO42R+IGyPXiV9PN7E8NDL/D+5KcyC99CgoKCgr+AZr2F+mEWW9jwXHgAAAAAElFTkSuQmCC</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>a9a463ac-1ecd-423a-b882-6c22aef993bd</rd:ReportID>
 </Report>
