@@ -11,7 +11,7 @@ A project directory report can be generated for export to PDF, Word or Excel.  T
 
 ![image](https://user-images.githubusercontent.com/1886088/178133489-fdd5f878-f75f-442b-9e86-3773e31d5229.png)
 
-Clicking into a cell alloows the values to be edited. Use the ESC key to cancel a change or simply tab into another cell to finish editing. 
+Clicking into a cell allows the values to be edited. Use the <kbd>Esc</kbd> key to cancel a change or simply <kbd>Tab</kbd> into another cell to finish editing. 
 
-When adding a new row tab between cells and click Enter or the pencil icon in the header column to finish entering the data.
+When adding a new row, <kbd>Tab</kbd> or click between cells then click the pencil icon in the header column or press <kbd>Enter</kbd> to finish entering the new row.
 ![image](https://user-images.githubusercontent.com/1886088/178133637-a494387d-e3c4-41b5-9056-610ef47e1c4d.png)
