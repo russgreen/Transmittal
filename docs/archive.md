@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Transmittal Archive
+title: Archive
 permalink: /archive/
 ---
 The archive screen is where all document transmittals that have been saved to the database can be viewed, edited, and reported.
