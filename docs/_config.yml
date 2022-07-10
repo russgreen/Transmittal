@@ -4,6 +4,7 @@ theme: minima
 
 header_pages:
 - transmittal-revit.md
+- transmittal.md
 - directory.md
 - archive.md
 - settings.md
