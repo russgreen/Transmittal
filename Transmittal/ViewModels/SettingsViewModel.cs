@@ -11,11 +11,12 @@ using System.ComponentModel.DataAnnotations;
 using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Transmittal.Library.Extensions;
+using Transmittal.Requesters;
 
 namespace Transmittal.ViewModels;
 
 //[INotifyPropertyChanged]
-internal partial class SettingsViewModel : BaseViewModel
+internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequester
 {
     public string WindowTitle { get; private set; }
     
@@ -340,4 +341,44 @@ internal partial class SettingsViewModel : BaseViewModel
         App.RevitDocument.ParameterBindings.Insert(definition, binding, parameterGroup);
     }
 
+    public void ParameterComplete(string variableName, string parameterGuid)
+    {
+        switch (variableName)
+        {
+            case nameof(SettingsModel.ProjectIdentifierParamGuid) :
+                ProjectIdentifierParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.OriginatorParamGuid):
+                OriginatorParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.RoleParamGuid):
+                RoleParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.SheetVolumeParamGuid):
+                SheetVolumeParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.SheetLevelParamGuid):
+                SheetLevelParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.DocumentTypeParamGuid):
+                DocumentTypeParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.SheetStatusParamGuid):
+                SheetStatusParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.SheetStatusDescriptionParamGuid):
+                SheetStatusDescriptionParamGuid = parameterGuid;
+                break;
+
+            default:
+                break;
+        }
+    }
 }

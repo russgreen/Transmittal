@@ -16,7 +16,6 @@ public partial class NewPersonView : Window
         _viewModel = new NewPersonViewModel(caller);
         this.DataContext = _viewModel;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
-
     }
 
     private void Button_AddCompany_Click(object sender, RoutedEventArgs e)

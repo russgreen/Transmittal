@@ -1,6 +1,8 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using Autodesk.Revit.DB;
+using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;
+using Transmittal.Library.Models;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
@@ -53,8 +55,7 @@ public partial class SettingsView : Window
             {
                 _viewModel.DatabaseTemplateFile = dialog.FileName;
             }
-        }
-            
+        }           
     }
 
     private void buttonDatabaseBrowse_Click(object sender, RoutedEventArgs e)
@@ -113,8 +114,6 @@ public partial class SettingsView : Window
                 File.Copy(_viewModel.DatabaseTemplateFile, _viewModel.DatabaseFile);
             }
         }
-
-
     }
 
     private void buttonReportPathBrowse_Click(object sender, RoutedEventArgs e)
@@ -160,5 +159,85 @@ public partial class SettingsView : Window
         {
             _viewModel.DirectoryStorePath = dialog.SelectedPath;
         }
+    }
+
+    private void buttonParamProjId_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+            nameof(SettingsModel.ProjectIdentifierParamGuid), 
+            BuiltInCategory.OST_ProjectInformation);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamOriginator_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.OriginatorParamGuid),
+    BuiltInCategory.OST_ProjectInformation);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamRole_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.RoleParamGuid),
+    BuiltInCategory.OST_ProjectInformation);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamVolume_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+            nameof(SettingsModel.SheetVolumeParamGuid), 
+            BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamLevel_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.SheetLevelParamGuid),
+    BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamType_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.DocumentTypeParamGuid),
+    BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamStatusCode_Click(object sender, RoutedEventArgs e)
+    {
+        Views.ParameterSelectorView dialog = new Views.ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.SheetStatusParamGuid),
+    BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
+    private void buttonParamStatus_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.SheetStatusDescriptionParamGuid),
+    BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
     }
 }

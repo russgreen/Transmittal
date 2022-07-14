@@ -265,7 +265,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="*" />
-                            <!--<ColumnDefinition Width="40" />-->
+                            <ColumnDefinition Width="40" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition />
@@ -299,48 +299,87 @@
 
                         <TextBlock Grid.Row="2" Grid.Column="0" 
                                    Text="Project Identifier" />
-                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding ProjectIdentifierParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamProjId"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}"
+                                Click="buttonParamProjId_Click"  />
+                        
                         <TextBlock Grid.Row="3" Grid.Column="0" 
                                    Text="Originator"  />
-                        <TextBox Grid.Row="3" Grid.Column="1"  Margin="0,0,0,5"
+                        <TextBox Grid.Row="3" Grid.Column="1"  Margin="0,0,5,5"
                                  Text="{Binding OriginatorParamGuid}"
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="3" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamOriginator"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamOriginator_Click"  />
+                        
                         <TextBlock Grid.Row="4" Grid.Column="0" 
                                    Text="Role" />
-                        <TextBox Grid.Row="4" Grid.Column="1"  Margin="0,0,0,5"
+                        <TextBox Grid.Row="4" Grid.Column="1"  Margin="0,0,5,5"
                                  Text="{Binding RoleParamGuid}"
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="4" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamRole"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamRole_Click"  />
 
                         <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,5"
                                    Text="Shared Parameter GUIDs - Paramaters should be attached to Sheets Category" FontFamily="Segoe UI" />
 
                         <TextBlock Grid.Row="6" Grid.Column="0" 
                                    Text="Sheet Volume"  />
-                        <TextBox Grid.Row="6" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="6" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetVolumeParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="6" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamVolume"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamVolume_Click"  />
+                        
                         <TextBlock Grid.Row="7" Grid.Column="0" 
                                    Text="Sheet Level" />
-                        <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetLevelParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="7" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamLevel"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamLevel_Click"  />
+                        
                         <TextBlock Grid.Row="8" Grid.Column="0" 
                                    Text="Document Type"  />
-                        <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding DocumentTypeParamGuid}"  
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="8" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamType"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamType_Click"  />
+                        
                         <TextBlock Grid.Row="9" Grid.Column="0" 
                                    Text="Sheet Status Code"  />
-                        <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetStatusParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="9" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamStatusCode"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamStatusCode_Click"  />
+                        
                         <TextBlock Grid.Row="10" Grid.Column="0" 
                                    Text="Sheet Status Description"  />
-                        <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,0,5"
+                        <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetStatusDescriptionParamGuid}"  
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
+                        <Button Grid.Row="10" Grid.Column="2" Margin="0,0,0,5"
+                                x:Name="buttonParamStatus"
+                                Content="..." 
+                                IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamStatus_Click"  />
                     </Grid>
                 </GroupBox>
                 
