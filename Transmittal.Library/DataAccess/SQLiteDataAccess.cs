@@ -73,10 +73,12 @@ public class SQLiteDataAccess : IDataConnection
         Dictionary<string, string> columnsToAdd = new Dictionary<string, string>
         {
             {
+                //added at v1.2.0
                 "ClientName",
                 "ALTER TABLE Settings ADD COLUMN ClientName TEXT"
             },
             {
+                //added at v1.2.2
                 "FileNameFilter2",
                 "ALTER TABLE Settings ADD COLUMN FileNameFilter2 TEXT"
             }
