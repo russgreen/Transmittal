@@ -182,6 +182,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="40" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -199,14 +200,18 @@
                         <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
                                    Text="Project database file not found!" Foreground="Red" 
                                    Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                        
+                        <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,5"
+                                Content="Load settings from database"
+                                Visibility="{Binding IsChecked, ElementName=UseDatabase, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding LoadSettingsFromDatabaseCommand}"/>
+
                         <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Template database" 
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,5,5"
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                  Text="{Binding DatabaseTemplateFile}"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="0,0,0,5"
+                        <Button Grid.Row="1" Grid.Column="3" Margin="0,0,0,5"
                                 x:Name="buttonTemplateDatabaseBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
@@ -215,11 +220,11 @@
                         <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Project database"
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,5,5"
+                        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                  Text="{Binding DatabaseFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                                  BorderBrush="{Binding DatabaseNotFound, Converter={StaticResource BrushColorConverter}}"/>
-                        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5"
+                        <Button Grid.Row="2" Grid.Column="3" Margin="0,0,0,5"
                                 x:Name="buttonDatabaseBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
@@ -228,10 +233,10 @@
                         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Report templates"
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,5,5"
+                        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                  Text="{Binding ReportTemplatePath}"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <Button Grid.Row="3" Grid.Column="2" Margin="0,0,0,5"
+                        <Button Grid.Row="3" Grid.Column="3" Margin="0,0,0,5"
                                 x:Name="buttonReportPathBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonReportPathBrowse_Click" />
@@ -239,10 +244,10 @@
                         <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Issue sheet store"
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,5,5"
+                        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                  Text="{Binding IssueSheetStorePath}"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <Button Grid.Row="4" Grid.Column="2" Margin="0,0,0,5"
+                        <Button Grid.Row="4" Grid.Column="3" Margin="0,0,0,5"
                                 x:Name="buttonIssueSheetStorePathBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonIssueSheetStorePathBrowse_Click" />
@@ -250,10 +255,10 @@
                         <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Directory store"
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <TextBox Grid.Row="5" Grid.Column="1" Margin="0,0,5,5"
+                        <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                  Text="{Binding DirectoryStorePath}"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                        <Button Grid.Row="5" Grid.Column="2" Margin="0,0,0,5"
+                        <Button Grid.Row="5" Grid.Column="3" Margin="0,0,0,5"
                                 x:Name="buttonDirectoryStorePathBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonDirectoryStorePathBrowse_Click"  />
