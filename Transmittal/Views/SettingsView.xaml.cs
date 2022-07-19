@@ -60,8 +60,6 @@ public partial class SettingsView : Window
 
     private void buttonDatabaseBrowse_Click(object sender, RoutedEventArgs e)
     {
-
-
         Ookii.Dialogs.Wpf.TaskDialogButton openButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Open existing project transmittal database");
         Ookii.Dialogs.Wpf.TaskDialogButton newButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Create a new project transmittal database");
         Ookii.Dialogs.Wpf.TaskDialogButton cancelButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Cancel);

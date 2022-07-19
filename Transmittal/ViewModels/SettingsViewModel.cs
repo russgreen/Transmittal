@@ -119,6 +119,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         //Settings = _settingsService.GlobalSettings;
         CheckForDatabaseFile();
 
+        SetPropertiesFromGlobalSettings();
+    }
+
+    private void SetPropertiesFromGlobalSettings()
+    {
         //BASIC SETTINGS
         FileNameFilter = _settingsService.GlobalSettings.FileNameFilter;
         DrawingIssueStore = _settingsService.GlobalSettings.DrawingIssueStore;
@@ -292,6 +297,14 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         t.Commit();        
     }
 
+    [RelayCommand]
+    private void LoadSettingsFromDatabase()
+    {
+        _settingsService.GetSettings();
+
+        SetPropertiesFromGlobalSettings();
+    }
+
     partial void OnDrawingIssueStoreChanged(string value)
     {
         SampleFolderName = DrawingIssueStore.ParseFolderName("FORMAT");
@@ -311,13 +324,14 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     partial void OnDatabaseFileChanged(string value)
     {
         CheckForDatabaseFile();
+        _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
     }
 
     private void CheckForDatabaseFile()
     {
         DatabaseNotFound = false;
-        
-        if(DatabaseFile != null)
+
+        if (DatabaseFile != null)
         {
             if (_recordTransmittals)
             {

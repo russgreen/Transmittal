@@ -13,4 +13,6 @@ public interface IDataConnection
     IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters);
 
     void SaveData<T>(string dbFilePath, string sqlStatement, T data);
+
+    void UpgradeDatabase(string dbFilePath);
 }
