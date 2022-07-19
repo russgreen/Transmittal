@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Humanizer;
 using Microsoft.Data.Sqlite;
 using System.Data;
 using Transmittal.Library.Extensions;
@@ -9,7 +10,7 @@ public class SQLiteDataAccess : IDataConnection
 {
     public bool CheckConnection(string dbFilePath)
     {
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath}"))
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
         {
             try
             {
@@ -67,7 +68,44 @@ public class SQLiteDataAccess : IDataConnection
         DeleteLockFile(dbFilePath);
     }
 
-    
+    public void UpgradeDatabase(string dbFilePath)
+    {
+        Dictionary<string, string> columnsToAdd = new Dictionary<string, string>
+        {
+            {
+                "ClientName",
+                "ALTER TABLE Settings ADD COLUMN ClientName TEXT"
+            },
+            {
+                "FileNameFilter2",
+                "ALTER TABLE Settings ADD COLUMN FileNameFilter2 TEXT"
+            }
+        };
+
+        WaitForLockFileToClear(dbFilePath);
+        CreateLockFile(dbFilePath);
+
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
+        {
+            dbConnection.Open();
+
+            foreach (var column in columnsToAdd)
+            {
+                try
+                {
+                    dbConnection.Execute(column.Value);
+                }
+                catch
+                {
+                    System.Diagnostics.Debug.WriteLine($"Failed to create column[{column.Key}]. Most likely it already exists, which is fine.");
+                }
+            }
+        }
+
+        DeleteLockFile(dbFilePath);
+    }
+
+
     // To prevent concurrent write attempts on the database a lock file will be created
     private void WaitForLockFileToClear(string dbFilePath)
     {
