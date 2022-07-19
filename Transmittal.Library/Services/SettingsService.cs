@@ -41,7 +41,8 @@ public class SettingsService : ISettingsService
                     GlobalSettings.IssueSheetStore = dbSettings.IssueSheetStore;
                     GlobalSettings.ReportStore = dbSettings.ReportStore;
                     GlobalSettings.DirectoryStore = dbSettings.DirectoryStore;
-                    GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;                    
+                    GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;
+                    GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2;
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
                     GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
@@ -64,6 +65,8 @@ public class SettingsService : ISettingsService
 
     public void UpdateSettings()
     {
+        _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
+
         string sql = "UPDATE Settings SET " +
             "DateFormatString = @DateFormatString, " +
             "DrawingIssueStore = @DrawingIssueStore, " +
@@ -71,6 +74,7 @@ public class SettingsService : ISettingsService
             "ReportStore = @ReportStore, " +
             "DirectoryStore = @DirectoryStore, " +
             "FileNameFilter = @FileNameFilter, " +
+            "FileNameFilter2 = @FileNameFilter2, " +
             "ProjectIdentifier = @ProjectIdentifier, " +
             "ProjectNumber = @ProjectNumber, " +           
             "ProjectName = @ProjectName, " +
@@ -99,6 +103,7 @@ public class SettingsService : ISettingsService
                 ReportStore = GlobalSettings.ReportStore,
                 DirectoryStore = GlobalSettings.DirectoryStore,
                 FileNameFilter = GlobalSettings.FileNameFilter,
+                FileNameFilter2 = GlobalSettings.FileNameFilter2,
                 ProjectIdentifier = GlobalSettings.ProjectIdentifier,
                 ProjectNumber = GlobalSettings.ProjectNumber,
                 ProjectName = GlobalSettings.ProjectName,
