@@ -16,10 +16,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{72F293E5-3217-479A-AEA9-80F2FC979831} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{C75E71D9-48AD-4FAF-AB01-F45215BB5957} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.2.2"/>
+    <ROW Property="ProductVersion" Value="1.2.3"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -53,7 +53,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{E01C92EA-6614-48B0-8086-1ABBE9BD1B59}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="AssociateFileExtensions.exe" ComponentId="{A8A7DB4B-2A63-4864-975F-563FFD56F6CF}" Directory_="APPDIR" Attributes="256" KeyPath="AssociateFileExtensions.exe"/>
     <ROW Component="AutoMapper.dll" ComponentId="{C6E1A7DB-89A8-4DE1-8ACB-B0954651FC03}" Directory_="APPDIR" Attributes="0" KeyPath="AutoMapper.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{3CB787D5-5C5A-4524-9BC5-C31A323FC923}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
     <ROW Component="Dapper.dll" ComponentId="{75CDDB4A-5F19-44BF-A402-F24B54EE44D7}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
@@ -164,8 +163,6 @@
     <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Reports.pdb" SelfReg="false"/>
     <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\PropertyChanged.dll" SelfReg="false"/>
-    <ROW File="AssociateFileExtensions.exe" Component_="AssociateFileExtensions.exe" FileName="ASSOCI~1.EXE|AssociateFileExtensions.exe" Attributes="0" SourcePath="..\AssociateFileExtensions\bin\x64\Release\net48\AssociateFileExtensions.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="AssociateFileExtensions.exe.config" Component_="TransmittalParameters.txt" FileName="ASSOCI~1.CON|AssociateFileExtensions.exe.config" Attributes="0" SourcePath="..\AssociateFileExtensions\bin\x64\Release\net48\AssociateFileExtensions.exe.config" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -295,7 +292,6 @@
     <ROW Feature_="MainFeature" Component_="Shell"/>
     <ROW Feature_="MainFeature" Component_="open"/>
     <ROW Feature_="MainFeature" Component_="__2"/>
-    <ROW Feature_="MainFeature" Component_="AssociateFileExtensions.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
