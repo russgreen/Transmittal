@@ -86,17 +86,14 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             }
             else
             {
-                // check revit for the templateDB parameter as we may be using a custom template database set in a revit template
-                var templateDB = Util.GetParameterValueString(_projectInfo, _paramTransmittalDBTemplateGuid);
+                //// check revit for the templateDB parameter as we may be using a custom template database set in a revit template
+                //var templateDB = _settingsService.GlobalSettings.DatabaseTemplateFile;
 
-                if (CheckDatabaseFileExists(templateDB, false))
-                {
-                    // seems there is a template database but we need the settings
-                    // dialog open to setup this project so return false
-                    _settingsService.GlobalSettings.DatabaseTemplateFile = templateDB;
-
-                    return false;
-                }
+                //if (CheckDatabaseFileExists(templateDB, false))
+                //{
+                //    return false;
+                //}
+                return false;
             }
         }
 
