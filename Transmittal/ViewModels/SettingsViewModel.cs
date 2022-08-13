@@ -12,6 +12,7 @@ using Autodesk.Revit.DB;
 using System.Windows.Controls;
 using Transmittal.Library.Extensions;
 using Transmittal.Requesters;
+using Transmittal.Library.Validation;
 
 namespace Transmittal.ViewModels;
 
@@ -76,6 +77,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [ObservableProperty]
     private string _databaseTemplateFile;
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MustBeFalse(ErrorMessage = "Database file is not found")] 
     private bool _databaseNotFound; //used to control visibility of error message in UI
     [ObservableProperty]
     private string _reportTemplatePath;
