@@ -26,5 +26,10 @@ After clicking Finish the progress will be displayed.
 If the transmittal was recorded in the database the Transmittal Sheet report will be displayed.
 ![image](https://user-images.githubusercontent.com/1886088/176995644-b5646a98-d28b-421d-986b-6b92be854c6e.png)
 
+Sample transmittal reports: 
+- [Sample Report 1](https://github.com/russgreen/Transmittal/blob/f418fa67eaad57dc255b875e8f9a25bd31aad8c7/SampleReports/Alternative%20Sample%201/TransmittalSheet.pdf)
+- [Sample Report 2](https://github.com/russgreen/Transmittal/blob/f418fa67eaad57dc255b875e8f9a25bd31aad8c7/SampleReports/Alternative%20Sample%202/TransmittalSheet.pdf)
+
+
 Exporting the report will result in it being automatically named and saved to the Issue Sheet Store configured in Settings.
 ![image](https://user-images.githubusercontent.com/1886088/178138968-4c3bbb61-646c-4297-9fb6-587450b135a2.png)
