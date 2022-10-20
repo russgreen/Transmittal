@@ -32,4 +32,5 @@ Sample transmittal reports:
 
 
 Exporting the report will result in it being automatically named and saved to the Issue Sheet Store configured in Settings.
+
 ![image](https://user-images.githubusercontent.com/1886088/178138968-4c3bbb61-646c-4297-9fb6-587450b135a2.png)
