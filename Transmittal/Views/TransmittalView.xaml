@@ -15,6 +15,7 @@
         Height="620" Width="860" 
         MinHeight="620" MinWidth="860" 
         WindowStyle="SingleBorderWindow">
+    
     <Window.DataContext>
         <viewModels:TransmittalViewModel />
     </Window.DataContext>
@@ -28,12 +29,10 @@
     </Window.Resources>
 
     <Grid>
-
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
                                   NextEnabled="True" 
                                   FinishEnabled="{Binding IsFinishEnabled}"
-                                  CancelButtonCancelsWindow="True"
                                   Help="WizardControl_Help" 
                                   Cancel="WizardControl_Cancel">
             <interactivity:Interaction.Triggers>
@@ -277,8 +276,8 @@
             </syncfusion:WizardPage>
             <syncfusion:WizardPage x:Name="wizardPage3" 
                                    Title="Distribution" 
+                                   FinishVisible="False"
                                    Description="Select recipients of drawing transmittal" 
-                                   FinishVisible="False" 
                                    NextEnabled="{Binding IsDistributionValid}"
                                    BannerBackground="White">
                 <Grid>

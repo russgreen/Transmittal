@@ -15,6 +15,7 @@ using Transmittal.Requesters;
 using Transmittal.Services;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Transmittal.ViewModels;
 
@@ -158,6 +159,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
 
+        IsWindowVisible = true;
+
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
         
         WireUpSheetsPage();
@@ -174,7 +177,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         DrawingSheets = GetDrawingSheets()
             .OrderBy(x => x.DrgVolume)
-            .ThenBy(x => x.DrgLevel)
             .ThenBy(x => x.DrgNumber)
             .ToList<DrawingSheetModel>();
     }
@@ -684,6 +686,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_exportPDF == true)
                             {
+                                SheetTaskProgressLabel = "Exporting PDF...";
+                                DispatcherHelper.DoEvents();
+
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
                                     _exportPDFService.ExportPDF($"{fileName}.pdf", 
                                     App.revitDocument, 
@@ -700,10 +705,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 #endif
 
                                 //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported PDF";
+                                SheetTaskProgressLabel = "Exporting PDF...DONE";
                                 SheetTaskProcessed += 1;
-
-                                // to allow cancel button working
                                 DispatcherHelper.DoEvents();
                             }
 
@@ -717,6 +720,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_exportDWG == true)
                             {
+                                SheetTaskProgressLabel = "Exporting DWG...";
+                                DispatcherHelper.DoEvents();
+
                                 DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
                                 DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
 
@@ -730,10 +736,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 _exportedFiles.Add(dwg);
 
                                 //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported DWG";
+                                SheetTaskProgressLabel = "Exporting DWG...DONE";
                                 SheetTaskProcessed += 1;
-
-                                // to allow cancel button working
                                 DispatcherHelper.DoEvents();
                             }
 
@@ -747,6 +751,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_exportDWF == true)
                             {
+                                SheetTaskProgressLabel = "Exporting DWF...";
+                                DispatcherHelper.DoEvents();
+
                                 var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
 
                                 var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
@@ -761,10 +768,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 _exportedFiles.Add(dwf);
 
                                 //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exported DWF";
+                                SheetTaskProgressLabel = "Exporting DWF...DONE";
                                 SheetTaskProcessed += 1;
-
-                                // to allow cancel button working
                                 DispatcherHelper.DoEvents();
                             }
 
@@ -823,6 +828,239 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         catch (Exception ex)
         {
             Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
+            this.OnClosingRequest();
+            return;
+        }
+    }
+
+    [RelayCommand]
+    private void ProcessSheetsPF()
+    {
+        IsBackEnabled = false;
+        IsFinishEnabled = false;
+
+        //TODO: This is NOT an MVVM this to do
+        var pf = new Views.ProgressView();
+        pf.Show();
+
+        //IsWindowVisible = false;
+
+        WeakReferenceMessenger.Default.Send(new SheetsToProcessMessage(_selectedDrawingSheets.Count));
+        WeakReferenceMessenger.Default.Send(new SheetTasksToProcessMessage(_exportFormatCount));
+
+        try
+        {
+            var sheets = new FilteredElementCollector(App.RevitDocument);
+            sheets.OfClass(typeof(ViewSheet));
+
+            foreach (DrawingSheetModel drawingSheet in _selectedDrawingSheets)
+            {
+                foreach (ViewSheet sheet in sheets)
+                {
+                    // abort if cancel was clicked
+                    if (_abortFlag == true)
+                    {
+                        WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
+                        this.OnClosingRequest();
+                        return;
+                    }
+
+                    if (drawingSheet.DrgNumber == sheet.SheetNumber)
+                    {
+                        //TODO - test if this check is required.....left in for now...
+                        if (sheet.CanBePrinted == true)
+                        {
+                            var views = new ViewSet();
+                            views.Insert(sheet);
+
+                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                                 _settingsService.GlobalSettings.ProjectNumber,
+                                 _settingsService.GlobalSettings.ProjectIdentifier,
+                                 _settingsService.GlobalSettings.ProjectName,
+                                 drawingSheet.DrgOriginator,
+                                 drawingSheet.DrgVolume,
+                                 drawingSheet.DrgLevel,
+                                 drawingSheet.DrgType,
+                                 drawingSheet.DrgRole,
+                                 sheet.SheetNumber,
+                                 drawingSheet.DrgName, 
+                                 drawingSheet.DrgRev,
+                                 drawingSheet.DrgStatus,
+                                 drawingSheet.DrgStatusDescription);
+                                                     
+                            //DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                            //SheetTaskProcessed = 0;
+                            //SheetTaskProgressLabel = string.Empty;
+                            //DispatcherHelper.DoEvents();
+                            WeakReferenceMessenger.Default.Send(new SheetProcessingMessage(fileName));
+                            WeakReferenceMessenger.Default.Send(new SheetTasksProcessedMessage(0));
+                            WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage(string.Empty));
+
+
+                            if (_exportPDF == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting PDF...."));
+                                DispatcherHelper.DoEvents();
+
+#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
+                                    _exportPDFService.ExportPDF($"{fileName}.pdf", 
+                                    App.revitDocument, 
+                                    sheet);
+#else
+                                var filePath = _exportPDFService.ExportPDF(fileName,
+                                    App.RevitDocument,
+                                    views,
+                                    PdfExportOptions);
+
+                                DocumentModel pdf = new DocumentModel(drawingSheet);
+                                pdf.FilePath = filePath;
+                                _exportedFiles.Add(pdf);
+#endif
+
+                                //TODO - actually check if the export worked OK
+                                //SheetTaskProgressLabel = "Exported PDF";
+                                SheetTaskProcessed += 1;
+                                WeakReferenceMessenger.Default.Send(new SheetTasksProcessedMessage(SheetTaskProcessed));
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting PDF....DONE"));
+
+                                // to allow cancel button working
+                                DispatcherHelper.DoEvents();
+                            }
+
+
+
+                            if (_abortFlag == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
+                                this.OnClosingRequest();
+                                return;
+                            }
+
+                            if (_exportDWG == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting DWG...."));
+                                DispatcherHelper.DoEvents();
+
+                                DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+                                DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
+
+                                var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
+                                    DwgExportOptions,
+                                    views,
+                                    App.RevitDocument);
+
+                                DocumentModel dwg = new DocumentModel(drawingSheet);
+                                dwg.FilePath = filePath;
+                                _exportedFiles.Add(dwg);
+
+                                //TODO - actually check if the export worked OK
+                                //SheetTaskProgressLabel = "Exported DWG";
+                                SheetTaskProcessed += 1;
+                                WeakReferenceMessenger.Default.Send(new SheetTasksProcessedMessage(SheetTaskProcessed));
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting DWG....DONE"));
+
+                                // to allow cancel button working
+                                DispatcherHelper.DoEvents();
+                            }
+
+
+
+                            if (_abortFlag == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
+                                this.OnClosingRequest();
+                                return;
+                            }
+
+                            if (_exportDWF == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting DWF...."));
+                                DispatcherHelper.DoEvents();
+
+                                var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
+
+                                var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
+                                    argsheetsize,
+                                    _printSetup,
+                                    DwfExportOptions,
+                                    App.RevitDocument,
+                                    views);
+
+                                DocumentModel dwf = new DocumentModel(drawingSheet);
+                                dwf.FilePath = filePath;
+                                _exportedFiles.Add(dwf);
+
+                                //TODO - actually check if the export worked OK
+                                //SheetTaskProgressLabel = "Exported DWF";
+                                SheetTaskProcessed += 1;
+                                WeakReferenceMessenger.Default.Send(new SheetTasksProcessedMessage(SheetTaskProcessed));
+                                WeakReferenceMessenger.Default.Send(new SheetTaskProcessingMessage("Exporting DWF....DONE"));
+
+                                // to allow cancel button working
+                                DispatcherHelper.DoEvents();
+                            }
+
+
+                            if (_abortFlag == true)
+                            {
+                                WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
+                                this.OnClosingRequest();
+                                return;
+                            }
+
+                            if (RecordTransmittal == true)
+                            {
+                                // Mark sheets issued date.
+                                SetIssueDate(sheet);
+
+                                // Mark revisions issued
+                                SetRevisionsIssued(sheet);
+                            }
+
+                            DrawingSheetsProcessed += 1;
+                            WeakReferenceMessenger.Default.Send(new SheetsProcessedMessage(DrawingSheetsProcessed));
+
+                            // to allow cancel button working
+                            DispatcherHelper.DoEvents();
+                        }
+                    }
+                }
+            }
+
+            StepOneComplete = true;
+            WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(1));
+            DispatcherHelper.DoEvents();
+
+            if (RecordTransmittal == true)
+            {
+                RecordTransmittalInDatabase();
+                StepTwoComplete = true;
+                WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(2));
+                DispatcherHelper.DoEvents();
+                LaunchTransmittalReport();
+                StepThreeComplete = true;
+                WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(3));
+                DispatcherHelper.DoEvents();
+            }
+
+            if(_settingsService.GlobalSettings.UseExtranet == true)
+            {
+                CopyFilesForExtranet();
+            }
+
+            OpenExporerToExportedFilesLocations();
+             
+            //just pause before closing the window
+            Thread.Sleep(5000);
+
+            WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
+            this.OnClosingRequest();
+            return;
+        }
+        catch (Exception ex)
+        {
+            Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
+            WeakReferenceMessenger.Default.Send(new TransmittalStepCompleteMessage(4));
             this.OnClosingRequest();
             return;
         }
