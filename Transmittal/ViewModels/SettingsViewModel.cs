@@ -326,11 +326,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     partial void OnDatabaseFileChanged(string value)
     {
-        CheckForDatabaseFile();
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
+
+        CheckForDatabaseFile();
     }
 
-    private void CheckForDatabaseFile()
+    public void CheckForDatabaseFile()
     {
         DatabaseNotFound = false;
 
@@ -338,7 +339,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         {
             if (_recordTransmittals)
             {
-                if(!_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile, false))
+                if (!_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile.Trim(), false))
                 {
                     DatabaseNotFound = true;
                 }
