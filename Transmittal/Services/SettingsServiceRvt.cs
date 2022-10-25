@@ -441,8 +441,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         //    schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)));
         //_settingsService.GlobalSettings.DirectoryStore = entity.Get<string>(
         //    schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)));
-        //_settingsService.GlobalSettings.ReportStore = entity.Get<string>(
-        //    schema.GetField(nameof(_settingsService.GlobalSettings.ReportStore)));
+        _settingsService.GlobalSettings.ReportStore = entity.Get<string>(
+            schema.GetField(nameof(_settingsService.GlobalSettings.ReportStore)));
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = entity.Get<bool>(
             schema.GetField(nameof(_settingsService.GlobalSettings.UseCustomSharedParameters)));
