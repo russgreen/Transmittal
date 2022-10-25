@@ -201,17 +201,16 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         IsBackEnabled = false;
 
         try
-        {
-            
+        {  
             RecordTransmittalInDatabase();
             LaunchTransmittalReport();
 
             this.OnClosingRequest();
             return;
         }
-        catch (Exception ex)
+        catch
         {
-             this.OnClosingRequest();
+            this.OnClosingRequest();
             return;
         }
     }

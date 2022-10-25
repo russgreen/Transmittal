@@ -16,6 +16,10 @@ using Transmittal.Services;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.Messaging;
+using Transmittal.Messages;
+using Transmittal.Views;
+using Syncfusion.Windows.Tools.Controls;
+using System.Windows.Threading;
 
 namespace Transmittal.ViewModels;
 
@@ -31,6 +35,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
 
     public string WindowTitle { get; private set; }
+
+    private Thread _progressWindowThread;
+
+    [ObservableProperty]
+    private System.Windows.Visibility _isWindowVisible = System.Windows.Visibility.Visible;
 
     private TransmittalModel _newTransmittal = new();    
     
@@ -138,6 +147,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _stepThreeComplete = false;
 
     [ObservableProperty]
+    private string _currentStepProgressLabel = "Exporting drawing sheets";
+
+    [ObservableProperty]
     private double _drawingSheetsProcessed = 0;
     [ObservableProperty]
     private string _drawingSheetProgressLabel = string.Empty;
@@ -166,6 +178,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         WireUpExportFormatsPage();
 
         WireUpDistributionPage();
+
+        WeakReferenceMessenger.Default.Register<CancelTransmittalMessage>(this, (r, m) =>
+        {
+            _abortFlag = true;
+        });
     }
 
     private void WireUpSheetsPage()
@@ -621,6 +638,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IsBackEnabled = false;
         IsFinishEnabled = false;
 
+        IsWindowVisible = System.Windows.Visibility.Hidden;
+
+        OpenProgressWindow();
+
         try
         {
             var sheets = new FilteredElementCollector(App.RevitDocument);
@@ -633,6 +654,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     // abort if cancel was clicked
                     if (_abortFlag == true)
                     {
+                        CloseProgress();
                         this.OnClosingRequest();
                         return;
                     }
@@ -644,22 +666,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                         {
                             var views = new ViewSet();
                             views.Insert(sheet);
-
-                            // build the filename
-                            //string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
-                            //    _settingsService.GlobalSettings.ProjectNumber,
-                            //    _settingsService.GlobalSettings.ProjectIdentifier,
-                            //    _settingsService.GlobalSettings.ProjectName,
-                            //    _settingsService.GlobalSettings.Originator,
-                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetVolumeParamGuid),
-                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetLevelParamGuid),
-                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid),
-                            //    _settingsService.GlobalSettings.Role,
-                            //    sheet.SheetNumber,
-                            //    sheet.Name,
-                            //    sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString(),
-                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid),
-                            //    Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid));
 
                             string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
                                  _settingsService.GlobalSettings.ProjectNumber,
@@ -680,11 +686,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
                             SheetTaskProcessed = 0;
                             SheetTaskProgressLabel = string.Empty;
+                            SendProgressMessage();
                             DispatcherHelper.DoEvents();
 
                             if (_exportPDF == true)
                             {
                                 SheetTaskProgressLabel = "Exporting PDF...";
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
 
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
@@ -705,6 +713,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 //TODO - actually check if the export worked OK
                                 SheetTaskProgressLabel = "Exporting PDF...DONE";
                                 SheetTaskProcessed += 1;
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
                             }
 
@@ -712,6 +721,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_abortFlag == true)
                             {
+                                CloseProgress();
                                 this.OnClosingRequest();
                                 return;
                             }
@@ -719,6 +729,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             if (_exportDWG == true)
                             {
                                 SheetTaskProgressLabel = "Exporting DWG...";
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
 
                                 DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
@@ -736,6 +747,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 //TODO - actually check if the export worked OK
                                 SheetTaskProgressLabel = "Exporting DWG...DONE";
                                 SheetTaskProcessed += 1;
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
                             }
 
@@ -743,6 +755,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_abortFlag == true)
                             {
+                                CloseProgress();
                                 this.OnClosingRequest();
                                 return;
                             }
@@ -750,6 +763,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             if (_exportDWF == true)
                             {
                                 SheetTaskProgressLabel = "Exporting DWF...";
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
 
                                 var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
@@ -768,12 +782,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 //TODO - actually check if the export worked OK
                                 SheetTaskProgressLabel = "Exporting DWF...DONE";
                                 SheetTaskProcessed += 1;
+                                SendProgressMessage();
                                 DispatcherHelper.DoEvents();
                             }
 
 
                             if (_abortFlag == true)
                             {
+                                CloseProgress();
                                 this.OnClosingRequest();
                                 return;
                             }
@@ -789,8 +805,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             DrawingSheetsProcessed += 1;
 
-
                             // to allow cancel button working
+                            SendProgressMessage();
                             DispatcherHelper.DoEvents();
                         }
                     }
@@ -798,6 +814,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
             StepOneComplete = true;
+            CurrentStepProgressLabel = "Recording transmittal...";
+            SendProgressMessage();
             DispatcherHelper.DoEvents();
 
             if (RecordTransmittal == true)
@@ -805,6 +823,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 RecordTransmittalInDatabase();
                 StepTwoComplete = true;
                 DispatcherHelper.DoEvents();
+                CurrentStepProgressLabel = "Displaying report...";
+                SendProgressMessage();
                 LaunchTransmittalReport();
                 StepThreeComplete = true;
                 DispatcherHelper.DoEvents();
@@ -820,12 +840,17 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             //just pause before closing the window
             Thread.Sleep(5000);
 
+            CloseProgress();
+
             this.OnClosingRequest();
             return;
         }
         catch (Exception ex)
         {
             Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
+
+            CloseProgress();
+
             this.OnClosingRequest();
             return;
         }
@@ -1025,5 +1050,51 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Process.Start(processStartInfo);        
     }
 
+    private void OpenProgressWindow()
+    {
+        // Create a thread
+        _progressWindowThread = new Thread(new ThreadStart(() =>
+        {
+            // Create and show the Window
+            ProgressView progressWindow = new();
 
+            progressWindow.Closed += (s, e) => 
+            Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Background);
+
+            progressWindow.Show();
+
+            // Start the Dispatcher Processing
+            Dispatcher.Run();
+        }));
+
+        // Set the apartment state
+        _progressWindowThread.SetApartmentState(ApartmentState.STA);
+
+        // Make the thread a background thread
+        _progressWindowThread.IsBackground = true;
+
+        // Start the thread
+        _progressWindowThread.Start();
+    }
+
+    private void CloseProgress()
+    {
+        Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
+    }
+
+    private void SendProgressMessage()
+    {
+        WeakReferenceMessenger.Default.Send(
+            new ProgressUpdateMessage(
+                new ProgressMessageModel 
+                { 
+                    CurrentStepProgressLabel = _currentStepProgressLabel,
+                    DrawingSheetsToProcess = _selectedDrawingSheets.Count,
+                    DrawingSheetsProcessed = _drawingSheetsProcessed,
+                    DrawingSheetProgressLabel = _drawingSheetProgressLabel,
+                    SheetTasksToProcess = _exportFormatCount,
+                    SheetTaskProcessed = _sheetTaskProcessed,
+                    SheetTaskProgressLabel = _sheetTaskProgressLabel
+                }));
+    }
 }

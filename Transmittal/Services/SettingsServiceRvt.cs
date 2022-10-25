@@ -142,15 +142,18 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         if (filepath != "[NONE]" || filepath != null)
         {
-            if (System.IO.File.Exists(filepath.ParsePathWithEnvironmentVariables()))
+            var databaseFile = filepath.ParsePathWithEnvironmentVariables();
+            var databaseExists = System.IO.File.Exists(databaseFile);
+
+            if (databaseExists)
             {
                 if (checkConnection == true)
                 {
-                    return _dataConnection.CheckConnection(filepath.ParsePathWithEnvironmentVariables());
+                    return _dataConnection.CheckConnection(databaseFile);
                 }
             }
 
-            return System.IO.File.Exists(filepath.ParsePathWithEnvironmentVariables());
+            return databaseExists;
         }
 
         return false;

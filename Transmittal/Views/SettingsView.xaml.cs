@@ -54,6 +54,7 @@ public partial class SettingsView : Window
             if (dialog.CheckFileExists)
             {
                 _viewModel.DatabaseTemplateFile = dialog.FileName;
+                _viewModel.CheckForDatabaseFile();
             }
         }           
     }
@@ -108,8 +109,8 @@ public partial class SettingsView : Window
             if (dialog.ShowDialog() == true)
             {
                 //we don't have a file so copy the template to the new file
+                File.Copy(_viewModel.DatabaseTemplateFile, dialog.FileName);
                 _viewModel.DatabaseFile = dialog.FileName;
-                File.Copy(_viewModel.DatabaseTemplateFile, _viewModel.DatabaseFile);
             }
         }
     }

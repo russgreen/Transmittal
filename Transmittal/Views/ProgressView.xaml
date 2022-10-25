@@ -1,0 +1,54 @@
+﻿<Window x:Class="Transmittal.Views.ProgressView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:ProgressViewModel, IsDesignTimeCreatable=True}"
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" 
+        Height="300" Width="600" 
+        WindowStyle="None" ResizeMode="NoResize">
+    
+    <Window.DataContext>
+        <viewModels:ProgressViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <GroupBox Header="{Binding CurrentStepProgressLabel}"
+              Margin="10" 
+              Style="{DynamicResource GroupBox}"  >
+         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,40,0,0">
+                <ProgressBar Height="30" Width="500" 
+                                         Maximum="{Binding DrawingSheetsToProcess}"
+                                         Value="{Binding DrawingSheetsProcessed}"/>
+                <TextBlock Text="{Binding DrawingSheetProgressLabel}" />
+                <ProgressBar Height="30" Width="500" Margin="0,20,0,0" 
+                                         Maximum="{Binding SheetTasksToProcess}"
+                                         Value="{Binding SheetTaskProcessed}"/>
+                <TextBlock Text="{Binding SheetTaskProgressLabel}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button x:Name="CancelButton" Content="Cancel Transmittal" Width="150" Margin="0,0,0,0" Click="CancelButton_Click" />
+            </StackPanel>
+        </Grid>       
+    </GroupBox>
+
+
+</Window>

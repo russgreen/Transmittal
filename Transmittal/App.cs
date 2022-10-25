@@ -101,7 +101,7 @@ public class App : IExternalApplication
         PushButton buttonDirectory = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.CommandDirectory),
-                "Project Directory",
+                $"Project{System.Environment.NewLine}Directory",
                 Assembly.GetExecutingAssembly().Location,
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandDirectory)}"));
         buttonDirectory.ToolTip = "Edit the the project directory";
@@ -111,7 +111,7 @@ public class App : IExternalApplication
         PushButton buttonTransmittalArchive = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.CommandTransmittalsArchive),
-                "Transmittal Archive",
+                $"Transmittal{System.Environment.NewLine}Archive",
                 Assembly.GetExecutingAssembly().Location,
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittalsArchive)}"));
         buttonTransmittalArchive.ToolTip = "View the transmittal archive";
