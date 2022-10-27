@@ -4,21 +4,14 @@
     <!--<TargetFramework>net6.0-windows</TargetFramework>-->
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>true</UseWindowsForms>
+	  <UseWPF>true</UseWPF>
 	  <LangVersion>10</LangVersion>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Reports\ProjectDirectory.rdlc" />
-    <None Remove="Reports\TransmittalSheet.rdlc" />
-    <None Remove="Reports\TransmittalSheet_Alternative.rdlc" />
-    <None Remove="Reports\TransmittalSummary.rdlc" />
-    <None Remove="Reports\TransmittalSummary_Alternative.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSummary.rdlc" />
@@ -26,7 +19,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1484.0" GeneratePathProperty="true" />
+		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1537.0" GeneratePathProperty="true" />
 	</ItemGroup>
 
 	<ItemGroup>
