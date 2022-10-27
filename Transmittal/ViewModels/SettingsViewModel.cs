@@ -301,7 +301,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     }
 
     [RelayCommand]
-    private void LoadSettingsFromDatabase()
+    public void LoadSettingsFromDatabase()
     {
         _settingsService.GetSettings();
 

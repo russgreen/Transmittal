@@ -114,10 +114,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     /// DISTRIBUTION
     public List<IssueFormatModel> IssueFormats { get; private set; }
     public bool CanRecordTransmittal { get; private set; }
-    public bool IsDistributionValid => ValidateDistribution();
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
     private bool _recordTransmittal = false;
     [ObservableProperty]
     private int _copies = 1;
@@ -126,7 +124,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsDistributionValid))]
     private ObservableCollection<TransmittalDistributionModel> _distribution;
     [ObservableProperty]
     private ObservableCollection<object> _selectedProjectDirectory;
@@ -139,13 +136,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
 
     /// SUMMARY PROGRESS
-    [ObservableProperty]
-    private bool _stepOneComplete = false;
-    [ObservableProperty]
-    private bool _stepTwoComplete = false;
-    [ObservableProperty]
-    private bool _stepThreeComplete = false;
-
     [ObservableProperty]
     private string _currentStepProgressLabel = "Exporting drawing sheets";
 
@@ -160,7 +150,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private string _sheetTaskProgressLabel = string.Empty;
 
     [ObservableProperty]
-    private bool _isFinishEnabled = true;
+    private bool _isFinishEnabled = false;
     [ObservableProperty]
     private bool _isBackEnabled = true;
 
@@ -168,7 +158,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public TransmittalViewModel()
     {
-        var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        var informationVersion = Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            .InformationalVersion;
+
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
@@ -244,6 +237,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             SelectedDistribution = new();
             SelectedDistribution.CollectionChanged += SelectedDistribution_CollectionChanged;
         }
+
+        ValidateTransmittal();
     }
 
     #region Drawing Sheets
@@ -547,14 +542,19 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ProjectDirectory.Add(projectDirectoryModel);
     }
     
-    private bool ValidateDistribution()
+    private void ValidateTransmittal()
     {
+        IsFinishEnabled = true;
+
         if (_recordTransmittal == true && (_distribution is null || _distribution.Count == 0))
         {
-            return false;
+            IsFinishEnabled = false;
         }
+    }
 
-        return true;
+    partial void OnRecordTransmittalChanged(bool value)
+    {
+        ValidateTransmittal();
     }
 
     private void ProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -564,7 +564,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void Distribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        OnPropertyChanged(nameof(IsDistributionValid));
+        ValidateTransmittal();
     }
 
     private void SelectedProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -642,6 +642,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         OpenProgressWindow();
 
+        DispatcherHelper.DoEvents();
+
         try
         {
             var sheets = new FilteredElementCollector(App.RevitDocument);
@@ -682,42 +684,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                  drawingSheet.DrgStatus,
                                  drawingSheet.DrgStatusDescription);
 
-
                             DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
                             SheetTaskProcessed = 0;
                             SheetTaskProgressLabel = string.Empty;
                             SendProgressMessage();
-                            DispatcherHelper.DoEvents();
 
                             if (_exportPDF == true)
                             {
-                                SheetTaskProgressLabel = "Exporting PDF...";
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
-
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-                                    _exportPDFService.ExportPDF($"{fileName}.pdf", 
-                                    App.revitDocument, 
-                                    sheet);
-#else
-                                var filePath = _exportPDFService.ExportPDF(fileName,
-                                    App.RevitDocument,
-                                    views,
-                                    PdfExportOptions);
-
-                                DocumentModel pdf = new DocumentModel(drawingSheet);
-                                pdf.FilePath = filePath;
-                                _exportedFiles.Add(pdf);
-#endif
-
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exporting PDF...DONE";
-                                SheetTaskProcessed += 1;
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
+                                ExportSheetToPDF(drawingSheet, views, fileName);
                             }
-
-
 
                             if (_abortFlag == true)
                             {
@@ -728,30 +703,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_exportDWG == true)
                             {
-                                SheetTaskProgressLabel = "Exporting DWG...";
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
-
-                                DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
-                                DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
-
-                                var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
-                                    DwgExportOptions,
-                                    views,
-                                    App.RevitDocument);
-
-                                DocumentModel dwg = new DocumentModel(drawingSheet);
-                                dwg.FilePath = filePath;
-                                _exportedFiles.Add(dwg);
-
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exporting DWG...DONE";
-                                SheetTaskProcessed += 1;
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
+                                ExportSheetToDWG(drawingSheet, views, fileName);
                             }
-
-
 
                             if (_abortFlag == true)
                             {
@@ -762,30 +715,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                             if (_exportDWF == true)
                             {
-                                SheetTaskProgressLabel = "Exporting DWF...";
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
-
-                                var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
-
-                                var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
-                                    argsheetsize,
-                                    _printSetup,
-                                    DwfExportOptions,
-                                    App.RevitDocument,
-                                    views);
-
-                                DocumentModel dwf = new DocumentModel(drawingSheet);
-                                dwf.FilePath = filePath;
-                                _exportedFiles.Add(dwf);
-
-                                //TODO - actually check if the export worked OK
-                                SheetTaskProgressLabel = "Exporting DWF...DONE";
-                                SheetTaskProcessed += 1;
-                                SendProgressMessage();
-                                DispatcherHelper.DoEvents();
+                                ExportSheetToDWF(drawingSheet, sheet, views, fileName);
                             }
-
 
                             if (_abortFlag == true)
                             {
@@ -804,30 +735,23 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             }
 
                             DrawingSheetsProcessed += 1;
-
-                            // to allow cancel button working
                             SendProgressMessage();
-                            DispatcherHelper.DoEvents();
                         }
                     }
                 }
             }
 
-            StepOneComplete = true;
             CurrentStepProgressLabel = "Recording transmittal...";
             SendProgressMessage();
-            DispatcherHelper.DoEvents();
 
             if (RecordTransmittal == true)
             {
                 RecordTransmittalInDatabase();
-                StepTwoComplete = true;
-                DispatcherHelper.DoEvents();
+
                 CurrentStepProgressLabel = "Displaying report...";
                 SendProgressMessage();
+
                 LaunchTransmittalReport();
-                StepThreeComplete = true;
-                DispatcherHelper.DoEvents();
             }
 
             if(_settingsService.GlobalSettings.UseExtranet == true)
@@ -847,13 +771,88 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
         catch (Exception ex)
         {
-            Autodesk.Revit.UI.TaskDialog.Show("Error", $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
+            Autodesk.Revit.UI.TaskDialog.Show("Error", 
+                $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", 
+                Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
 
             CloseProgress();
 
             this.OnClosingRequest();
             return;
         }
+    }
+
+    private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    {
+        SheetTaskProgressLabel = "Exporting PDF...";
+        SendProgressMessage();
+
+#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
+        _exportPDFService.ExportPDF($"{fileName}.pdf", 
+        App.revitDocument, 
+        sheet);
+#else
+        var filePath = _exportPDFService.ExportPDF(fileName,
+            App.RevitDocument,
+            views,
+            PdfExportOptions);
+
+        DocumentModel pdf = new DocumentModel(drawingSheet);
+        pdf.FilePath = filePath;
+        _exportedFiles.Add(pdf);
+#endif
+
+        //TODO - actually check if the export worked OK
+        SheetTaskProgressLabel = "Exporting PDF...DONE";
+        SheetTaskProcessed += 1;
+        SendProgressMessage();
+    }
+
+    private void ExportSheetToDWG(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    {
+        SheetTaskProgressLabel = "Exporting DWG...";
+        SendProgressMessage();
+
+        DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+        DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
+
+        var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
+            DwgExportOptions,
+            views,
+            App.RevitDocument);
+
+        DocumentModel dwg = new DocumentModel(drawingSheet);
+        dwg.FilePath = filePath;
+        _exportedFiles.Add(dwg);
+
+        //TODO - actually check if the export worked OK
+        SheetTaskProgressLabel = "Exporting DWG...DONE";
+        SheetTaskProcessed += 1;
+        SendProgressMessage();
+    }
+
+    private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName)
+    {
+        SheetTaskProgressLabel = "Exporting DWF...";
+        SendProgressMessage();
+
+        var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
+
+        var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
+            argsheetsize,
+            _printSetup,
+            DwfExportOptions,
+            App.RevitDocument,
+            views);
+
+        DocumentModel dwf = new DocumentModel(drawingSheet);
+        dwf.FilePath = filePath;
+        _exportedFiles.Add(dwf);
+
+        //TODO - actually check if the export worked OK
+        SheetTaskProgressLabel = "Exporting DWF...DONE";
+        SheetTaskProcessed += 1;
+        SendProgressMessage();
     }
 
     private void CopyFilesForExtranet()
@@ -899,32 +898,37 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         }
 
-        Process.Start("explorer.exe",
-    $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName)}");
+        Process.Start("explorer.exe", $"/root, {folderPath}");
 
     }
 
     private void OpenExporerToExportedFilesLocations()
     {
+        List<string> folderPaths = new();
+
+        if (_exportPDF == true)
+        {
+            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()));
+        }
+
         if (_exportDWG == true)
         {
-            Process.Start("explorer.exe",
-                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString())}");
+            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString()));
         }
 
         if (_exportDWF == true)
         {
-            Process.Start("explorer.exe",
-                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString())}");
+            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString()));
         }
 
-        if (_exportPDF == true)
+        var paths = folderPaths.Distinct();
+        foreach (var path in paths)
         {
-            Process.Start("explorer.exe",
-                $"/root, {_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString())}");
+            Process.Start("explorer.exe", $"/root, {path}");
         }
+
     }
-        
+
     private void SetRevisionsIssued(ViewSheet sheet)
     {
         try
@@ -1077,11 +1081,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _progressWindowThread.Start();
     }
 
-    private void CloseProgress()
-    {
-        Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
-    }
-
     private void SendProgressMessage()
     {
         WeakReferenceMessenger.Default.Send(
@@ -1097,4 +1096,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     SheetTaskProgressLabel = _sheetTaskProgressLabel
                 }));
     }
+
+    private void CloseProgress()
+    {
+        Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
+    }
+
+
 }

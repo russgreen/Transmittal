@@ -201,11 +201,13 @@
                                    Text="Project database file not found!" Foreground="Red" 
                                    Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,5"
+                                x:Name="buttonLoadSettingsFromDatabase"
                                 Content="Load settings from database"
                                 Visibility="{Binding IsChecked, ElementName=UseDatabase, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Command="{Binding LoadSettingsFromDatabaseCommand}"/>
+                                Click="buttonLoadSettingsFromDatabase_Click"/>
+                                <!--Command="{Binding LoadSettingsFromDatabaseCommand}"/>-->
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
+                        <!--<TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Template database" 
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
                         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
@@ -215,7 +217,7 @@
                                 x:Name="buttonTemplateDatabaseBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
-                                Click="buttonTemplateDatabaseBrowse_Click"/>
+                                Click="buttonTemplateDatabaseBrowse_Click"/>-->
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Project database"

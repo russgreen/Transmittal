@@ -24,8 +24,17 @@ internal class CommandTransmittalsArchive : IExternalCommand
         var dbFile = _settingsService.GlobalSettings.DatabaseFile;
 
         //if database is found the launch the UI
+        if (_settingsService.GlobalSettings.RecordTransmittals == false)
+        {
+            var td = new TaskDialog("Transmittal")
+            {
+                MainContent = "This project is not configured to store transmittals in a database.  Update settings and try again.",
+                CommonButtons = TaskDialogCommonButtons.Close
+            };
+            td.Show();
 
-
+            return Result.Cancelled;
+        }
 
 #if DEBUG
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);

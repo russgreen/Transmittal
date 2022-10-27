@@ -24,7 +24,17 @@ internal class CommandDirectory : IExternalCommand
         var dbFile = _settingsService.GlobalSettings.DatabaseFile;
 
         //if database is found the launch the UI
+        if(_settingsService.GlobalSettings.RecordTransmittals == false)
+        {
+            var td = new TaskDialog("Transmittal")
+            {
+                MainContent = "This project is not configured to store transmittals in a database.  Update settings and try again.",
+                CommonButtons = TaskDialogCommonButtons.Close
+            };
+            td.Show();
 
+            return Result.Cancelled;
+        }
 
 #if DEBUG
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -32,7 +42,7 @@ internal class CommandDirectory : IExternalCommand
 
         var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\x64\Debug\net48", "Transmittal.Desktop.exe");
 #else
-                        var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
+        var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
 #endif
 
         ProcessStartInfo processStartInfo = new ProcessStartInfo();

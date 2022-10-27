@@ -1,14 +1,14 @@
 ---
 layout: page
-title: Transmittal for Revit
+title: Transmittal Addin
 permalink: /transmittal/
 ---
-Transmittal for Revit provides a wizard style UI to export drawing sheets to PDF, DWG or DWF while optionally recording the transmittal in database for the purpose of reporting.
+Transmittal for Autodesk® Revit® provides a wizard style UI to export drawing sheets to PDF, DWG or DWF while optionally recording the transmittal in database for the purpose of reporting.
 ![image](https://user-images.githubusercontent.com/1886088/178137922-959b268e-ce69-4328-89b9-a65a4c03e2f7.png)
 
 Selected sheets can have revisions and status values set. 
 
-New revisions in the Revit model can be created from within Transmittal while setting the revisions to selected sheets.
+New revisions in the model can be created from within Transmittal while setting the revisions to selected sheets.
 ![image](https://user-images.githubusercontent.com/1886088/176995586-5ae120ed-89dc-44fe-a017-f2e5b4b9082f.png)
 
 Sheet status can be set. Both the status code and status description parameter values will be set.
