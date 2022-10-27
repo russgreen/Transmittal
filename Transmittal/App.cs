@@ -7,6 +7,8 @@ using Transmittal.Library.Services;
 using Transmittal.Library.DataAccess;
 using Transmittal.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Autodesk.Revit.DB.Events;
+using Autodesk.Revit.UI.Events;
 
 namespace Transmittal;
 
@@ -27,12 +29,16 @@ public class App : IExternalApplication
 
     private AppDocEvents _appEvents;
     private readonly string _tabName = "Transmittal";
+
+    private RibbonPanel _ribbonPanel;
     
     public Result OnStartup(UIControlledApplication application)
     {
         ThisApp = this;
         CachedUiCtrApp = application;
         CtrApp = application.ControlledApplication;
+
+        CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
         Ioc.Default.ConfigureServices(new ServiceCollection()
             .AddSingleton<ISettingsService, SettingsService>()
@@ -46,7 +52,7 @@ public class App : IExternalApplication
             .BuildServiceProvider());
 
         // building the ribbon panel
-        var panel = RibbonPanel(application);
+        _ribbonPanel = RibbonPanel(application);
 
         AddAppDocEvents();
 
@@ -68,12 +74,22 @@ public class App : IExternalApplication
         _appEvents = new AppDocEvents();
         _appEvents.EnableEvents();
     }
+
     private void RemoveAppDocEvents()
     {
         _appEvents.DisableEvents();
     }
 
+    private void OnViewActivated(object sender, ViewActivatedEventArgs e)
+    {
+        _ribbonPanel.Enabled = true;
 
+        if (e.Document.IsFamilyDocument)
+        {
+            _ribbonPanel.Enabled = false;
+        }
+
+    }
     #endregion
 
     #region Ribbon Panel
@@ -101,7 +117,7 @@ public class App : IExternalApplication
         PushButton buttonDirectory = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.CommandDirectory),
-                $"Project{System.Environment.NewLine}Directory",
+                $"Project Directory",
                 Assembly.GetExecutingAssembly().Location,
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandDirectory)}"));
         buttonDirectory.ToolTip = "Edit the the project directory";
@@ -111,7 +127,7 @@ public class App : IExternalApplication
         PushButton buttonTransmittalArchive = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.CommandTransmittalsArchive),
-                $"Transmittal{System.Environment.NewLine}Archive",
+                $"Transmittal Archive",
                 Assembly.GetExecutingAssembly().Location,
                 $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittalsArchive)}"));
         buttonTransmittalArchive.ToolTip = "View the transmittal archive";

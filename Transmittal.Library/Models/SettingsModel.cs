@@ -19,7 +19,7 @@ public partial class SettingsModel : BaseModel
     public string DrawingIssueStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "DrawingIssues");
     public string IssueSheetStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
     public string DirectoryStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "Directory");
-    public string ReportStore { get; set; } //= $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Reports\";
+    public string ReportStore { get; set; } = string.Empty;
         
     public string FileNameFilter { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
     public string FileNameFilter2 { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>";

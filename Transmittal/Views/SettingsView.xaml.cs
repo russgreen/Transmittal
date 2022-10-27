@@ -38,6 +38,27 @@ public partial class SettingsView : Window
         }
     }
 
+    private void buttonLoadSettingsFromDatabase_Click(object sender, RoutedEventArgs e)
+    {
+        Ookii.Dialogs.Wpf.TaskDialogButton openButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Load settings from database");
+        Ookii.Dialogs.Wpf.TaskDialogButton cancelButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Cancel);
+
+        Ookii.Dialogs.Wpf.TaskDialog taskDialog = new Ookii.Dialogs.Wpf.TaskDialog()
+        {
+            WindowTitle = "Transmittal Settings",
+            MainInstruction = "Load the settings saved in the database?",
+            ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.CommandLinks,
+            Buttons =  { openButton, cancelButton }
+        };
+
+        Ookii.Dialogs.Wpf.TaskDialogButton button = taskDialog.ShowDialog(this);
+
+        if (button == openButton)
+        {
+            _viewModel.LoadSettingsFromDatabase();
+        }
+    }
+
     private void buttonTemplateDatabaseBrowse_Click(object sender, RoutedEventArgs e)
     {
         //not using ookii file dilaog because it doesn't implement initialDirectory correctly

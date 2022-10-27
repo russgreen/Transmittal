@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B230A017-8A16-4418-B58D-2D9948FC46B7}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		BoldReportsKey.txt = BoldReportsKey.txt
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 		SyncfusionKey.txt = SyncfusionKey.txt

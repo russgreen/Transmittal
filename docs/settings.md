@@ -5,7 +5,7 @@ permalink: /settings/
 ---
 ## Basic Settings
 
-Settings for Transmittal are stored in the Revit model in extensisible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.
+Settings for Transmittal are stored in the Autodesk® Revit® model in extensible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.
 
 ### Filename filter/rule
 The rule used to construct the filename of exported sheet files.  The [available tags](/Transmittal/settings/tags) get replaced with parameter values. The filename rule should not include file extensions.
@@ -38,9 +38,9 @@ Lists of transmittal types and status codes used in the transmittal process
 ## Database
 ### Use Project Database 
 Enables transmittals to be recorded so transmittal issue sheets can be generated. 
-
+<!--
 ### Template database
-The template database defaults to the C:\Program Files\Transmittal\Data folder.
+The template database defaults to the C:\Program Files\Transmittal\Data folder.-->
 
 ### Project database 
 Location of the project database file. Each project should have its own database but where multiple Revit files are used on a project they should all be set to use the same database.  

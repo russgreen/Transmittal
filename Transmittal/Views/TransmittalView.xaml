@@ -36,6 +36,7 @@
                                   FinishEnabled="{Binding IsFinishEnabled}"
                                   Help="WizardControl_Help" 
                                   Cancel="WizardControl_Cancel">
+            
             <interactivity:Interaction.Triggers>
                 <interactivity:EventTrigger EventName="Finish">
                     <interactivity:InvokeCommandAction Command="{Binding ProcessSheetsCommand}"  />
@@ -43,12 +44,12 @@
             </interactivity:Interaction.Triggers>
 
             <syncfusion:WizardPage x:Name="wizardPage1" 
-                Title="Drawing Sheets" 
-                Description="Select the drawings sheets to revise, set status and transmit." 
-                FinishVisible="False" 
-                NextEnabled="{Binding IsSelectedSheetsValid}"
-                BackVisible="False" 
-                BannerBackground="White">
+                                   Title="Drawing Sheets" 
+                                   Description="Select the drawings sheets to revise, set status and transmit." 
+                                   FinishVisible="False" 
+                                   NextEnabled="{Binding IsSelectedSheetsValid}"
+                                   BackVisible="False" 
+                                   BannerBackground="White">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
@@ -108,6 +109,7 @@
                     </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
+            
             <syncfusion:WizardPage x:Name="wizardPage2" 
                                    Title="Export Formats"
                                    Description="Select the formats for the transmittal" 
@@ -281,12 +283,12 @@
                 </StackPanel>
 
             </syncfusion:WizardPage>
+            
             <syncfusion:WizardPage x:Name="wizardPage3" 
                                    Title="Distribution" 
+                                   Description="Select recipients of the drawing transmittal" 
                                    NextVisible="False"
                                    FinishVisible="True"
-                                   Description="Select recipients of the drawing transmittal" 
-                                   FinishEnabled="{Binding IsDistributionValid}"
                                    BannerBackground="White">
                 <Grid>
                     <Grid.RowDefinitions>
