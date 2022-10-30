@@ -116,12 +116,10 @@
   </ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
 		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
 	</Target>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
 		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
 	</Target>
 
