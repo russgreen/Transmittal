@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Reporting.WinForms;
 using System.Reflection;
@@ -39,6 +39,8 @@ namespace Transmittal.Reports
             _transmittalService = transmittalService;          
 
             ConfigureDataModelMapping();
+
+            //Bold.Licensing.BoldLicenseProvider.RegisterLicense("##SyncfusionLicense##");
         }
 
         public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory) //, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
@@ -97,6 +99,12 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
 
+            //var wpf = NewReportViewerWPF(
+            //                    "Transmittal Record",
+            //report,
+            //_settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
+            //    $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
+
             //map to the derived model type
             IMapper iMapper = _configTransmittal.CreateMapper();
             var transmittalReport = iMapper.Map<TransmittalModel, Models.TransmittalReportModel>(transmittal);
@@ -104,7 +112,7 @@ namespace Transmittal.Reports
             //we need to pass in a list<T> to the datasets
             List<Models.TransmittalReportModel> transmittals = new List<Models.TransmittalReportModel>
             {
-                transmittalReport 
+                transmittalReport
             };
             List<Models.TransmittalDistributionReportModel> transmittalDistributions = new List<Models.TransmittalDistributionReportModel>();
 
@@ -137,6 +145,16 @@ namespace Transmittal.Reports
 
             frm.reportViewer1.RefreshReport();
             frm.ShowDialog();
+
+
+            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsProject", projects));
+            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittal", transmittals));
+            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittalItems", transmittal.Items));
+            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittalDistribution", transmittalDistributions));
+
+            //wpf.reportViewer.RefreshReport();
+
+            //wpf.ShowDialog();
         }
 
         public void ShowTransmittalSummaryReport()//bool useISO, string projectIdentifier, string projectName)
@@ -200,7 +218,6 @@ namespace Transmittal.Reports
 
         }
 
-
         private FormReportViewer NewReportViewer(
             string windowTitle,
             Stream report,
@@ -225,6 +242,22 @@ namespace Transmittal.Reports
             return frm;
         }
 
+        //private ReportViewerWindow NewReportViewerWPF(
+        //    string windowTitle,
+        //    Stream report,
+        //    string folderPath,
+        //    string fileName)
+        //{
+        //    ReportViewerWindow reportViewerWindow = new(folderPath, fileName);
+
+        //    reportViewerWindow.Title = windowTitle;
+
+        //    reportViewerWindow.reportViewer.LoadReport(report);
+        //    reportViewerWindow.reportViewer.DataSources.Clear();
+
+        //    return reportViewerWindow;
+        //}
+
         private void ConfigureDataModelMapping()
         {
             _configDirectory = new MapperConfiguration(cfg =>
@@ -248,7 +281,7 @@ namespace Transmittal.Reports
             });
         }
 
-        private Stream GetReport(string reportName)
+        private System.IO.Stream GetReport(string reportName)
         {
             var folder = string.Empty;
 
@@ -260,20 +293,20 @@ namespace Transmittal.Reports
             string reportFilePath = Path.Combine(folder, reportName);
             var dir = Path.GetDirectoryName(reportFilePath);
 
-            if (dir != string.Empty.ToString() ||
+            if (dir != string.Empty.ToString() &
                 File.Exists(reportFilePath))
             {
-                var report = File.OpenRead(reportFilePath);
+                Stream report = new FileStream(reportFilePath, FileMode.Open, FileAccess.Read);
+                report.Seek(0L, SeekOrigin.Begin);
                 return report;
             }
             else
             {
-                var report = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{nameof(Transmittal)}.{nameof(Transmittal.Reports)}.{nameof(Transmittal.Reports.Reports)}.{reportName}");
+                Stream report = Assembly.GetExecutingAssembly().GetManifestResourceStream($"{nameof(Transmittal)}.{nameof(Transmittal.Reports)}.{nameof(Transmittal.Reports.Reports)}.{reportName}");
                 report.Seek(0L, SeekOrigin.Begin);
                 return report;
             }
         }
-
     }
 
 }
