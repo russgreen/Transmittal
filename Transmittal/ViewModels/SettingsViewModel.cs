@@ -16,7 +16,6 @@ using Transmittal.Library.Validation;
 
 namespace Transmittal.ViewModels;
 
-//[INotifyPropertyChanged]
 internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequester
 {
     public string WindowTitle { get; private set; }
@@ -31,7 +30,6 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     public string Originator;
     public string Role;
         
-
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
@@ -226,27 +224,19 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     private void AppendToFolderPath(string filter)
     {   
-        if(filter == "%UserProfile%")
-        {
-            try
-            {
-                var tempPath = DrawingIssueStore;
-                tempPath = tempPath.Replace("<", " ");
-                tempPath = tempPath.Replace(">", " ");
-                var dirInfo = new System.IO.DirectoryInfo(tempPath);
-
-                //this has to go at the start of the string
-                DrawingIssueStore = DrawingIssueStore.Replace(dirInfo.Root.ToString(), filter);
-            }
-            catch 
-            { 
-            }
-            
-            return;
-
-        }
         if (filter != null && !_drawingIssueStore.Contains(filter))
         {
+            if (_drawingIssueStore.StartsWith("%"))
+            {
+                return;
+            }
+
+            if(filter.StartsWith("%")) 
+            {
+                DrawingIssueStore = filter += DrawingIssueStore;
+                return;
+            }
+
             DrawingIssueStore += $"{filter}";
         }
     }
