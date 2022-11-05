@@ -7,8 +7,8 @@ public class RevisionDataModel
     public int Sequence { get; set; }
 
 #if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-        //nothing to add before 2022
-        public RevisionNumberType Numbering { get; set; }
+    //nothing to add before 2022
+    public RevisionNumberType Numbering { get; set; }
 #else
     public string SequenceName { get; set; }
 #endif
