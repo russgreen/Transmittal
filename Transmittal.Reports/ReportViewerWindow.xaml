@@ -1,0 +1,21 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Reports"
+        xmlns:syncfusion="clr-namespace:BoldReports.UI.Xaml;assembly=BoldReports.Wpf"
+        xmlns:Writer="clr-namespace:BoldReports.Writer;assembly=BoldReports.Wpf" x:Class="Transmittal.Reports.ReportViewerWindow"
+        mc:Ignorable="d"
+        Title="ReportViewerWindow" >
+    <Grid>
+        <syncfusion:ReportViewer x:Name="reportViewer" 
+                                 ProcessingMode="Local" 
+                                 ShowHtmlExportButton="False" 
+                                 ShowPPTExportButton="False" 
+                                 ShowXpsExportButton="False" 
+                                 ShowXmlExportButton="False" ReportExport="reportViewer_ReportExport" >
+
+        </syncfusion:ReportViewer>
+    </Grid>
+</Window>

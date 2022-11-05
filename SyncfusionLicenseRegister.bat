@@ -14,13 +14,15 @@ set keyFile=%3
 set DummyKey=##SyncfusionLicense##
 ::from .txt file
 set /p LicenseKey=<"%keyFile%"
+
+echo %LicenseKey%
 	
 ::Replacement statement
 if NOT "%LicenseKey%" == "" (
 	if "%buildType%" == "PreBuild" (
-	powershell -Command "(gc %sourceFile%) -Replace '%DummyKey%','%LicenseKey%'|SC %sourceFile%"
+		powershell -Command "(Get-Content %sourceFile%).Replace('%DummyKey%','%LicenseKey%')|Set-Content %sourceFile%"
 	)
 	if "%buildType%" == "PostBuild" (
-	powershell -Command "(gc %sourceFile%) -Replace '%LicenseKey%','%DummyKey%'|SC %sourceFile%"
+		powershell -Command "(Get-Content %sourceFile%).Replace('%LicenseKey%','%DummyKey%')|Set-Content %sourceFile%"
 	)
 )

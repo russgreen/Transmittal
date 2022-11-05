@@ -16,8 +16,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private const string _schemaGuidV1 = "42DCEC84-45AB-4CA1-8C6B-8C4853A23BCF";
     private const string _vendorID = "Transmittal";
 
-    private const string _paramTransmittalDBTemplateName = "TransmittalDBTemplate";
-    private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
+    //private const string _paramTransmittalDBTemplateName = "TransmittalDBTemplate";
+    //private const string _paramTransmittalDBTemplateGuid = "7d00fc2a-08e5-4973-8f08-8115ee93e1e2";
 
     private Autodesk.Revit.DB.ProjectInfo _projectInfo = null;
 
@@ -290,7 +290,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             Entity entity = new Entity(_schema); // create an entity (object) for this schema (class)
 
             dataStorageElement.SetEntity(entity);
-            //App.RevitDocument.ProjectInformation.SetEntity(entity); // store the entity in the element
 
             createSchema.Commit();
         }
@@ -305,7 +304,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             storeData.Start();
 
-            Entity entity = dataStorageElement.GetEntity(_schema);// App.RevitDocument.ProjectInformation.GetEntity(_schema);
+            Entity entity = dataStorageElement.GetEntity(_schema);
 
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)), _settingsService.GlobalSettings.FileNameFilter);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter2)), _settingsService.GlobalSettings.FileNameFilter2);
@@ -320,11 +319,11 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 ListOfDocumentStatusToDictionary(_settingsService.GlobalSettings.DocumentStatuses));
 
             entity.Set<bool>(_schema.GetField(nameof(_settingsService.GlobalSettings.RecordTransmittals)), _settingsService.GlobalSettings.RecordTransmittals);
-            //entity.Set<string>(schema.GetField(nameof(_settingsService.GlobalSettings.DatabaseTemplateFile)), _settingsService.GlobalSettings.DatabaseTemplateFile);
+            //entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DatabaseTemplateFile)), _settingsService.GlobalSettings.DatabaseTemplateFile);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DatabaseFile)), _settingsService.GlobalSettings.DatabaseFile);
 
-            //entity.Set<string>(schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)), _settingsService.GlobalSettings.IssueSheetStore);
-            //entity.Set<string>(schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)), _settingsService.GlobalSettings.DirectoryStore);
+            entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)), _settingsService.GlobalSettings.IssueSheetStore);
+            entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)), _settingsService.GlobalSettings.DirectoryStore);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.ReportStore)), _settingsService.GlobalSettings.ReportStore);
 
             entity.Set<bool>(_schema.GetField(nameof(_settingsService.GlobalSettings.UseCustomSharedParameters)), _settingsService.GlobalSettings.UseCustomSharedParameters);
@@ -338,7 +337,6 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusParamGuid)), _settingsService.GlobalSettings.SheetStatusParamGuid);
             entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)), _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
 
-            //App.RevitDocument.ProjectInformation.SetEntity(entity);
             dataStorageElement.SetEntity(entity);
 
             storeData.Commit();
@@ -349,7 +347,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         Schema schema = GetSchema(_schemaName);
         DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-        Entity entity = dataStorageElement.GetEntity(_oldSchema);// App.RevitDocument.ProjectInformation.GetEntity(schema);
+        Entity entity = dataStorageElement.GetEntity(_oldSchema);
 
         _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -408,7 +406,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         Schema schema = GetSchema(_schemaNameV1);
         DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-        Entity entity = dataStorageElement.GetEntity(_schema);// App.RevitDocument.ProjectInformation.GetEntity(schema);
+        Entity entity = dataStorageElement.GetEntity(_schema);
 
         _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -437,10 +435,10 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         //_settingsService.GlobalSettings.DatabaseTemplateFile = entity.Get<string>(schema.GetField(
         //    nameof(_settingsService.GlobalSettings.DatabaseTemplateFile)));
 
-        //_settingsService.GlobalSettings.IssueSheetStore = entity.Get<string>(
-        //    schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)));
-        //_settingsService.GlobalSettings.DirectoryStore = entity.Get<string>(
-        //    schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)));
+        _settingsService.GlobalSettings.IssueSheetStore = entity.Get<string>(
+            schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)));
+        _settingsService.GlobalSettings.DirectoryStore = entity.Get<string>(
+            schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)));
         _settingsService.GlobalSettings.ReportStore = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.ReportStore)));
 

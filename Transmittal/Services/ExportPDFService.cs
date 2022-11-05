@@ -54,8 +54,6 @@ internal class ExportPDFService : IExportPDFService
                 {
                     exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf");
                     fullPath = Path.Combine(folderPath, exportFileName);
-                    //fullPath = Path.Combine(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()), 
-                    //    exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf"));
                 }
             }
 
