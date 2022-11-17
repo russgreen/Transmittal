@@ -260,4 +260,9 @@ public partial class SettingsView : Window
         dialog.Owner = this;
         dialog.ShowDialog();
     }
+
+    private void buttonCancel_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
 }

@@ -48,6 +48,7 @@
 	  <None Remove="Resources\Delete.png" />
 	  <None Remove="Resources\Directory_Button.png" />
 	  <None Remove="Resources\GreenCheck.png" />
+	  <None Remove="Resources\Import_Button.png" />
 	  <None Remove="Resources\Report.png" />
 	  <None Remove="Resources\Settings_Button.png" />
 	  <None Remove="Resources\Transmittal.ico" />
@@ -81,6 +82,7 @@
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+		<PackageReference Include="System.Text.Json" Version="7.0.0-rc.2.22472.3" />
 		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
 	</ItemGroup>
 
@@ -92,6 +94,7 @@
 		<Resource Include="Resources\GreenCheck.png" />
 		<Resource Include="Resources\Report.png" />
 		<Resource Include="Resources\Transmittal.ico" />
+		<EmbeddedResource Include="Resources\Import_Button.png" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 		<EmbeddedResource Include="Resources\Archive_Button.png" />
 		<EmbeddedResource Include="Resources\Directory_Button.png" />
