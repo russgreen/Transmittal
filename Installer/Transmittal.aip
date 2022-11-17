@@ -16,10 +16,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{04638C31-0A02-4A20-8251-904FA157C048} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{B7233E82-9A08-4BFC-A9C0-3641487E83BD} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.3.1"/>
+    <ROW Property="ProductVersion" Value="1.4.0"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -163,6 +163,7 @@
     <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Reports.pdb" SelfReg="false"/>
     <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\PropertyChanged.dll" SelfReg="false"/>
+    <ROW File="ImportTemplate.json" Component_="TransmittalParameters.txt_1" FileName="IMPORT~1.JSO|ImportTemplate.json" Attributes="0" SourcePath="..\ImportTemplate.json" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
