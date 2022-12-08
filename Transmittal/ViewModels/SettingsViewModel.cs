@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using System.Reflection;
-using Transmittal.Library.Models;
+using Transmittal.Library.Models; 
 using Transmittal.Library.ViewModels;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -13,6 +13,9 @@ using System.Windows.Controls;
 using Transmittal.Library.Extensions;
 using Transmittal.Requesters;
 using Transmittal.Library.Validation;
+using CommunityToolkit.Mvvm.Messaging;
+using Transmittal.Messages;
+using Transmittal.Models;
 
 namespace Transmittal.ViewModels;
 
@@ -121,6 +124,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         CheckForDatabaseFile();
 
         SetPropertiesFromGlobalSettings();
+
+        WeakReferenceMessenger.Default.Register<ImportSettingsMessage>(this, (r, m) =>
+        {
+            SetPropertiesFromImportedSettings(m.Value);
+        });
     }
 
     private void SetPropertiesFromGlobalSettings()
@@ -157,6 +165,44 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         DocumentTypeParamGuid = _settingsService.GlobalSettings.DocumentTypeParamGuid;
         SheetStatusParamGuid = _settingsService.GlobalSettings.SheetStatusParamGuid;
         SheetStatusDescriptionParamGuid = _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid;
+    }
+
+    private void SetPropertiesFromImportedSettings(ImportSettingsModel settings)
+    {
+        //BASIC SETTINGS
+        FileNameFilter = settings.FileNameFilter;
+        DrawingIssueStore = settings.DrawingIssueStore;
+        DateFormatString = settings.DateFormatString;
+
+        UseISO19650 = settings.UseISO19650;
+        UseExtranet = settings.UseExtranet;
+        FileNameFilter2 = settings.FileNameFilter2;
+
+        IssueFormats = settings.IssueFormats;
+        DocumentStatuses = settings.DocumentStatuses;
+
+        //DATABASE SETTINGS
+        RecordTransmittals = settings.RecordTransmittals;
+        DatabaseFile = string.Empty; //we can't really save the database file in an import settings file
+        //DatabaseTemplateFile = settings.DatabaseTemplateFile; // we're not saving the template file path at the moment so not using this
+        ReportTemplatePath = settings.ReportStore;
+        IssueSheetStorePath = settings.IssueSheetStore;
+        DirectoryStorePath = settings.DirectoryStore;
+
+        //ADVANCED SETTINGS
+        UseCustomSharedParameters = settings.UseCustomSharedParameters;
+        // project parameters
+        ProjectIdentifierParamGuid = settings.ProjectIdentifierParamGuid;
+        OriginatorParamGuid = settings.OriginatorParamGuid;
+        RoleParamGuid = settings.RoleParamGuid;
+        // sheet parameters
+        SheetVolumeParamGuid = settings.SheetVolumeParamGuid;
+        SheetLevelParamGuid = settings.SheetLevelParamGuid;
+        DocumentTypeParamGuid = settings.DocumentTypeParamGuid;
+        SheetStatusParamGuid = settings.SheetStatusParamGuid;
+        SheetStatusDescriptionParamGuid = settings.SheetStatusDescriptionParamGuid;
+
+        //TODO check if all the parameters exist in the project or load them from the shared parameters file.
     }
 
     [RelayCommand]
@@ -293,6 +339,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     public void LoadSettingsFromDatabase()
     {
+        if(_databaseNotFound) return;
+
         _settingsService.GetSettings();
 
         SetPropertiesFromGlobalSettings();

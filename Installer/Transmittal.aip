@@ -16,10 +16,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{150173A5-D592-46CF-B186-7944730BE72A} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{0B25C547-33E3-49BA-909B-4A24BC3B078F} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.3.2"/>
+    <ROW Property="ProductVersion" Value="1.4.1"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -87,7 +87,10 @@
     <ROW Component="System.Memory.dll" ComponentId="{BCDC15C8-FF2D-4457-A886-D6C9AF806B55}" Directory_="APPDIR" Attributes="0" KeyPath="System.Memory.dll"/>
     <ROW Component="System.Numerics.Vectors.dll" ComponentId="{121B9310-B34C-4041-82E7-7C199B8175D2}" Directory_="APPDIR" Attributes="0" KeyPath="System.Numerics.Vectors.dll"/>
     <ROW Component="System.Runtime.CompilerServices.Unsafe.dll" ComponentId="{3FC4569F-EEF4-49AF-8F5C-6F1D802A9D4D}" Directory_="APPDIR" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsafe.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{76CEEFA0-CE6F-46E0-A45F-24F78E12434A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{0F79316F-B672-449B-AACB-07FAA80B44EE}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
     <ROW Component="System.Threading.Tasks.Extensions.dll" ComponentId="{D9D9DC00-54F3-47DF-A03C-F7D5E23BC57B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Threading.Tasks.Extensions.dll"/>
+    <ROW Component="System.ValueTuple.dll" ComponentId="{184496D2-E504-4501-86C8-F5F1E92C7314}" Directory_="APPDIR" Attributes="0" KeyPath="System.ValueTuple.dll"/>
     <ROW Component="TemplateDatabase.tdb" ComponentId="{67545C2E-56FF-4D86-8626-0B6EC14D63BA}" Directory_="Data_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb" Type="0"/>
     <ROW Component="Transmittal.Desktop.exe" ComponentId="{518C98AF-F70D-4888-A2E3-4D7E7B9CC798}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.exe"/>
     <ROW Component="Transmittal.Library.dll" ComponentId="{17247CE9-6423-430C-AD14-F4972BF4BFB1}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Library.dll"/>
@@ -163,6 +166,10 @@
     <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Reports.pdb" SelfReg="false"/>
     <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\PropertyChanged.dll" SelfReg="false"/>
+    <ROW File="ImportTemplate.json" Component_="TransmittalParameters.txt_1" FileName="IMPORT~1.JSO|ImportTemplate.json" Attributes="0" SourcePath="..\ImportTemplate.json" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~7.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R22\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~8.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R22\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="System.ValueTuple.dll" Component_="System.ValueTuple.dll" FileName="SYSTEM~9.DLL|System.ValueTuple.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R22\System.ValueTuple.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -292,6 +299,9 @@
     <ROW Feature_="MainFeature" Component_="Shell"/>
     <ROW Feature_="MainFeature" Component_="open"/>
     <ROW Feature_="MainFeature" Component_="__2"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ValueTuple.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
