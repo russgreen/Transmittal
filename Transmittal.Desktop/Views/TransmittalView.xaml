@@ -26,7 +26,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
@@ -39,7 +39,6 @@
                     <interactivity:InvokeCommandAction Command="{Binding ProcessDocumentsCommand}"  />
                 </interactivity:EventTrigger>
             </interactivity:Interaction.Triggers>
-
             <syncfusion:WizardPage x:Name="wizardPage1" 
                 Title="Documents" 
                 Description="Drag and drop files onto the grid below to record transmittals in the database." 
@@ -103,7 +102,6 @@
                     </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
-            
             <syncfusion:WizardPage x:Name="wizardPage2" 
                                    Title="Distribution" 
                                    Description="Select recipients of the document transmittal" 
@@ -187,6 +185,9 @@
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
 
+                    <CheckBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="10" 
+                              Content="Zip documents" IsChecked="{Binding ZipDocuments}" />
+
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"
                                            SelectedItems="{Binding SelectedDistribution}"
@@ -207,6 +208,7 @@
                     </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
+
 
         </syncfusion:WizardControl>
 

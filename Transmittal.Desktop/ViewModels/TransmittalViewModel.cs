@@ -1,10 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using Transmittal.Desktop.Requesters;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -46,6 +50,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     private bool _hasDirectoryEntriesSelected = false;
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
+    [ObservableProperty]
+    private bool _zipDocuments = false;
 
     [ObservableProperty]
     private bool _isBackEnabled = true;
@@ -201,7 +207,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         IsBackEnabled = false;
 
         try
-        {  
+        {
+            if (_zipDocuments == true)
+            {
+                ZipDocumentsPackages();
+            }
             RecordTransmittalInDatabase();
             LaunchTransmittalReport();
 
@@ -212,6 +222,24 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         {
             this.OnClosingRequest();
             return;
+        }
+    }
+
+    private void ZipDocumentsPackages()
+    {
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(string.Empty);
+        if (System.IO.Directory.Exists(folderPath))
+        {
+            string zipFileName = Path.Combine(folderPath, $"{DateTime.Now.ToStringYYMMDD()}-{DateTime.Now.ToShortTimeString().Replace(":", "")}_DocumentTransmittal.zip");
+
+            using (ZipArchive zip = ZipFile.Open(zipFileName, ZipArchiveMode.Create))
+            {
+                foreach (var document in _documents)
+                {
+                    // Add the entry for each file
+                    zip.CreateEntryFromFile(document.FilePath, document.FileName, CompressionLevel.Optimal);
+                }
+            }
         }
     }
 
@@ -232,6 +260,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
             _settingsService.GlobalSettings.Originator,
             _settingsService.GlobalSettings.Role);
+
+        documentModel.FilePath = file;
 
         if (!Documents.Any(x => x.FileName == documentModel.FileName))
         {

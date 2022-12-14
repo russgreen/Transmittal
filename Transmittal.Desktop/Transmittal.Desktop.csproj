@@ -67,6 +67,7 @@
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.3.0.60" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="20.3.0.60" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
