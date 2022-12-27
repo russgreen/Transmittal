@@ -1,4 +1,7 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
+//using Microsoft.AppCenter;
+//using Microsoft.AppCenter.Analytics;
+//using Microsoft.AppCenter.Crashes;
 using Microsoft.Extensions.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using System.IO;
@@ -18,6 +21,9 @@ public partial class App : Application
         
     void App_Startup(object sender, StartupEventArgs e)
     {
+        //start app center
+        //AppCenter.Start("##AppCenterSecret##", typeof(Analytics), typeof(Crashes));
+
         //build dependancy injection system
         Ioc.Default.ConfigureServices(new ServiceCollection()
             .AddSingleton<ISettingsService, SettingsService>()

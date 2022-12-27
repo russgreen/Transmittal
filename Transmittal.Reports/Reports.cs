@@ -214,8 +214,6 @@ namespace Transmittal.Reports
 
             frm.reportViewer1.RefreshReport();
             frm.ShowDialog();
-
-
         }
 
         private FormReportViewer NewReportViewer(
