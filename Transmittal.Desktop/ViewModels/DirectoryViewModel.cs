@@ -1,18 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Transmittal.Library.Models;
-using Transmittal.Library.ViewModels;
-using Transmittal.Library.Services;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Reflection;
+using Transmittal.Library.Models;
+using Transmittal.Library.Services;
+using Transmittal.Library.ViewModels;
 
 namespace Transmittal.Desktop.ViewModels;
 
@@ -83,7 +78,7 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     private void WireUpPeoplePropertyChangedEvents()
     {
-        _people.CollectionChanged += People_CollectionChanged;
+        People.CollectionChanged += People_CollectionChanged;
 
         foreach (var item in People)
         {
@@ -93,7 +88,7 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     private void WireUpCompaniesPropertyChangedEvents()
     {
-        _companies.CollectionChanged += Companies_CollectionChanged;
+        Companies.CollectionChanged += Companies_CollectionChanged;
 
         foreach (var item in Companies)
         {
@@ -103,11 +98,10 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     private void Company_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if(_selectedCompany != null)
+        if(SelectedCompany != null)
         {
-            _contactDirectoryService.UpdateCompany(_selectedCompany);
+            _contactDirectoryService.UpdateCompany(SelectedCompany);
         }
-
     }
 
     private void Person_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -118,9 +112,9 @@ internal partial class DirectoryViewModel : BaseViewModel
             return;
         }
 
-        if(_selectedPerson != null)
+        if(SelectedPerson != null)
         {
-            _contactDirectoryService.UpdatePerson(_selectedPerson);
+            _contactDirectoryService.UpdatePerson(SelectedPerson);
         }
     }
 
@@ -161,15 +155,25 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void RemovePerson()
     {
-        //TODO impement method
+        if (SelectedPerson != null)
+        {
+            if (_transmittalService.GetTransmittals_ByPerson(SelectedPerson.ID).Count == 0)
+            {
+                _contactDirectoryService.DeletePerson(SelectedPerson);
+            }
+        }
+    }
 
-        //check if the person has any transmittals recorded against them
-
-        //if person transmittals = 0 then
-
-        //remove the person from the database
-
-        //remoe the person from the project directory
+    [RelayCommand]
+    private void RemoveCompany()
+    {
+        if (SelectedCompany != null)
+        {
+            if (_contactDirectoryService.GetPeople_ByCompany(SelectedCompany.ID).Count == 0)
+            {
+                _contactDirectoryService.DeleteCompany(SelectedCompany);
+            }
+        }
     }
 
     [RelayCommand]
@@ -177,8 +181,8 @@ internal partial class DirectoryViewModel : BaseViewModel
     {
         ProjectDirectoryModel projectDirectoryModel = new()
         {
-            Person = _selectedPerson,
-            Company = _companies.ToList().Find(x => x.ID == _selectedPerson.CompanyID)
+            Person = SelectedPerson,
+            Company = Companies.ToList().Find(x => x.ID == SelectedPerson.CompanyID)
         };
 
         Library.Helpers.VCardHelper.ExportVard(projectDirectoryModel);
@@ -189,7 +193,9 @@ internal partial class DirectoryViewModel : BaseViewModel
     {
         BuildProjectDirectory();
 
-        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        Reports.Reports reports = new(_settingsService, 
+            _contactDirectoryService, 
+            _transmittalService);
 
         reports.ShowProjectDirectoryReport(_projectDirectory);
     }

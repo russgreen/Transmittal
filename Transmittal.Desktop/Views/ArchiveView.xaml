@@ -10,7 +10,9 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:ArchiveViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="800" Height="450" 
-        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="450">
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" 
+        MinWidth="800" MinHeight="450">
     <Window.Resources>
         <ResourceDictionary>
             <converters:AddNewRowPositionConverter x:Key="AddNewRowPositionConverter"/>
@@ -54,8 +56,7 @@
                 </StackPanel>
             </Button>
             <Button x:Name="Button_MergeTransmittals"  
-                    IsEnabled="{Binding CanMergeTransmittals}" Click="Button_MergeTransmittals_Click"
-                     >
+                    IsEnabled="{Binding CanMergeTransmittals}" Click="Button_MergeTransmittals_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/DataMerge.png" Width="18" />
                     <TextBlock Margin="3,0,0,0">Merge Transmittals</TextBlock>
@@ -101,7 +102,10 @@
                                        GridValidationMode="InEdit"
                                        ColumnSizer="AutoLastColumnFill"
                                        ItemsSource="{Binding TransmittalItems}"
-                                       SelectedItem="{Binding SelectedTransmittalItem}" AddNewRowInitiating="sfDataGridTransmittalItems_AddNewRowInitiating">
+                                       SelectedItem="{Binding SelectedTransmittalItem}" 
+                                       AddNewRowInitiating="sfDataGridTransmittalItems_AddNewRowInitiating" 
+                                       AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}" 
+                                       RecordDeleting="sfDataGridTransmittalItems_RecordDeleting">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn MappingName="DrgProj" HeaderText="Project" />
                         <syncfusion:GridTextColumn MappingName="DrgOriginator" HeaderText="Originator" />
@@ -131,7 +135,9 @@
                                        AddNewRowPosition="{Binding IsChecked, ElementName=EnableEditButton, Converter={StaticResource AddNewRowPositionConverter}}"
                                        ColumnSizer="AutoLastColumnFill"
                                        ItemsSource="{Binding TransmittalDistribution}"
-                                       SelectedItem="{Binding SelectedTransmittalDistribution}">
+                                       SelectedItem="{Binding SelectedTransmittalDistribution}" 
+                                       AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}" 
+                                       RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting" >
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridComboBoxColumn HeaderText="Contact" 
                                                        ColumnSizer="AutoLastColumnFill"
