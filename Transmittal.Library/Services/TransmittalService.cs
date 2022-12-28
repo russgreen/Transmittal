@@ -161,7 +161,22 @@ public class TransmittalService : ITransmittalService
 
     public List<TransmittalModel> GetTransmittals_ByPerson(int personID)
     {
-        throw new NotImplementedException();
+        string sql = "SELECT Transmittal.*, TransmittalDistribution.PersonID " +
+            "FROM Transmittal " +
+            "INNER JOIN TransmittalDistribution ON Transmittal.ID = TransmittalDistribution.TransID " +
+            "WHERE TransmittalDistribution.PersonID = @PersonID;";
+
+        var transmittals = _connection.LoadData<TransmittalModel, dynamic>(
+            _settingsService.GlobalSettings.DatabaseFile,
+            sql, new { PersonID = personID }).ToList();
+
+        foreach (TransmittalModel transmittal in transmittals)
+        {
+            transmittal.Items = GetTransmittalItems_ByTransmittal(transmittal.ID);
+            transmittal.Distribution = GetTransmittalDistributions_ByTransmittal(transmittal.ID);
+        }
+
+        return transmittals;
     }
 
     public TransmittalModel MergeTransmittals(List<TransmittalModel> transmittalsToMerge)
