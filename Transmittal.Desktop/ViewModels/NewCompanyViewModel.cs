@@ -30,8 +30,8 @@ namespace Transmittal.Desktop.ViewModels
         [RelayCommand]
         private void SendCompany()
         {
-            _company.CompanyName = _companyName;
-            _callingViewModel.CompanyComplete(_company);
+            Company.CompanyName = CompanyName;
+            _callingViewModel.CompanyComplete(Company);
             this.OnClosingRequest();
         }
     }

@@ -240,7 +240,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         _settingsServiceRvt.UpdateSettingsRvt();
 
-        if (_recordTransmittals == true)
+        if (RecordTransmittals == true)
         {
             // we have a database file so save a copy of settings to the database for use by desktop.exe
             _settingsService.UpdateSettings();
@@ -252,7 +252,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     private void AppendToFileNameFilter(string filter)
     {
-        if (filter != null && !_fileNameFilter.Contains(filter))
+        if (filter != null && !FileNameFilter.Contains(filter))
         {
             FileNameFilter += $"{filter}";
         }
@@ -261,7 +261,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     private void AppendToFileNameFilter2(string filter)
     {
-        if (filter != null && !_fileNameFilter2.Contains(filter))
+        if (filter != null && !FileNameFilter2.Contains(filter))
         {
             FileNameFilter2 += $"{filter}";
         }
@@ -270,9 +270,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     private void AppendToFolderPath(string filter)
     {   
-        if (filter != null && !_drawingIssueStore.Contains(filter))
+        if (filter != null && !DrawingIssueStore.Contains(filter))
         {
-            if (_drawingIssueStore.StartsWith("%"))
+            if (DrawingIssueStore.StartsWith("%"))
             {
                 return;
             }
@@ -339,7 +339,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     public void LoadSettingsFromDatabase()
     {
-        if(_databaseNotFound) return;
+        if(DatabaseNotFound) return;
 
         _settingsService.GetSettings();
 
@@ -375,7 +375,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         if (DatabaseFile != null)
         {
-            if (_recordTransmittals)
+            if (RecordTransmittals)
             {
                 if (!_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile.Trim(), false))
                 {

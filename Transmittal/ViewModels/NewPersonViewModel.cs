@@ -58,11 +58,11 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     [RelayCommand]
     private void SendPerson()
     {
-        _person.FirstName = _firstName;
-        _person.LastName = _lastName;
-        _person.Email = _email;
-        _person.CompanyID = _companyID;
-        _callingViewModel.PersonComplete(_person);
+        Person.FirstName = FirstName;
+        Person.LastName = LastName;
+        Person.Email = Email;
+        Person.CompanyID = CompanyID;
+        _callingViewModel.PersonComplete(Person);
         this.OnClosingRequest();
     }
 

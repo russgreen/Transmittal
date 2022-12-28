@@ -57,13 +57,13 @@ internal partial class DirectoryViewModel : BaseViewModel
     {
         _projectDirectory = new();
 
-        foreach (var person in _people)
+        foreach (var person in People)
         {
             var company = new CompanyModel();
 
             if(person.CompanyID > 0)
             {
-                company = _companies.ToList().Find(x => x.ID == person.CompanyID);
+                company = Companies.ToList().Find(x => x.ID == person.CompanyID);
             }
 
             ProjectDirectoryModel projectDirectoryModel = new()
