@@ -1,15 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -21,7 +17,7 @@ internal partial class ArchiveViewModel : BaseViewModel
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
-    
+
     public string WindowTitle { get; private set; }
 
     [ObservableProperty]
@@ -192,6 +188,55 @@ internal partial class ArchiveViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private void DuplicateTransmittal()
+    {
+        TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
+        TransmittalModel newTransmittal = new();
+
+        _transmittalService.CreateTransmittal(newTransmittal);
+
+        foreach (TransmittalItemModel item in transmittalModel.Items)
+        {
+            TransmittalItemModel newItem = new();
+
+            item.CopyPropertiesTo(newItem); 
+            newItem.TransID = newTransmittal.ID;
+
+            _transmittalService.CreateTransmittalItem(newItem);
+
+            newTransmittal.Items.Add(newItem);
+        }
+
+        foreach (TransmittalDistributionModel dist in transmittalModel.Distribution)
+        {
+            TransmittalDistributionModel newDist = new();
+
+            dist.CopyPropertiesTo(newDist);
+            newDist.TransID = newTransmittal.ID;
+
+            _transmittalService.CreateTransmittalDist(newDist);
+
+            newTransmittal.Distribution.Add(newDist);
+        }
+
+        Transmittals.Add(newTransmittal);
+        WireUpTransmittalPropertyChangedEvents(); 
+    }
+
+    [RelayCommand]
+    private void DeleteTransmittal()
+    {
+        TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
+
+        if (transmittalModel.Items.Count == 0 &&
+                transmittalModel.Distribution.Count == 0)
+        {
+            _transmittalService.DeleteTransmittal(transmittalModel);
+            Transmittals.Remove(transmittalModel);
+        }        
+    }
+
+    [RelayCommand]
     private void ShowSummaryReport()
     {
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
@@ -212,6 +257,9 @@ internal partial class ArchiveViewModel : BaseViewModel
         if (SelectedTransmittalItem != null)
         {
             _transmittalService.DeleteTransmittalItem(SelectedTransmittalItem);
+
+            var transmittal = SelectedTransmittals.First() as TransmittalModel;
+            transmittal.Items.Remove(SelectedTransmittalItem);
         }
     }
 
@@ -221,6 +269,10 @@ internal partial class ArchiveViewModel : BaseViewModel
         if (SelectedTransmittalDistribution != null)
         {
             _transmittalService.DeleteTransmittalDist(SelectedTransmittalDistribution);
+
+            var transmittal = SelectedTransmittals.First() as TransmittalModel;
+            transmittal.Distribution.Remove(SelectedTransmittalDistribution);
         }
     }
+
 }

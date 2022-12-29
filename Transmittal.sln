@@ -24,6 +24,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Reports", "Tran
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Desktop", "Transmittal.Desktop\Transmittal.Desktop.csproj", "{F0665B9A-18BE-41CB-846C-1B970E352BBE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F7D733C9-F838-4BB2-B16A-5FD176F37105}"
+	ProjectSection(SolutionItems) = preProject
+		docs\404.html = docs\404.html
+		docs\archive.md = docs\archive.md
+		docs\directory.md = docs\directory.md
+		docs\index.md = docs\index.md
+		docs\logo.png = docs\logo.png
+		docs\reports.md = docs\reports.md
+		docs\settings.md = docs\settings.md
+		docs\tags.md = docs\tags.md
+		docs\transmittal-revit.md = docs\transmittal-revit.md
+		docs\transmittal.md = docs\transmittal.md
+		docs\update_database.md = docs\update_database.md
+		docs\_config.yml = docs\_config.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug 2022|x64 = Debug 2022|x64

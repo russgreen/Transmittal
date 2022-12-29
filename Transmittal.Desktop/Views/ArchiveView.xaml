@@ -35,33 +35,53 @@
         </Grid.RowDefinitions>
 
         <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="White" >
-            <Button Command="{Binding LoadDataCommand}">
+            <Button Command="{Binding LoadDataCommand}" Margin="0,0,5,0" 
+                    ToolTip="Reload the data from the tdb file">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/Reload.png" Width="18" />
-                    <TextBlock Margin="3,0,0,0">Reload Data</TextBlock>
+                    <TextBlock Margin="3,0,0,0">Reload</TextBlock>
                 </StackPanel>
             </Button>
             <Button IsEnabled="{Binding ItemSelected}"
-                    Command="{Binding ShowTransmittalReportCommand}">
+                    Command="{Binding ShowTransmittalReportCommand}" Margin="0,0,5,0"
+                    ToolTip="View the transmittal report">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/Report.png" Width="18" />
-                    <TextBlock Margin="3,0,0,0">Transmittal Report</TextBlock>
+                    <TextBlock Margin="3,0,0,0">Transmittal</TextBlock>
                 </StackPanel>
             </Button>
             <Button IsEnabled="{Binding HasDatabase}"
-                    Command="{Binding ShowSummaryReportCommand}">
+                    Command="{Binding ShowSummaryReportCommand}" Margin="0,0,5,0"
+                    ToolTip="View the transmittal summary report">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/Report.png" Width="18" />
-                    <TextBlock Margin="3,0,0,0">Summary Report</TextBlock>
+                    <TextBlock Margin="3,0,0,0">Summary</TextBlock>
                 </StackPanel>
             </Button>
             <Button x:Name="Button_MergeTransmittals"  
-                    IsEnabled="{Binding CanMergeTransmittals}" Click="Button_MergeTransmittals_Click" >
+                    IsEnabled="{Binding CanMergeTransmittals}" 
+                    Click="Button_MergeTransmittals_Click" Margin="0,0,5,0" 
+                    ToolTip="Merge selected transmittals into a single transmittal record">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/DataMerge.png" Width="18" />
-                    <TextBlock Margin="3,0,0,0">Merge Transmittals</TextBlock>
+                    <TextBlock Margin="3,0,0,0">Merge</TextBlock>
                 </StackPanel>
             </Button>
+            <Button IsEnabled="{Binding ItemSelected}"
+                    Command="{Binding DuplicateTransmittalCommand}" Margin="0,0,5,0"
+                    ToolTip="Duplicate the selected transmittal to a new transmittal record dated today">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Duplicate.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Duplicate</TextBlock>
+                </StackPanel>
+            </Button>
+            <!--<Button IsEnabled="{Binding ItemSelected}"
+                    Command="{Binding DeleteTransmittalCommand}" Margin="0,0,5,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Delete.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Delete</TextBlock>
+                </StackPanel>
+            </Button>-->
             <ToggleButton x:Name="EnableEditButton" 
                           IsEnabled="{Binding ItemSelected}" >
                 <StackPanel Orientation="Horizontal">
@@ -78,9 +98,12 @@
                                AllowFiltering="True"
                                SelectionMode="Extended"
                                SelectedItems="{Binding SelectedTransmittals,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                               ItemsSource="{Binding Transmittals}">
+                               ItemsSource="{Binding Transmittals}" 
+                               AllowDeleting="True"
+                               RecordDeleting="sfDataGridTransmittals_RecordDeleting">
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridDateTimeColumn HeaderText="Transmittal Date" MappingName = "TransDate" 
+                <syncfusion:GridDateTimeColumn HeaderText="Transmittal Date" 
+                                               MappingName="TransDate" 
                                                IsReadOnly="True" 
                                                TextAlignment="Left" 
                                                Pattern="LongDate" />
@@ -136,8 +159,8 @@
                                        ColumnSizer="AutoLastColumnFill"
                                        ItemsSource="{Binding TransmittalDistribution}"
                                        SelectedItem="{Binding SelectedTransmittalDistribution}" 
-                                       AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}" 
-                                       RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting" >
+                                       AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}"
+                                       RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridComboBoxColumn HeaderText="Contact" 
                                                        ColumnSizer="AutoLastColumnFill"

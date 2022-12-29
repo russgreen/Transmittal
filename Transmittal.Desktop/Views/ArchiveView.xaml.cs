@@ -1,19 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 
@@ -75,6 +63,22 @@ public partial class ArchiveView : Window
         }
     }
 
+    private void sfDataGridTransmittals_RecordDeleting(object sender, RecordDeletingEventArgs e)
+    {
+        if (_viewModel.SelectedTransmittals.Count == 1)
+        {
+            TransmittalModel transmittal = _viewModel.SelectedTransmittals.FirstOrDefault() as TransmittalModel; //   .Cast<TransmittalModel>();   //.Cast<TransmittalModel>().ToList();
+
+            if(transmittal.Items.Count == 0 &&
+                transmittal.Distribution.Count == 0) 
+            { 
+                _viewModel.DeleteTransmittalCommand.Execute(null);
+            }
+        }
+
+        e.Cancel = true;
+    }
+
     private void sfDataGridTransmittalItems_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
         TaskDialogButton deleteButton = new($"Delete the selected transmittal item {_viewModel.SelectedTransmittalItem.DrgNumber}. This action cannot be undone.");
@@ -124,4 +128,6 @@ public partial class ArchiveView : Window
 
         e.Cancel = true;
     }
+
+
 }
