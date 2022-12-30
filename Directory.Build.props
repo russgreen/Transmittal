@@ -8,7 +8,7 @@
     <FileVersion>$(PackageVersion).0</FileVersion>
     <InformationalVersion>$(PackageVersion).0</InformationalVersion>-->
 
-    <VersionPrefix>1.4.2</VersionPrefix>
+    <VersionPrefix>1.5.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
