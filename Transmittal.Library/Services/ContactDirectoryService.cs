@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reflection;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 
@@ -164,6 +165,14 @@ public class ContactDirectoryService : IContactDirectoryService
             });
     }
 
+    public void DeleteCompany(CompanyModel model) 
+    {
+        string sql = "DELETE FROM Company WHERE (ID = @ID);";
+
+        _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
+            sql, new { ID = model.ID });
+    }
+
     public void UpdatePerson(PersonModel model)
     {
         string sql = "UPDATE Person SET " +
@@ -195,4 +204,11 @@ public class ContactDirectoryService : IContactDirectoryService
             });
     }
 
+    public void DeletePerson(PersonModel model)
+    {
+        string sql = "DELETE FROM Person WHERE (ID = @ID);";
+
+        _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
+            sql, new { ID = model.ID });
+    }
 }

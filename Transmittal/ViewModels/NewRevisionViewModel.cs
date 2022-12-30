@@ -55,15 +55,15 @@ internal partial class NewRevisionViewModel : BaseViewModel
         RevisionDataModel revisionModel = new RevisionDataModel
         {
             RevDate = _revisionDate.ToString(_settingsService.GlobalSettings.DateFormatString),
-            Description = _description,
-            IssuedBy = _issuedBy,
-            IssuedTo = _issuedTo,
+            Description = Description,
+            IssuedBy = IssuedBy,
+            IssuedTo = IssuedTo,
             Numbering = (RevisionNumberType)_revisionSequence
         };
 
 #else
         //create a new revision model & pupulate the values from the form
-        RevisionDataModel revisionModel = new RevisionDataModel
+        RevisionDataModel revisionModel = new()
         {
             RevDate = RevisionDate.ToString(_settingsService.GlobalSettings.DateFormatString),
             Description = Description,

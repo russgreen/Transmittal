@@ -24,7 +24,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
     [NotifyPropertyChangedFor(nameof(IsRevisionSelected))]
     private RevisionDataModel _selectedRevision;
 
-    public bool IsRevisionSelected => _selectedRevision != null;
+    public bool IsRevisionSelected => SelectedRevision != null;
 
     public RevisionsViewModel(IRevisionRequester callingViewModel)
     {
@@ -93,7 +93,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
     [RelayCommand]
     private void SendRevision()
     {
-        _callingViewModel.RevisionComplete(_selectedRevision);
+        _callingViewModel.RevisionComplete(SelectedRevision);
         this.OnClosingRequest();
     }
 }

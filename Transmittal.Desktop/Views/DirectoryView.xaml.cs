@@ -1,7 +1,10 @@
-﻿using Syncfusion.UI.Xaml.Grid;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Ookii.Dialogs.Wpf;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using System.Windows;
 using System.Windows.Controls;
+using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Views;
 /// <summary>
@@ -9,21 +12,31 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class DirectoryView : Window
 {
+    private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
+    private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
+
     GridRowSizingOptions _gridRowResizingOptions = new GridRowSizingOptions();
     //To get the calculated height from GetAutoRowHeight method.    
     private double _autoHeight = double.NaN;
+
+    private readonly ViewModels.DirectoryViewModel _viewModel;
 
     public DirectoryView()
     {
         InitializeComponent();
 
-        this.sfDataGridPeople.QueryRowHeight += sfDataGridPeople_QueryRowHeight;
-        this.sfDataGridPeople.CurrentCellEndEdit += sfDataGridPeople_CurrentCellEndEdit;        
-        this.sfDataGridCompanies.QueryRowHeight += sfDataGridCompanies_QueryRowHeight;
-        this.sfDataGridCompanies.CurrentCellEndEdit += sfDataGridCompanies_CurrentCellEndEdit;
+        _viewModel = (ViewModels.DirectoryViewModel)this.DataContext;
 
-        this.sfDataGridPeople.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridPeople);
-        this.sfDataGridCompanies.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridCompanies);
+        //this.sfDataGridPeople.QueryRowHeight += sfDataGridPeople_QueryRowHeight;
+        //this.sfDataGridPeople.CurrentCellEndEdit += sfDataGridPeople_CurrentCellEndEdit;    
+        //this.sfDataGridPeople.RecordDeleting += sfDataGridPeople_RecordDeleting;        
+
+        //this.sfDataGridCompanies.QueryRowHeight += sfDataGridCompanies_QueryRowHeight;
+        //this.sfDataGridCompanies.CurrentCellEndEdit += sfDataGridCompanies_CurrentCellEndEdit;
+        //this.sfDataGridCompanies.RecordDeleting += sfDataGridPeople_RecordDeleting;
+
+        //this.sfDataGridPeople.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridPeople);
+        //this.sfDataGridCompanies.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridCompanies);
     }
 
     private void sfDataGridPeople_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs args)
@@ -68,4 +81,62 @@ public partial class DirectoryView : Window
         }
 
     }
+
+    private void sfDataGridPeople_RecordDeleting(object sender, RecordDeletingEventArgs e)
+    {
+        TaskDialogButton deleteButton = new($"Remove the selected contact from the transmittal. This action cannot be undone.");
+        TaskDialogButton cancelButton = new(ButtonType.Cancel);
+
+        TaskDialog taskDialog = new()
+        {
+            WindowTitle = "Delete contact from transmittal",
+            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
+            Buttons = { deleteButton, cancelButton }
+        };
+
+        if (_viewModel.SelectedPerson != null)
+        {
+            if (_transmittalService.GetTransmittals_ByPerson(_viewModel.SelectedPerson.ID).Count == 0)
+            {
+                TaskDialogButton button = taskDialog.ShowDialog(this);
+                if (button == deleteButton)
+                {
+                    _viewModel.RemovePersonCommand.Execute(null);
+                    return;
+                }
+            }
+        }
+
+        e.Cancel = true;
+    }
+
+    private void sfDataGridCompanies_RecordDeleting(object sender, RecordDeletingEventArgs e)
+    {
+        TaskDialogButton deleteButton = new($"Remove the selected company from the database. This action cannot be undone.");
+        TaskDialogButton cancelButton = new(ButtonType.Cancel);
+
+        TaskDialog taskDialog = new()
+        {
+            WindowTitle = "Delete company",
+            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
+            Buttons = { deleteButton, cancelButton }
+        };
+
+        if (_viewModel.SelectedCompany != null)
+        {
+            if (_contactDirectoryService.GetPeople_ByCompany(_viewModel.SelectedCompany.ID).Count == 0)
+            {
+                TaskDialogButton button = taskDialog.ShowDialog(this);
+                if (button == deleteButton)
+                {
+                    _viewModel.RemoveCompanyCommand.Execute(null);
+                    return;
+                }
+            }
+        }
+
+        e.Cancel = true;
+    }
+
+
 }

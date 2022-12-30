@@ -26,9 +26,14 @@ public interface IContactDirectoryService
     /// <param name="model"></param>
     void UpdateCompany(CompanyModel model);
     /// <summary>
-    /// Get a list of all contacts within a company
+    /// Delete a compabny
     /// </summary>
     /// <param name="companyID"></param>
+    void DeleteCompany(CompanyModel model);
+    /// <summary>
+    /// Get a list of all contacts within a company
+    /// </summary>
+    /// <param name="model"></param>
     /// <returns>A list of PersonModel</returns>
     List<PersonModel> GetPeople_ByCompany(int companyID);
     /// <summary>
@@ -52,6 +57,11 @@ public interface IContactDirectoryService
     /// </summary>
     /// <param name="model"></param>
     void UpdatePerson(PersonModel model);
+    /// <summary>
+    /// Delete a contact
+    /// </summary>
+    /// <param name="model"></param>
+    void DeletePerson(PersonModel model);
 
     
     ///// <summary>

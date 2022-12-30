@@ -104,7 +104,7 @@ namespace Transmittal.ViewModels
         [RelayCommand]
         private void SendParameter()
         {
-            _callingViewModel.ParameterComplete(_targetVariable, _selectedParameter.Guid);
+            _callingViewModel.ParameterComplete(TargetVariable, SelectedParameter.Guid);
             this.OnClosingRequest();
         }
 

@@ -9,7 +9,9 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:DirectoryViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="800" Height="450" 
-        FontSize="12" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="450">
+        FontSize="12" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" 
+        MinWidth="800" MinHeight="450">
     <Window.DataContext>
         <viewModels:DirectoryViewModel />
     </Window.DataContext>
@@ -52,7 +54,11 @@
                                        AutoGenerateColumns="False" 
                                        AddNewRowPosition="Bottom"
                                        AddNewRowText="Click here to add a new person to the directory"                                      
-                                       GridValidationMode="InEdit" EditTrigger="OnTap">
+                                       GridValidationMode="InEdit" 
+                                       AllowDeleting="True" 
+                                       CurrentCellEndEdit="sfDataGridPeople_CurrentCellEndEdit" 
+                                       QueryRowHeight="sfDataGridPeople_QueryRowHeight" 
+                                       RecordDeleting="sfDataGridPeople_RecordDeleting" >
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridCheckBoxColumn MappingName="ShowInReport" HeaderText="Print" Width="50" />
                         <syncfusion:GridComboBoxColumn Width="350" 
@@ -100,8 +106,11 @@
                                        AutoGenerateColumns="False" 
                                        AddNewRowPosition="Bottom" 
                                        AddNewRowText="Click here to add a new company to the directory"
-                                       GridValidationMode="InEdit" EditTrigger="OnTap">
-                  
+                                       GridValidationMode="InEdit" EditTrigger="OnTap" 
+                                       AllowDeleting="True" 
+                                       CurrentCellEndEdit="sfDataGridCompanies_CurrentCellEndEdit" 
+                                       QueryRowHeight="sfDataGridCompanies_QueryRowHeight" 
+                                       RecordDeleting="sfDataGridCompanies_RecordDeleting" >
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn MappingName="CompanyName" HeaderText="Company Name" Width="350" />
                         <syncfusion:GridTextColumn MappingName="Role" HeaderText="Role" Width="150" />
@@ -128,7 +137,6 @@
                         <syncfusion:GridNumericColumn MappingName="Contacts.Count" HeaderText="People" Width="50" NumberDecimalDigits="0" AllowEditing="False" />
                     </syncfusion:SfDataGrid.Columns>
                 </syncfusion:SfDataGrid>
-
             </TabItem>
         </TabControl>
 

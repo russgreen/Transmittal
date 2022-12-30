@@ -1,15 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -21,7 +17,7 @@ internal partial class ArchiveViewModel : BaseViewModel
     private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
-    
+
     public string WindowTitle { get; private set; }
 
     [ObservableProperty]
@@ -65,7 +61,7 @@ internal partial class ArchiveViewModel : BaseViewModel
 
     private void WireUpTransmittalPropertyChangedEvents()
     {
-        foreach (var transmittal in _transmittals)
+        foreach (var transmittal in Transmittals)
         {
             foreach (var item in transmittal.Items)
             {
@@ -82,17 +78,17 @@ internal partial class ArchiveViewModel : BaseViewModel
 
     private void TransmittalItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if(_selectedTransmittalItem != null)
+        if(SelectedTransmittalItem != null)
         {
-            _transmittalService.UpdateTransmittalItem(_selectedTransmittalItem);
+            _transmittalService.UpdateTransmittalItem(SelectedTransmittalItem);
         }
     }
 
     private void Distribution_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if(_selectedTransmittalDistribution != null)
+        if(SelectedTransmittalDistribution != null)
         {
-            _transmittalService.UpdateTransmittalDist(_selectedTransmittalDistribution);
+            _transmittalService.UpdateTransmittalDist(SelectedTransmittalDistribution);
         }
     }
     
@@ -100,7 +96,7 @@ internal partial class ArchiveViewModel : BaseViewModel
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            TransmittalModel transmittalModel = _selectedTransmittals.First() as TransmittalModel;
+            TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
             TransmittalItemModel itemModel = (TransmittalItemModel)e.NewItems[0];
             
             itemModel.TransID = transmittalModel.ID;
@@ -115,7 +111,7 @@ internal partial class ArchiveViewModel : BaseViewModel
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            TransmittalModel transmittalModel = _selectedTransmittals.First() as TransmittalModel;
+            TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
             TransmittalDistributionModel distributionModel = (TransmittalDistributionModel)e.NewItems[0];
 
             distributionModel.TransID = transmittalModel.ID;
@@ -129,17 +125,17 @@ internal partial class ArchiveViewModel : BaseViewModel
     private void SelectedTransmittals_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         CanMergeTransmittals = false;
-        ItemSelected = (_selectedTransmittals.Count == 1);
+        ItemSelected = (SelectedTransmittals.Count == 1);
 
-        if (_selectedTransmittals.Count == 0 & TransmittalItems != null)
+        if (SelectedTransmittals.Count == 0 & TransmittalItems != null)
         {
             TransmittalItems.Clear();
             TransmittalDistribution.Clear();
         }
         
-        if (_selectedTransmittals.Count == 1)
+        if (SelectedTransmittals.Count == 1)
         {
-            TransmittalModel transmittalModel = _selectedTransmittals.First() as TransmittalModel;
+            TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
             TransmittalItems = new ObservableCollection<TransmittalItemModel>(transmittalModel.Items);
             TransmittalDistribution = new ObservableCollection<TransmittalDistributionModel>(transmittalModel.Distribution);
 
@@ -147,14 +143,14 @@ internal partial class ArchiveViewModel : BaseViewModel
             TransmittalDistribution.CollectionChanged += TransmittalDistribution_CollectionChanged;
         }
 
-        if (_selectedTransmittals.Count > 1)
+        if (SelectedTransmittals.Count > 1)
         {
             CanMergeTransmittals = false;
 
             TransmittalItems.Clear();
             TransmittalDistribution.Clear();
 
-            List<TransmittalModel> transmittals = _selectedTransmittals.Cast<TransmittalModel>().ToList();
+            List<TransmittalModel> transmittals = SelectedTransmittals.Cast<TransmittalModel>().ToList();
             if (transmittals
                 .TrueForAll(i => i.TransDate.Date == transmittals
                 .FirstOrDefault().TransDate.Date))
@@ -179,16 +175,65 @@ internal partial class ArchiveViewModel : BaseViewModel
     [RelayCommand]
     private void MergeTransmittals()
     {
-        List<TransmittalModel> transmittalsToMerge = _selectedTransmittals.Cast<TransmittalModel>().ToList();
+        List<TransmittalModel> transmittalsToMerge = SelectedTransmittals.Cast<TransmittalModel>().ToList();
         //remove the selected items from the list
         foreach (TransmittalModel item in transmittalsToMerge)
         {
-            _transmittals.Remove(item);
+            Transmittals.Remove(item);
         }
 
-        _transmittals.Add(_transmittalService.MergeTransmittals(transmittalsToMerge));
+        Transmittals.Add(_transmittalService.MergeTransmittals(transmittalsToMerge));
 
         CanMergeTransmittals = false;
+    }
+
+    [RelayCommand]
+    private void DuplicateTransmittal()
+    {
+        TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
+        TransmittalModel newTransmittal = new();
+
+        _transmittalService.CreateTransmittal(newTransmittal);
+
+        foreach (TransmittalItemModel item in transmittalModel.Items)
+        {
+            TransmittalItemModel newItem = new();
+
+            item.CopyPropertiesTo(newItem); 
+            newItem.TransID = newTransmittal.ID;
+
+            _transmittalService.CreateTransmittalItem(newItem);
+
+            newTransmittal.Items.Add(newItem);
+        }
+
+        foreach (TransmittalDistributionModel dist in transmittalModel.Distribution)
+        {
+            TransmittalDistributionModel newDist = new();
+
+            dist.CopyPropertiesTo(newDist);
+            newDist.TransID = newTransmittal.ID;
+
+            _transmittalService.CreateTransmittalDist(newDist);
+
+            newTransmittal.Distribution.Add(newDist);
+        }
+
+        Transmittals.Add(newTransmittal);
+        WireUpTransmittalPropertyChangedEvents(); 
+    }
+
+    [RelayCommand]
+    private void DeleteTransmittal()
+    {
+        TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
+
+        if (transmittalModel.Items.Count == 0 &&
+                transmittalModel.Distribution.Count == 0)
+        {
+            _transmittalService.DeleteTransmittal(transmittalModel);
+            Transmittals.Remove(transmittalModel);
+        }        
     }
 
     [RelayCommand]
@@ -201,8 +246,33 @@ internal partial class ArchiveViewModel : BaseViewModel
     [RelayCommand]
     private void ShowTransmittalReport()
     {
-        TransmittalModel transmittalModel = _selectedTransmittals.First() as TransmittalModel;
+        TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalReport(transmittalModel.ID);
     }
+
+    [RelayCommand]
+    private void DeleteSelectedTransmittalItem()
+    {
+        if (SelectedTransmittalItem != null)
+        {
+            _transmittalService.DeleteTransmittalItem(SelectedTransmittalItem);
+
+            var transmittal = SelectedTransmittals.First() as TransmittalModel;
+            transmittal.Items.Remove(SelectedTransmittalItem);
+        }
+    }
+
+    [RelayCommand]
+    private void DeleteSelectedDistribution()
+    {
+        if (SelectedTransmittalDistribution != null)
+        {
+            _transmittalService.DeleteTransmittalDist(SelectedTransmittalDistribution);
+
+            var transmittal = SelectedTransmittals.First() as TransmittalModel;
+            transmittal.Distribution.Remove(SelectedTransmittalDistribution);
+        }
+    }
+
 }

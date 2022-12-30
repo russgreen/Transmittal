@@ -2,24 +2,22 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Threading;
 using Transmittal.Extensions;
-using Transmittal.Library.Models;
-using Transmittal.Library.ViewModels;
-using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
+using Transmittal.Library.Models;
+using Transmittal.Library.Services;
+using Transmittal.Library.ViewModels;
+using Transmittal.Messages;
 using Transmittal.Models;
 using Transmittal.Requesters;
 using Transmittal.Services;
-using System.Diagnostics;
-using System.ComponentModel.DataAnnotations;
-using CommunityToolkit.Mvvm.Messaging;
-using Transmittal.Messages;
 using Transmittal.Views;
-using Syncfusion.Windows.Tools.Controls;
-using System.Windows.Threading;
 
 namespace Transmittal.ViewModels;
 
@@ -72,7 +70,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [NotifyPropertyChangedFor(nameof(IsExportFormatSelected))]
     private int _exportFormatCount = 1;
     
-    public bool IsExportFormatSelected => _exportFormatCount > 0;
+    public bool IsExportFormatSelected => ExportFormatCount > 0;
 
     [ObservableProperty]
     private PDFExportOptions _pdfExportOptions = new();
@@ -191,10 +189,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void WireUpExportFormatsPage()
     {
-        _printManager = App.RevitDocument.PrintManager;
-        PrintSetup = _printManager.PrintSetup;
+        PrintManager = App.RevitDocument.PrintManager;
+        PrintSetup = PrintManager.PrintSetup;
         PrintSetup.CurrentPrintSetting.PrintParameters.HideUnreferencedViewTags = true;
-        _pdfExportOptions.HideUnreferencedViewTags = true;
+        PdfExportOptions.HideUnreferencedViewTags = true;
 
         RasterQualities = Enum.GetValues(typeof(RasterQualityType));
         Colors = Enum.GetValues(typeof(ColorDepthType));
@@ -223,7 +221,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
-            _recordTransmittal = true;
+            RecordTransmittal = true;
 
             ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory());
             ProjectDirectory.CollectionChanged += ProjectDirectory_CollectionChanged;
@@ -324,7 +322,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IsSheetsSelected = false;
         IsSelectedSheetsValid = false;
         
-        if (_selectedDrawingSheets.Count > 0)
+        if (SelectedDrawingSheets.Count > 0)
         {
             IsSheetsSelected = true;
             IsSelectedSheetsValid = true;
@@ -333,7 +331,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
             //todo validate the selected sheets meet ISO19650 rules and all parameters have values
-            foreach (TransmittalItemModel item in _selectedDrawingSheets)
+            foreach (TransmittalItemModel item in SelectedDrawingSheets)
             {
                 if ((string.IsNullOrEmpty(item.DrgVolume)) ||
                     (string.IsNullOrEmpty(item.DrgLevel)) ||
@@ -355,7 +353,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         sheets.OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
-        foreach (DrawingSheetModel sheetModel in _selectedDrawingSheets)
+        foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
         {
             //set the model values
             sheetModel.DrgStatus = model.Code;
@@ -450,7 +448,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         sheets.OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
-        foreach (DrawingSheetModel sheetModel in _selectedDrawingSheets)
+        foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
         {
             foreach (ViewSheet sheet in sheets)
             {
@@ -514,7 +512,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void GetFormatCount()
     {
-        bool[] formats = { _exportPDF, _exportDWG, _exportDWF };
+        bool[] formats = { ExportPDF, ExportDWG, ExportDWF };
 
         ExportFormatCount = formats.Sum(x => x ? 1 : 0);
     }
@@ -522,7 +520,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void SetDwgVersion()
     {
-        DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+        DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
     }
 
     #endregion
@@ -546,7 +544,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         IsFinishEnabled = true;
 
-        if (_recordTransmittal == true && (_distribution is null || _distribution.Count == 0))
+        if (RecordTransmittal == true && (Distribution is null || Distribution.Count == 0))
         {
             IsFinishEnabled = false;
         }
@@ -571,7 +569,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         HasDirectoryEntriesSelected = true;
 
-        if (_selectedProjectDirectory == null || _selectedProjectDirectory.Count == 0)
+        if (SelectedProjectDirectory == null || SelectedProjectDirectory.Count == 0)
         {
             HasDirectoryEntriesSelected = false;
         }
@@ -581,7 +579,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         HasDistributionEntriesSelected = true;
 
-        if (_selectedDistribution == null || _selectedDistribution.Count == 0)
+        if (SelectedDistribution == null || SelectedDistribution.Count == 0)
         {
             HasDistributionEntriesSelected = false;
         }
@@ -590,7 +588,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void AddToDistribition()
     {
-        foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
+        foreach (ProjectDirectoryModel directoryContact in SelectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
         {
             if (directoryContact != null)
             {
@@ -600,12 +598,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     Company = directoryContact.Company,
                     Person = directoryContact.Person,
                     PersonID = directoryContact.Person.ID,
-                    TransCopies = _copies,
-                    TransFormat = _issueFormat.Code
+                    TransCopies = Copies,
+                    TransFormat = IssueFormat.Code
                 };
 
-                _projectDirectory.Remove(directoryContact);
-                _distribution.Add(distributionRecord);
+                ProjectDirectory.Remove(directoryContact);
+                Distribution.Add(distributionRecord);
             }
         }
     }
@@ -613,7 +611,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void RemoveFromDistribution()
     {
-        foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
+        foreach (TransmittalDistributionModel distributionRecord in SelectedDistribution.Cast<TransmittalDistributionModel>().ToList())
         {
             if (distributionRecord != null)
             {
@@ -623,8 +621,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     Person = distributionRecord.Person
                 };
 
-                _distribution.Remove(distributionRecord);
-                _projectDirectory.Add(directoryContact);
+                Distribution.Remove(distributionRecord);
+                ProjectDirectory.Add(directoryContact);
             }
         }
     }
@@ -649,12 +647,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             var sheets = new FilteredElementCollector(App.RevitDocument);
             sheets.OfClass(typeof(ViewSheet));
 
-            foreach (DrawingSheetModel drawingSheet in _selectedDrawingSheets)
+            foreach (DrawingSheetModel drawingSheet in SelectedDrawingSheets)
             {
                 foreach (ViewSheet sheet in sheets)
                 {
                     // abort if cancel was clicked
-                    if (_abortFlag == true)
+                    if (AbortFlag == true)
                     {
                         CloseProgress();
                         this.OnClosingRequest();
@@ -689,36 +687,36 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             SheetTaskProgressLabel = string.Empty;
                             SendProgressMessage();
 
-                            if (_exportPDF == true)
+                            if (ExportPDF == true)
                             {
                                 ExportSheetToPDF(drawingSheet, views, fileName);
                             }
 
-                            if (_abortFlag == true)
+                            if (AbortFlag == true)
                             {
                                 CloseProgress();
                                 this.OnClosingRequest();
                                 return;
                             }
 
-                            if (_exportDWG == true)
+                            if (ExportDWG == true)
                             {
                                 ExportSheetToDWG(drawingSheet, views, fileName);
                             }
 
-                            if (_abortFlag == true)
+                            if (AbortFlag == true)
                             {
                                 CloseProgress();
                                 this.OnClosingRequest();
                                 return;
                             }
 
-                            if (_exportDWF == true)
+                            if (ExportDWF == true)
                             {
                                 ExportSheetToDWF(drawingSheet, sheet, views, fileName);
                             }
 
-                            if (_abortFlag == true)
+                            if (AbortFlag == true)
                             {
                                 CloseProgress();
                                 this.OnClosingRequest();
@@ -813,7 +811,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SheetTaskProgressLabel = "Exporting DWG...";
         SendProgressMessage();
 
-        DwgExportOptions.FileVersion = (ACADVersion)_dwgVersion;
+        DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
         DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
 
         var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
@@ -840,7 +838,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
             argsheetsize,
-            _printSetup,
+            PrintSetup,
             DwfExportOptions,
             App.RevitDocument,
             views);
@@ -906,17 +904,17 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         List<string> folderPaths = new();
 
-        if (_exportPDF == true)
+        if (ExportPDF == true)
         {
             folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()));
         }
 
-        if (_exportDWG == true)
+        if (ExportDWG == true)
         {
             folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString()));
         }
 
-        if (_exportDWF == true)
+        if (ExportDWF == true)
         {
             folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString()));
         }
@@ -1001,7 +999,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _newTransmittal.TransDate = DateTime.Now;
         _transmittalService.CreateTransmittal(_newTransmittal);
 
-        foreach (TransmittalItemModel item in _selectedDrawingSheets)
+        foreach (TransmittalItemModel item in SelectedDrawingSheets)
         {
             item.TransID = _newTransmittal.ID;
 
@@ -1020,7 +1018,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             _transmittalService.CreateTransmittalItem(item);
         }
 
-        foreach (TransmittalDistributionModel dist in _distribution)
+        foreach (TransmittalDistributionModel dist in Distribution)
         {
             dist.TransID = _newTransmittal.ID;
             _transmittalService.CreateTransmittalDist(dist);
@@ -1087,13 +1085,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             new ProgressUpdateMessage(
                 new ProgressMessageModel 
                 { 
-                    CurrentStepProgressLabel = _currentStepProgressLabel,
-                    DrawingSheetsToProcess = _selectedDrawingSheets.Count,
-                    DrawingSheetsProcessed = _drawingSheetsProcessed,
-                    DrawingSheetProgressLabel = _drawingSheetProgressLabel,
-                    SheetTasksToProcess = _exportFormatCount,
-                    SheetTaskProcessed = _sheetTaskProcessed,
-                    SheetTaskProgressLabel = _sheetTaskProgressLabel
+                    CurrentStepProgressLabel = CurrentStepProgressLabel,
+                    DrawingSheetsToProcess = SelectedDrawingSheets.Count,
+                    DrawingSheetsProcessed = DrawingSheetsProcessed,
+                    DrawingSheetProgressLabel = DrawingSheetProgressLabel,
+                    SheetTasksToProcess = ExportFormatCount,
+                    SheetTaskProcessed = SheetTaskProcessed,
+                    SheetTaskProgressLabel = SheetTaskProgressLabel
                 }));
     }
 

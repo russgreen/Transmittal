@@ -113,7 +113,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
     private bool ValidateDistribution()
     {
-        if (_distribution is null || _distribution.Count == 0)
+        if (Distribution is null || Distribution.Count == 0)
         {
             return false;
         }
@@ -140,7 +140,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     {
         HasDirectoryEntriesSelected = true;
 
-        if (_selectedProjectDirectory == null || _selectedProjectDirectory.Count == 0)
+        if (SelectedProjectDirectory == null || SelectedProjectDirectory.Count == 0)
         {
             HasDirectoryEntriesSelected = false;
         }
@@ -150,7 +150,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     {
         HasDistributionEntriesSelected = true;
 
-        if (_selectedDistribution == null || _selectedDistribution.Count == 0)
+        if (SelectedDistribution == null || SelectedDistribution.Count == 0)
         {
             HasDistributionEntriesSelected = false;
         }
@@ -159,7 +159,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [RelayCommand]
     private void AddToDistribition()
     {
-        foreach (ProjectDirectoryModel directoryContact in _selectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
+        foreach (ProjectDirectoryModel directoryContact in SelectedProjectDirectory.Cast<ProjectDirectoryModel>().ToList())
         {
             if (directoryContact != null)
             {
@@ -169,12 +169,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
                     Company = directoryContact.Company,
                     Person = directoryContact.Person,
                     PersonID = directoryContact.Person.ID,
-                    TransCopies = _copies,
-                    TransFormat = _issueFormat.Code
+                    TransCopies = Copies,
+                    TransFormat = IssueFormat.Code
                 };
 
-                _projectDirectory.Remove(directoryContact);
-                _distribution.Add(distributionRecord);
+                ProjectDirectory.Remove(directoryContact);
+                Distribution.Add(distributionRecord);
             }
         }
     }
@@ -182,7 +182,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [RelayCommand]
     private void RemoveFromDistribution()
     {
-        foreach (TransmittalDistributionModel distributionRecord in _selectedDistribution.Cast<TransmittalDistributionModel>().ToList())
+        foreach (TransmittalDistributionModel distributionRecord in SelectedDistribution.Cast<TransmittalDistributionModel>().ToList())
         {
             if (distributionRecord != null)
             {
@@ -192,8 +192,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
                     Person = distributionRecord.Person
                 };
 
-                _distribution.Remove(distributionRecord);
-                _projectDirectory.Add(directoryContact);
+                Distribution.Remove(distributionRecord);
+                ProjectDirectory.Add(directoryContact);
             }
         }
     }
@@ -208,7 +208,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
         try
         {
-            if (_zipDocuments == true)
+            if (ZipDocuments == true)
             {
                 ZipDocumentsPackages();
             }
@@ -234,7 +234,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
             using (ZipArchive zip = ZipFile.Open(zipFileName, ZipArchiveMode.Create))
             {
-                foreach (var document in _documents)
+                foreach (var document in Documents)
                 {
                     // Add the entry for each file
                     zip.CreateEntryFromFile(document.FilePath, document.FileName, CompressionLevel.Optimal);
@@ -274,7 +274,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         _newTransmittal.TransDate = DateTime.Now;
         _transmittalService.CreateTransmittal(_newTransmittal);
 
-        foreach (TransmittalItemModel item in _documents)
+        foreach (TransmittalItemModel item in Documents)
         {
             item.TransID = _newTransmittal.ID;
 
@@ -293,7 +293,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
             _transmittalService.CreateTransmittalItem(item);
         }
 
-        foreach (TransmittalDistributionModel dist in _distribution)
+        foreach (TransmittalDistributionModel dist in Distribution)
         {
             dist.TransID = _newTransmittal.ID;
             _transmittalService.CreateTransmittalDist(dist);
