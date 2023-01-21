@@ -94,8 +94,8 @@
                             <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
-                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume" Width="50" />
-                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume/Functional" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level/Spatial" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgStatusDescription" HeaderText="Status Description" Width="120" />
