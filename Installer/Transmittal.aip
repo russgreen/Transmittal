@@ -5,7 +5,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
-    <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
+    <ROW Property="AI_CURRENT_YEAR" Value="2023" ValueLocId="-"/>
     <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 20.2 build 2c3f1cf9" ValueLocId="-"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_VERSION"/>
     <ROW Property="AI_REQUIRED_DOTNET_DISPLAY" MultiBuildValue="DefaultBuild:4.8" ValueLocId="-"/>
@@ -16,10 +16,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{1863311C-D676-472D-A3A3-0981940354AF} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{398825B7-62EC-4EA9-8AE6-005D20657C7A} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.5.0"/>
+    <ROW Property="ProductVersion" Value="1.5.1"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -77,11 +77,13 @@
     <ROW Component="SQLitePCLRaw.core.dll" ComponentId="{63E1DA29-72C6-4BF8-9631-D04B99377B95}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.core.dll"/>
     <ROW Component="SQLitePCLRaw.provider.dynamic_cdecl.dll" ComponentId="{21E87463-39FA-4D38-8FEC-2DE1D1FE5A72}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.provider.dynamic_cdecl.dll"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
+    <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{35DEEFC2-4D3E-4EB4-B89D-AFA0DD3FE351}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
     <ROW Component="Syncfusion.Data.WPF.dll" ComponentId="{733E5462-1BB8-40B9-8B88-1D4230B8BD6D}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Data.WPF.dll"/>
     <ROW Component="Syncfusion.Licensing.dll" ComponentId="{7443B77F-6134-4EB5-9B67-22DCC646408E}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Licensing.dll"/>
     <ROW Component="Syncfusion.SfGrid.WPF.dll" ComponentId="{9376E79C-F259-40CE-A668-1810860E57C7}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.SfGrid.WPF.dll"/>
     <ROW Component="Syncfusion.Shared.WPF.dll" ComponentId="{E47DFDEB-BA4D-4FB1-922E-82163FE8DB72}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Shared.WPF.dll"/>
     <ROW Component="Syncfusion.Tools.WPF.dll" ComponentId="{5ED13E30-19A5-4E4A-AB27-2B165F9C9CDC}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Tools.WPF.dll"/>
+    <ROW Component="Syncfusion.XlsIO.Base.dll" ComponentId="{3D190C67-A9BA-4790-B1D6-492881F41779}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll"/>
     <ROW Component="System.Buffers.dll" ComponentId="{50D35F0E-5409-424F-A521-CCB521393D75}" Directory_="APPDIR" Attributes="0" KeyPath="System.Buffers.dll"/>
     <ROW Component="System.ComponentModel.Annotations.dll" ComponentId="{DB9C01DB-E37A-48A3-8316-211C2709D4F8}" Directory_="APPDIR" Attributes="0" KeyPath="System.ComponentModel.Annotations.dll"/>
     <ROW Component="System.Memory.dll" ComponentId="{BCDC15C8-FF2D-4457-A886-D6C9AF806B55}" Directory_="APPDIR" Attributes="0" KeyPath="System.Memory.dll"/>
@@ -170,6 +172,8 @@
     <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~7.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.Text.Encodings.Web.dll" SelfReg="false"/>
     <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~8.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.Text.Json.dll" SelfReg="false"/>
     <ROW File="System.ValueTuple.dll" Component_="System.ValueTuple.dll" FileName="SYSTEM~9.DLL|System.ValueTuple.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.ValueTuple.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.XlsIO.Base.dll" Component_="Syncfusion.XlsIO.Base.dll" FileName="SYNCFU~6.DLL|Syncfusion.XlsIO.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\Syncfusion.XlsIO.Base.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Compression.Base.dll" Component_="Syncfusion.Compression.Base.dll" FileName="SYNCFU~7.DLL|Syncfusion.Compression.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\Syncfusion.Compression.Base.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -303,6 +307,8 @@
     <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="System.ValueTuple.dll"/>
+    <ROW Feature_="MainFeature" Component_="Syncfusion.XlsIO.Base.dll"/>
+    <ROW Feature_="MainFeature" Component_="Syncfusion.Compression.Base.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
