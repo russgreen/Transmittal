@@ -348,6 +348,17 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" >
+                        <CheckBox x:Name="GenerateExtranetCopy" HorizontalAlignment="Center"
+                                  IsEnabled="{Binding CanGenerateExtranetCopies}"
+                                  IsChecked="{Binding GenerateExtranetCopies}" />
+                        <TextBlock Text="Generate files for extranet"    
+                                   Width="150"
+                                   HorizontalAlignment="Center" 
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                    </StackPanel> 
+                    
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" >
                         <TextBlock Text="Copies:" HorizontalAlignment="Center" />
                         <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
                                            MinValue="1"
@@ -355,7 +366,7 @@
                                            Value="{Binding Copies}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" >
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" >
                         <TextBlock Text="Issue format:" HorizontalAlignment="Center" />
                         <ComboBox Width="154"
                                   IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
@@ -370,17 +381,21 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <Button Grid.Row="4" Grid.Column="1" Width="150" Margin="5"
+                    <Button Grid.Row="5" Grid.Column="1" Width="150" Margin="5"
                             Content="Add to distribution"
                             ToolTip="Add new contact to the project directory"
                             IsEnabled="{Binding HasDirectoryEntriesSelected}"
                             Command="{Binding AddToDistribitionCommand}"/>
 
-                    <Button Grid.Row="5" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
+                    <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
                             IsEnabled="{Binding HasDistributionEntriesSelected}"
                             Command="{Binding RemoveFromDistributionCommand}">
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
+
+
+
+
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"

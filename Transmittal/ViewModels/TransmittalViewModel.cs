@@ -3,10 +3,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
@@ -132,6 +135,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
 
+    public bool CanGenerateExtranetCopies { get; private set; }
+    [ObservableProperty]
+    private bool _generateExtranetCopies = false;
+
 
     /// SUMMARY PROGRESS
     [ObservableProperty]
@@ -215,6 +222,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private void WireUpDistributionPage()
     {
         CanRecordTransmittal = _settingsService.GlobalSettings.RecordTransmittals;
+
+        CanGenerateExtranetCopies = _settingsService.GlobalSettings.UseExtranet;
+        GenerateExtranetCopies = CanGenerateExtranetCopies;
 
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         IssueFormat = IssueFormats.FirstOrDefault();
@@ -752,9 +762,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 LaunchTransmittalReport();
             }
 
-            if(_settingsService.GlobalSettings.UseExtranet == true)
+            if(GenerateExtranetCopies == true)
             {
                 CopyFilesForExtranet();
+                GenerateExtranetImportFile();
             }
 
             OpenExporerToExportedFilesLocations();
@@ -779,6 +790,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return;
         }
     }
+
 
     private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
     {
@@ -855,19 +867,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void CopyFilesForExtranet()
     {
-        var extranetFolderName = "Extranet";
-
-        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName);
-
-        if (!_settingsService.GlobalSettings.DrawingIssueStore.Contains("<Format>"))
-        {
-            folderPath = System.IO.Path.Combine(folderPath, extranetFolderName);
-        }
-
-        if (!System.IO.Directory.Exists(folderPath))
-        {
-            System.IO.Directory.CreateDirectory(folderPath);
-        }
+        string folderPath = GetExtranetFolderPath();
 
         foreach (var document in _exportedFiles)
         {
@@ -888,7 +888,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 document.DrgStatus,
                                 document.DrgStatusDescription);
 
-
+            document.FileName = $"{fileName}{fileInfo.Extension}";
 
             var fullPath = System.IO.Path.Combine(folderPath, fileName + fileInfo.Extension);
 
@@ -899,6 +899,61 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Process.Start("explorer.exe", $"/root, {folderPath}");
 
     }
+
+    private void GenerateExtranetImportFile()
+    {
+        string folderPath = GetExtranetFolderPath();
+
+        using (ExcelEngine excelEngine = new())
+        {
+            IApplication application = excelEngine.Excel;
+            application.DefaultVersion = ExcelVersion.Excel2013;
+            IWorkbook workbook = application.Workbooks.Create(1);
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            ExcelImportDataOptions importDataOptions = new()
+            {
+                FirstRow = 1,
+                FirstColumn = 1,
+                IncludeHeader = true,
+                PreserveTypes = false
+            };
+
+            worksheet.ImportData(_exportedFiles, importDataOptions);
+
+            try
+            {
+                workbook.SaveAs(Path.Combine(folderPath, "ImportData.xlsx"));
+            }
+            catch
+            {
+                workbook.SaveAs(Path.Combine(folderPath, $"ImportData_{DateTime.Now.TimeOfDay.Hours}{DateTime.Now.TimeOfDay.Minutes}{DateTime.Now.TimeOfDay.Seconds}.xlsx"));
+            }
+
+        }
+
+
+    }
+
+    private string GetExtranetFolderPath()
+    {
+        var extranetFolderName = "Extranet";
+
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName);
+
+        if (!_settingsService.GlobalSettings.DrawingIssueStore.Contains("<Format>"))
+        {
+            folderPath = System.IO.Path.Combine(folderPath, extranetFolderName);
+        }
+
+        if (!System.IO.Directory.Exists(folderPath))
+        {
+            System.IO.Directory.CreateDirectory(folderPath);
+        }
+
+        return folderPath;
+    }
+
 
     private void OpenExporerToExportedFilesLocations()
     {
