@@ -51,7 +51,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
     [ObservableProperty]
-    private bool _zipDocuments = false;
+    private bool _zipDocuments = true;
 
     [ObservableProperty]
     private bool _isBackEnabled = true;
