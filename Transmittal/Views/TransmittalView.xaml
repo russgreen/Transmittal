@@ -207,6 +207,8 @@
                                                   IsChecked="{Binding PdfExportOptions.ReplaceHalftoneWithThinLines}" />
                                         <CheckBox Content="Region edges mask coicident lines" 
                                                   IsChecked="{Binding PdfExportOptions.MaskCoincidentLines}" />
+                                        <CheckBox Content="Use raster processing" 
+                                                  IsChecked="{Binding PdfExportOptions.AlwaysUseRaster}" />
                                     </StackPanel>
 
                                     <StackPanel Orientation="Vertical" Grid.Column="1">

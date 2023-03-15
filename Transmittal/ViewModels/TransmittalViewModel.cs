@@ -200,6 +200,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         PrintSetup = PrintManager.PrintSetup;
         PrintSetup.CurrentPrintSetting.PrintParameters.HideUnreferencedViewTags = true;
         PdfExportOptions.HideUnreferencedViewTags = true;
+        PdfExportOptions.AlwaysUseRaster = false;
 
         RasterQualities = Enum.GetValues(typeof(RasterQualityType));
         Colors = Enum.GetValues(typeof(ColorDepthType));
