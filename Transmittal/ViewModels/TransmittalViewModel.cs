@@ -200,6 +200,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         PrintSetup = PrintManager.PrintSetup;
         PrintSetup.CurrentPrintSetting.PrintParameters.HideUnreferencedViewTags = true;
         PdfExportOptions.HideUnreferencedViewTags = true;
+        PdfExportOptions.AlwaysUseRaster = false;
 
         RasterQualities = Enum.GetValues(typeof(RasterQualityType));
         Colors = Enum.GetValues(typeof(ColorDepthType));
@@ -903,27 +904,39 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private void GenerateExtranetImportFile()
     {
         string folderPath = GetExtranetFolderPath();
+        string excelFilePath = Path.Combine(folderPath, "ImportData.xlsx");
+        bool columnHeaders = true;
 
         using (ExcelEngine excelEngine = new())
         {
             IApplication application = excelEngine.Excel;
             application.DefaultVersion = ExcelVersion.Excel2013;
+
             IWorkbook workbook = application.Workbooks.Create(1);
+
+            FileInfo fileInfo = new FileInfo(excelFilePath);
+            if (fileInfo.Exists && fileInfo.IsReadOnly == false)
+            {
+                workbook = application.Workbooks.Open(excelFilePath);
+                columnHeaders = false;
+            }
+
             IWorksheet worksheet = workbook.Worksheets[0];
 
             ExcelImportDataOptions importDataOptions = new()
             {
-                FirstRow = 1,
+                FirstRow = worksheet.UsedRange.LastRow + 1,
                 FirstColumn = 1,
-                IncludeHeader = true,
+                IncludeHeader = columnHeaders,
                 PreserveTypes = false
             };
 
             worksheet.ImportData(_exportedFiles, importDataOptions);
+            worksheet.UsedRange.AutofitColumns();
 
             try
             {
-                workbook.SaveAs(Path.Combine(folderPath, "ImportData.xlsx"));
+                workbook.SaveAs(excelFilePath);
             }
             catch
             {
