@@ -76,8 +76,8 @@
                             <syncfusion:GridTextColumn MappingName="FileName" HeaderText="File" MinimumWidth="350" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgProj" HeaderText="Project" Width="80" />
                             <syncfusion:GridTextColumn MappingName="DrgOriginator" HeaderText="Originator" Width="80" />
-                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume" Width="80" />
-                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level" Width="80" />
+                            <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume / Functional" Width="80" />
+                            <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level / Spatial" Width="80" />
                             <!--<syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />-->
                             <syncfusion:GridComboBoxColumn MappingName="DrgType"
                                                            HeaderText="Type"
