@@ -257,9 +257,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
             projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
         }
 
+        //var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
+        //    _settingsService.GlobalSettings.Originator,
+        //    _settingsService.GlobalSettings.Role);
+
         var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
-            _settingsService.GlobalSettings.Originator,
-            _settingsService.GlobalSettings.Role);
+    _settingsService.GlobalSettings.Originator,
+    _settingsService.GlobalSettings.Role,
+    _settingsService.GlobalSettings.FileNameFilter);
 
         documentModel.FilePath = file;
 
