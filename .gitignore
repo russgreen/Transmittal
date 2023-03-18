@@ -361,3 +361,6 @@ Installer/Transmittal-SetupFiles/*
 # misc solution stuff
 Testing
 AppCenterSecret.txt
+
+# local debug launch setting
+/Transmittal.Desktop/Properties/launchSettings.json
