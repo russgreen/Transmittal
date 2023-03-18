@@ -51,7 +51,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
     [ObservableProperty]
-    private bool _zipDocuments = false;
+    private bool _zipDocuments = true;
 
     [ObservableProperty]
     private bool _isBackEnabled = true;
@@ -257,9 +257,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
             projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
         }
 
+        //var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
+        //    _settingsService.GlobalSettings.Originator,
+        //    _settingsService.GlobalSettings.Role);
+
         var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
-            _settingsService.GlobalSettings.Originator,
-            _settingsService.GlobalSettings.Role);
+    _settingsService.GlobalSettings.Originator,
+    _settingsService.GlobalSettings.Role,
+    _settingsService.GlobalSettings.FileNameFilter);
 
         documentModel.FilePath = file;
 

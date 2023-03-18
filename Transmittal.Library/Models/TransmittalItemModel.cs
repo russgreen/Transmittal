@@ -24,10 +24,10 @@ public class TransmittalItemModel : BaseModel
     [StringLength(5)]
     public string DrgOriginator { get; set; } = "XXX"; //= GlobalConfig.GlobalSettings.BS1192Originator;
     [Required]
-    [StringLength(2)]
+    [StringLength(4)]
     public string DrgVolume { get; set; } = "ZZ";
     [Required]
-    [StringLength(2)]
+    [StringLength(4)]
     public string DrgLevel { get; set; } = "00";
     [Required]
     [StringLength(2)]

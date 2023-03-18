@@ -339,7 +339,7 @@
                                    Text="Shared Parameter GUIDs - Paramaters should be attached to Sheets Category" FontFamily="Segoe UI" />
 
                         <TextBlock Grid.Row="6" Grid.Column="0" 
-                                   Text="Sheet Volume"  />
+                                   Text="Sheet Volume / Functional"  />
                         <TextBox Grid.Row="6" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetVolumeParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>
@@ -349,7 +349,7 @@
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamVolume_Click"  />
                         
                         <TextBlock Grid.Row="7" Grid.Column="0" 
-                                   Text="Sheet Level" />
+                                   Text="Sheet Level / Spatial" />
                         <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,5,5"
                                  Text="{Binding SheetLevelParamGuid}" 
                                  IsEnabled="{Binding UseCustomSharedParameters}"/>

@@ -1,7 +1,9 @@
 ﻿using Humanizer;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using Transmittal.Library.Models;
+using Transmittal.Library.Extensions;
 
 namespace Transmittal.Desktop.Util;
 internal static class ISO19650Parser
@@ -64,8 +66,8 @@ internal static class ISO19650Parser
 
         string ext = fi.Extension;
         // regex patterns testing and built with http://regexstorm.net/tester
-        string pattern1 = @"\w{2,6}\u002D\w{2,4}\u002D\w{2}\u002D\w{2}\u002D\w{2}\u002D\w\u002D\w{2,4}\u002D"; // <ProjId>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-
-        string pattern2 = @"\w{2,6}\u002D\w{2,4}\u002D\w{2}\u002D\w{2}\u002D\w{2}\u002D\w\u002D"; // <ProjId>-<Originator>-<Volume>-<Level>-<Type>-<Role>-
+        string pattern1 = @"\w{2,6}\u002D\w{2,4}\u002D\w{2,5}\u002D\w{2,5}\u002D\w{2}\u002D\w\u002D\w{2,4}\u002D"; // <ProjId>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-
+        string pattern2 = @"\w{2,6}\u002D\w{2,4}\u002D\w{2,5}\u002D\w{2,5}\u002D\w{2}\u002D\w\u002D"; // <ProjId>-<Originator>-<Volume>-<Level>-<Type>-<Role>-
         string pattern3 = @"\u002D\D\w\u002D\D\w+?" + ext; // -<Status>-<Rev>.ext
         string s1 = "";
         string s2 = "";
@@ -145,5 +147,62 @@ internal static class ISO19650Parser
         };
 
         return document;
+    }
+
+    internal static DocumentModel DocumentModel(string filePath, string projectIdentifier, string originator, string role, string exportRule)
+    {
+        // Generate the regular expression pattern from the export rule
+        var pattern = GetPatternFromExportRule(exportRule);
+
+        // Parse the filename using the regular expression pattern
+        var match = Regex.Match(Path.GetFileNameWithoutExtension(filePath), pattern);
+        if (!match.Success)
+        {
+            //throw new Exception("Filename does not match the export rule.");
+        }
+
+        // Get the values for the document properties from the regular expression groups
+        var documentProperties = new Dictionary<string, string>();
+        foreach (Group group in match.Groups)
+        {
+            documentProperties[group.Name] = group.Value;          
+        }
+
+        DocumentModel document = new DocumentModel
+        {
+            FileName = Path.GetFileName(filePath),
+            DrgProj = projectIdentifier,
+            DrgOriginator = originator,
+            DrgVolume = documentProperties.GetValueOrDefault("Volume", "ZZ"),
+            DrgLevel = documentProperties.GetValueOrDefault("Level", "XX"),
+            DrgType = documentProperties.GetValueOrDefault("Type", " "),
+            DrgRole = role,
+            DrgNumber = documentProperties.GetValueOrDefault("SheetNo", "0000"),
+            DrgName = documentProperties.GetValueOrDefault("SheetName", "Title").Humanize(),
+            DrgStatus = documentProperties.GetValueOrDefault("Status", "S0"),
+            DrgRev = documentProperties.GetValueOrDefault("Rev", "P01")
+        };
+
+        return document;
+    }
+
+
+    private static string GetPatternFromExportRule(string exportRule)
+    {
+        // Escape any regex special characters in the export rule
+        var escapedExportRule = Regex.Escape(exportRule);
+
+        // Replace tag placeholders with regex capture groups
+        var tagRegex = new Regex(@"(<\w+>)");
+        var matchEvaluator = new MatchEvaluator(match => $"(?<{match.Groups[1].Value.Trim('<', '>')}>.*)");
+        var pattern = tagRegex.Replace(escapedExportRule, matchEvaluator);
+
+        // Add optional whitespace and/or hyphen characters between tags
+        pattern = Regex.Replace(pattern, @"(</\w+>)\s*([^-<])", "$1[- ]*$2");
+
+        // Add start and end anchors to the pattern
+        pattern = $"^{pattern}$";
+
+        return pattern;
     }
 }

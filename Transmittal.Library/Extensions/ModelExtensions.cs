@@ -9,7 +9,7 @@ public static class ModelExtensions
         foreach (PropertyInfo propTo in toObjectProperties)
         {
             PropertyInfo propFrom = fromObject.GetType().GetProperty(propTo.Name);
-            if (propFrom != null && propFrom.CanWrite)
+            if (propFrom != null && propTo.CanWrite)
             {
                 propTo.SetValue(toObject, propFrom.GetValue(fromObject, null), null);
             }
