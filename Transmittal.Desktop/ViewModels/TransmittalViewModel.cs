@@ -261,7 +261,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         //    _settingsService.GlobalSettings.Originator,
         //    _settingsService.GlobalSettings.Role);
 
-        var documentModel = Helpers.FilenameParser.DocumentModel(file, projectIdentifier,
+        var documentModel = Library.Helpers.FilenameParser.DocumentModel(file, projectIdentifier,
     _settingsService.GlobalSettings.Originator,
     _settingsService.GlobalSettings.Role,
     _settingsService.GlobalSettings.FileNameFilter);
