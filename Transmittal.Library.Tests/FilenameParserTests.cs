@@ -13,7 +13,7 @@ public class FilenameParserTests
     [Theory]
     [InlineData("0001-ORI-XX-D01-GA-A-0003-SiteAnalysisPlan-S2-P01.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
     [InlineData("0001-ORI-XX-D01-GA-A-0003 P01 SiteAnalysisPlan.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev> <SheetName>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
-    //[InlineData("0001-ORI-XX-D01-GA-A-0003 P01 Site Analysis Plan.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev> <SheetName2>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
+    [InlineData("0001-ORI-XX-D01-GA-A-0003 P01 Site Analysis Plan.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev> <SheetName2>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
     [InlineData("PROJ-ORI-XX-00-GA-A-0003", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>", "PROJ", "ORI", "A", "XX", "00", "GA", "0003", "S2", "", "", "")]
     [InlineData("PROJ-ORI-XX-00-GA-A-0003-C02", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<Rev>", "PROJ", "ORI", "A", "XX", "00", "GA", "0003", "S2", "", "C02", "")]
     //[InlineData("0001-ORI-XX-D01-GA-A-0003.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
