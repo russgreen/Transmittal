@@ -70,7 +70,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
     private void WireUpDocumentsPage()
     {
-        DocumentTypes = Util.ISO19650Parser.GetDocumentTypes();
+        DocumentTypes = Library.Helpers.ISO19650.GetDocumentTypes();
         DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
         Documents.CollectionChanged += Documents_CollectionChanged;
     }
@@ -261,7 +261,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
         //    _settingsService.GlobalSettings.Originator,
         //    _settingsService.GlobalSettings.Role);
 
-        var documentModel = Util.ISO19650Parser.DocumentModel(file, projectIdentifier,
+        var documentModel = Helpers.FilenameParser.DocumentModel(file, projectIdentifier,
     _settingsService.GlobalSettings.Originator,
     _settingsService.GlobalSettings.Role,
     _settingsService.GlobalSettings.FileNameFilter);
