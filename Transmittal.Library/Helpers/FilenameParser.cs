@@ -7,7 +7,7 @@ using Transmittal.Library.Extensions;
 namespace Transmittal.Library.Helpers;
 public static class FilenameParser
 {
-    public static DocumentModel DocumentModel(string filePath, string projectIdentifier, string originator, string role, string exportRule)
+    public static DocumentModel GetDocumentModel(string filePath, string projectIdentifier, string originator, string role, string exportRule)
     {
         // Generate the regular expression pattern from the export rule
         var pattern = GetPatternFromExportRule(exportRule);
