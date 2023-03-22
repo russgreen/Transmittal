@@ -18,6 +18,7 @@ public class FilenameParserTests
     [InlineData("PROJ-ORI-XX-00-GA-A-0003-C02", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<Rev>", "PROJ", "ORI", "A", "XX", "00", "GA", "0003", "S2", "", "C02", "")]
     //[InlineData("0001-ORI-XX-D01-GA-A-0003.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
     [InlineData("PROJ-ORI-XX-00-GA-A-0003-SheetName-ProjectName-S1-C02", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<ProjName>-<Status>-<Rev>", "PROJ", "ORI", "A", "XX", "00", "GA", "0003", "S1", "", "C02", "Sheet Name")]
+    [InlineData("0001-ORI-XX-D01-GA-A-0003-SiteAnalysisPlan-S2-P01.pdf", "<ProjNo>-ORI-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
     public void DocumentModel_ShouldReturnExpectedResult(string filePath, 
         string exportRule, 
         string projectNumber,

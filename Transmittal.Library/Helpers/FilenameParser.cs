@@ -44,10 +44,10 @@ public static class FilenameParser
             DrgOriginator = originator,
             DrgVolume = documentProperties.GetValueOrDefault("Volume", "ZZ"),
             DrgLevel = documentProperties.GetValueOrDefault("Level", "XX"),
-            DrgType = documentProperties.GetValueOrDefault("Type", " "),
+            DrgType = documentProperties.GetValueOrDefault("Type", "DR"),
             DrgRole = role,
             DrgNumber = documentProperties.GetValueOrDefault("SheetNo", "0000"),
-            DrgName = documentProperties.GetValueOrDefault("SheetName", "Title").Humanize(),
+            DrgName = documentProperties.GetValueOrDefault("SheetName", "Title").Humanize().Titleize(),
             DrgStatus = documentProperties.GetValueOrDefault("Status", "S0"),
             DrgRev = documentProperties.GetValueOrDefault("Rev", "P01")
         };
