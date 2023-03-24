@@ -6,7 +6,7 @@ using System.Text;
 namespace Transmittal.Library.Helpers;
 public static class VCardHelper
 {
-    public static void ExportVard(Models.ProjectDirectoryModel directoryModel)
+    public static void ExportVCard(Models.ProjectDirectoryModel directoryModel)
     {
         System.Text.StringBuilder sb = new StringBuilder();
 
