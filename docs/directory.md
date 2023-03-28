@@ -16,6 +16,6 @@ Clicking into a cell allows the values to be edited. Use the <kbd>Esc</kbd> key 
 When adding a new row, <kbd>Tab</kbd> or click between cells then click the pencil icon in the header column or press <kbd>Enter</kbd> to finish entering the new row.
 ![image](https://user-images.githubusercontent.com/1886088/178133637-a494387d-e3c4-41b5-9056-610ef47e1c4d.png)
 
-Companies can be deleted only if no people are assigned to it.
+A company can be deleted only if no people are assigned to it.
 
 People can be deleted only if no transmittals arre recorded to them.
