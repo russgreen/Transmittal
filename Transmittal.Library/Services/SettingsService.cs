@@ -22,7 +22,7 @@ public class SettingsService : ISettingsService
 
     public void GetSettings()
     {
-        //this is where additonal settings related to desktop.exe and reporting are pulled form the project DB.
+        //this is where additional settings related to desktop.exe and reporting are pulled form the project DB.
 
         if (GlobalSettings.DatabaseFile != "[NONE]" || GlobalSettings.DatabaseFile != null)
         {

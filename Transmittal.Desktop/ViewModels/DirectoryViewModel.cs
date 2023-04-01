@@ -185,7 +185,7 @@ internal partial class DirectoryViewModel : BaseViewModel
             Company = Companies.ToList().Find(x => x.ID == SelectedPerson.CompanyID)
         };
 
-        Library.Helpers.VCardHelper.ExportVard(projectDirectoryModel);
+        Library.Helpers.VCardHelper.ExportVCard(projectDirectoryModel);
     }
 
     [RelayCommand]
