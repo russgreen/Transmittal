@@ -40,7 +40,7 @@ internal class CommandImportSettings : IExternalCommand
                 //TODO : perform some checks here to make sure we have a valid JSON.
 
                 var newView = new Views.SettingsView();
-                newView.Show();
+                newView.ShowDialog();
 
                 WeakReferenceMessenger.Default.Send(new ImportSettingsMessage(settings));
 
