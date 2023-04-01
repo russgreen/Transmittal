@@ -49,4 +49,63 @@ public static class VCardHelper
         startInfo.UseShellExecute = true;
         Process.Start(startInfo);
     }
+
+    public static Models.ProjectDirectoryModel ImportVCard(string vCardFilePath)
+    {
+        var directoryModel = new Models.ProjectDirectoryModel();
+
+        var vCard = File.ReadAllText(vCardFilePath);
+
+        var lines = vCard.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var line in lines)
+        {
+            var key = line.Substring(0, line.IndexOf(":"));
+            var value = line.Substring(line.IndexOf(":") + 1);
+
+            switch (key)
+            {
+                case "N":
+                    var names = value.Split(';');
+                    directoryModel.Person.LastName = names[0];
+                    directoryModel.Person.FirstName = names[1];
+                    break;
+                //case "FN":
+                //    directoryModel.Person.FullName = value;
+                //    break;
+                case "ORG":
+                    directoryModel.Company.CompanyName = value;
+                    break;
+                case "URL;WORK":
+                    directoryModel.Company.Website = value;
+                    break;
+                case "TITLE":
+                    directoryModel.Person.Position = value;
+                    break;
+                case "TEL;TYPE=work;type=pref;VOICE;VALUE=uri":
+                    directoryModel.Company.Tel = value;
+                    break;
+                case "TEL;TYPE=work;VOICE;VALUE=uri":
+                    directoryModel.Person.Tel = value;
+                    break;
+                case "TEL;TYPE=cell;VOICE;VALUE=uri":
+                    directoryModel.Person.Mobile = value;
+                    break;
+                case "TEL;TYPE=work;FAX":
+                    directoryModel.Company.Fax = value;
+                    break;
+                case "EMAIL;PREF;INTERNET":
+                    directoryModel.Person.Email = value;
+                    break;
+                case "ADR;WORK;PREF;ENCODING=QUOTED-PRINTABLE":
+                    directoryModel.Company.Address = value.Replace(";", System.Environment.NewLine);
+                    break;
+                case "NOTE":
+                    directoryModel.Person.Notes = value;
+                    break;
+            }
+        }
+
+        return directoryModel;
+    }
 }
