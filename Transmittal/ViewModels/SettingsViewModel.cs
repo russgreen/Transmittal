@@ -311,10 +311,18 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         var originatorParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.OriginatorParamName);
         var roleParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.RoleParamName);
 
-        var categoryProjectInfo = App.RevitDocument.Settings.Categories.get_Item(BuiltInCategory.OST_ProjectInformation);
+        var categoryProjectInfo = App.RevitDocument.Settings.Categories.get_Item( BuiltInCategory.OST_ProjectInformation);
+#if REVIT2024_OR_GREATER
+
+        BindSharedParameter(projectIdentifierParam, categoryProjectInfo, GroupTypeId.IdentityData);
+        BindSharedParameter(originatorParam, categoryProjectInfo, GroupTypeId.IdentityData);
+        BindSharedParameter(roleParam, categoryProjectInfo, GroupTypeId.IdentityData);
+#else
         BindSharedParameter(projectIdentifierParam, categoryProjectInfo, BuiltInParameterGroup.PG_IDENTITY_DATA);
         BindSharedParameter(originatorParam, categoryProjectInfo, BuiltInParameterGroup.PG_IDENTITY_DATA);
         BindSharedParameter(roleParam, categoryProjectInfo, BuiltInParameterGroup.PG_IDENTITY_DATA);
+#endif
+
 
         //add sheet parameters
         var sheetVolumeParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetVolumeParamName);
@@ -324,17 +332,26 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         var sheetStatusDescriptionParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetStatusDescriptionParamName);
 
         var categorySheets = App.RevitDocument.Settings.Categories.get_Item(BuiltInCategory.OST_Sheets);
+#if REVIT2024_OR_GREATER
+        BindSharedParameter(sheetVolumeParam, categorySheets, GroupTypeId.Title);
+        BindSharedParameter(sheetLevelParam, categorySheets, GroupTypeId.Title);
+        BindSharedParameter(documentTypeParam, categorySheets, GroupTypeId.Title);
+        BindSharedParameter(sheetStatusParam, categorySheets, GroupTypeId.Title);
+        BindSharedParameter(sheetStatusDescriptionParam, categorySheets, GroupTypeId.Title);
+#else
         BindSharedParameter(sheetVolumeParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetLevelParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(documentTypeParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetStatusParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetStatusDescriptionParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
+#endif
 
         //set shared parameters file back to original
         App.CachedUiApp.Application.SharedParametersFilename = currentSharedParametersFile;
 
         t.Commit();        
     }
+
 
     [RelayCommand]
     public void LoadSettingsFromDatabase()
@@ -385,6 +402,21 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         }
     }
 
+#if REVIT2024_OR_GREATER
+    private void BindSharedParameter(Definition definition, Category category, ForgeTypeId parameterGroup)
+    {
+        var ca = App.RevitDocument.Application.Create;
+
+        var categorySet = ca.NewCategorySet();
+        categorySet.Insert(category);
+
+        var binding = ca.NewInstanceBinding(categorySet) as Binding;
+
+        App.RevitDocument.ParameterBindings.Insert(definition, binding, parameterGroup);
+    }
+
+
+#else
     private void BindSharedParameter(Definition definition, Category category, BuiltInParameterGroup parameterGroup)
     {
         var ca = App.RevitDocument.Application.Create;
@@ -396,6 +428,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         App.RevitDocument.ParameterBindings.Insert(definition, binding, parameterGroup);
     }
+
+
+#endif
 
     public void ParameterComplete(string variableName, string parameterGuid)
     {

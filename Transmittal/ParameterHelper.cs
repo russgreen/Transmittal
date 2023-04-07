@@ -163,11 +163,19 @@ public class ParameterHelper
                         }
                         else if (value.GetType().Equals(typeof(string)))
                         {
+#if REVIT2024_OR_GREATER
+                            _parameter.Set(new ElementId(Int64.Parse(value as string)));
+#else
                             _parameter.Set(new ElementId(int.Parse(value as string)));
+#endif
                         }
                         else
                         {
+#if REVIT2024_OR_GREATER
+                            _parameter.Set(new ElementId(Convert.ToInt64(value)));
+#else
                             _parameter.Set(new ElementId(Convert.ToInt32(value)));
+#endif
                         }
 
                         break;
@@ -237,7 +245,11 @@ public class ParameterHelper
                     if (asString == true)
                     {
                         // Get the Element's Name
+#if REVIT2024_OR_GREATER
+                        var m_eid = new ElementId(_parameter.AsElementId().Value);
+#else
                         var m_eid = new ElementId(_parameter.AsElementId().IntegerValue);
+#endif
                         Element m_obj;
                         m_obj = _parameter.Element.Document.GetElement(m_eid);
                         return m_obj.Name;
@@ -491,13 +503,20 @@ public class ParameterHelper
                         }
                     }
                 }
-
+#if REVIT2024_OR_GREATER
+                parameterBindings.ReInsert(def, binding2, GroupTypeId.IdentityData);
+#else
                 parameterBindings.ReInsert(def, binding2, BuiltInParameterGroup.PG_IDENTITY_DATA);
+#endif
             }
             else
             {
                 var binding2 = !(bindType == "Type") ? elem.Document.Application.Create.NewInstanceBinding(catSet) : (Autodesk.Revit.DB.Binding)elem.Document.Application.Create.NewTypeBinding(catSet);
+#if REVIT2024_OR_GREATER                
+                parameterBindings.Insert(def, binding2, GroupTypeId.IdentityData);
+#else
                 parameterBindings.Insert(def, binding2, BuiltInParameterGroup.PG_IDENTITY_DATA);
+#endif
             }
         }
         catch (Exception)

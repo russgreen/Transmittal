@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 	<PropertyGroup>
-		<Configurations>Debug R22;Debug R23</Configurations>
-		<Configurations>$(Configurations);Release R22;Release R23</Configurations>
+		<Configurations>Debug R22;Debug R23;Debug R24</Configurations>
+		<Configurations>$(Configurations);Release R22;Release R23;Release R24</Configurations>
 		<Platforms>x64</Platforms>
 		<Description>Revit addin to manage drawing sheet transmittals</Description>
 		<LangVersion>latest</LangVersion>		
@@ -33,9 +33,15 @@
 		<TargetFramework>net48</TargetFramework>
 		<RevitVersion>2023</RevitVersion>
 		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
-		<DefineConstants>$(DefineConstants);REVIT2023_OR_GREATER</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER</DefineConstants>
 	</PropertyGroup>
-
+	<PropertyGroup Condition="$(Configuration.Contains('R24'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2024</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2024</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	
 	<PropertyGroup>
 		<AssemblyName>Transmittal_$(RevitVersion)</AssemblyName>
 	</PropertyGroup>
@@ -127,7 +133,6 @@
 	    <DependentUpon>Settings.settings</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Properties\Resources.resx">
