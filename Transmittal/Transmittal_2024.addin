@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <!--<AddIn Type="Command">
+    <Text>Command Transmittal</Text>
+    <Description>Some description for Transmittal</Description>
+    <Assembly>Transmittal.dll</Assembly>
+    <FullClassName>Transmittal.Command</FullClassName>
+    <ClientId>d4927302-40ff-4165-9459-94d390d408f5</ClientId>
+    <VendorId>TBC_</VendorId>
+  </AddIn>-->
+  
+  <AddIn Type="Application">
+    <Name>Transmittal</Name>
+    <Assembly>C:\Program Files\Transmittal\Transmittal_2024.dll</Assembly>
+    <ClientId>A8DCC200-6A73-4EDF-BA81-8BEC385AEDF3</ClientId>
+    <FullClassName>Transmittal.App</FullClassName>
+    <VendorId>Transmittal</VendorId>
+	<VisibilityMode>NotVisibleInFamily</VisibilityMode>
+	<VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+  </AddIn>
+</RevitAddIns>

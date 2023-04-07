@@ -14,10 +14,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{42D330F6-2240-4D10-9B2E-E0BE7B78A7A8} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{B2EF87B0-3B9C-4E29-A706-BFD4F6F30049} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.5.5"/>
+    <ROW Property="ProductVersion" Value="1.6.0"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -40,6 +40,7 @@
     <ROW Directory="Revit_Dir" Directory_Parent="Autodesk_Dir" DefaultDir="Revit"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="__1_Dir" Directory_Parent="Addins_Dir" DefaultDir="2023"/>
+    <ROW Directory="__2_Dir" Directory_Parent="Addins_Dir" DefaultDir="2024"/>
     <ROW Directory="__Dir" Directory_Parent="Addins_Dir" DefaultDir="2022"/>
     <ROW Directory="native_1_Dir" Directory_Parent="winx64_Dir" DefaultDir="native"/>
     <ROW Directory="native_2_Dir" Directory_Parent="winx86_Dir" DefaultDir="native"/>
@@ -101,6 +102,8 @@
     <ROW Component="Transmittal_2022.dll" ComponentId="{0801DC2B-D113-4668-9D09-83149B029BF4}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal_2022.dll"/>
     <ROW Component="Transmittal_2023.addin" ComponentId="{DEFADA39-040B-49B0-8396-57C017C083FA}" Directory_="__1_Dir" Attributes="0" KeyPath="Transmittal_2023.addin" Type="0"/>
     <ROW Component="Transmittal_2023.dll" ComponentId="{0010D487-A1C1-4590-AE2C-1AAF1F6B3A4C}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal_2023.dll"/>
+    <ROW Component="Transmittal_2024.addin" ComponentId="{9B16D613-48BC-4339-B078-AE9DD45D231C}" Directory_="__2_Dir" Attributes="0" KeyPath="Transmittal_2024.addin" Type="0"/>
+    <ROW Component="Transmittal_2024.dll" ComponentId="{315418DF-22E1-448D-8201-AAB148870162}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal_2024.dll"/>
     <ROW Component="_" ComponentId="{01ACBF6A-1168-401F-8D69-F975A7028420}" Directory_="APPDIR" Attributes="260" KeyPath="_"/>
     <ROW Component="__1" ComponentId="{2FC92E21-0268-42F0-9D2C-F43D86EBCB23}" Directory_="APPDIR" Attributes="260" KeyPath="__1"/>
     <ROW Component="__2" ComponentId="{F6D2A36B-DD97-4968-92F6-5B366F7A49A7}" Directory_="APPDIR" Attributes="260" KeyPath="__2"/>
@@ -116,30 +119,30 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="TemplateDatabase.tdb" Component_="TemplateDatabase.tdb" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Data\TemplateDatabase.tdb" SelfReg="false"/>
-    <ROW File="System.Threading.Tasks.Extensions.dll" Component_="System.Threading.Tasks.Extensions.dll" FileName="SYSTEM~1.DLL|System.Threading.Tasks.Extensions.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.Threading.Tasks.Extensions.dll" SelfReg="false"/>
-    <ROW File="Transmittal.Library.dll" Component_="Transmittal.Library.dll" FileName="TRANSM~1.DLL|Transmittal.Library.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.dll" SelfReg="false"/>
+    <ROW File="System.Threading.Tasks.Extensions.dll" Component_="System.Threading.Tasks.Extensions.dll" FileName="SYSTEM~1.DLL|System.Threading.Tasks.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Threading.Tasks.Extensions.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Library.dll" Component_="Transmittal.Library.dll" FileName="TRANSM~1.DLL|Transmittal.Library.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Transmittal.Library.dll" SelfReg="false"/>
     <ROW File="Transmittal_2022.dll" Component_="Transmittal_2022.dll" FileName="TRANSM~2.DLL|Transmittal_2022.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R22\Transmittal_2022.dll" SelfReg="false"/>
-    <ROW File="CommunityToolkit.Mvvm.dll" Component_="CommunityToolkit.Mvvm.dll" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
-    <ROW File="Dapper.dll" Component_="Dapper.dll" FileName="Dapper.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Dapper.dll" SelfReg="false"/>
-    <ROW File="Humanizer.dll" Component_="Humanizer.dll" FileName="HUMANI~1.DLL|Humanizer.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Humanizer.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Bcl.AsyncInterfaces.dll" Component_="Microsoft.Bcl.AsyncInterfaces.dll" FileName="MICROS~1.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Data.Sqlite.dll" Component_="Microsoft.Data.Sqlite.dll" FileName="MICROS~2.DLL|Microsoft.Data.Sqlite.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.Data.Sqlite.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Xaml.Behaviors.dll" Component_="Microsoft.Xaml.Behaviors.dll" FileName="MICROS~5.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
-    <ROW File="Ookii.Dialogs.Wpf.dll" Component_="Ookii.Dialogs.Wpf.dll" FileName="OOKIID~1.DLL|Ookii.Dialogs.Wpf.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Ookii.Dialogs.Wpf.dll" SelfReg="false"/>
-    <ROW File="SQLitePCLRaw.batteries_v2.dll" Component_="SQLitePCLRaw.batteries_v2.dll" FileName="SQLITE~1.DLL|SQLitePCLRaw.batteries_v2.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\SQLitePCLRaw.batteries_v2.dll" SelfReg="false"/>
-    <ROW File="SQLitePCLRaw.core.dll" Component_="SQLitePCLRaw.core.dll" FileName="SQLITE~2.DLL|SQLitePCLRaw.core.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\SQLitePCLRaw.core.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.Data.WPF.dll" Component_="Syncfusion.Data.WPF.dll" FileName="SYNCFU~1.DLL|Syncfusion.Data.WPF.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Syncfusion.Data.WPF.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.Licensing.dll" Component_="Syncfusion.Licensing.dll" FileName="SYNCFU~2.DLL|Syncfusion.Licensing.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Syncfusion.Licensing.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.SfGrid.WPF.dll" Component_="Syncfusion.SfGrid.WPF.dll" FileName="SYNCFU~3.DLL|Syncfusion.SfGrid.WPF.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Syncfusion.SfGrid.WPF.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.Shared.WPF.dll" Component_="Syncfusion.Shared.WPF.dll" FileName="SYNCFU~4.DLL|Syncfusion.Shared.WPF.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Syncfusion.Shared.WPF.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.Tools.WPF.dll" Component_="Syncfusion.Tools.WPF.dll" FileName="SYNCFU~5.DLL|Syncfusion.Tools.WPF.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Syncfusion.Tools.WPF.dll" SelfReg="false"/>
-    <ROW File="System.Buffers.dll" Component_="System.Buffers.dll" FileName="SYSTEM~2.DLL|System.Buffers.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.Buffers.dll" SelfReg="false"/>
-    <ROW File="System.ComponentModel.Annotations.dll" Component_="System.ComponentModel.Annotations.dll" FileName="SYSTEM~3.DLL|System.ComponentModel.Annotations.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.ComponentModel.Annotations.dll" SelfReg="false"/>
-    <ROW File="System.Memory.dll" Component_="System.Memory.dll" FileName="SYSTEM~4.DLL|System.Memory.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.Memory.dll" SelfReg="false"/>
-    <ROW File="System.Numerics.Vectors.dll" Component_="System.Numerics.Vectors.dll" FileName="SYSTEM~5.DLL|System.Numerics.Vectors.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.Numerics.Vectors.dll" SelfReg="false"/>
-    <ROW File="System.Runtime.CompilerServices.Unsafe.dll" Component_="System.Runtime.CompilerServices.Unsafe.dll" FileName="SYSTEM~6.DLL|System.Runtime.CompilerServices.Unsafe.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\System.Runtime.CompilerServices.Unsafe.dll" SelfReg="false"/>
+    <ROW File="CommunityToolkit.Mvvm.dll" Component_="CommunityToolkit.Mvvm.dll" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
+    <ROW File="Dapper.dll" Component_="Dapper.dll" FileName="Dapper.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Dapper.dll" SelfReg="false"/>
+    <ROW File="Humanizer.dll" Component_="Humanizer.dll" FileName="HUMANI~1.DLL|Humanizer.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Humanizer.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Bcl.AsyncInterfaces.dll" Component_="Microsoft.Bcl.AsyncInterfaces.dll" FileName="MICROS~1.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Data.Sqlite.dll" Component_="Microsoft.Data.Sqlite.dll" FileName="MICROS~2.DLL|Microsoft.Data.Sqlite.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Microsoft.Data.Sqlite.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Xaml.Behaviors.dll" Component_="Microsoft.Xaml.Behaviors.dll" FileName="MICROS~5.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
+    <ROW File="Ookii.Dialogs.Wpf.dll" Component_="Ookii.Dialogs.Wpf.dll" FileName="OOKIID~1.DLL|Ookii.Dialogs.Wpf.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Ookii.Dialogs.Wpf.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.batteries_v2.dll" Component_="SQLitePCLRaw.batteries_v2.dll" FileName="SQLITE~1.DLL|SQLitePCLRaw.batteries_v2.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\SQLitePCLRaw.batteries_v2.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.core.dll" Component_="SQLitePCLRaw.core.dll" FileName="SQLITE~2.DLL|SQLitePCLRaw.core.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\SQLitePCLRaw.core.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Data.WPF.dll" Component_="Syncfusion.Data.WPF.dll" FileName="SYNCFU~1.DLL|Syncfusion.Data.WPF.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.Data.WPF.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Licensing.dll" Component_="Syncfusion.Licensing.dll" FileName="SYNCFU~2.DLL|Syncfusion.Licensing.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.Licensing.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.SfGrid.WPF.dll" Component_="Syncfusion.SfGrid.WPF.dll" FileName="SYNCFU~3.DLL|Syncfusion.SfGrid.WPF.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.SfGrid.WPF.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Shared.WPF.dll" Component_="Syncfusion.Shared.WPF.dll" FileName="SYNCFU~4.DLL|Syncfusion.Shared.WPF.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.Shared.WPF.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Tools.WPF.dll" Component_="Syncfusion.Tools.WPF.dll" FileName="SYNCFU~5.DLL|Syncfusion.Tools.WPF.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.Tools.WPF.dll" SelfReg="false"/>
+    <ROW File="System.Buffers.dll" Component_="System.Buffers.dll" FileName="SYSTEM~2.DLL|System.Buffers.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Buffers.dll" SelfReg="false"/>
+    <ROW File="System.ComponentModel.Annotations.dll" Component_="System.ComponentModel.Annotations.dll" FileName="SYSTEM~3.DLL|System.ComponentModel.Annotations.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.ComponentModel.Annotations.dll" SelfReg="false"/>
+    <ROW File="System.Memory.dll" Component_="System.Memory.dll" FileName="SYSTEM~4.DLL|System.Memory.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Memory.dll" SelfReg="false"/>
+    <ROW File="System.Numerics.Vectors.dll" Component_="System.Numerics.Vectors.dll" FileName="SYSTEM~5.DLL|System.Numerics.Vectors.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Numerics.Vectors.dll" SelfReg="false"/>
+    <ROW File="System.Runtime.CompilerServices.Unsafe.dll" Component_="System.Runtime.CompilerServices.Unsafe.dll" FileName="SYSTEM~6.DLL|System.Runtime.CompilerServices.Unsafe.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Runtime.CompilerServices.Unsafe.dll" SelfReg="false"/>
     <ROW File="Transmittal_2023.dll" Component_="Transmittal_2023.dll" FileName="TRANSM~3.DLL|Transmittal_2023.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\Transmittal_2023.dll" SelfReg="false"/>
     <ROW File="Transmittal_2022.addin" Component_="Transmittal_2022.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\Transmittal\Transmittal_2022.addin" SelfReg="false"/>
     <ROW File="Transmittal_2023.addin" Component_="Transmittal_2023.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\Transmittal\Transmittal_2023.addin" SelfReg="false"/>
@@ -155,7 +158,7 @@
     <ROW File="Microsoft.ReportViewer.ProcessingObjectModel.dll" Component_="Microsoft.ReportViewer.ProcessingObjectModel.dll" FileName="MICROS~9.DLL|Microsoft.ReportViewer.ProcessingObjectModel.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.ReportViewer.ProcessingObjectModel.dll" SelfReg="false"/>
     <ROW File="Microsoft.ReportViewer.WinForms.dll" Component_="Microsoft.ReportViewer.WinForms.dll" FileName="MICRO~10.DLL|Microsoft.ReportViewer.WinForms.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.ReportViewer.WinForms.dll" SelfReg="false"/>
     <ROW File="Microsoft.SqlServer.Types.dll" Component_="Microsoft.SqlServer.Types.dll" FileName="MICRO~11.DLL|Microsoft.SqlServer.Types.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Microsoft.SqlServer.Types.dll" SelfReg="false"/>
-    <ROW File="SQLitePCLRaw.provider.dynamic_cdecl.dll" Component_="SQLitePCLRaw.provider.dynamic_cdecl.dll" FileName="SQLITE~5.DLL|SQLitePCLRaw.provider.dynamic_cdecl.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\SQLitePCLRaw.provider.dynamic_cdecl.dll" SelfReg="false"/>
+    <ROW File="SQLitePCLRaw.provider.dynamic_cdecl.dll" Component_="SQLitePCLRaw.provider.dynamic_cdecl.dll" FileName="SQLITE~5.DLL|SQLitePCLRaw.provider.dynamic_cdecl.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\SQLitePCLRaw.provider.dynamic_cdecl.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_3" Component_="e_sqlite3.dll_3" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\e_sqlite3.dll" SelfReg="false"/>
     <ROW File="Transmittal.Desktop.exe" Component_="Transmittal.Desktop.exe" FileName="TRANSM~1.EXE|Transmittal.Desktop.exe" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Desktop.exe" SelfReg="false" DigSign="true"/>
     <ROW File="Transmittal.Desktop.exe.config" Component_="TransmittalParameters.txt" FileName="TRANSM~1.CON|Transmittal.Desktop.exe.config" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Desktop.exe.config" SelfReg="false"/>
@@ -163,15 +166,17 @@
     <ROW File="TransmittalSheet.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~1.RDL|TransmittalSheet.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSheet.rdlc" SelfReg="false"/>
     <ROW File="TransmittalSummary.rdlc" Component_="ProjectDirectory.rdlc" FileName="TRANSM~3.RDL|TransmittalSummary.rdlc" Attributes="0" SourcePath="..\Transmittal.Reports\Reports\TransmittalSummary.rdlc" SelfReg="false"/>
     <ROW File="Transmittal.Desktop.pdb" Component_="Transmittal.Desktop.exe" FileName="TRANSM~1.PDB|Transmittal.Desktop.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Desktop.pdb" SelfReg="false"/>
-    <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Library.pdb" SelfReg="false"/>
+    <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\Transmittal.Reports.pdb" SelfReg="false"/>
-    <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\x64\Release\net48\PropertyChanged.dll" SelfReg="false"/>
+    <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\PropertyChanged.dll" SelfReg="false"/>
     <ROW File="ImportTemplate.json" Component_="TransmittalParameters.txt_1" FileName="IMPORT~1.JSO|ImportTemplate.json" Attributes="0" SourcePath="..\ImportTemplate.json" SelfReg="false"/>
-    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~7.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~8.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.Text.Json.dll" SelfReg="false"/>
-    <ROW File="System.ValueTuple.dll" Component_="System.ValueTuple.dll" FileName="SYSTEM~9.DLL|System.ValueTuple.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\System.ValueTuple.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.XlsIO.Base.dll" Component_="Syncfusion.XlsIO.Base.dll" FileName="SYNCFU~6.DLL|Syncfusion.XlsIO.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\Syncfusion.XlsIO.Base.dll" SelfReg="false"/>
-    <ROW File="Syncfusion.Compression.Base.dll" Component_="Syncfusion.Compression.Base.dll" FileName="SYNCFU~7.DLL|Syncfusion.Compression.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R23\Syncfusion.Compression.Base.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~7.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~8.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="System.ValueTuple.dll" Component_="System.ValueTuple.dll" FileName="SYSTEM~9.DLL|System.ValueTuple.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\System.ValueTuple.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.XlsIO.Base.dll" Component_="Syncfusion.XlsIO.Base.dll" FileName="SYNCFU~6.DLL|Syncfusion.XlsIO.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.XlsIO.Base.dll" SelfReg="false"/>
+    <ROW File="Syncfusion.Compression.Base.dll" Component_="Syncfusion.Compression.Base.dll" FileName="SYNCFU~7.DLL|Syncfusion.Compression.Base.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Syncfusion.Compression.Base.dll" SelfReg="false"/>
+    <ROW File="Transmittal_2024.addin" Component_="Transmittal_2024.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\Transmittal\Transmittal_2024.addin" SelfReg="false"/>
+    <ROW File="Transmittal_2024.dll" Component_="Transmittal_2024.dll" FileName="TRANSM~5.DLL|Transmittal_2024.dll" Attributes="0" SourcePath="..\Transmittal\bin\x64\Release R24\Transmittal_2024.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -307,6 +312,8 @@
     <ROW Feature_="MainFeature" Component_="System.ValueTuple.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.XlsIO.Base.dll"/>
     <ROW Feature_="MainFeature" Component_="Syncfusion.Compression.Base.dll"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal_2024.addin"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal_2024.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
