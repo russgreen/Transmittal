@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -11,10 +10,8 @@ using Transmittal.Requesters;
 
 namespace Transmittal.ViewModels;
 
-//[INotifyPropertyChanged]
 internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 {
-    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IRevisionRequester _callingViewModel;
     

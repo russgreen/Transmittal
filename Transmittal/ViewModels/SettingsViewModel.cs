@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using System.Reflection;
 using Transmittal.Library.Models; 
@@ -23,8 +22,6 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 {
     public string WindowTitle { get; private set; }
 
-    //private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
-    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 

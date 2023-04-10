@@ -1,13 +1,8 @@
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Windows.Media.Imaging;
-using Transmittal.Library.DataAccess;
-using Transmittal.Library.Services;
-using Transmittal.Services;
 
 namespace Transmittal;
 
@@ -39,16 +34,6 @@ public class App : IExternalApplication
 
         CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
-        //Ioc.Default.ConfigureServices(new ServiceCollection()
-        //    .AddSingleton<ISettingsService, SettingsService>()
-        //    .AddTransient<ISettingsServiceRvt, SettingsServiceRvt>()
-        //    .AddTransient<IDataConnection, SQLiteDataAccess>()
-        //    .AddTransient<IExportPDFService, ExportPDFService>()
-        //    .AddTransient<IExportDWGService, ExportDWGService>()
-        //    .AddTransient<IExportDWFService, ExportDWFService>()
-        //    .AddTransient<IContactDirectoryService, ContactDirectoryService>()
-        //    .AddTransient<ITransmittalService, TransmittalService>()
-        //    .BuildServiceProvider());
         Host.StartHost();
 
         //allow end users to customise the ribbon tab name

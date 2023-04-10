@@ -1,18 +1,14 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using Syncfusion.UI.Xaml.Grid;
+﻿using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
-/// <summary>
-/// Interaction logic for RevisionsView.xaml
-/// </summary>
+
 public partial class RevisionsView : Window
 {
     private readonly RevisionsViewModel _viewModel;
-    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     public RevisionsView(IRevisionRequester caller)

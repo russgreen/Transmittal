@@ -1,7 +1,6 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -11,8 +10,6 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 internal class CommandDirectory : IExternalCommand
 {
-    //private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
-    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
     private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
