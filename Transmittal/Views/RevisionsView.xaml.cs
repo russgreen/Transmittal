@@ -12,7 +12,8 @@ namespace Transmittal.Views;
 public partial class RevisionsView : Window
 {
     private readonly RevisionsViewModel _viewModel;
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     public RevisionsView(IRevisionRequester caller)
     {

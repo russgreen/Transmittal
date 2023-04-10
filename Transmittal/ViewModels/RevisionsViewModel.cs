@@ -14,7 +14,8 @@ namespace Transmittal.ViewModels;
 //[INotifyPropertyChanged]
 internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 {
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IRevisionRequester _callingViewModel;
     
     [ObservableProperty]

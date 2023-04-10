@@ -9,7 +9,7 @@ using Transmittal.Library.Models;
 using Transmittal.Messages;
 using Transmittal.Models;
 
-namespace Transmittal;
+namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
 internal class CommandImportSettings : IExternalCommand

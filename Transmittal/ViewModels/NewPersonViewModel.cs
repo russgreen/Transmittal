@@ -12,7 +12,8 @@ namespace Transmittal.ViewModels;
 
 internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
 {
-    private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
+    //private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
+    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly IPersonRequester _callingViewModel;
 
     [ObservableProperty]

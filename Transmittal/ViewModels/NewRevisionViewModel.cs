@@ -13,7 +13,8 @@ namespace Transmittal.ViewModels;
 internal partial class NewRevisionViewModel : BaseViewModel
 {
     private readonly IRevisionRequester _callingViewModel;
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     [ObservableProperty]
     private DateTime _revisionDate = DateTime.Now;

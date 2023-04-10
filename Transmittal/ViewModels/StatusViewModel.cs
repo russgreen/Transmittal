@@ -5,13 +5,15 @@ using Transmittal.Library.Models;
 using Transmittal.Library.ViewModels;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
+using Transmittal.Services;
 
 namespace Transmittal.ViewModels;
 
 //[INotifyPropertyChanged]
 internal partial class StatusViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IStatusRequester _callingViewModel;
 
     public List<DocumentStatusModel> DocumentStatuses { get; private set; }

@@ -6,14 +6,16 @@ using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 
-namespace Transmittal;
+namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
 internal class CommandTransmittalsArchive : IExternalCommand
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
-    
+    //private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
+    //private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;

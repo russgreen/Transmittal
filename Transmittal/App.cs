@@ -39,16 +39,17 @@ public class App : IExternalApplication
 
         CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
-        Ioc.Default.ConfigureServices(new ServiceCollection()
-            .AddSingleton<ISettingsService, SettingsService>()
-            .AddTransient<ISettingsServiceRvt, SettingsServiceRvt>()
-            .AddTransient<IDataConnection, SQLiteDataAccess>()
-            .AddTransient<IExportPDFService, ExportPDFService>()
-            .AddTransient<IExportDWGService, ExportDWGService>()
-            .AddTransient<IExportDWFService, ExportDWFService>()
-            .AddTransient<IContactDirectoryService, ContactDirectoryService>()
-            .AddTransient<ITransmittalService, TransmittalService>()
-            .BuildServiceProvider());
+        //Ioc.Default.ConfigureServices(new ServiceCollection()
+        //    .AddSingleton<ISettingsService, SettingsService>()
+        //    .AddTransient<ISettingsServiceRvt, SettingsServiceRvt>()
+        //    .AddTransient<IDataConnection, SQLiteDataAccess>()
+        //    .AddTransient<IExportPDFService, ExportPDFService>()
+        //    .AddTransient<IExportDWGService, ExportDWGService>()
+        //    .AddTransient<IExportDWFService, ExportDWFService>()
+        //    .AddTransient<IContactDirectoryService, ContactDirectoryService>()
+        //    .AddTransient<ITransmittalService, TransmittalService>()
+        //    .BuildServiceProvider());
+        Host.StartHost();
 
         //allow end users to customise the ribbon tab name
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -114,30 +115,31 @@ public class App : IExternalApplication
         
         PushButton buttonTransmittal = (PushButton)panel.AddItem(
             new PushButtonData(
-                nameof(Transmittal.CommandTransmittal),
+                nameof(Transmittal.Commands.CommandTransmittal),
                 "Transmittal",
                 Assembly.GetExecutingAssembly().Location,
-                $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittal)}"));
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandTransmittal)}"));
         buttonTransmittal.ToolTip = "Execute the Transmittal command";
         buttonTransmittal.LargeImage = PngImageSource("Transmittal.Resources.Transmittal_Button.png");
         buttonTransmittal.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/transmittal/"));
 
+
         PushButton buttonDirectory = (PushButton)panel.AddItem(
             new PushButtonData(
-                nameof(Transmittal.CommandDirectory),
+                nameof(Transmittal.Commands.CommandDirectory),
                 $"Project{Environment.NewLine}Directory",
                 Assembly.GetExecutingAssembly().Location,
-                $"{nameof(Transmittal)}.{nameof(Transmittal.CommandDirectory)}"));
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandDirectory)}"));
         buttonDirectory.ToolTip = "Edit the the project directory";
         buttonDirectory.LargeImage = PngImageSource("Transmittal.Resources.Directory_Button.png");
         buttonDirectory.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/directory/"));
 
         PushButton buttonTransmittalArchive = (PushButton)panel.AddItem(
             new PushButtonData(
-                nameof(Transmittal.CommandTransmittalsArchive),
+                nameof(Transmittal.Commands.CommandTransmittalsArchive),
                 $"Transmittal{Environment.NewLine}Archive",
                 Assembly.GetExecutingAssembly().Location,
-                $"{nameof(Transmittal)}.{nameof(Transmittal.CommandTransmittalsArchive)}"));
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandTransmittalsArchive)}"));
         buttonTransmittalArchive.ToolTip = "View the transmittal archive";
         buttonTransmittalArchive.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
         buttonTransmittalArchive.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
@@ -148,7 +150,7 @@ public class App : IExternalApplication
         PushButton pushButton = splitButton.AddPushButton(
             new PushButtonData("Settings", "Settings",
             Assembly.GetExecutingAssembly().Location,
-            $"{nameof(Transmittal)}.{nameof(Transmittal.CommandSettings)}"));
+            $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandSettings)}"));
         pushButton.ToolTip = "Edit the settings";
         pushButton.LargeImage = PngImageSource("Transmittal.Resources.Settings_Button.png");
         pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
@@ -156,7 +158,7 @@ public class App : IExternalApplication
         pushButton = splitButton.AddPushButton(
             new PushButtonData("ImportSettings", "Import Settings",
             Assembly.GetExecutingAssembly().Location,
-            $"{nameof(Transmittal)}.{nameof(Transmittal.CommandImportSettings)}"));
+            $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandImportSettings)}"));
         pushButton.ToolTip = "Import settings from template file";
         pushButton.LargeImage = PngImageSource("Transmittal.Resources.Import_Button.png");
         pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
