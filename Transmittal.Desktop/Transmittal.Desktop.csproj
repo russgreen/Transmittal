@@ -69,8 +69,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.3.0.61" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.3.0.61" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
 	<!--<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
 	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />-->
