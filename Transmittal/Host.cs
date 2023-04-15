@@ -23,17 +23,7 @@ namespace Transmittal
             {
                 var assembly = Assembly.GetExecutingAssembly();
                 var assemblyLocation = assembly.Location;
-                var addinVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
-#if RELEASE
-                //var version = addinVersion.Split('.')[0];
-                //if (version == "1") version = "Develop";
-                //var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                //var userDataLocation = Path.Combine(programDataPath, @"Autodesk\Revit\Addins\", version, "RevitLookup");
-                var userDataLocation = Path.GetDirectoryName(assemblyLocation)!;
-#else
-                var userDataLocation = Path.GetDirectoryName(assemblyLocation)!;
-#endif
-                var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                var softwareVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
 
                 var targetFrameworkAttributes = assembly.GetCustomAttributes(typeof(TargetFrameworkAttribute), true);
                 var targetFrameworkAttribute = (TargetFrameworkAttribute)targetFrameworkAttributes.First();
@@ -43,9 +33,7 @@ namespace Transmittal
                 {
                     new("Assembly", assemblyLocation),
                     new("Framework", targetFramework),
-                    new("AddinVersion", addinVersion),
-                    new("ConfigFolder", Path.Combine(userDataLocation, "Config")),
-                    new("DownloadFolder", Path.Combine(userDataLocation, "Downloads")),
+                    new("SoftwareVersion", softwareVersion),
                 });
             })
             .ConfigureServices((_, services) =>
