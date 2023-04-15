@@ -47,7 +47,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
-    private ObservableCollection<DrawingSheetModel> _selectedDrawingSheets;
+    private ObservableCollection<object> _selectedDrawingSheets;
 
     [ObservableProperty]
     private bool _isSheetsSelected = false;
@@ -187,8 +187,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets()
-            .OrderBy(x => x.DrgVolume)
-            .ThenBy(x => x.DrgNumber)
+            .OrderBy(x => x.DrgNumber)
             .ToList<DrawingSheetModel>();
     }
 
