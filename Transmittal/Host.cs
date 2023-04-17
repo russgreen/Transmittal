@@ -25,14 +25,9 @@ namespace Transmittal
                 var assemblyLocation = assembly.Location;
                 var softwareVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
 
-                var targetFrameworkAttributes = assembly.GetCustomAttributes(typeof(TargetFrameworkAttribute), true);
-                var targetFrameworkAttribute = (TargetFrameworkAttribute)targetFrameworkAttributes.First();
-                var targetFramework = targetFrameworkAttribute.FrameworkDisplayName;
-
                 builder.AddInMemoryCollection(new KeyValuePair<string, string>[]
                 {
                     new("Assembly", assemblyLocation),
-                    new("Framework", targetFramework),
                     new("SoftwareVersion", softwareVersion),
                 });
             })
