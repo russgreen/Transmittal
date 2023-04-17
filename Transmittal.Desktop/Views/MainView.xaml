@@ -8,8 +8,11 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:MainViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Width="500" Height="210" ResizeMode="NoResize" 
+        Title="{Binding WindowTitle}"  
+        Width="500" Height="250" 
+        ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
+        WindowStartupLocation="CenterScreen"
         FontSize="14" FontFamily="Segoe UI Light" >
     <Window.DataContext>
         <viewModels:MainViewModel />
@@ -59,7 +62,10 @@
 
             <Button Grid.Column="0" 
                     Margin="0,0,5,0" 
-                    x:Name="Button_Transmittal" Background="#FF0072C6" Click="Button_Transmittal_Click" >
+                    x:Name="Button_Transmittal" 
+                    Background="#FF0072C6" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_Transmittal_Click" >
                 <Button.Content>
                     <Image  Source="/Resources/Transmittal_Button.png" Stretch="Uniform" />
                 </Button.Content>
@@ -67,7 +73,10 @@
 
             <Button Grid.Column="1" 
                     Margin="5,0,5,0"
-                    x:Name="Button_TransmittalArchive" Background="#FF0072C6" Click="Button_TransmittalArchive_Click">
+                    x:Name="Button_TransmittalArchive" 
+                    Background="#FF0072C6" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_TransmittalArchive_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Archive_Button.png" Stretch="Uniform" />
                 </Button.Content>
@@ -75,11 +84,27 @@
 
             <Button Grid.Column="2" 
                     Margin="5,0,0,0"
-                    x:Name="Button_Directory" Background="#FF0072C6" Click="Button_Directory_Click">
+                    x:Name="Button_Directory" 
+                    Background="#FF0072C6" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_Directory_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Directory_Button.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
         </Grid>
+
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+            <Button Width="25" Margin="0,0,5,0" 
+                    x:Name="Button_About"
+                    Background="{x:Null}" 
+                    BorderBrush="{x:Null}" Click="Button_About_Click"  >
+                <Button.Content>
+                    <Image  Source="/Resources/Information.png" Stretch="Uniform" />
+                </Button.Content>
+            </Button>
+            <TextBlock Text="Version: " />
+            <TextBlock Text="{Binding Version}" />
+        </StackPanel>
     </StackPanel>
 </Window>
