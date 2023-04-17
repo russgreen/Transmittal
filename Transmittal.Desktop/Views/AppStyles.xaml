@@ -4,7 +4,8 @@
                     mc:Ignorable="d"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
-                    xmlns:converters="clr-namespace:Transmittal.Desktop.Converters">
+                    xmlns:converters="clr-namespace:Transmittal.Desktop.Converters"
+                    xmlns:controls="clr-namespace:Transmittal.Library.Controls;assembly=Transmittal.Library" >
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -14,7 +15,8 @@
     <BitmapImage x:Key="ContactImage" UriSource="../Resources/ContactDetails.png" />
     <BitmapImage x:Key="ReportImage" UriSource="../Resources/Report.png" />
     <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
-        
+    <BitmapImage x:Key="Hyperlink" UriSource="../Resources/Hyperlink.png" />
+
     <Style x:Key="WizardControlStyle1" TargetType="{x:Type syncfusion:WizardControl}">
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderBrush" Value="#FF93B8D9"/>
@@ -41,4 +43,10 @@
         </Setter>
     </Style>
 
+    <Style x:Key="HyperlinkControlStyle" TargetType="{x:Type controls:Hyperlink}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="#FF0072C6" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+    </Style>
 </ResourceDictionary>
