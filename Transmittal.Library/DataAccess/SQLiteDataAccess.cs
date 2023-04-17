@@ -2,6 +2,7 @@
 using Humanizer;
 using Microsoft.Data.Sqlite;
 using System.Data;
+using System.IO;
 using Transmittal.Library.Extensions;
 
 namespace Transmittal.Library.DataAccess;

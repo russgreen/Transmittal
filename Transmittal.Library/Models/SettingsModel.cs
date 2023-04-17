@@ -1,4 +1,6 @@
-﻿namespace Transmittal.Library.Models;
+﻿using System.IO;
+
+namespace Transmittal.Library.Models;
 
 public partial class SettingsModel : BaseModel
 {
