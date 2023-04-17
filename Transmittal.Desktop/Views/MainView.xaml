@@ -103,8 +103,7 @@
                     <Image  Source="/Resources/Information.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
-            <TextBlock Text="Version: " />
-            <TextBlock Text="{Binding Version}" />
+            <TextBlock Text="{Binding Message}" />
         </StackPanel>
     </StackPanel>
 </Window>
