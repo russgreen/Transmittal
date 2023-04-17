@@ -1,8 +1,3 @@
-using CommunityToolkit.Mvvm.DependencyInjection;
-//using Microsoft.AppCenter;
-//using Microsoft.AppCenter.Analytics;
-//using Microsoft.AppCenter.Crashes;
-using Microsoft.Extensions.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;
@@ -21,21 +16,13 @@ public partial class App : Application
         
     void App_Startup(object sender, StartupEventArgs e)
     {
-        //start app center
-        //AppCenter.Start("##AppCenterSecret##", typeof(Analytics), typeof(Crashes));
-
         //build dependancy injection system
-        Ioc.Default.ConfigureServices(new ServiceCollection()
-            .AddSingleton<ISettingsService, SettingsService>()
-            .AddTransient<IDataConnection, SQLiteDataAccess>()
-            .AddTransient<IContactDirectoryService, ContactDirectoryService>()
-            .AddTransient<ITransmittalService, TransmittalService>()
-            .BuildServiceProvider());
-        
+        Host.StartHost();
+
         //register the syncfusion license
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
 
-        var settings = Ioc.Default.GetService<ISettingsService>();
+        var settings = Host.GetService<ISettingsService>();
 
         // If no command line arguments were provided, don't process them if (e.Args.Length == 0) return;  
         if (e.Args.Length > 0)
@@ -90,14 +77,22 @@ public partial class App : Application
                     return;
                 }
 
+                // if the agument is --about then launch the about view 
+                if (arg == "--about")
+                {
+                    AboutView aboutView = new();
+                    aboutView.Show();
+                    return;
+                }
+
                 // if the agument is --transmittal then launch the transmittal report view
                 if (arg.StartsWith("--transmittal"))
                 {
                     TransmittalID = int.Parse(e.Args[0].Substring(e.Args[0].IndexOf("=") + 1));
 
-                    Reports.Reports report = new(Ioc.Default.GetService<ISettingsService>(),
-                        Ioc.Default.GetService<IContactDirectoryService>(),
-                        Ioc.Default.GetService<ITransmittalService>());
+                    Reports.Reports report = new(Host.GetService<ISettingsService>(),
+    Host.GetService<IContactDirectoryService>(),
+    Host.GetService<ITransmittalService>());
 
                     report.ShowTransmittalReport(TransmittalID);
                     Current.Shutdown();

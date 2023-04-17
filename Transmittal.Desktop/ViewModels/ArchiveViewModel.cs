@@ -14,9 +14,9 @@ namespace Transmittal.Desktop.ViewModels;
 
 internal partial class ArchiveViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
 
     public string WindowTitle { get; private set; }
 
