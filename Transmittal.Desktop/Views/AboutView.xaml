@@ -64,6 +64,10 @@
                             Content="Download update"
                             Command="{Binding DownloadUpdateCommand}"
                             Visibility="{Binding DownloadAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Margin="0,0,0,0" Height="25"
+                            Content="Install update"
+                            Command="{Binding InstallUpdateCommand}"
+                            Visibility="{Binding InstallAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
             </Grid>            
         </GroupBox>

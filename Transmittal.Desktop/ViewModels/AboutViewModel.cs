@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.IO;
 using Transmittal.Library.Enums;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -110,6 +112,15 @@ internal partial class AboutViewModel : BaseViewModel
         IsDownloadAttempted = true;
 
         StateChanged();
+    }
+
+    [RelayCommand]
+    private void InstallUpdate()
+    {
+        if(File.Exists(_softwareUpdateService.LocalFilePath))
+        {
+            Process.Start(_softwareUpdateService.LocalFilePath);
+        }
     }
 
     private void BuildOpenSourceSoftwareList()
