@@ -11,7 +11,7 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class ArchiveView : Window
 {
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     private readonly ViewModels.ArchiveViewModel _viewModel;
 

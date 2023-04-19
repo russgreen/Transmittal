@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.XlsIO;
@@ -24,16 +23,15 @@ using Transmittal.Views;
 
 namespace Transmittal.ViewModels;
 
-//[INotifyPropertyChanged]
 internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, IRevisionRequester, IPersonRequester
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>(); 
-    private readonly IExportPDFService _exportPDFService = Ioc.Default.GetRequiredService<IExportPDFService>();
-    private readonly IExportDWGService _exportDWGService = Ioc.Default.GetRequiredService<IExportDWGService>();
-    private readonly IExportDWFService _exportDWFService = Ioc.Default.GetRequiredService<IExportDWFService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
+    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly IExportPDFService _exportPDFService = Host.GetService<IExportPDFService>();
+    private readonly IExportDWGService _exportDWGService = Host.GetService<IExportDWGService>();
+    private readonly IExportDWFService _exportDWFService = Host.GetService<IExportDWFService>();
+    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
 
     public string WindowTitle { get; private set; }
 
@@ -49,7 +47,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
-    private ObservableCollection<DrawingSheetModel> _selectedDrawingSheets;
+    private ObservableCollection<object> _selectedDrawingSheets;
 
     [ObservableProperty]
     private bool _isSheetsSelected = false;
@@ -189,8 +187,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets()
-            .OrderBy(x => x.DrgVolume)
-            .ThenBy(x => x.DrgNumber)
+            .OrderBy(x => x.DrgNumber)
             .ToList<DrawingSheetModel>();
     }
 

@@ -53,23 +53,6 @@ public partial class TransmittalView : Window
         //TODO stop the main window closing if the no button is clicked
     }
 
-    private void sfDataGridSheets_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
-    {
-        // couldn't get the databinding to work on the selecteditems property.
-        // TODO investigate why not working
-        var items = sfDataGridSheets.SelectedItems;
-        _viewModel.SelectedDrawingSheets.Clear();
-
-        if (items.Count > 0)
-        {
-            //viewModel.SheetsSelected = true;
-            foreach (var item in items)
-            {
-                _viewModel.SelectedDrawingSheets.Add((DrawingSheetModel)item);
-            }
-        }
-    }
-
     private void ButtonRevise_Click(object sender, RoutedEventArgs e)
     {
         Views.RevisionsView dialog = new Views.RevisionsView(_viewModel);

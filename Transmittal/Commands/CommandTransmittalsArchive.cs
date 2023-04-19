@@ -1,30 +1,29 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 
-namespace Transmittal;
+namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
-internal class CommandDirectory : IExternalCommand
+internal class CommandTransmittalsArchive : IExternalCommand
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Ioc.Default.GetRequiredService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
-    
+    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {
         App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
-        //get the database file from the current model
+         //get the database file from the current model
         var dbFile = _settingsService.GlobalSettings.DatabaseFile;
 
         //if database is found the launch the UI
-        if(_settingsService.GlobalSettings.RecordTransmittals == false)
+        if (_settingsService.GlobalSettings.RecordTransmittals == false)
         {
             var td = new TaskDialog("Transmittal")
             {
@@ -47,7 +46,7 @@ internal class CommandDirectory : IExternalCommand
 
         ProcessStartInfo processStartInfo = new ProcessStartInfo();
         processStartInfo.FileName = pathToExe;
-        processStartInfo.Arguments = $"--directory \"--database={dbFile}\"";
+        processStartInfo.Arguments = $"--archive \"--database={dbFile}\"";
 
         Process.Start(processStartInfo);
 

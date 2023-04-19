@@ -12,8 +12,8 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class DirectoryView : Window
 {
-    private readonly ITransmittalService _transmittalService = Ioc.Default.GetRequiredService<ITransmittalService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Ioc.Default.GetRequiredService<IContactDirectoryService>();
+    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
+    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
 
     GridRowSizingOptions _gridRowResizingOptions = new GridRowSizingOptions();
     //To get the calculated height from GetAutoRowHeight method.    

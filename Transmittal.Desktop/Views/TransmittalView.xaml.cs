@@ -12,7 +12,7 @@ namespace Transmittal.Desktop.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-    private readonly ISettingsService _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     public TransmittalView()
     {

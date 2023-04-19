@@ -21,6 +21,7 @@
 	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
 		<Optimize>true</Optimize>
 		<DebugType>none</DebugType>
+		<DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('R22'))">
@@ -47,6 +48,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\About_Button.png" />
 	  <None Remove="Resources\Add.png" />
 	  <None Remove="Resources\Archive_Button.png" />
 	  <None Remove="Resources\ContactDetails.png" />
@@ -59,38 +61,20 @@
 	  <None Remove="Resources\Settings_Button.png" />
 	  <None Remove="Resources\Transmittal.ico" />
 	</ItemGroup>
-
-	<!--
-	<PropertyGroup>
-		<Path_DLL_API>..\..\RevitAPI\</Path_DLL_API>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Reference Include="AdWindows">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\AdWindows.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="RevitAPI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="RevitAPIUI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>   
-	</ItemGroup>
-	-->
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
-		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="20.3.0.61" />
-		<PackageReference Include="System.Text.Json" Version="7.0.0" />
-		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
+				<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
+		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="21.1.39" />
+		<PackageReference Include="System.Text.Json" Version="7.0.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+		<!--<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />-->
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
+		<PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />		
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,7 +82,8 @@
 		<Resource Include="Resources\ContactDetails.png" />
 		<Resource Include="Resources\DataMerge.png" />
 		<Resource Include="Resources\Delete.png" />		
-		<Resource Include="Resources\GreenCheck.png" />
+		<Resource Include="Resources\GreenCheck.png" />		
+		<EmbeddedResource Include="Resources\About_Button.png" />
 		<Resource Include="Resources\Report.png" />
 		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\Import_Button.png" />
@@ -107,14 +92,6 @@
 		<EmbeddedResource Include="Resources\Directory_Button.png" />
 		<EmbeddedResource Include="Resources\Settings_Button.png" />		
 	</ItemGroup>
-
-	<ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.3.0.61" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.3.0.61" />
-  </ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />

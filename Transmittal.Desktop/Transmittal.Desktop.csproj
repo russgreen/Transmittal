@@ -24,6 +24,8 @@
     <None Remove="Resources\Directory_Button.png" />
     <None Remove="Resources\Duplicate.png" />
     <None Remove="Resources\GreenCheck.png" />
+    <None Remove="Resources\Hyperlink.png" />
+    <None Remove="Resources\Information.png" />
     <None Remove="Resources\Reload.png" />
     <None Remove="Resources\Report.png" />
     <None Remove="Resources\Transmittal_Button.png" />
@@ -41,6 +43,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\GreenCheck.png" />
+    <Resource Include="Resources\Hyperlink.png" />
+    <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\Transmittal_Button.png" />
   </ItemGroup>
 
@@ -66,11 +70,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.3.0.61" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.3.0.61" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
 	<!--<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
 	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />-->

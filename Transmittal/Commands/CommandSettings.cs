@@ -1,10 +1,9 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Transmittal.Services;
 
-namespace Transmittal;
+namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
 internal class CommandSettings : IExternalCommand

@@ -1,0 +1,141 @@
+﻿<Window x:Class="Transmittal.Desktop.Views.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Desktop.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels" 
+        xmlns:controls="clr-namespace:Transmittal.Library.Controls;assembly=Transmittal.Library"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:AboutViewModel}, IsDesignTimeCreatable=True}"
+        Title="About" Height="500" Width="600"
+        FontSize="14" FontFamily="Segoe UI Light" 
+        ResizeMode="NoResize" 
+        WindowStyle="SingleBorderWindow" 
+        WindowStartupLocation="CenterScreen" >
+    
+    <Window.DataContext>
+        <viewModels:AboutViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <StackPanel Margin="10">
+        <TextBlock FontSize="32" 
+                   Text="Transmittal" />
+        <TextBlock TextWrapping="Wrap"
+                   Margin="0,15,0,0"
+                   Text="{Binding Description}" />
+
+        <GroupBox Margin="0,15,0,0" Height="85" Header="Software Update" >
+            <Grid Margin="5" Height="80"  >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" >
+                    <TextBlock Text="{Binding UpdateMessage}" TextWrapping="Wrap" />
+                    <controls:Hyperlink Margin="0,5,0,0" 
+                                        Style="{DynamicResource HyperlinkControlStyle}"
+                                        NavigateUri="{Binding ReleaseNotesUrl}">
+                        <controls:Hyperlink.Content>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="12" Source="{Binding Mode=OneWay, Source={StaticResource Hyperlink}}" Stretch="Uniform"/>
+                                <TextBlock Text=" Release notes" />
+                            </StackPanel>
+                        </controls:Hyperlink.Content>
+
+                    </controls:Hyperlink>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" >
+                    <Button Margin="0,0,0,0" Height="25"
+                            Content="Check for updates"
+                            Command="{Binding CheckForUpdatesCommand}"
+                            Visibility="{Binding CanCheckForUpdates, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Margin="0,0,0,0" Height="25"
+                            Content="Download update"
+                            Command="{Binding DownloadUpdateCommand}"
+                            Visibility="{Binding DownloadAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Margin="0,0,0,0" Height="25"
+                            Content="Install update"
+                            Command="{Binding InstallUpdateCommand}"
+                            Visibility="{Binding InstallAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </StackPanel>
+            </Grid>            
+        </GroupBox>
+                
+        <TextBlock Margin="0,5,0,0"
+                   Text="{Binding Copyright}" />
+
+        <controls:Hyperlink Margin="0,5,0,0"
+                            Style="{DynamicResource HyperlinkControlStyle}"
+                            NavigateUri="https://github.com/russgreen/Transmittal">
+            <controls:Hyperlink.Content>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Height="12" Source="{DynamicResource ResourceKey=Hyperlink}" Stretch="Uniform"/>
+                    <TextBlock Text=" Source repository on Github" />
+                </StackPanel>
+            </controls:Hyperlink.Content>
+        </controls:Hyperlink>
+
+        <controls:Hyperlink Margin="0,5,0,0" 
+                            Style="{DynamicResource HyperlinkControlStyle}"
+                            NavigateUri="https://github.com/russgreen/Transmittal/issues/new">
+            <controls:Hyperlink.Content>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Height="12" Source="/Resources/Hyperlink.png" Stretch="Uniform"/>
+                    <TextBlock Text=" Contact" />
+                </StackPanel>
+            </controls:Hyperlink.Content>
+        </controls:Hyperlink>
+
+        <GroupBox Margin="0,15,0,0" Height="150" Header="Open Source Software Used" >
+         <DataGrid Margin="0,5,0,0" 
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="None"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  ItemsSource="{Binding OpenSourceSoftwareModels}"
+                  HorizontalScrollBarVisibility="Hidden"
+                  VerticalScrollBarVisibility="Visible" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridHyperlinkColumn Width="2*"
+                                         Header="Software"
+                                         Binding="{Binding SoftwareUri}"
+                                         ContentBinding="{Binding SoftwareName}">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style>
+                            <EventSetter
+                            Event="Hyperlink.Click"
+                            Handler="OpenLink" />
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+                </DataGridHyperlinkColumn>
+                <DataGridHyperlinkColumn Width="1*"
+                                         Header="License"
+                                         Binding="{Binding LicenseUri}"
+                                         ContentBinding="{Binding LicenseName}">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style>
+                            <EventSetter
+                            Event="Hyperlink.Click"
+                            Handler="OpenLink" />
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+                </DataGridHyperlinkColumn>
+            </DataGrid.Columns>
+        </DataGrid>           
+        </GroupBox>
+
+    </StackPanel>
+</Window>

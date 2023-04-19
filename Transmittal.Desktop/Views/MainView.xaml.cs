@@ -41,5 +41,11 @@ namespace Transmittal.Desktop.Views
             DirectoryView view = new();
             view.ShowDialog();
         }
+
+        private void Button_About_Click(object sender, RoutedEventArgs e)
+        {
+            AboutView view = new AboutView();
+            view.ShowDialog();
+        }
     }
 }
