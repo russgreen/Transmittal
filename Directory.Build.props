@@ -1,12 +1,6 @@
 <Project>
   <PropertyGroup>
     <Company>Russell Green</Company>
-    <!--<PackageVersion>6.0.0</PackageVersion>
-    <VersionPrefix>$(PackageVersion)</VersionPrefix>
-    <VersionSuffix>BETA</VersionSuffix>
-    <ApplicationVersion>$(PackageVersion).0</ApplicationVersion>
-    <FileVersion>$(PackageVersion).0</FileVersion>
-    <InformationalVersion>$(PackageVersion).0</InformationalVersion>-->
 
     <VersionPrefix>1.6.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
@@ -16,11 +10,9 @@
 
     <Authors>Russ Green</Authors>
     <Title>Transmittal</Title>
-    <Copyright>Copyright © Russ Green</Copyright>
+    <Copyright>Copyright © Russell Green</Copyright>
     
-    <Description>Transmittal is a tool to assist is consistently creating and recording document transmittals</Description>
+    <Description>Transmittal is a tool to assist in consistently creating and recording document transmittals from Autodesk Revit.</Description>
     
-    <!--<SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>../../sn.snk</AssemblyOriginatorKeyFile> -->
    </PropertyGroup> 
 </Project>
