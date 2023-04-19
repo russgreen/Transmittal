@@ -133,7 +133,9 @@ public class App : IExternalApplication
         SplitButton splitButton = panel.AddItem(splitButtonData) as SplitButton;
 
         PushButton pushButton = splitButton.AddPushButton(
-            new PushButtonData("Settings", "Settings",
+            new PushButtonData(
+                nameof(Transmittal.Commands.CommandSettings),  
+                "Settings",
             Assembly.GetExecutingAssembly().Location,
             $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandSettings)}"));
         pushButton.ToolTip = "Edit the settings";
@@ -141,12 +143,23 @@ public class App : IExternalApplication
         pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
 
         pushButton = splitButton.AddPushButton(
-            new PushButtonData("ImportSettings", "Import Settings",
+            new PushButtonData(
+                nameof(Transmittal.Commands.CommandImportSettings), 
+                "Import Settings",
             Assembly.GetExecutingAssembly().Location,
             $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandImportSettings)}"));
         pushButton.ToolTip = "Import settings from template file";
         pushButton.LargeImage = PngImageSource("Transmittal.Resources.Import_Button.png");
         pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
+
+        pushButton = splitButton.AddPushButton(
+        new PushButtonData(nameof(Transmittal.Commands.CommandAbout), 
+            "About",
+        Assembly.GetExecutingAssembly().Location,
+        $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandAbout)}"));
+        pushButton.ToolTip = "About Transmittal";
+        pushButton.LargeImage = PngImageSource("Transmittal.Resources.About_Button.png");
+        pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
 
         return panel;
     }
