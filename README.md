@@ -2,7 +2,6 @@
 ![Revit Version](https://img.shields.io/badge/Revit%20Version-2022_--_2024-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue.svg)
 ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg)
-[![AppStore](https://img.shields.io/badge/Autodesk-AppStore-blue)](https://apps.autodesk.com/en/Publisher/PublisherHomepage?ID=200910140805021)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![GitHub all releases](https://img.shields.io/github/downloads/russgreen/Transmittal/total)
 
