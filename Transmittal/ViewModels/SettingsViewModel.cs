@@ -360,6 +360,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GetSettings();
 
         SetPropertiesFromGlobalSettings();
+
+        //we loaded settings from the database so we must want to record transmittals
+        RecordTransmittals = true;
     }
 
     partial void OnDrawingIssueStoreChanged(string value)
