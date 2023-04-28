@@ -734,7 +734,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             if (RecordTransmittal == true)
                             {
                                 // Mark sheets issued date.
-                                SetIssueDate(sheet);
+                                // Currently disabled is not required for transmittal
+                                //SetIssueDate(sheet);
 
                                 // Mark revisions issued
                                 SetRevisionsIssued(sheet);
