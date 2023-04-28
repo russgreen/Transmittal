@@ -56,7 +56,7 @@ The default report templates are embedded in the application but it is possible 
 The path to the folder where transmittal reports should be saved when exported from the report viewer.
 
 ### Directory store
-The path to the folder where the contract directory report should be saved when exported from the report viewer.
+The path to the folder where the project directory report should be saved when exported from the report viewer.
 
 ## Advanced Settings
 ### Add standard transmittal parameters to your project
