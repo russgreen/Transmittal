@@ -12,7 +12,7 @@ internal static class Host
 {
     private static IHost _host;
 
-    public static void StartHost()
+    public static async Task StartHost()
     {
         _host = Microsoft.Extensions.Hosting.Host
         .CreateDefaultBuilder()
@@ -42,7 +42,7 @@ internal static class Host
         })
         .Build();
 
-        _host.Start();
+        await _host.StartAsync();
     }
 
     public static async Task StartHost(IHost host)

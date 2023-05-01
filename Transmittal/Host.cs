@@ -15,22 +15,10 @@ namespace Transmittal
     {
         private static IHost _host;
 
-        public static void StartHost()
+        public static async Task StartHost()
         {
             _host = Microsoft.Extensions.Hosting.Host
             .CreateDefaultBuilder()
-            .ConfigureAppConfiguration(builder =>
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var assemblyLocation = assembly.Location;
-                var softwareVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
-
-                builder.AddInMemoryCollection(new KeyValuePair<string, string>[]
-                {
-                    new("Assembly", assemblyLocation),
-                    new("SoftwareVersion", softwareVersion),
-                });
-            })
             .ConfigureServices((_, services) =>
             {
                 services.AddSingleton<ISettingsService, SettingsService>();
@@ -45,7 +33,7 @@ namespace Transmittal
             })
             .Build();
 
-            _host.Start();
+            await _host.StartAsync();
         }
 
         public static async Task StartHost(IHost host)

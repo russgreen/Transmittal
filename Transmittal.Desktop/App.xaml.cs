@@ -17,7 +17,7 @@ public partial class App : Application
     void App_Startup(object sender, StartupEventArgs e)
     {
         //build dependancy injection system
-        Host.StartHost();
+        Host.StartHost().Wait();
 
         //register the syncfusion license
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");

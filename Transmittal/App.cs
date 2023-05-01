@@ -34,7 +34,7 @@ public class App : IExternalApplication
 
         CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
-        Host.StartHost();
+        Host.StartHost().Wait();
 
         //allow end users to customise the ribbon tab name
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
