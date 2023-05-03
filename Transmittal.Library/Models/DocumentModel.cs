@@ -12,6 +12,8 @@ public class DocumentModel : TransmittalItemModel
 
     public DocumentTypeModel DocumentType { get; set; }
 
+    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription}";
+
     public DocumentModel()
     {
 
