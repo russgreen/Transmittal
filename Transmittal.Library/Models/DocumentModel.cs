@@ -13,7 +13,7 @@ public class DocumentModel : TransmittalItemModel
 
     public DocumentTypeModel DocumentType { get; set; }
 
-    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription.Humanize().Titleize()}";
+    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription.Transform(To.LowerCase, To.TitleCase)}";
 
     public DocumentModel()
     {
