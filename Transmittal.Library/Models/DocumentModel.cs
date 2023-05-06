@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Transmittal.Library.Validation;
+using Humanizer;
 
 namespace Transmittal.Library.Models;
 public class DocumentModel : TransmittalItemModel
@@ -12,11 +13,10 @@ public class DocumentModel : TransmittalItemModel
 
     public DocumentTypeModel DocumentType { get; set; }
 
-    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription}";
+    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription.Humanize().Titleize()}";
 
     public DocumentModel()
     {
-
     }
 
     public DocumentModel(DocumentModel model)
