@@ -6,6 +6,7 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:r2021="R2021"
         x:Class="Transmittal.Views.TransmittalView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
@@ -177,10 +178,27 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Margin="5,0,0,0"  >
-                            <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
-                                      Content="Export Sheets to PDF" 
-                                      IsChecked="{Binding ExportPDF}" 
-                                      Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
+                            <mc:AlternateContent>
+                                <mc:Choice Requires="r2021">
+                                    <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
+                                              Content="Print Sheets to PDF using PDF24" 
+                                              IsEnabled="{Binding ExportPDFAvailable}"
+                                              IsChecked="{Binding ExportPDF}" 
+                                              Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
+
+                                    <TextBlock Margin="5" Text="PDF24 does not appear to be installed" 
+                                               Foreground="Red" Visibility="{Binding ExportPDFAvailable, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                                </mc:Choice>
+                                <mc:Fallback>
+                                    <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
+                                              Content="Export Sheets to PDF" 
+                                              IsEnabled="{Binding ExportPDFAvailable}"
+                                              IsChecked="{Binding ExportPDF}" 
+                                              Command="{Binding GetFormatCountCommand, Mode=OneWay}" />                                    
+                                </mc:Fallback>
+                            </mc:AlternateContent>
+
+                            
                             <GroupBox Header="PDF Export Options" 
                                       Margin="0,5,0,0" 
                                       Padding="2"

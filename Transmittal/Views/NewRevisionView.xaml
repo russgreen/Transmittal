@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:local="clr-namespace:Transmittal.Views"
+        xmlns:r2021="R2021"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:NewRevisionViewModel, IsDesignTimeCreatable=True}"
         Title="New Revision" Height="300" Width="345" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Topmost="True">
@@ -29,12 +30,24 @@
         <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding Description}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0">Type</TextBlock>
-        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
-                  ItemsSource="{Binding RevisionSequences}" 
-                  DisplayMemberPath="Name"
-                  SelectedValuePath="Id"
-                  SelectedValue="{Binding RevisionSequenceID}"
-                  SelectedItem="{Binding RevisionSequence}"/>
+        <mc:AlternateContent>
+            <mc:Choice Requires="r2021">
+             <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
+                      ItemsSource="{Binding RevisionSequences}" 
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding RevisionSequenceID}"
+                      SelectedItem="{Binding RevisionSequence}"/>               
+                
+            </mc:Choice>
+            <mc:Fallback>
+             <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" 
+                      ItemsSource="{Binding RevisionSequences}" 
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding RevisionSequenceID}"
+                      SelectedItem="{Binding RevisionSequence}"/>               
+            </mc:Fallback>
+        </mc:AlternateContent>
 
         <TextBlock Grid.Row="3" Grid.Column="0">Issued by</TextBlock>
         <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" Text="{Binding IssuedBy}"/>

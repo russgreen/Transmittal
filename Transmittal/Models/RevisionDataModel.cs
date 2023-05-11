@@ -6,11 +6,10 @@ public class RevisionDataModel
 {
     public int Sequence { get; set; }
 
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-    //nothing to add before 2022
-    public RevisionNumberType Numbering { get; set; }
-#else
+#if REVIT2022_OR_GREATER
     public string SequenceName { get; set; }
+#else
+    public RevisionNumberType Numbering { get; set; }
 #endif
 
     public string RevDate { get; set; }
@@ -34,16 +33,15 @@ public class RevisionDataModel
         IssuedBy = r.IssuedBy;
         Show = r.Visibility;
 
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-        //nothing to add before 2022
-        Numbering = r.NumberType;
-#else
+#if REVIT2022_OR_GREATER
         SequenceId = r.RevisionNumberingSequenceId;
 
         using (var revisionNumberingSequence = (RevisionNumberingSequence)App.RevitDocument.GetElement(r.RevisionNumberingSequenceId))
         {
             SequenceName = revisionNumberingSequence.SequenceName;
         }
+#else
+        Numbering = r.NumberType;
 #endif
     }
 

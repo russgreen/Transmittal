@@ -9,6 +9,7 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>  
     <converters:BrushColorConverter x:Key="BrushColorConverter"/>
+    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
     <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
     <BitmapImage x:Key="MergeImage" UriSource="../Resources/DataMerge.png" />

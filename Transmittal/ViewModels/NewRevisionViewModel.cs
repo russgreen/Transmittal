@@ -31,16 +31,27 @@ internal partial class NewRevisionViewModel : BaseViewModel
     [ObservableProperty]
     private string _issuedTo = string.Empty;
 
+#if REVIT2022_OR_GREATER
     public List<Element> RevisionSequences { get; private set; }
-
+#else
+    public List<object> RevisionSequences { get; private set; }
+#endif
     public NewRevisionViewModel(IRevisionRequester callingViewModel)
     {
         _callingViewModel = callingViewModel;
 
+#if REVIT2022_OR_GREATER
         RevisionSequences = RevisionNumberingSequence
             .GetAllRevisionNumberingSequences(App.RevitDocument)
             .Select(App.RevitDocument.GetElement)
             .ToList();
+#else
+        RevisionSequences = new ();
+        foreach (var i in Enum.GetValues(typeof(Autodesk.Revit.DB.RevisionNumberType)))
+        {
+            RevisionSequences.Add(i);
+        }
+#endif
 
         _revisionSequence = RevisionSequences.FirstOrDefault();
     }
@@ -48,18 +59,7 @@ internal partial class NewRevisionViewModel : BaseViewModel
     [RelayCommand]
     private void SendRevision()
     {
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-        //create a new revision model & pupulate the values from the form
-        RevisionDataModel revisionModel = new RevisionDataModel
-        {
-            RevDate = _revisionDate.ToString(_settingsService.GlobalSettings.DateFormatString),
-            Description = Description,
-            IssuedBy = IssuedBy,
-            IssuedTo = IssuedTo,
-            Numbering = (RevisionNumberType)_revisionSequence
-        };
-
-#else
+#if REVIT2022_OR_GREATER
         //create a new revision model & pupulate the values from the form
         RevisionDataModel revisionModel = new()
         {
@@ -69,8 +69,17 @@ internal partial class NewRevisionViewModel : BaseViewModel
             IssuedTo = IssuedTo,
             SequenceId = (ElementId)RevisionSequenceID
         };
+#else
+        //create a new revision model & pupulate the values from the form
+        RevisionDataModel revisionModel = new RevisionDataModel
+        {
+            RevDate = RevisionDate.ToString(_settingsService.GlobalSettings.DateFormatString),
+            Description = Description,
+            IssuedBy = IssuedBy,
+            IssuedTo = IssuedTo,
+            Numbering = (RevisionNumberType)RevisionSequence
+        };
 #endif
-
 
         _callingViewModel.RevisionComplete(revisionModel);
         this.OnClosingRequest();

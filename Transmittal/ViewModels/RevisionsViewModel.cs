@@ -60,22 +60,19 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         try
         {
             trans = new Transaction(App.RevitDocument, "Create Revision");
-            //var failOpt = trans.GetFailureHandlingOptions();
-            //failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            //trans.SetFailureHandlingOptions(failOpt);
+
             trans.Start();
             var newRevision = Revision.Create(App.RevitDocument);
             newRevision.Description = model.Description;
             newRevision.IssuedBy = model.IssuedBy;
             newRevision.IssuedTo = model.IssuedTo;
             newRevision.RevisionDate = model.RevDate;
-            //newRevision.NumberType = model.Numbering;
 
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
+#if REVIT2022_OR_GREATER
+            newRevision.RevisionNumberingSequenceId = model.SequenceId;
+#else
             //no sequence ID until 2022
             newRevision.NumberType = model.Numbering;
-#else
-            newRevision.RevisionNumberingSequenceId = model.SequenceId;
 #endif
 
             trans.Commit();

@@ -1,11 +1,13 @@
 # Transmittal
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2022_--_2024-blue.svg)
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2021_--_2024-blue.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue.svg)
 ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![GitHub all releases](https://img.shields.io/github/downloads/russgreen/Transmittal/total)
 
 Transmittal adds a wizard interface to Revit to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and produce transmittal reports and historic document issue sheets.
+
+To use Transmittal with Revit 2021 the freeware PDF24 printer must be installed.  This is not required for Revit 2022 and later. The PDF24 printer can be downloaded from https://download.pdf24.org/pdf24-creator-11.11.1-x64.msi
 
 ![Screenshot 2022-06-06 064221](https://user-images.githubusercontent.com/1886088/172102241-c7e597ad-ac73-45c0-ad63-7f65f5f0eddb.png)
 
