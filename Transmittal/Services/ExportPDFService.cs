@@ -342,7 +342,7 @@ internal class ExportPDFService : IExportPDFService
         }
         catch
         {
-            settings = new()
+            PDsettings = new()
             {
                 AutoSaveDir = @"%USERPROFILE%\Documents\Transmittal\Temp\PDF",
                 AutoSaveFileCmd = "",
