@@ -796,11 +796,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SheetTaskProgressLabel = "Exporting PDF...";
         SendProgressMessage();
 
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-        _exportPDFService.ExportPDF($"{fileName}.pdf", 
-        App.revitDocument, 
-        sheet);
-#else
+#if REVIT2021
+        PdfExportOptions.RasterQuality = PdfRasterQuality;
+        PdfExportOptions.ColorDepth = PdfColor;
+#endif
+
         var filePath = _exportPDFService.ExportPDF(fileName,
             App.RevitDocument,
             views,
@@ -809,7 +809,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         DocumentModel pdf = new DocumentModel(drawingSheet);
         pdf.FilePath = filePath;
         _exportedFiles.Add(pdf);
-#endif
 
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting PDF...DONE";

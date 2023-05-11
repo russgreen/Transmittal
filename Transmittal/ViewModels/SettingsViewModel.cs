@@ -311,8 +311,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         var roleParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.RoleParamName);
 
         var categoryProjectInfo = App.RevitDocument.Settings.Categories.get_Item( BuiltInCategory.OST_ProjectInformation);
-#if REVIT2024_OR_GREATER
 
+#if REVIT2024_OR_GREATER
         BindSharedParameter(projectIdentifierParam, categoryProjectInfo, GroupTypeId.IdentityData);
         BindSharedParameter(originatorParam, categoryProjectInfo, GroupTypeId.IdentityData);
         BindSharedParameter(roleParam, categoryProjectInfo, GroupTypeId.IdentityData);
@@ -416,8 +416,6 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         App.RevitDocument.ParameterBindings.Insert(definition, binding, parameterGroup);
     }
-
-
 #else
     private void BindSharedParameter(Definition definition, Category category, BuiltInParameterGroup parameterGroup)
     {
@@ -430,8 +428,6 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         App.RevitDocument.ParameterBindings.Insert(definition, binding, parameterGroup);
     }
-
-
 #endif
 
     public void ParameterComplete(string variableName, string parameterGuid)

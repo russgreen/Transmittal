@@ -296,8 +296,8 @@ public class ParameterHelper
         return true;
     }
 
-#if PREFORGETYPEID
-    public virtual bool AddParameter(Document doc, Element elem, string bindType, ParameterType pDataType, string paramName, string defPath, string groupName, bool bHandelTransaction = true, bool bSuppressError = false)
+#if REVIT2022_OR_GREATER
+    public virtual bool AddParameter(Document doc, Element elem, string bindType, ForgeTypeId pDataType, string paramName, string defPath, string groupName, bool bHandelTransaction = true, bool bSuppressError = false)
     {
         bool flag = false;
         Transaction transaction = null;
@@ -351,7 +351,7 @@ public class ParameterHelper
         return flag;
     }
 #else
-    public virtual bool AddParameter(Document doc, Element elem, string bindType, ForgeTypeId pDataType, string paramName, string defPath, string groupName, bool bHandelTransaction = true, bool bSuppressError = false)
+    public virtual bool AddParameter(Document doc, Element elem, string bindType, ParameterType pDataType, string paramName, string defPath, string groupName, bool bHandelTransaction = true, bool bSuppressError = false)
     {
         bool flag = false;
         Transaction transaction = null;
