@@ -119,31 +119,8 @@ internal class ExportPDFService : IExportPDFService
         string currentDefaultPrinterName;
         string pdfPrinterName = "PDF24";
 
-        PDF24Settings pDF24Settings;
-        try
-        {
-            pDF24Settings = GetCurrentPDF24Settings();
-        }
-        catch 
-        {
-            pDF24Settings = new()
-            {
-                AutoSaveDir = @"%USERPROFILE%\Documents\Transmittal\Temp\PDF",
-                AutoSaveFileCmd = "",
-                AutoSaveFilename = "$fileName",
-                AutoSaveOpenDir = false,
-                AutoSaveOverwrite = true,
-                AutoSaveOverwriteFile = true,
-                AutoSaveProfile = "default/best",
-                AutoSaveShowProgress = false,
-                AutoSaveUseFileCmd = false,
-                FilenameErasements = "",
-                Handler = "autoSave",
-                LoadInCreatorIfOpen = false,
-                ShellCmd = ""
-            };
-        }
-
+        PDF24Settings pDF24Settings = GetCurrentPDF24Settings();
+       
         ViewSheet sheet = null;
         foreach (var view in views)
         {
@@ -341,24 +318,47 @@ internal class ExportPDFService : IExportPDFService
 
     private PDF24Settings GetCurrentPDF24Settings()
     {
-        //read values from the registry key HKEY_CURRENT_USER\Software\PDF24\Services\PDF
-        PDF24Settings settings = new()
-        {
-            AutoSaveDir = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveDir", "").ToString(),
-            AutoSaveFileCmd = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveFileCmd", "").ToString(),
-            AutoSaveFilename = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveFilename", "").ToString(),
-            AutoSaveProfile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveProfile", "").ToString(),
-            FilenameErasements = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "FilenameErasements", "").ToString(),
-            Handler = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "Handler", "").ToString(),
-            ShellCmd = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "ShellCmd", "").ToString(),
+        PDF24Settings settings;
 
-            AutoSaveOpenDir = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOpenDir"),
-            AutoSaveOverwrite = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOverwrite"),
-            AutoSaveOverwriteFile = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOverwriteFile"),
-            AutoSaveShowProgress = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveShowProgress"),
-            AutoSaveUseFileCmd = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveUseFileCmd"),
-            LoadInCreatorIfOpen = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "LoadInCreatorIfOpen")
-        };
+        try
+        {
+            settings = new()
+            {
+                AutoSaveDir = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveDir", "").ToString(),
+                AutoSaveFileCmd = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveFileCmd", "").ToString(),
+                AutoSaveFilename = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveFilename", "").ToString(),
+                AutoSaveProfile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "AutoSaveProfile", "").ToString(),
+                FilenameErasements = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "FilenameErasements", "").ToString(),
+                Handler = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "Handler", "").ToString(),
+                ShellCmd = Registry.GetValue(@"HKEY_CURRENT_USER\Software\PDF24\Services\PDF", "ShellCmd", "").ToString(),
+
+                AutoSaveOpenDir = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOpenDir"),
+                AutoSaveOverwrite = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOverwrite"),
+                AutoSaveOverwriteFile = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveOverwriteFile"),
+                AutoSaveShowProgress = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveShowProgress"),
+                AutoSaveUseFileCmd = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "AutoSaveUseFileCmd"),
+                LoadInCreatorIfOpen = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "LoadInCreatorIfOpen")
+            };
+        }
+        catch
+        {
+            settings = new()
+            {
+                AutoSaveDir = @"%USERPROFILE%\Documents\Transmittal\Temp\PDF",
+                AutoSaveFileCmd = "",
+                AutoSaveFilename = "$fileName",
+                AutoSaveOpenDir = false,
+                AutoSaveOverwrite = true,
+                AutoSaveOverwriteFile = true,
+                AutoSaveProfile = "default/best",
+                AutoSaveShowProgress = false,
+                AutoSaveUseFileCmd = false,
+                FilenameErasements = "",
+                Handler = "autoSave",
+                LoadInCreatorIfOpen = false,
+                ShellCmd = ""
+            };
+        }
 
         return settings;
     }

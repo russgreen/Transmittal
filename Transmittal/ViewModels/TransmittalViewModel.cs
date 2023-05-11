@@ -62,6 +62,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     /// EXPORT FORMATS 
     [ObservableProperty]
+    private bool _exportPDFAvailable = true;
+    [ObservableProperty]
     private bool _exportPDF = true;
     [ObservableProperty]
     private bool _exportDWG = false;
@@ -193,6 +195,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void WireUpExportFormatsPage()
     {
+#if REVIT2022_OR_GREATER
+        //we use the Revit 2022 API to export PDF so always available
+        ExportPDFAvailable = true;
+        ExportPDF = true;
+#else
+        //we need to check PDF24 is installed
+        ExportPDFAvailable = Util.IsPrinterInstalled("PDF24");
+        if (!ExportPDFAvailable)
+        {
+            ExportPDF = false;
+            ExportFormatCount = 0;
+        }
+#endif
+
         PrintManager = App.RevitDocument.PrintManager;
         PrintSetup = PrintManager.PrintSetup;
         PrintSetup.CurrentPrintSetting.PrintParameters.HideUnreferencedViewTags = true;
