@@ -1,12 +1,13 @@
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
+using Nice3point.Revit.Toolkit.External;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
 namespace Transmittal;
 
-public class App : IExternalApplication
+public class App : ExternalApplication
 {
     // get the absolute path of this assembly
     public static readonly string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -19,22 +20,20 @@ public class App : IExternalApplication
     public static ControlledApplication CtrApp;
     public static Autodesk.Revit.DB.Document RevitDocument;  
 
-    public static IServiceProvider ServiceProvider;
-
     private AppDocEvents _appEvents;
     private string _tabName = "Transmittal";
 
     private RibbonPanel _ribbonPanel;
-    
-    public Result OnStartup(UIControlledApplication application)
+
+    public override async void OnStartup()
     {
         ThisApp = this;
-        CachedUiCtrApp = application;
-        CtrApp = application.ControlledApplication;
+        CachedUiCtrApp = Application;
+        CtrApp = Application.ControlledApplication;
 
         CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
-        Host.StartHost().Wait();
+        await Host.StartHost();
 
         //allow end users to customise the ribbon tab name
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -46,20 +45,18 @@ public class App : IExternalApplication
         }
 
         // building the ribbon panel
-        _ribbonPanel = RibbonPanel(application);
+        _ribbonPanel = RibbonPanel(Application);
 
         AddAppDocEvents();
 
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
-
-        return Result.Succeeded;
     }
 
-    public Result OnShutdown(UIControlledApplication application)
+    public override async void OnShutdown()
     {
         RemoveAppDocEvents();
 
-        return Result.Succeeded;
+        await Host.StopHost();
     }
 
     #region Event Handling
@@ -180,4 +177,5 @@ public class App : IExternalApplication
         return imageSource;
     }
     #endregion
+
 }

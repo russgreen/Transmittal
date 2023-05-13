@@ -183,6 +183,14 @@ internal partial class AboutViewModel : BaseViewModel
 
         OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
         {
+            SoftwareName = "Nice3point.Revit.Toolkit",
+            SoftwareUri = "https://github.com/Nice3point/RevitToolkit",
+            LicenseName = "MIT License",
+            LicenseUri = "https://github.com/Nice3point/RevitToolkit/blob/develop/License.md"
+        });
+
+        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
+        {
             SoftwareName = "Ookii.Dialogs.Wpf",
             SoftwareUri = "https://github.com/ookii-dialogs/ookii-dialogs-wpf",
             LicenseName = "BSD 3-Clause License",
