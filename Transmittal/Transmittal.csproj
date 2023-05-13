@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Configurations>Debug R21;Debug R22;Debug R23;Debug R24</Configurations>
 		<Configurations>$(Configurations);Release R21;Release R22;Release R23;Release R24</Configurations>
-		<Platforms>x64</Platforms>
 		<Description>Revit addin to manage drawing sheet transmittals</Description>
-		<LangVersion>latest</LangVersion>		
-		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+        <LangVersion>latest</LangVersion>
+        <PlatformTarget>x64</PlatformTarget>
+        <ImplicitUsings>true</ImplicitUsings>
 		<NeutralLanguage>en</NeutralLanguage>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-		<UseWPF>true</UseWPF>		
-		<!--<Nullable>enable</Nullable>-->
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
@@ -28,13 +28,12 @@
 		<TargetFramework>net48</TargetFramework>
 		<RevitVersion>2021</RevitVersion>
 		<DefineConstants>$(DefineConstants);REVIT2021</DefineConstants>
-		<DefineConstants>$(DefineConstants);REVIT2021_OR_GREATER</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R22'))">
 		<TargetFramework>net48</TargetFramework>
 		<RevitVersion>2022</RevitVersion>
 		<DefineConstants>$(DefineConstants);REVIT2022</DefineConstants>
-		<DefineConstants>$(DefineConstants);REVIT2021_OR_GREATER;REVIT2022_OR_GREATER</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
 		<TargetFramework>net48</TargetFramework>
@@ -52,37 +51,24 @@
 	<PropertyGroup>
 		<AssemblyName>Transmittal_$(RevitVersion)</AssemblyName>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Remove="Resources\About_Button.png" />
-	  <None Remove="Resources\Add.png" />
-	  <None Remove="Resources\Archive_Button.png" />
-	  <None Remove="Resources\ContactDetails.png" />
-	  <None Remove="Resources\DataMerge.png" />
-	  <None Remove="Resources\Delete.png" />
-	  <None Remove="Resources\Directory_Button.png" />
-	  <None Remove="Resources\GreenCheck.png" />
-	  <None Remove="Resources\Import_Button.png" />
-	  <None Remove="Resources\Report.png" />
-	  <None Remove="Resources\Settings_Button.png" />
-	  <None Remove="Resources\Transmittal.ico" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />
 		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
 		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="21.1.39" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
 		<!--<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />-->
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />		
 	</ItemGroup>
 
-	<ItemGroup Condition="$(Configuration.Contains('R21'))">
+	<!--<ItemGroup Condition="$(Configuration.Contains('R21'))">-->
+	<ItemGroup>
 	  <Reference Include="System.Printing" />
 	</ItemGroup>	
 	
@@ -92,9 +78,9 @@
 		<Resource Include="Resources\DataMerge.png" />
 		<Resource Include="Resources\Delete.png" />		
 		<Resource Include="Resources\GreenCheck.png" />		
-		<EmbeddedResource Include="Resources\About_Button.png" />
 		<Resource Include="Resources\Report.png" />
 		<Resource Include="Resources\Transmittal.ico" />
+		<EmbeddedResource Include="Resources\About_Button.png" />		
 		<EmbeddedResource Include="Resources\Import_Button.png" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 		<EmbeddedResource Include="Resources\Archive_Button.png" />
@@ -104,26 +90,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Properties\Resources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Resources.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Properties\Settings.Designer.cs">
-	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Settings.settings</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Update="Properties\Resources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
