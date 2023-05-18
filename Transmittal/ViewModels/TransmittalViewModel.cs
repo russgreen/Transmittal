@@ -188,9 +188,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets = new();
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
-        DrawingSheets = GetDrawingSheets()
-            .OrderBy(x => x.DrgNumber)
-            .ToList<DrawingSheetModel>();
+        DrawingSheets = GetDrawingSheets();
     }
 
     private void WireUpExportFormatsPage()
@@ -278,9 +276,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
 
         // retrieve the title block instances:
-        var _filteredEC = new FilteredElementCollector(App.RevitDocument);
-        _filteredEC.OfCategory(BuiltInCategory.OST_TitleBlocks);
-        _filteredEC.OfClass(typeof(FamilyInstance));
+        var filteredEC = new FilteredElementCollector(App.RevitDocument);
+        filteredEC.OfCategory(BuiltInCategory.OST_TitleBlocks);
+        filteredEC.OfClass(typeof(FamilyInstance));
 
         foreach (ViewSheet sheet in sheets)
         {
@@ -304,25 +302,27 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             drawingSheet.DrgRole = _settingsService.GlobalSettings.Role;
             drawingSheet.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
 
-            // get the sizes with from the titleblock instances
-            var Width = default(double);
-            var Height = default(double);
-            foreach (FamilyInstance FI in _filteredEC)
-            {
-                var _p = FI.get_Parameter(BuiltInParameter.SHEET_NUMBER);
-                if (_p.AsString() == sheet.SheetNumber)
-                {
-                    // we have the tb instance
-                    _p = FI.get_Parameter(BuiltInParameter.SHEET_WIDTH);
-                    Width = _p.AsDouble().FootToMm();
-                    _p = FI.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
-                    Height = _p.AsDouble().FootToMm();
-                }
-            }
-
             if (sheet.IsPlaceholder == false)
             {
-                drawingSheet.DrgPaper = Util.GetPapersize(Width, Height);
+                //TODO find a way of getting the paper size from the sheet in a more performant way
+
+                // get the sizes with from the titleblock instances
+                //var Width = default(double);
+                //var Height = default(double);
+                //foreach (FamilyInstance FI in filteredEC)
+                //{
+                    //var p = FI.get_Parameter(BuiltInParameter.SHEET_NUMBER);
+                    //if (p.AsString() == sheet.SheetNumber)
+                    //{
+                    //    // we have the tb instance
+                    //    p = FI.get_Parameter(BuiltInParameter.SHEET_WIDTH);
+                    //    Width = p.AsDouble().FootToMm();
+                    //    p = FI.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
+                    //    Height = p.AsDouble().FootToMm();
+                    //}
+                //}
+
+                //drawingSheet.DrgPaper = Util.GetPapersize(Width, Height);
                 drawingSheet.IssueDate = sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).AsString();
                 drawingSheet.DrgDrawn = sheet.get_Parameter(BuiltInParameter.SHEET_DRAWN_BY).AsString();
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
@@ -332,6 +332,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
         }
+
+        drawingSheets
+            .OrderBy(x => x.DrgNumber)
+            .ToList();
 
         return drawingSheets;
     }
