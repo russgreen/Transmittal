@@ -257,7 +257,11 @@ internal class Util
 
             if (param.StorageType == StorageType.String)
             {
+#if REVIT2022_OR_GREATER
                 value = param.AsValueString();
+#else
+               value = param.AsString();
+#endif
             }
         }
 

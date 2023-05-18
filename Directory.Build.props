@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Company>Russell Green</Company>
 
-    <VersionPrefix>1.6.5</VersionPrefix>
+    <VersionPrefix>1.6.6</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
