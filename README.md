@@ -3,7 +3,7 @@
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue.svg)
 ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![GitHub all releases](https://img.shields.io/github/downloads/russgreen/Transmittal/total)
+![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) 
 
 Transmittal adds a wizard interface to Revit to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and produce transmittal reports and historic document issue sheets.
 
