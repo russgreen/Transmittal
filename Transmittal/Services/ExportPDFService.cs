@@ -43,28 +43,16 @@ internal class ExportPDFService : IExportPDFService
                 Directory.CreateDirectory(folderPath);
             }
 
-            // get the sizes with from the titleblock instances
-            var Width = default(double);
-            var Height = default(double);
+            var sheet = views.OfType<ViewSheet>().FirstOrDefault();
+
             var viewIDs = new List<ElementId>();
-            foreach (ViewSheet sheet in views)
-            {
-                viewIDs.Add(sheet.Id);
+            viewIDs.Add(sheet.Id);
 
-                var titleblock = sheet.GetTitleBlockFamilyInstance();
-
-                if (titleblock != null)
-                {
-                    var p = titleblock.get_Parameter(BuiltInParameter.SHEET_WIDTH);
-                    Width = p.AsDouble().FootToMm();
-                    p = titleblock.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
-                    Height = p.AsDouble().FootToMm();
-                }
-            }
+            var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
 
             pdfExportOptions.FileName = exportFileName;
 
-            if (Width > Height)
+            if (paper.Width > paper.Height)
             {
                 pdfExportOptions.PaperOrientation = PageOrientationType.Landscape;
             }
