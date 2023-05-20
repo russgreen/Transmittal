@@ -32,6 +32,18 @@ public static class FilenameParser
                 Group group = match.Groups[groupName];
                 if (group.Success)
                 {
+                    if(groupName == "SheetName2")
+                    {
+                        documentProperties.Add("SheetName", group.Value);
+                        continue;
+                    }
+
+                    if (groupName == "SheetName")
+                    {
+                        documentProperties.Add(groupName, group.Value.Humanize().Titleize());
+                        continue;
+                    }
+
                     documentProperties.Add(groupName, group.Value);
                 }
             }
@@ -47,7 +59,7 @@ public static class FilenameParser
             DrgType = documentProperties.GetValueOrDefault("Type", "DR"),
             DrgRole = role,
             DrgNumber = documentProperties.GetValueOrDefault("SheetNo", "0000"),
-            DrgName = documentProperties.GetValueOrDefault("SheetName", "Title").Humanize().Titleize(),
+            DrgName = documentProperties.GetValueOrDefault("SheetName", "Title"),
             DrgStatus = documentProperties.GetValueOrDefault("Status", "S0"),
             DrgRev = documentProperties.GetValueOrDefault("Rev", "P01")
         };
@@ -55,22 +67,45 @@ public static class FilenameParser
         return document;
     }
 
+    //private static string GetPatternFromExportRule(string exportRule)
+    //{
+    //    // Escape any regex special characters in the export rule
+    //    var escapedExportRule = Regex.Escape(exportRule);
+
+    //    // Replace tag placeholders with regex capture groups
+    //    var tagRegex = new Regex(@"(<\w+>)");
+    //    var matchEvaluator = new MatchEvaluator(match => $"(?<{match.Groups[1].Value.Trim('<', '>')}>.*)");
+    //    var pattern = tagRegex.Replace(escapedExportRule, matchEvaluator);
+
+    //    // Add optional whitespace and/or hyphen characters between tags
+    //    pattern = Regex.Replace(pattern, @"(</\w+>)\s*([^-<])", "$1[- ]*$2");
+
+    //    // Add start and end anchors to the pattern
+    //    pattern = $"^{pattern}$";
+
+    //    return pattern;
+    //}
+
     private static string GetPatternFromExportRule(string exportRule)
     {
         // Escape any regex special characters in the export rule
         var escapedExportRule = Regex.Escape(exportRule);
 
-        // Replace tag placeholders with regex capture groups
-        var tagRegex = new Regex(@"(<\w+>)");
-        var matchEvaluator = new MatchEvaluator(match => $"(?<{match.Groups[1].Value.Trim('<', '>')}>.*)");
+        // Replace curly tag placeholders with regex capture groups
+        var tagRegex = new Regex(@"<{1}(?<tag>\w+)>{1}", RegexOptions.ExplicitCapture);
+        var matchEvaluator = new MatchEvaluator(match =>
+        {
+            var tag = match.Groups["tag"].Value;
+            return $"(?<{tag}>.*?)";
+        });
         var pattern = tagRegex.Replace(escapedExportRule, matchEvaluator);
 
         // Add optional whitespace and/or hyphen characters between tags
-        pattern = Regex.Replace(pattern, @"(</\w+>)\s*([^-<])", "$1[- ]*$2");
-
+        pattern = Regex.Replace(pattern, @"</\w+>\s{0,4}(?!\n)(?=\w)", "$0[- ]*");
         // Add start and end anchors to the pattern
         pattern = $"^{pattern}$";
 
         return pattern;
     }
+
 }

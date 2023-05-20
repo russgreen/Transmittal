@@ -518,7 +518,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
         foreach (IssueFormatModel item in listToConvert)
         {
-            dictionary.Add(item.Code, item.Description);
+            dictionary.Add(item.Code ?? string.Empty, item.Description ?? string.Empty);
         }
 
         return dictionary;
@@ -530,7 +530,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
         foreach (DocumentStatusModel item in listToConvert)
         {
-            dictionary.Add(item.Code, item.Description);
+            dictionary.Add(item.Code ?? string.Empty, item.Description ?? string.Empty);
         }
 
         return dictionary;

@@ -3,6 +3,8 @@ using System.IO;
 using Transmittal.Extensions;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
+using System.Drawing.Printing;
+using System.Reflection;
 #if REVIT2021
 using System.Diagnostics;
 using Microsoft.Win32;
@@ -41,49 +43,16 @@ internal class ExportPDFService : IExportPDFService
                 Directory.CreateDirectory(folderPath);
             }
 
-            //TODO investigate if this is needed
-            //if (File.Exists(fullPath) == true)
-            //{
-            //    try
-            //    {
-            //        File.Delete(fullPath);
-            //    }
-            //    catch (Exception)
-            //    {
-            //        exportFileName.Replace(".pdf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).pdf");
-            //        fullPath = Path.Combine(folderPath, exportFileName);
-            //    }
-            //}
+            var sheet = views.OfType<ViewSheet>().FirstOrDefault();
 
-            // get the titleblock instances
-            var titleBlocks = new FilteredElementCollector(exportDocument);
-            titleBlocks.OfCategory(BuiltInCategory.OST_TitleBlocks);
-            titleBlocks.OfClass(typeof(FamilyInstance));
-
-            // get the sizes with from the titleblock instances
-            var Width = default(double);
-            var Height = default(double);
             var viewIDs = new List<ElementId>();
-            foreach (ViewSheet sheet in views)
-            {
-                viewIDs.Add(sheet.Id);
-                foreach (FamilyInstance FI in titleBlocks)
-                {
-                    var _p = FI.get_Parameter(BuiltInParameter.SHEET_NUMBER);
-                    if ((_p.AsString() ?? "") == (sheet.SheetNumber ?? ""))
-                    {
-                        // we have the tb instance
-                        _p = FI.get_Parameter(BuiltInParameter.SHEET_WIDTH);
-                        Width = _p.AsDouble().FootToMm();
-                        _p = FI.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
-                        Height = _p.AsDouble().FootToMm();
-                    }
-                }
-            }
+            viewIDs.Add(sheet.Id);
+
+            var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
 
             pdfExportOptions.FileName = exportFileName;
 
-            if (Width > Height)
+            if (paper.Width > paper.Height)
             {
                 pdfExportOptions.PaperOrientation = PageOrientationType.Landscape;
             }
@@ -135,7 +104,7 @@ internal class ExportPDFService : IExportPDFService
         try
         {
             currentDefaultPrinterName = System.Printing.LocalPrintServer.GetDefaultPrintQueue().FullName;
-            Util.SetDefaultPrinter(pdfPrinterName);
+            SetDefaultPrinter(pdfPrinterName);
 
             trans = new Transaction(App.RevitDocument, "Export PDF");
             var failOpt = trans.GetFailureHandlingOptions();
@@ -171,27 +140,7 @@ internal class ExportPDFService : IExportPDFService
                 fullPath = $"{fullPath}.pdf";
             }
 
-            // get the titleblock instances
-            var titleBlocks = new FilteredElementCollector(exportDocument);
-            titleBlocks.OfCategory(BuiltInCategory.OST_TitleBlocks);
-            titleBlocks.OfClass(typeof(FamilyInstance));
-
-            // get the sizes with from the titleblock instances
-            var Width = default(double);
-            var Height = default(double);
-
-            foreach (FamilyInstance FI in titleBlocks)
-            {
-                var _p = FI.get_Parameter(BuiltInParameter.SHEET_NUMBER);
-                if ((_p.AsString() ?? "") == (sheet.SheetNumber ?? ""))
-                {
-                    // we have the tb instance
-                    _p = FI.get_Parameter(BuiltInParameter.SHEET_WIDTH);
-                    Width = _p.AsDouble().FootToMm();
-                    _p = FI.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
-                    Height = _p.AsDouble().FootToMm();
-                }
-            }
+            var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
 
             PDF24Settings transmittalPDF24Settings = new()
             {
@@ -212,7 +161,6 @@ internal class ExportPDFService : IExportPDFService
 
             SetPDF24Settings(transmittalPDF24Settings);
 
-
             //set the print manager 
             PrintManager printManager = App.RevitDocument.PrintManager;
             printManager.PrintSetup.CurrentPrintSetting = printManager.PrintSetup.InSession;
@@ -230,7 +178,7 @@ internal class ExportPDFService : IExportPDFService
 
             printManager.PrintSetup.InSession.PrintParameters.ZoomType = ZoomType.Zoom;
             printManager.PrintSetup.InSession.PrintParameters.Zoom = 100;
-            if (Width > Height)
+            if (paper.Width > paper.Height)
             {
                 // pParams.PageOrientation = PageOrientationType.Landscape
                 printManager.PrintSetup.InSession.PrintParameters.PageOrientation = PageOrientationType.Landscape;
@@ -263,11 +211,11 @@ internal class ExportPDFService : IExportPDFService
                 }
             }
 
-            string PaperSize = Util.GetPapersize(Width, Height);
+            //string PaperSize = Util.GetPapersize(Width, Height);
             foreach (Autodesk.Revit.DB.PaperSize ps in printManager.PaperSizes)
             {
                 // TODO - Handle custom paper sizes
-                if (ps.Name.Equals(PaperSize))
+                if (ps.Name.Equals(paper.Name))//PaperSize))
                 {
                     // pParams.PaperSize = ps
                     printManager.PrintSetup.InSession.PrintParameters.PaperSize = ps;
@@ -299,7 +247,7 @@ internal class ExportPDFService : IExportPDFService
 
             viewSheetSetting.Delete();
 
-            Util.SetDefaultPrinter(currentDefaultPrinterName);
+            SetDefaultPrinter(currentDefaultPrinterName);
         }
         catch
         {
@@ -399,6 +347,13 @@ internal class ExportPDFService : IExportPDFService
         bool myBool = Convert.ToBoolean(myRegDWordValue);
 
         return myBool;
+    }
+
+    private static void SetDefaultPrinter(string printername)
+    {
+        var type__1 = Type.GetTypeFromProgID("WScript.Network");
+        var instance = Activator.CreateInstance(type__1);
+        type__1.InvokeMember("SetDefaultPrinter", BindingFlags.InvokeMethod, null, instance, new object[] { printername });
     }
 }
 
