@@ -6,6 +6,7 @@ using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -199,7 +200,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ExportPDF = true;
 #else
         //we need to check PDF24 is installed
-        ExportPDFAvailable = Util.IsPrinterInstalled("PDF24");
+        ExportPDFAvailable = IsPrinterInstalled("PDF24");
         if (!ExportPDFAvailable)
         {
             ExportPDF = false;
@@ -275,11 +276,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return drawingSheets;
         }
 
-        // retrieve the title block instances:
-        var filteredEC = new FilteredElementCollector(App.RevitDocument);
-        filteredEC.OfCategory(BuiltInCategory.OST_TitleBlocks);
-        filteredEC.OfClass(typeof(FamilyInstance));
-
         foreach (ViewSheet sheet in sheets)
         {
             // Create a new drawing sheet model to add to the list
@@ -305,24 +301,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             if (sheet.IsPlaceholder == false)
             {
                 //TODO find a way of getting the paper size from the sheet in a more performant way
+                //that does require sheet graphics to be regenerated
+                //drawingSheet.DrgPaper = sheet.GetPaperSize();
 
-                // get the sizes with from the titleblock instances
-                //var Width = default(double);
-                //var Height = default(double);
-                //foreach (FamilyInstance FI in filteredEC)
-                //{
-                    //var p = FI.get_Parameter(BuiltInParameter.SHEET_NUMBER);
-                    //if (p.AsString() == sheet.SheetNumber)
-                    //{
-                    //    // we have the tb instance
-                    //    p = FI.get_Parameter(BuiltInParameter.SHEET_WIDTH);
-                    //    Width = p.AsDouble().FootToMm();
-                    //    p = FI.get_Parameter(BuiltInParameter.SHEET_HEIGHT);
-                    //    Height = p.AsDouble().FootToMm();
-                    //}
-                //}
-
-                //drawingSheet.DrgPaper = Util.GetPapersize(Width, Height);
                 drawingSheet.IssueDate = sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).AsString();
                 drawingSheet.DrgDrawn = sheet.get_Parameter(BuiltInParameter.SHEET_DRAWN_BY).AsString();
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
@@ -377,8 +358,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public void StatusComplete(DocumentStatusModel model)
     {
         //get the sheets in the model
-        var sheets = new FilteredElementCollector(App.RevitDocument);
-        sheets.OfClass(typeof(ViewSheet));
+        var sheets = new FilteredElementCollector(App.RevitDocument)
+            .OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
         foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
@@ -407,19 +388,21 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private void SetSheetStatus(ViewSheet sheet, string status, string description)
     {
         Transaction trans = null;
-        var m_paramList = new List<Parameter>();
-        var m_paramSet = sheet.Parameters;
-        var enumerator = m_paramSet.GetEnumerator();
+        var paramList = new List<Parameter>();
+        var paramSet = sheet.Parameters;
+        var enumerator = paramSet.GetEnumerator();
         enumerator.Reset();
 
         while (enumerator.MoveNext())
-            m_paramList.Add((Parameter)enumerator.Current);
-
-        foreach (Parameter m_param in m_paramList)
         {
-            if (m_param.IsShared == true)
+            paramList.Add((Parameter)enumerator.Current);
+        }
+
+        foreach (Parameter param in paramList)
+        {
+            if (param.IsShared == true)
             {
-                if (m_param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusParamGuid)
+                if (param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusParamGuid)
                 {
                     {
                         try
@@ -429,10 +412,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             failOpt.SetFailuresPreprocessor(new WarningSwallower());
                             trans.SetFailureHandlingOptions(failOpt);
                             trans.Start();
-                            var cp = new ParameterHelper(m_param)
-                            {
-                                Value = status
-                            };
+
+                            param.Set(status);
+                            
                             trans.Commit();
                         }
                         catch (Exception)
@@ -442,9 +424,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     }
                 }
 
-                if (m_param.IsShared == true)
+                if (param.IsShared == true)
                 {
-                    if (m_param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)
+                    if (param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)
                     {
                         try
                         {
@@ -453,10 +435,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             failOpt.SetFailuresPreprocessor(new WarningSwallower());
                             trans.SetFailureHandlingOptions(failOpt);
                             trans.Start();
-                            var cp = new ParameterHelper(m_param)
-                            {
-                                Value = description
-                            };
+
+                            param.Set(description);
+
                             trans.Commit();
                         }
                         catch (Exception)
@@ -472,8 +453,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     public void RevisionComplete(RevisionDataModel model)
     {
         //get the sheets in the model
-        var sheets = new FilteredElementCollector(App.RevitDocument);
-        sheets.OfClass(typeof(ViewSheet));
+        var sheets = new FilteredElementCollector(App.RevitDocument)
+            .OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
         foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
@@ -787,7 +768,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 GenerateExtranetImportFile();
             }
 
-            OpenExporerToExportedFilesLocations();
+            OpenExplorerToExportedFilesLocations();
              
             //just pause before closing the window
             Thread.Sleep(5000);
@@ -809,7 +790,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return;
         }
     }
-
 
     private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
     {
@@ -864,10 +844,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SheetTaskProgressLabel = "Exporting DWF...";
         SendProgressMessage();
 
-        var argsheetsize = Util.GetSheetsize(sheet, App.RevitDocument);
+        var sheetsize = sheet.GetExportPaperFormat();
 
         var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
-            argsheetsize,
+            sheetsize,
             PrintSetup,
             DwfExportOptions,
             App.RevitDocument,
@@ -985,7 +965,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     }
 
 
-    private void OpenExporerToExportedFilesLocations()
+    private void OpenExplorerToExportedFilesLocations()
     {
         List<string> folderPaths = new();
 
@@ -1019,9 +999,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             ICollection<ElementId> revisions = sheet.GetAllRevisionIds();
 
             // Find revisions whose description matches input string
-            var collector = new FilteredElementCollector(App.RevitDocument, revisions);
-            collector.OfCategory(BuiltInCategory.OST_Revisions);
-            collector.WhereElementIsNotElementType();
+            var collector = new FilteredElementCollector(App.RevitDocument, revisions)
+                    .OfCategory(BuiltInCategory.OST_Revisions)
+                    .WhereElementIsNotElementType();
+
             if (revisions.Count > 0)
             {
                 foreach (Revision revision in collector)
@@ -1036,7 +1017,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                             failOpt.SetFailuresPreprocessor(new WarningSwallower());
                             trans.SetFailureHandlingOptions(failOpt);
                             trans.Start();
+
                             revision.Issued = true;
+
                             trans.Commit();
                         }
                         catch (Exception)
@@ -1185,5 +1168,29 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
     }
 
+#if REVIT2021
+    private bool IsPrinterInstalled(string PrinterName)
+    {
+        bool retval = false;
+        foreach (var ptName in PrinterSettings.InstalledPrinters)
+        {
+            if ((ptName.ToString() ?? "") == (PrinterName ?? ""))
+            {
+                var pt = new PrinterSettings
+                {
+                    PrinterName = ptName.ToString()
+                };
 
+                if (pt.IsValid)
+                {
+                    retval = true;
+                    break;
+                }
+            }
+        }
+
+        return retval;
+    }
+
+#endif
 }
