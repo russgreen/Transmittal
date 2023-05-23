@@ -142,7 +142,6 @@
                                                    AutoGenerateColumns="False" 
                                                    AllowGrouping="False" 
                                                    AllowResizingColumns="True" 
-                                                   NavigationMode="Row" 
                                                    SelectionMode="Single"                                               
                                                    RowSelectionBrush="#9993B8D9" 
                                                    AllowEditing="True" 
@@ -161,12 +160,12 @@
                                                    AutoGenerateColumns="False" 
                                                    AllowGrouping="False" 
                                                    AllowResizingColumns="True" 
-                                                   NavigationMode="Row" 
                                                    SelectionMode="Single"                                               
                                                    RowSelectionBrush="#9993B8D9" 
-                                                   AllowEditing="True" 
                                                    AllowDeleting="True" 
-                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill">
+                                                   AddNewRowPosition="Bottom" 
+                                                   ColumnSizer="AutoWithLastColumnFill" 
+                                                   AllowEditing="True">
                                 <syncfusion:SfDataGrid.Columns>
                                     <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
                                     <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
