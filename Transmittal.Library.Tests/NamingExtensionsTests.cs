@@ -42,6 +42,10 @@ public class NamingExtensionsTests
     [Theory]
     [InlineData("12345_L1_Dr_A_A101_FloorPlan_P01", "<ProjNo>_<Level>_<Type>_<Role>_<SheetNo>_<SheetName>_<Rev>", "12345", "", "", "", "", "L1", "Dr", "A", "A101", "FloorPlan", "P01", "", "") ]
     [InlineData("0001-ORI-XX-XX-GA-A-0001 P01 FloorPlan", "<ProjNo>-ORI-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev> <SheetName>", "0001", "", "", "ORI", "XX", "XX", "GA", "A", "0001", "FloorPlan", "P01", "", "")]
+    [InlineData("12345-L1-Dr-A-A101-FloorPlan-P01", "<ProjNo>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Rev>", "12345", "", "", "", "", "L1", "Dr", "A", "A101", "FloorPlan", "P01", "", "")]
+    [InlineData("0001-ORI-ZZ-XX-TL-A-0001-TransmittalRecord", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "TL", "A", "0001", "TransmittalRecord", "", "", "")]
+    [InlineData("0001-ORI-ZZ-XX-DR-A-0001-DrawingSheet-S3-P01", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "DrawingSheet", "P01", "S3", "")]
+    [InlineData("0001-ORI-ZZ-XX-DR-A-0001-Drawing Sheet-S3-P01", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName2>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "Drawing Sheet", "P01", "S3", "")]
     public void ParseFilename_ShouldReplaceTagsInFilename(string expected, string filenameFilter, string projNo, string projID, string projName, string originator, 
         string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
     {
@@ -65,5 +69,22 @@ public class NamingExtensionsTests
 
         // Assert
         Assert.Equal("  -     ", result);
+    }
+
+    [Theory]
+    [InlineData("12345_L1_Dr_A_A101_FloorPlan", "12345_L1_Dr_A_A101_FloorPlan___")]
+    [InlineData("12345_L1_Dr_A_A101_FloorPlan", "12345_L1_Dr_A_A101_FloorPlan--")]
+    [InlineData("12345_L1_Dr_A_A101_FloorPlan", "12345_L1_Dr_A_A101_FloorPlan *")]
+    [InlineData("12345_L1_Dr_A_A101_FloorPlan", "12345_L1_Dr_A_A101_FloorPlan >")]
+    [InlineData("12345_L1_Dr_A_A101_FloorPlan", "12345_L1_Dr_A_A101_FloorPlan | ")]
+    public void RemoveTrailingSymbols_ShouldRemoveTrailingSymbolsFromInputString(string expected, string input)
+    {
+        // Arrange
+
+        // Act
+        var result = input.RemoveTrailingSymbols();
+
+        // Assert
+        Assert.Equal(expected, result);
     }
 }

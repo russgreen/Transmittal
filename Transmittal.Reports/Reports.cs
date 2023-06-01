@@ -47,11 +47,23 @@ namespace Transmittal.Reports
         {
             var report = GetReport("ProjectDirectory.rdlc");
 
+            var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                _settingsService.GlobalSettings.ProjectIdentifier,
+                _settingsService.GlobalSettings.ProjectName,
+                _settingsService.GlobalSettings.Originator,
+                "ZZ",
+                "XX",
+                "DY",
+                _settingsService.GlobalSettings.Role,
+                "0001",
+                "ProjectDirectory",
+                null, null, null);
+
             FormReportViewer frm = NewReportViewer(
                 "Project Directory",
                 report,
                 _settingsService.GlobalSettings.DirectoryStore.ParsePathWithEnvironmentVariables(),
-                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-DY-{_settingsService.GlobalSettings.Role}-0001-ProjectDirectory");
+                fileName);
 
             List<Models.ProjectDirectoryReportModel> projectDirectoryReportModels = new();
             var filteredProjectDirectory = projectDirectory.Where(x => x.Person.ShowInReport == true).ToList();   
@@ -93,11 +105,23 @@ namespace Transmittal.Reports
 
             TransmittalModel transmittal = _transmittalService.GetTransmittal(transmittalID);
 
+            var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                            _settingsService.GlobalSettings.ProjectIdentifier,
+                            _settingsService.GlobalSettings.ProjectName,
+                            _settingsService.GlobalSettings.Originator,
+                            "ZZ",
+                            "XX",
+                            "TL",
+                            _settingsService.GlobalSettings.Role,
+                            transmittal.ID.ToString().PadLeft(4, '0'),
+                            "TransmittalRecord",
+                            null, null, null);
+
             FormReportViewer frm = NewReportViewer(
                 "Transmittal Record",
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
-                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
+                fileName);
 
             //var wpf = NewReportViewerWPF(
             //                    "Transmittal Record",
@@ -161,11 +185,23 @@ namespace Transmittal.Reports
         {
             Stream report = GetReport(  "TransmittalSummary.rdlc");
 
+            var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                _settingsService.GlobalSettings.ProjectIdentifier,
+                _settingsService.GlobalSettings.ProjectName,
+                _settingsService.GlobalSettings.Originator,
+                "ZZ",
+                "XX",
+                "MX",
+                _settingsService.GlobalSettings.Role,
+                "0001",
+                "TransmittalSummary",
+                null, null, null);
+
             FormReportViewer frm = NewReportViewer(
                 "Transmittal Record",
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
-                $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-MX-{_settingsService.GlobalSettings.Role}-0001-TransmittalSummary");
+                fileName);
 
             List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();
 

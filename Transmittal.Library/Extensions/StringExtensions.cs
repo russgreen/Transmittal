@@ -62,7 +62,7 @@ public static class NamingExtensions
     /// <returns></returns>
     public static string ParseFilename(this string filenameFilter, string projNo, string projId, string projName, string originator, 
         string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
-    {
+     {
         string fileName = filenameFilter;
         // <ProjNo>
         // <ProjId>
@@ -106,7 +106,7 @@ public static class NamingExtensions
         fileName = fileName.Replace("<DateYY>", DateTime.Now.ToStringYY());
         fileName = fileName.Replace("<DateYYYY>", DateTime.Now.Year.ToString());
         
-        return RemoveIllegalCharacters(fileName);
+        return fileName.RemoveIllegalCharacters().RemoveTrailingSymbols();
     }
 
     public static string RemoveIllegalCharacters(this string illegalString)
@@ -127,5 +127,21 @@ public static class NamingExtensions
         //retval = retval.Replace(".", " ");
 
         return retval;
+    }
+
+    public static string RemoveTrailingSymbols(this string inputString)
+    {
+        if (string.IsNullOrEmpty(inputString))
+        {
+            return inputString;
+        }
+
+        // remove trailing spaces and non-alphanumeric characters
+        inputString.Trim();
+        while (inputString.Length > 0 && !Char.IsLetterOrDigit(inputString[inputString.Length - 1]))
+        {
+            inputString = inputString.Remove(inputString.Length - 1, 1);
+        }
+        return inputString;
     }
 }
