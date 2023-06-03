@@ -9,7 +9,7 @@ public partial class DocumentStatusModel : ObservableValidator
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "Code is required.")]
+    [Required(ErrorMessage = "A unique code is required.")]
     private string _code;
 
     [ObservableProperty]
