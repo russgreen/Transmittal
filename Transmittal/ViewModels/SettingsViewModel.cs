@@ -15,6 +15,10 @@ using Transmittal.Library.Validation;
 using CommunityToolkit.Mvvm.Messaging;
 using Transmittal.Messages;
 using Transmittal.Models;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Transmittal.ViewModels;
 
@@ -65,10 +69,14 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private string _fileNameFilter2;
 
     [ObservableProperty]
-    private List<IssueFormatModel> _issueFormats;
+    [NotifyDataErrorInfo]
+    [Required]
+    private ObservableCollection<IssueFormatModel> _issueFormats;
 
     [ObservableProperty]
-    private List<DocumentStatusModel> _documentStatuses;
+    [NotifyDataErrorInfo]
+    [Required]
+    private ObservableCollection<DocumentStatusModel> _documentStatuses;
 
     [ObservableProperty]
     private bool _recordTransmittals;
@@ -119,15 +127,127 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         Originator = _settingsService.GlobalSettings.Originator;
         Role = _settingsService.GlobalSettings.Role;
 
-        //Settings = _settingsService.GlobalSettings;
         CheckForDatabaseFile();
 
         SetPropertiesFromGlobalSettings();
+
+        IssueFormats.CollectionChanged += IssueFormats_CollectionChanged;
+        DocumentStatuses.CollectionChanged += DocumentStatuses_CollectionChanged;
 
         WeakReferenceMessenger.Default.Register<ImportSettingsMessage>(this, (r, m) =>
         {
             SetPropertiesFromImportedSettings(m.Value);
         });
+    }
+
+    partial void OnIssueFormatsChanged(ObservableCollection<IssueFormatModel> value)
+    {
+        foreach (var item in value)
+        {
+            item.PropertyChanged += IssueFormat_PropertyChanged;
+        }
+    }
+
+    partial void OnDocumentStatusesChanged(ObservableCollection<DocumentStatusModel> value)
+    {
+        foreach (var item in value)
+        {
+            item.PropertyChanged += DocumentStatus_PropertyChanged;
+        }
+    }
+
+    private void IssueFormats_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        Debug.WriteLine("IssueFormats changed");
+
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (IssueFormatModel item in e.NewItems)
+            {
+                item.PropertyChanged += IssueFormat_PropertyChanged;
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (IssueFormatModel item in e.OldItems)
+            {
+                item.PropertyChanged -= IssueFormat_PropertyChanged;
+            }
+        }
+    }
+
+    private void DocumentStatuses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        Debug.WriteLine("DocumentStatuses changed");
+
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (DocumentStatusModel item in e.NewItems)
+            {
+                item.PropertyChanged += DocumentStatus_PropertyChanged;
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (DocumentStatusModel item in e.OldItems)
+            {
+                item.PropertyChanged -= DocumentStatus_PropertyChanged;
+            }
+        }
+    }
+
+    private void IssueFormat_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        Debug.WriteLine("IssueFormat property changed");
+
+        var values = new HashSet<string>();
+        var duplicates = new HashSet<string>();
+
+        foreach (var item in IssueFormats)
+        {
+            var itemValue = item.GetType()
+                .GetProperty(nameof(IssueFormatModel.Code))
+                .GetValue(item, null).ToString();
+
+            if (!values.Add(itemValue))
+            {
+                duplicates.Add(itemValue);
+            }
+        }
+
+        if (duplicates.Count > 0)
+        {
+            Debug.WriteLine("IssueFormats contain duplicates");
+            var model = (IssueFormatModel)sender;
+            model.Code = string.Empty; // (nameof(IssueFormatModel.Code), "Issue formats contain duplicate codes");
+        }
+    }
+
+    private void DocumentStatus_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        Debug.WriteLine("DocumentStatus property changed");
+
+        var values = new HashSet<string>();
+        var duplicates = new HashSet<string>();
+
+        foreach (var item in DocumentStatuses)
+        {
+            var itemValue = item.GetType()
+                .GetProperty(nameof(DocumentStatusModel.Code))
+                .GetValue(item, null).ToString();
+
+            if (!values.Add(itemValue))
+            {
+                duplicates.Add(itemValue);
+            }
+        }
+
+        if (duplicates.Count > 0)
+        {
+            Debug.WriteLine("DocumentStatuses contain duplicates");
+            var model = (DocumentStatusModel)sender;
+            model.Code = string.Empty; // (nameof(IssueFormatModel.Code), "Issue formats contain duplicate codes");
+        }
     }
 
     private void SetPropertiesFromGlobalSettings()
@@ -141,8 +261,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         UseExtranet = _settingsService.GlobalSettings.UseExtranet;
         FileNameFilter2 = _settingsService.GlobalSettings.FileNameFilter2;
 
-        IssueFormats = _settingsService.GlobalSettings.IssueFormats;
-        DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
+        IssueFormats = new ObservableCollection<IssueFormatModel>(_settingsService.GlobalSettings.IssueFormats);
+        DocumentStatuses = new ObservableCollection<DocumentStatusModel>(_settingsService.GlobalSettings.DocumentStatuses);
 
         //DATABASE SETTINGS
         RecordTransmittals = _settingsService.GlobalSettings.RecordTransmittals;
@@ -177,8 +297,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         UseExtranet = settings.UseExtranet;
         FileNameFilter2 = settings.FileNameFilter2;
 
-        IssueFormats = settings.IssueFormats;
-        DocumentStatuses = settings.DocumentStatuses;
+        IssueFormats = new ObservableCollection<IssueFormatModel>(settings.IssueFormats);
+        DocumentStatuses = new ObservableCollection<DocumentStatusModel>(settings.DocumentStatuses);
 
         //DATABASE SETTINGS
         RecordTransmittals = settings.RecordTransmittals;
@@ -215,8 +335,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.UseExtranet = UseExtranet;
         _settingsService.GlobalSettings.FileNameFilter2 = FileNameFilter2?.Trim();
 
-        _settingsService.GlobalSettings.IssueFormats = IssueFormats;
-        _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses;
+        _settingsService.GlobalSettings.IssueFormats = IssueFormats.ToList();
+        _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses.ToList();
 
         
         _settingsService.GlobalSettings.RecordTransmittals = RecordTransmittals;
