@@ -197,13 +197,5 @@ internal partial class AboutViewModel : BaseViewModel
             LicenseUri = "https://github.com/ookii-dialogs/ookii-dialogs-wpf/blob/master/LICENSE.md"
         });
 
-        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
-        {
-            SoftwareName = "PropertyChanged.Fody",
-            SoftwareUri = "https://github.com/Fody/PropertyChanged",
-            LicenseName = "MIT License",
-            LicenseUri = "https://github.com/Fody/PropertyChanged/blob/master/license.txt"
-        });
-
     }
 }
