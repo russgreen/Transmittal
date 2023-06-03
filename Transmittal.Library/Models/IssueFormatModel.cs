@@ -1,19 +1,32 @@
-﻿namespace Transmittal.Library.Models;
-public class IssueFormatModel
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using Transmittal.Library.Validation;
+
+namespace Transmittal.Library.Models;
+public partial class IssueFormatModel : ObservableValidator
 {
-    public int ID { get; set; }
-    public string Code { get; set; }
-    public string Description { get; set; }
+    [ObservableProperty]
+    private int _iD;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Code is required.")]
+    private string _code;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Description is required.")]
+    private string _description;
 
     public IssueFormatModel()
     {
 
     }
 
-    public IssueFormatModel(string Code, string Description)
+    public IssueFormatModel(string code, string description)
     {
-        this.Code = Code;
-        this.Description = Description;
+        this.Code = code;
+        this.Description = description;
     }
 
 }

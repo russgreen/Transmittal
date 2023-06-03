@@ -2,12 +2,19 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class ProjectDirectoryModel : BaseModel
+public partial class ProjectDirectoryModel : ObservableObject
 {
-    public int ID { get; set; }
-    public string DisplayName => $"{Person.FullNameReversed} ({Company.CompanyName})";
+    [ObservableProperty]
+    private int _iD;
 
-    public CompanyModel Company { get; set; }
-    public PersonModel Person { get; set; } 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayName))]
+    private CompanyModel _company;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayName))]
+    private PersonModel _person; 
+
+    public string DisplayName => $"{Person.FullNameReversed} ({Company.CompanyName})";
 
 }

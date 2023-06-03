@@ -1,16 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
 
-public class CompanyModel : BaseModel
+public partial class CompanyModel : ObservableValidator
 {
-    public int ID { get; set; }
+    [ObservableProperty]
+    private int _iD;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required(ErrorMessage = "A company name is required")]
-    public string CompanyName { get; set; } = String.Empty; 
-    public string Role { get; set; }
-    public string Address { get; set; }
-    public string Tel { get; set; }
-    public string Fax { get; set; }
-    public string Website { get; set; }
-    public List<PersonModel> Contacts { get; set; }
+    private string _companyName;
+
+    [ObservableProperty]
+    private string _role;
+
+    [ObservableProperty]
+    private string _address;
+
+    [ObservableProperty]
+    private string _tel;
+
+    [ObservableProperty]
+    private string _fax;
+
+    [ObservableProperty]
+    private string _website;
+
+    [ObservableProperty]
+    private List<PersonModel> _contacts;
 }

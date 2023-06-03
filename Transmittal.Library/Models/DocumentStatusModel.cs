@@ -1,9 +1,22 @@
-﻿namespace Transmittal.Library.Models;
-public class DocumentStatusModel
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Transmittal.Library.Models;
+public partial class DocumentStatusModel : ObservableValidator
 {
-    public int ID { get; set; }
-    public string Code { get; set; }
-    public string Description { get; set; }
+    [ObservableProperty]
+    private int _iD;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Code is required.")]
+    private string _code;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Description is required.")]
+    private string _description;
+
     public string DisplayName
     {
         get

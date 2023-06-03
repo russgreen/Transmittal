@@ -1,44 +1,89 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class TransmittalItemModel : BaseModel
+public partial class TransmittalItemModel : ObservableValidator
 {
-    public int TransItemID { get; set; }
-    public int TransID { get; set; }
+    [ObservableProperty]
+    private int _transItemID;
+
+    [ObservableProperty]
+    private int _transID;
+
+    [ObservableProperty]
     [Required]
-    public string DrgNumber { get; set; }
+    private string _drgNumber;
+
+    [ObservableProperty]
     [Required]
-    public string DrgRev { get; set; } = "P01";
+    private string _drgRev = "P01";
+
+    [ObservableProperty]
     [Required]
-    public string DrgName { get; set; }
+    private string _drgName;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [StringLength(50)]
-    public string DrgPaper { get; set; }
+    private string _drgPaper;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [StringLength(120)]
-    public string DrgScale { get; set; }
+    private string _drgScale;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
-    public string DrgDrawn { get; set; } = "-";//= DefaultUserInitials();
+    private string _drgDrawn = "-";//= DefaultUserInitials();
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [StringLength(120)]
-    public string DrgChecked { get; set; } = "-";
+    private string _drgChecked = "-";
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
-    public string DrgProj { get; set; } = "0000";
+    private string _drgProj = "0000";
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [StringLength(5)]
-    public string DrgOriginator { get; set; } = "XXX"; //= GlobalConfig.GlobalSettings.BS1192Originator;
+    private string _drgOriginator = "XXX"; //= GlobalConfig.GlobalSettings.BS1192Originator;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     [StringLength(4)]
-    public string DrgVolume { get; set; } = "ZZ";
+    private string _drgVolume = "ZZ";
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     [StringLength(4)]
-    public string DrgLevel { get; set; } = "00";
+    private string _drgLevel = "00";
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     [StringLength(2)]
-    public string DrgType { get; set; } = "DR";
+    private string _drgType = "DR";
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     [StringLength(2)]
-    public string DrgRole { get; set; } = "A";//= GlobalConfig.GlobalSettings.BS1192Role;
+    private string _drgRole = "A";//= GlobalConfig.GlobalSettings.BS1192Role;
+
     /// <summary>
     /// ISO19650 Suitability Code
     /// </summary>
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
-    public string DrgStatus { get; set; } = "S0";
-    public string DrgStatusDescription { get; set; }
+    private string _drgStatus = "S0";
+
+    [ObservableProperty]
+    private string _drgStatusDescription;
 }
