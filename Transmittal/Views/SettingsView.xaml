@@ -141,12 +141,14 @@
                                                    ItemsSource="{Binding IssueFormats}"
                                                    AutoGenerateColumns="False" 
                                                    AllowGrouping="False" 
+                                                   AllowEditing="True"
+                                                   AllowDeleting="True"
                                                    AllowResizingColumns="True" 
                                                    SelectionMode="Single"                                               
                                                    RowSelectionBrush="#9993B8D9" 
-                                                   AllowEditing="True" 
-                                                   AllowDeleting="True" 
-                                                   AddNewRowPosition="Bottom" ColumnSizer="AutoWithLastColumnFill">
+                                                   GridValidationMode="InEdit"
+                                                   AddNewRowPosition="Bottom" 
+                                                   ColumnSizer="AutoWithLastColumnFill" >
                                 <syncfusion:SfDataGrid.Columns>
                                     <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
                                     <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
@@ -159,13 +161,14 @@
                                                    ItemsSource="{Binding DocumentStatuses}"
                                                    AutoGenerateColumns="False" 
                                                    AllowGrouping="False" 
+                                                   AllowEditing="True"
+                                                   AllowDeleting="True"
                                                    AllowResizingColumns="True" 
                                                    SelectionMode="Single"                                               
                                                    RowSelectionBrush="#9993B8D9" 
-                                                   AllowDeleting="True" 
+                                                   GridValidationMode="InEdit"
                                                    AddNewRowPosition="Bottom" 
-                                                   ColumnSizer="AutoWithLastColumnFill" 
-                                                   AllowEditing="True">
+                                                   ColumnSizer="AutoWithLastColumnFill" >
                                 <syncfusion:SfDataGrid.Columns>
                                     <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
                                     <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
@@ -395,7 +398,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="2" >
             <Button Content="Save Settings" Padding="5,0,5,0" 
                     Command="{Binding SaveSettingsCommand}" 
-                    IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}" />
+                    IsEnabled="{Binding HasAnyErrors,  Converter={StaticResource InverseBooleanConverter}}" />
             <Button x:Name="buttonCancel"
                     Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" 
                     IsCancel="True" 

@@ -1113,11 +1113,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
 #endif
 
-        ProcessStartInfo processStartInfo = new ProcessStartInfo();
-        processStartInfo.FileName = pathToExe;
-        processStartInfo.Arguments = $"--transmittal={_newTransmittal.ID} \"--database={dbFile}\"";
+        if(File.Exists(pathToExe))
+        {
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.FileName = pathToExe;
+            processStartInfo.Arguments = $"--transmittal={_newTransmittal.ID} \"--database={dbFile}\"";
 
-        Process.Start(processStartInfo);        
+            Process.Start(processStartInfo);   
+        }
+     
     }
 
     private void OpenProgressWindow()

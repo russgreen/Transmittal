@@ -1,40 +1,74 @@
-﻿using System.IO;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.IO;
 
 namespace Transmittal.Library.Models;
 
-public partial class SettingsModel : BaseModel
+public partial class SettingsModel : ObservableValidator
 {
-    public string DateFormatString { get; set; } = "dd.MM.yy";
+    [ObservableProperty]
+    private string _dateFormatString = "dd.MM.yy";
 
-    public string ProjectNumber { get; set; }
-    public string ProjectIdentifier { get; set; }
-    public string ProjectName { get; set; }
-    public string ClientName { get; set; }
+    [ObservableProperty]
+    private string _projectNumber;
 
-    public string Originator { get; set; }
-    public string Role { get; set; }
+    [ObservableProperty]
+    private string _projectIdentifier;
 
-    public bool RecordTransmittals { get; set; } = false;
-    public string DatabaseFile { get; set; } = "[NONE]";
-    public string DatabaseTemplateFile { get; set; } = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Data\TemplateDatabase.tdb";
-        
-    public string DrawingIssueStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "DrawingIssues");
-    public string IssueSheetStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
-    public string DirectoryStore { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "Directory");
-    public string ReportStore { get; set; } = string.Empty;
-        
-    public string FileNameFilter { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
-    public string FileNameFilter2 { get; set; } = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>";
-    public bool UseExtranet { get; set; } = false;
-    public bool UseISO19650 { get; set; } = false;
+    [ObservableProperty]
+    private string _projectName;
 
-    public List<IssueFormatModel> IssueFormats { get; set; } = new List<IssueFormatModel>()
+    [ObservableProperty]
+    private string _clientName;
+
+    [ObservableProperty]
+    private string _originator;
+
+    [ObservableProperty]
+    private string _role;
+
+    [ObservableProperty]
+    private bool _recordTransmittals = false;
+
+    [ObservableProperty]
+    private string _databaseFile = "[NONE]";
+
+    [ObservableProperty]
+    private string _databaseTemplateFile = $@"{Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)}\Data\TemplateDatabase.tdb";
+
+    [ObservableProperty]
+    private string _drawingIssueStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "DrawingIssues");
+
+    [ObservableProperty]
+    private string _issueSheetStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
+
+    [ObservableProperty]
+    private string _directoryStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "Directory");
+
+    [ObservableProperty]
+    private string _reportStore = string.Empty;
+
+    [ObservableProperty]
+    private string _fileNameFilter = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>";
+
+    [ObservableProperty]
+    private string _fileNameFilter2 = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>";
+
+    [ObservableProperty]
+    private bool _useExtranet = false;
+
+    [ObservableProperty]
+    private bool _useISO19650 = false;
+
+    [ObservableProperty]
+    private List<IssueFormatModel> _issueFormats = new List<IssueFormatModel>()
     {
         new IssueFormatModel() { Code = "P", Description = "Paper" },
         new IssueFormatModel() { Code = "C", Description = "Cloud" },
         new IssueFormatModel() { Code = "E", Description = "Email" },
     };
-    public List<DocumentStatusModel> DocumentStatuses { get; set; } = new List<DocumentStatusModel>()
+
+    [ObservableProperty]
+    private List<DocumentStatusModel> _documentStatuses = new List<DocumentStatusModel>()
     {
         new DocumentStatusModel() { Code = "S0", Description = "PRELIMINARY WIP" },
         new DocumentStatusModel() { Code = "S1", Description = "FOR CO-ORDINATION" },
@@ -61,23 +95,56 @@ public partial class SettingsModel : BaseModel
     };
 
     // names and guids of used shared parameters.  Allowing these to be changed means existing shared parameters can be used on projects.
-    public bool UseCustomSharedParameters { get; set; } = false;
+    [ObservableProperty]
+    private bool _useCustomSharedParameters = false;
+
     // project paramaters
-    public string ProjectIdentifierParamName { get; set; } 
-    public string ProjectIdentifierParamGuid { get; set; } 
-    public string OriginatorParamName { get; set; } 
-    public string OriginatorParamGuid { get; set; }
-    public string RoleParamName { get; set; }
-    public string RoleParamGuid { get; set; }
+    [ObservableProperty]
+    private string _projectIdentifierParamName;
+
+    [ObservableProperty]
+    private string _projectIdentifierParamGuid;
+
+    [ObservableProperty]
+    private string _originatorParamName;
+
+    [ObservableProperty]
+    private string _originatorParamGuid;
+
+    [ObservableProperty]
+    private string _roleParamName;
+
+    [ObservableProperty]
+    private string _roleParamGuid;
+
     // sheet parameters
-    public string SheetVolumeParamName { get; set; }
-    public string SheetVolumeParamGuid { get; set; }
-    public string SheetLevelParamName { get; set; }
-    public string SheetLevelParamGuid { get; set; }
-    public string DocumentTypeParamName { get; set; }
-    public string DocumentTypeParamGuid { get; set; }
-    public string SheetStatusParamName { get; set; }
-    public string SheetStatusParamGuid { get; set; }
-    public string SheetStatusDescriptionParamName { get; set; }
-    public string SheetStatusDescriptionParamGuid { get; set; }
+    [ObservableProperty]
+    private string _sheetVolumeParamName;
+
+    [ObservableProperty]
+    private string _sheetVolumeParamGuid;
+
+    [ObservableProperty]
+    private string _sheetLevelParamName;
+
+    [ObservableProperty]
+    private string _sheetLevelParamGuid;
+
+    [ObservableProperty]
+    private string _documentTypeParamName;
+
+    [ObservableProperty]
+    private string _documentTypeParamGuid;
+
+    [ObservableProperty]
+    private string _sheetStatusParamName;
+
+    [ObservableProperty]
+    private string _sheetStatusParamGuid;
+
+    [ObservableProperty]
+    private string _sheetStatusDescriptionParamName;
+
+    [ObservableProperty]
+    private string _sheetStatusDescriptionParamGuid;
 }
