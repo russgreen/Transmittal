@@ -46,6 +46,8 @@ public class NamingExtensionsTests
     [InlineData("0001-ORI-ZZ-XX-TL-A-0001-TransmittalRecord", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "TL", "A", "0001", "TransmittalRecord", "", "", "")]
     [InlineData("0001-ORI-ZZ-XX-DR-A-0001-DrawingSheet-S3-P01", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "DrawingSheet", "P01", "S3", "")]
     [InlineData("0001-ORI-ZZ-XX-DR-A-0001-Drawing Sheet-S3-P01", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName2>-<Status>-<Rev>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "Drawing Sheet", "P01", "S3", "")]
+    [InlineData("0001-ORI-ZZ-XX-DR-A-0001 P01_Drawing Sheet", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName2>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "Drawing Sheet", "P01", "S3", "")]
+    [InlineData("0001-ORI-ZZ-XX-TL-A-0001 TransmittalRecord", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName>", "0001", "", "", "ORI", "ZZ", "XX", "TL", "A", "0001", "TransmittalRecord", "", "", "")]
     public void ParseFilename_ShouldReplaceTagsInFilename(string expected, string filenameFilter, string projNo, string projID, string projName, string originator, 
         string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
     {
