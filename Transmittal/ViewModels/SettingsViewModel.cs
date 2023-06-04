@@ -35,15 +35,19 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     public string ProjectNumber;
     public string Originator;
     public string Role;
-        
+
+    public bool HasAnyErrors => GetAnyErrors();
+
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _fileNameFilter;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _drawingIssueStore;
 
     [ObservableProperty]
@@ -52,6 +56,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _dateFormatString;
 
     [ObservableProperty]
@@ -66,32 +71,36 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _fileNameFilter2;
 
     [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
     private ObservableCollection<IssueFormatModel> _issueFormats;
 
     [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
     private ObservableCollection<DocumentStatusModel> _documentStatuses;
 
     [ObservableProperty]
     private bool _recordTransmittals;
+
     [ObservableProperty]
     private string _databaseFile;
+
     [ObservableProperty]
     private string _databaseTemplateFile;
+
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [MustBeFalse(ErrorMessage = "Database file is not found")] 
+    [MustBeFalse(ErrorMessage = "Database file is not found")]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private bool _databaseNotFound; //used to control visibility of error message in UI
+
     [ObservableProperty]
     private string _reportTemplatePath;
+
     [ObservableProperty]
     private string _issueSheetStorePath;
+
     [ObservableProperty]
     private string _directoryStorePath;
 
@@ -99,21 +108,44 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private bool _useCustomSharedParameters;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _projectIdentifierParamGuid;
-    [ObservableProperty]
-    private string _originatorParamGuid;
-    [ObservableProperty]
-    private string _roleParamGuid;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
+    private string _originatorParamGuid;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
+    private string _roleParamGuid;
+
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _sheetVolumeParamGuid;
+
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _sheetLevelParamGuid;
+
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _documentTypeParamGuid;
+
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _sheetStatusParamGuid;
+
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _sheetStatusDescriptionParamGuid;
 
     public SettingsViewModel()
@@ -140,11 +172,42 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         });
     }
 
+    private bool GetAnyErrors()
+    {
+        if(GetErrors().Any() == true)
+        {
+            return true;
+        }
+
+        if (IssueFormats.Any(x => x.HasErrors == true))
+        {
+            return true;
+        }
+
+        if (DocumentStatuses.Any(x => x.HasErrors == true))
+        {
+            return true;
+        }
+
+        if(IssueFormats.Count == 0)
+        {
+            return true;
+        }
+
+        if (DocumentStatuses.Count == 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     partial void OnIssueFormatsChanged(ObservableCollection<IssueFormatModel> value)
     {
         foreach (var item in value)
         {
             item.PropertyChanged += IssueFormat_PropertyChanged;
+            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
         }
     }
 
@@ -153,6 +216,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         foreach (var item in value)
         {
             item.PropertyChanged += DocumentStatus_PropertyChanged;
+            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
         }
     }
 
@@ -165,6 +229,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             foreach (IssueFormatModel item in e.NewItems)
             {
                 item.PropertyChanged += IssueFormat_PropertyChanged;
+                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -172,8 +237,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             foreach (IssueFormatModel item in e.OldItems)
             {
                 item.PropertyChanged -= IssueFormat_PropertyChanged;
+                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
             }
         }
+
+        this.OnPropertyChanged(nameof(this.HasAnyErrors));
     }
 
     private void DocumentStatuses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -185,6 +253,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             foreach (DocumentStatusModel item in e.NewItems)
             {
                 item.PropertyChanged += DocumentStatus_PropertyChanged;
+                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -192,8 +261,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             foreach (DocumentStatusModel item in e.OldItems)
             {
                 item.PropertyChanged -= DocumentStatus_PropertyChanged;
+                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
             }
         }
+
+        this.OnPropertyChanged(nameof(this.HasAnyErrors));
     }
 
     private void IssueFormat_PropertyChanged(object sender, PropertyChangedEventArgs e)
