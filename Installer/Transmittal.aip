@@ -14,10 +14,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{C9BB96BC-3CBB-4E85-BE18-66AA871C5A35} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{5AFC051B-3393-478D-A3AE-EF29090B33D7} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.6.8"/>
+    <ROW Property="ProductVersion" Value="1.7.0"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -97,7 +97,6 @@
     <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{46B7614E-8C22-480B-A4AE-2A38C60C8AE0}" Directory_="APPDIR" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProjectDirectory.rdlc" ComponentId="{D1A78914-9F2F-4E1A-B46E-F00220C02B30}" Directory_="ReportTemplates_Dir" Attributes="0" KeyPath="ProjectDirectory.rdlc" Type="0"/>
-    <ROW Component="PropertyChanged.dll" ComponentId="{4B4D767C-9BA0-44C6-8C46-EBFCF701DBB9}" Directory_="APPDIR" Attributes="0" KeyPath="PropertyChanged.dll"/>
     <ROW Component="SQLitePCLRaw.batteries_v2.dll" ComponentId="{BEBA9873-1289-4992-8D96-D5C37DFB16F3}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.batteries_v2.dll"/>
     <ROW Component="SQLitePCLRaw.core.dll" ComponentId="{DD73F0DD-7AAB-4571-A69F-28FBCBB0316F}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.core.dll"/>
     <ROW Component="SQLitePCLRaw.provider.dynamic_cdecl.dll" ComponentId="{9693A81D-6202-4AAF-A4E5-708A9DF745F0}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.provider.dynamic_cdecl.dll"/>
@@ -217,7 +216,6 @@
     <ROW File="Microsoft.SqlServer.Types.dll" Component_="Microsoft.SqlServer.Types.dll" FileName="MICRO~33.DLL|Microsoft.SqlServer.Types.dll" Attributes="0" SourcePath="..\Transmittal.Desktop\bin\Release\Microsoft.SqlServer.Types.dll" SelfReg="false"/>
     <ROW File="Microsoft.Xaml.Behaviors.dll" Component_="Microsoft.Xaml.Behaviors.dll" FileName="MICRO~34.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
     <ROW File="Ookii.Dialogs.Wpf.dll" Component_="Ookii.Dialogs.Wpf.dll" FileName="OOKIID~1.DLL|Ookii.Dialogs.Wpf.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Ookii.Dialogs.Wpf.dll" SelfReg="false"/>
-    <ROW File="PropertyChanged.dll" Component_="PropertyChanged.dll" FileName="PROPER~1.DLL|PropertyChanged.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\PropertyChanged.dll" SelfReg="false"/>
     <ROW File="SQLitePCLRaw.batteries_v2.dll" Component_="SQLitePCLRaw.batteries_v2.dll" FileName="SQLITE~1.DLL|SQLitePCLRaw.batteries_v2.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\SQLitePCLRaw.batteries_v2.dll" SelfReg="false"/>
     <ROW File="SQLitePCLRaw.core.dll" Component_="SQLitePCLRaw.core.dll" FileName="SQLITE~2.DLL|SQLitePCLRaw.core.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\SQLitePCLRaw.core.dll" SelfReg="false"/>
     <ROW File="SQLitePCLRaw.provider.dynamic_cdecl.dll" Component_="SQLitePCLRaw.provider.dynamic_cdecl.dll" FileName="SQLITE~3.DLL|SQLitePCLRaw.provider.dynamic_cdecl.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\SQLitePCLRaw.provider.dynamic_cdecl.dll" SelfReg="false"/>
@@ -378,7 +376,6 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.SqlServer.Types.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Feature_="MainFeature" Component_="Ookii.Dialogs.Wpf.dll"/>
-    <ROW Feature_="MainFeature" Component_="PropertyChanged.dll"/>
     <ROW Feature_="MainFeature" Component_="Transmittal_2021.addin"/>
     <ROW Feature_="MainFeature" Component_="SQLitePCLRaw.batteries_v2.dll"/>
     <ROW Feature_="MainFeature" Component_="SQLitePCLRaw.core.dll"/>
