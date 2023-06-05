@@ -296,7 +296,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             drawingSheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
             drawingSheet.DrgRole = _settingsService.GlobalSettings.Role;
+                        
             drawingSheet.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
+
+            if(_settingsService.GlobalSettings.ProjectIdentifier == string.Empty ||
+                _settingsService.GlobalSettings.ProjectIdentifier == null)
+            {
+                drawingSheet.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
+            }
+
 
             if (sheet.IsPlaceholder == false)
             {

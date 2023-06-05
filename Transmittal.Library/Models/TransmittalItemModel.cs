@@ -11,24 +11,25 @@ public partial class TransmittalItemModel : ObservableValidator
     private int _transID;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     private string _drgNumber;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     private string _drgRev = "P01";
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
     private string _drgName;
 
     [ObservableProperty]
-    [NotifyDataErrorInfo]
     [StringLength(50)]
     private string _drgPaper;
 
     [ObservableProperty]
-    [NotifyDataErrorInfo]
     [StringLength(120)]
     private string _drgScale;
 
