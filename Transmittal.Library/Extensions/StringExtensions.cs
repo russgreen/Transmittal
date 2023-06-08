@@ -86,6 +86,8 @@ public static class NamingExtensions
         //if ((rev ?? "") == (string.Empty ?? ""))
         //    rev = "P00";
 
+        var now = DateTime.Now;
+
         fileName = fileName.Replace("<Originator>", originator);
         fileName = fileName.Replace("<Volume>", volume);
         fileName = fileName.Replace("<Level>", level);
@@ -101,10 +103,10 @@ public static class NamingExtensions
         fileName = fileName.Replace("<Rev>", rev);
         fileName = fileName.Replace("<Status>", status);
         fileName = fileName.Replace("<StatusDescription>", statusDescription);
-        fileName = fileName.Replace("<DateDD>", DateTime.Now.ToStringDD());
-        fileName = fileName.Replace("<DateMM>", DateTime.Now.ToStringMM());
-        fileName = fileName.Replace("<DateYY>", DateTime.Now.ToStringYY());
-        fileName = fileName.Replace("<DateYYYY>", DateTime.Now.Year.ToString());
+        fileName = fileName.Replace("<DateDD>", now.ToStringDD());
+        fileName = fileName.Replace("<DateMM>", now.ToStringMM());
+        fileName = fileName.Replace("<DateYY>", now.ToStringYY());
+        fileName = fileName.Replace("<DateYYYY>", now.Year.ToString());
         
         return fileName.RemoveIllegalCharacters().RemoveTrailingSymbols();
     }
@@ -124,7 +126,6 @@ public static class NamingExtensions
         retval = retval.Replace(">", " ");
         retval = retval.Replace("|", " ");
         retval = retval.Replace("'", "");
-        //retval = retval.Replace(".", " ");
 
         return retval;
     }
