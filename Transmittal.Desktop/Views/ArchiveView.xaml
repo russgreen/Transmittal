@@ -115,7 +115,7 @@
                 <syncfusion:SfDataGrid x:Name="sfDataGridTransmittalItems" 
                                        AutoGenerateColumns="False"
                                        AllowFiltering="True"
-                                       SelectionMode="Single"   
+                                       SelectionMode="Multiple"   
                                        ShowRowHeader="True"
                                        EditorSelectionBehavior="MoveLast"
                                        AllowEditing="{Binding IsChecked, ElementName=EnableEditButton}"
@@ -160,7 +160,7 @@
                                        ItemsSource="{Binding TransmittalDistribution}"
                                        SelectedItem="{Binding SelectedTransmittalDistribution}" 
                                        AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}"
-                                       RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting">
+                                       RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting" SelectionMode="Multiple">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridComboBoxColumn HeaderText="Contact" 
                                                        ColumnSizer="AutoLastColumnFill"
