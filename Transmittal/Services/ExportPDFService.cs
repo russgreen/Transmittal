@@ -80,7 +80,6 @@ internal class ExportPDFService : IExportPDFService
 
         return fullPath;
     }
-}
 #else
     public string ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
@@ -355,21 +354,7 @@ internal class ExportPDFService : IExportPDFService
         var instance = Activator.CreateInstance(type__1);
         type__1.InvokeMember("SetDefaultPrinter", BindingFlags.InvokeMethod, null, instance, new object[] { printername });
     }
-}
-
-internal class PDFExportOptions
-{
-    public bool ViewLinksInBlue { get; set; }
-    public bool HideReferencePlane { get; set; } = true;
-    public bool HideUnreferencedViewTags { get; set; } = true;
-    public bool HideCropBoundaries { get; set; }
-    public bool HideScopeBoxes { get; set; } = true;
-    public bool ReplaceHalftoneWithThinLines { get; set; }
-    public bool MaskCoincidentLines { get; set; }
-    public bool AlwaysUseRaster { get; set; }
-
-    public ColorDepthType ColorDepth { get; set; }
-    public RasterQualityType RasterQuality { get; set; }
+#endif
 }
 
 internal class PDF24Settings
@@ -387,5 +372,21 @@ internal class PDF24Settings
     public string Handler { get; set; }
     public bool LoadInCreatorIfOpen { get; set; }
     public string ShellCmd { get; set; }
+}
+
+#if REVIT2021 
+internal class PDFExportOptions
+{
+    public bool ViewLinksInBlue { get; set; }
+    public bool HideReferencePlane { get; set; } = true;
+    public bool HideUnreferencedViewTags { get; set; } = true;
+    public bool HideCropBoundaries { get; set; }
+    public bool HideScopeBoxes { get; set; } = true;
+    public bool ReplaceHalftoneWithThinLines { get; set; }
+    public bool MaskCoincidentLines { get; set; }
+    public bool AlwaysUseRaster { get; set; }
+
+    public ColorDepthType ColorDepth { get; set; }
+    public RasterQualityType RasterQuality { get; set; }
 }
 #endif

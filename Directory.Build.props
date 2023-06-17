@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Company>Russell Green</Company>
 
-    <VersionPrefix>1.7.1</VersionPrefix>
+    <VersionPrefix>1.7.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <ApplicationVersion>$(VersionPrefix).0</ApplicationVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
@@ -13,6 +13,6 @@
     <Copyright>Copyright © Russell Green</Copyright>
     
     <Description>Transmittal is a tool to assist in consistently creating and recording document transmittals from Autodesk Revit and standalone using any document type outside of Revit.</Description>
-    
-   </PropertyGroup> 
+
+  </PropertyGroup> 
 </Project>
