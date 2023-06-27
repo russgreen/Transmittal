@@ -36,6 +36,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public string WindowTitle { get; private set; }
 
+
+
     private Thread _progressWindowThread;
 
     [ObservableProperty]
@@ -73,6 +75,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsExportFormatSelected))]
     private int _exportFormatCount = 1;
+
+    [ObservableProperty]
+    private bool _pDF24Available = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PDF24Selected))]
+    private bool _revitPDFExporterSelected = true; //default should be to export with the Revit PDF Exporter
+
+    public bool PDF24Selected => !RevitPDFExporterSelected;
     
     public bool IsExportFormatSelected => ExportFormatCount > 0;
 
@@ -198,9 +209,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         //we use the Revit 2022 API to export PDF so always available
         ExportPDFAvailable = true;
         ExportPDF = true;
+
+        //if PDF24 is installed we can use it
+        PDF24Available = IsPrinterInstalled("PDF24");
 #else
         //we need to check PDF24 is installed
         ExportPDFAvailable = IsPrinterInstalled("PDF24");
+        PDF24Available = ExportPDFAvailable;
         if (!ExportPDFAvailable)
         {
             ExportPDF = false;
@@ -807,12 +822,30 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 #if REVIT2021
         PdfExportOptions.RasterQuality = PdfRasterQuality;
         PdfExportOptions.ColorDepth = PdfColor;
-#endif
 
-        var filePath = _exportPDFService.ExportPDF(fileName,
+        var filePath = _exportPDFService.PrintPDF(fileName,
             App.RevitDocument,
             views,
             PdfExportOptions);
+#else
+        string filePath = string.Empty;
+
+        if(RevitPDFExporterSelected == true)
+        {
+            filePath = _exportPDFService.ExportPDF(fileName,
+                App.RevitDocument,
+                views,
+                PdfExportOptions);
+        }
+        else
+        {
+            filePath = _exportPDFService.PrintPDF(fileName,
+                App.RevitDocument,
+                views,
+                PdfExportOptions);
+        }
+
+#endif
 
         DocumentModel pdf = new DocumentModel(drawingSheet);
         pdf.FilePath = filePath;
@@ -1180,7 +1213,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
     }
 
-#if REVIT2021
+
     private bool IsPrinterInstalled(string PrinterName)
     {
         bool retval = false;
@@ -1204,5 +1237,4 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return retval;
     }
 
-#endif
 }

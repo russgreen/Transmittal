@@ -5,11 +5,11 @@ using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using System.Drawing.Printing;
 using System.Reflection;
-#if REVIT2021
+
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
-#endif
+
 
 namespace Transmittal.Services;
 internal class ExportPDFService : IExportPDFService
@@ -20,6 +20,7 @@ internal class ExportPDFService : IExportPDFService
     {
         _settingsService = settingsService;
     }
+
 #if REVIT2022_OR_GREATER
     public string ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
@@ -80,8 +81,19 @@ internal class ExportPDFService : IExportPDFService
 
         return fullPath;
     }
-#else
-    public string ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
+
+#endif
+
+    /// <summary>
+    /// Print to the PDF24 printer
+    /// </summary>
+    /// <param name="exportFileName"></param>
+    /// <param name="exportDocument"></param>
+    /// <param name="views"></param>
+    /// <param name="pdfExportOptions"></param>
+    /// <param name="RecordError"></param>
+    /// <returns></returns>
+    public string PrintPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
         var fullPath = string.Empty;
         string currentDefaultPrinterName;
@@ -354,7 +366,7 @@ internal class ExportPDFService : IExportPDFService
         var instance = Activator.CreateInstance(type__1);
         type__1.InvokeMember("SetDefaultPrinter", BindingFlags.InvokeMethod, null, instance, new object[] { printername });
     }
-#endif
+
 }
 
 internal class PDF24Settings
