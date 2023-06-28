@@ -31,9 +31,9 @@ internal partial class ArchiveViewModel : BaseViewModel
     private ObservableCollection<TransmittalDistributionModel> _transmittalDistribution;
 
     [ObservableProperty]
-    private TransmittalItemModel _selectedTransmittalItem;
+    private ObservableCollection<object> _selectedTransmittalItems = new();
     [ObservableProperty]
-    private TransmittalDistributionModel _selectedTransmittalDistribution;
+    private ObservableCollection<object> _selectedTransmittalDistributions = new();
 
     [ObservableProperty]
     private ObservableCollection<ProjectDirectoryModel> _projectDirectory;
@@ -78,17 +78,19 @@ internal partial class ArchiveViewModel : BaseViewModel
 
     private void TransmittalItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if(SelectedTransmittalItem != null)
+        var item = sender as TransmittalItemModel;
+        if(item != null)
         {
-            _transmittalService.UpdateTransmittalItem(SelectedTransmittalItem);
+            _transmittalService.UpdateTransmittalItem(item);
         }
     }
 
     private void Distribution_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if(SelectedTransmittalDistribution != null)
+        var distribution = sender as TransmittalDistributionModel;
+        if(distribution != null)
         {
-            _transmittalService.UpdateTransmittalDist(SelectedTransmittalDistribution);
+            _transmittalService.UpdateTransmittalDist(distribution);
         }
     }
     
@@ -254,24 +256,24 @@ internal partial class ArchiveViewModel : BaseViewModel
     [RelayCommand]
     private void DeleteSelectedTransmittalItem()
     {
-        if (SelectedTransmittalItem != null)
+        foreach (var item in SelectedTransmittalItems)
         {
-            _transmittalService.DeleteTransmittalItem(SelectedTransmittalItem);
+            _transmittalService.DeleteTransmittalItem((TransmittalItemModel)item);
 
             var transmittal = SelectedTransmittals.First() as TransmittalModel;
-            transmittal.Items.Remove(SelectedTransmittalItem);
+            transmittal.Items.Remove((TransmittalItemModel)item);
         }
     }
 
     [RelayCommand]
     private void DeleteSelectedDistribution()
     {
-        if (SelectedTransmittalDistribution != null)
+        foreach (var item in SelectedTransmittalDistributions)
         {
-            _transmittalService.DeleteTransmittalDist(SelectedTransmittalDistribution);
+            _transmittalService.DeleteTransmittalDist((TransmittalDistributionModel)item);
 
             var transmittal = SelectedTransmittals.First() as TransmittalModel;
-            transmittal.Distribution.Remove(SelectedTransmittalDistribution);
+            transmittal.Distribution.Remove((TransmittalDistributionModel)item);
         }
     }
 

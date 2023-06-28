@@ -125,7 +125,7 @@
                                        GridValidationMode="InEdit"
                                        ColumnSizer="AutoLastColumnFill"
                                        ItemsSource="{Binding TransmittalItems}"
-                                       SelectedItem="{Binding SelectedTransmittalItem}" 
+                                       SelectedItems="{Binding SelectedTransmittalItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                        AddNewRowInitiating="sfDataGridTransmittalItems_AddNewRowInitiating" 
                                        AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}" 
                                        RecordDeleting="sfDataGridTransmittalItems_RecordDeleting">
@@ -157,8 +157,8 @@
                                        EditorSelectionBehavior="MoveLast"
                                        AddNewRowPosition="{Binding IsChecked, ElementName=EnableEditButton, Converter={StaticResource AddNewRowPositionConverter}}"
                                        ColumnSizer="AutoLastColumnFill"
-                                       ItemsSource="{Binding TransmittalDistribution}"
-                                       SelectedItem="{Binding SelectedTransmittalDistribution}" 
+                                       ItemsSource="{Binding TransmittalDistribution}" 
+                                       SelectedItems="{Binding SelectedTransmittalDistributions,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                        AllowDeleting="{Binding IsChecked, ElementName=EnableEditButton}"
                                        RecordDeleting="sfDataGridTransmittalDistribution_RecordDeleting" SelectionMode="Multiple">
                     <syncfusion:SfDataGrid.Columns>

@@ -81,12 +81,12 @@ public partial class ArchiveView : Window
 
     private void sfDataGridTransmittalItems_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Delete the selected transmittal item {_viewModel.SelectedTransmittalItem.DrgNumber}. This action cannot be undone.");
+        TaskDialogButton deleteButton = new($"Delete the selected transmittal item(s). This action cannot be undone.");
         TaskDialogButton cancelButton = new(ButtonType.Cancel);
 
         TaskDialog taskDialog = new()
         {
-            WindowTitle = "Delete item from transmittal",
+            WindowTitle = "Delete item(s) from transmittal",
             ButtonStyle = TaskDialogButtonStyle.CommandLinks,
             Buttons = { deleteButton, cancelButton }
         };
@@ -94,7 +94,7 @@ public partial class ArchiveView : Window
         TaskDialogButton button = taskDialog.ShowDialog(this);
         if (button == deleteButton)
         {
-            if(_viewModel.SelectedTransmittalItem != null)
+            if(_viewModel.SelectedTransmittalItems.Count > 0)
             {
                 _viewModel.DeleteSelectedTransmittalItemCommand.Execute(null);
                 return;
@@ -106,12 +106,12 @@ public partial class ArchiveView : Window
 
     private void sfDataGridTransmittalDistribution_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Remove the selected contact from the transmittal. This action cannot be undone.");
+        TaskDialogButton deleteButton = new($"Remove the selected contact(s) from the transmittal. This action cannot be undone.");
         TaskDialogButton cancelButton = new(ButtonType.Cancel);
 
         TaskDialog taskDialog = new()
         {
-            WindowTitle = "Delete contact from transmittal",
+            WindowTitle = "Delete contact(s) from transmittal",
             ButtonStyle = TaskDialogButtonStyle.CommandLinks,
             Buttons = { deleteButton, cancelButton }
         };
@@ -119,7 +119,7 @@ public partial class ArchiveView : Window
         TaskDialogButton button = taskDialog.ShowDialog(this);
         if (button == deleteButton)
         {
-            if(_viewModel.SelectedTransmittalDistribution != null)
+            if(_viewModel.SelectedTransmittalDistributions.Count > 0)
             {
                 _viewModel.DeleteSelectedDistributionCommand.Execute(null);
                 return;
