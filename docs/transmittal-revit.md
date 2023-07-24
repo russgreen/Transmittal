@@ -35,5 +35,5 @@ Exporting the report will result in it being automatically named and saved to th
 
 ![image](https://user-images.githubusercontent.com/1886088/178138968-4c3bbb61-646c-4297-9fb6-587450b135a2.png)
 
-To use Transmittal with Revit 2021 the freeware PDF24 printer must be installed.  This is not required for Revit 2022 and later. The PDF24 printer can be downloaded from https://download.pdf24.org/pdf24-creator-11.11.1-x64.msi
+To use Transmittal with Revit 2021 the freeware PDF24 printer must be installed.  This is not required for Revit 2022 and later. The PDF24 printer can be downloaded from [PDF24.org](https://download.pdf24.org/pdf24-creator-11.11.1-x64.msi)
 
