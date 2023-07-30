@@ -14,10 +14,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{E18DD115-BFCE-4E7E-B6C5-D42A0432EEAE} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{A3CDB8B3-C6DE-426C-8D2E-6BF9ED0FB275} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.8.2" Options="32"/>
+    <ROW Property="ProductVersion" Value="1.9.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -35,6 +35,7 @@
     <ROW Directory="Autodesk_Dir" Directory_Parent="CommonAppDataFolder" DefaultDir="Autodesk"/>
     <ROW Directory="CommonAppDataFolder" Directory_Parent="TARGETDIR" DefaultDir="COMMON~1|CommonAppDataFolder" IsPseudoRoot="1"/>
     <ROW Directory="Data_Dir" Directory_Parent="APPDIR" DefaultDir="Data"/>
+    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="ReportTemplates_Dir" Directory_Parent="APPDIR" DefaultDir="REPORT~1|Report Templates"/>
     <ROW Directory="Resources_Dir" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|Resources"/>
     <ROW Directory="Revit_Dir" Directory_Parent="Autodesk_Dir" DefaultDir="Revit"/>
@@ -442,6 +443,9 @@
     <ROW Registry="command" Root="0" Key="Transmittal.Database\Shell\open\command" Name="\"/>
     <ROW Registry="open" Root="0" Key="Transmittal.Database\Shell\open" Name="+" Component_="open"/>
     <ROW Registry="tdb" Root="0" Key=".tdb" Name="\"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="Transmittal" Directory_="DesktopFolder" Name="TRANSM~1|Transmittal" Component_="Transmittal.Desktop.exe" Target="[#Transmittal.Desktop.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
