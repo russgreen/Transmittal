@@ -100,7 +100,7 @@ public partial class SettingsView : Window
             var dialog = new Microsoft.Win32.OpenFileDialog
             {          
                 Filter = "Transmittal Database File (*.tdb)|*.tdb",
-                Title = "Select the Project Transmittal Database  File",
+                Title = "Select the project Transmittal database file",
                 InitialDirectory = Path.GetDirectoryName(Environment.SpecialFolder.MyComputer.ToString())
             };
 
@@ -122,7 +122,7 @@ public partial class SettingsView : Window
             var dialog = new Microsoft.Win32.SaveFileDialog
             {
                 Filter = "Transmittal Database File (*.tdb)|*.tdb",
-                Title = "Create a new Project Transmittal Database  File",
+                Title = "Create a new project Transmittal database file",
                 InitialDirectory = Path.GetDirectoryName(Environment.SpecialFolder.MyComputer.ToString()),
                 FileName = fileName
             };
@@ -264,5 +264,10 @@ public partial class SettingsView : Window
     private void buttonCancel_Click(object sender, RoutedEventArgs e)
     {
         this.Close();
+    }
+
+    private void buttonHelp_Click(object sender, RoutedEventArgs e)
+    {
+        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/settings/");
     }
 }

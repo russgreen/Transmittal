@@ -11,8 +11,11 @@
         x:Class="Transmittal.Views.SettingsView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Width="800" Height="650" 
-        FontSize="14" FontFamily="Segoe UI Light" WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="650" >
+        Title="{Binding WindowTitle}"  
+        Width="800" Height="650" 
+        MinWidth="800" MinHeight="650"
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -395,15 +398,28 @@
             </StackPanel>
         </ScrollViewer>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="2" >
-            <Button Content="Save Settings" Padding="5,0,5,0" 
-                    Command="{Binding SaveSettingsCommand}" 
-                    IsEnabled="{Binding HasAnyErrors,  Converter={StaticResource InverseBooleanConverter}}" />
-            <Button x:Name="buttonCancel"
-                    Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" 
-                    IsCancel="True" 
-                    Click="buttonCancel_Click" />
-        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="buttonHelp" Height="23"
+                Content="Help" Padding="5,0,5,0" Margin="0,5,0,0" 
+                Click="buttonHelp_Click" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Column="2" >
+                <Button Content="Save Settings" Padding="5,0,5,0" 
+                Command="{Binding SaveSettingsCommand}" 
+                IsEnabled="{Binding HasAnyErrors,  Converter={StaticResource InverseBooleanConverter}}" />
+                <Button x:Name="buttonCancel"
+                Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" 
+                IsCancel="True" 
+                Click="buttonCancel_Click" />
+            </StackPanel>
+        </Grid>
+       
+        
     </Grid>
 
 </Window>

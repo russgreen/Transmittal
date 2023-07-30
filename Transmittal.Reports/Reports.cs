@@ -7,6 +7,7 @@ using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Transmittal.Reports
 {
@@ -39,8 +40,6 @@ namespace Transmittal.Reports
             _transmittalService = transmittalService;          
 
             ConfigureDataModelMapping();
-
-            //Bold.Licensing.BoldLicenseProvider.RegisterLicense("##SyncfusionLicense##");
         }
 
         public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory) //, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
@@ -59,7 +58,7 @@ namespace Transmittal.Reports
                 "ProjectDirectory",
                 null, null, null);
 
-            FormReportViewer frm = NewReportViewer(
+            var frm = NewReportViewerWPF(
                 "Project Directory",
                 report,
                 _settingsService.GlobalSettings.DirectoryStore.ParsePathWithEnvironmentVariables(),
@@ -91,12 +90,11 @@ namespace Transmittal.Reports
                 project
             };
 
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsProjectDirectory", projectDirectoryReportModels));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsProjectDirectory", projectDirectoryReportModels));
 
-            frm.reportViewer1.RefreshReport();
+            frm.reportViewer.RefreshReport();
             frm.ShowDialog();
-            //frm.Show();
         }
 
         public void ShowTransmittalReport(int transmittalID) //, bool useISO, string projectIdentifier, string projectName)
@@ -117,17 +115,11 @@ namespace Transmittal.Reports
                             "TransmittalRecord",
                             null, null, null);
 
-            FormReportViewer frm = NewReportViewer(
+            var frm = NewReportViewerWPF(
                 "Transmittal Record",
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 fileName);
-
-            //var wpf = NewReportViewerWPF(
-            //                    "Transmittal Record",
-            //report,
-            //_settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
-            //    $"{_settingsService.GlobalSettings.ProjectNumber}-{_settingsService.GlobalSettings.Originator}-ZZ-XX-TL-{_settingsService.GlobalSettings.Role}-{transmittal.ID.ToString().PadLeft(4, '0')}-TransmittalRecord");
 
             //map to the derived model type
             IMapper iMapper = _configTransmittal.CreateMapper();
@@ -162,23 +154,13 @@ namespace Transmittal.Reports
                 project
             };
 
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittal", transmittals));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittalItems", transmittal.Items));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittalDistribution", transmittalDistributions));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittal", transmittals));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittalItems", transmittal.Items));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsTransmittalDistribution", transmittalDistributions));
 
-            frm.reportViewer1.RefreshReport();
+            frm.reportViewer.RefreshReport();
             frm.ShowDialog();
-
-
-            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsProject", projects));
-            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittal", transmittals));
-            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittalItems", transmittal.Items));
-            //wpf.reportViewer.DataSources.Add(new BoldReports.Windows.ReportDataSource("dsTransmittalDistribution", transmittalDistributions));
-
-            //wpf.reportViewer.RefreshReport();
-
-            //wpf.ShowDialog();
         }
 
         public void ShowTransmittalSummaryReport()//bool useISO, string projectIdentifier, string projectName)
@@ -197,8 +179,8 @@ namespace Transmittal.Reports
                 "TransmittalSummary",
                 null, null, null);
 
-            FormReportViewer frm = NewReportViewer(
-                "Transmittal Record",
+            var frm = NewReportViewerWPF(
+                "Transmittal Summary",
                 report,
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 fileName);
@@ -244,53 +226,36 @@ namespace Transmittal.Reports
                 project
             };
 
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsSummaryItems", transmittalItems));
-            frm.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("dsSummaryDistribution", transmittalDistributions));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsSummaryItems", transmittalItems));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsSummaryDistribution", transmittalDistributions));
 
-            frm.reportViewer1.RefreshReport();
+            frm.reportViewer.RefreshReport();
             frm.ShowDialog();
         }
 
-        private FormReportViewer NewReportViewer(
+        private ReportViewerWindow NewReportViewerWPF(
             string windowTitle,
             Stream report,
             string folderPath,
             string fileName)
         {
-            FormReportViewer frm = new FormReportViewer(folderPath, fileName)
-            {
-                Text = windowTitle
-            };
-            
-            frm.reportViewer1.Reset();
+            ReportViewerWindow reportViewerWindow = new(folderPath, fileName);
 
-            frm.reportViewer1.LocalReport.LoadReportDefinition(report);
-            frm.reportViewer1.LocalReport.EnableExternalImages = true;
+            reportViewerWindow.Title = windowTitle;
 
-            frm.reportViewer1.SetDisplayMode(DisplayMode.PrintLayout);
-            frm.reportViewer1.ZoomMode = ZoomMode.PageWidth;
+            reportViewerWindow.reportViewer.Reset();
 
-            frm.reportViewer1.LocalReport.DataSources.Clear();
+            reportViewerWindow.reportViewer.LocalReport.LoadReportDefinition(report);
+            reportViewerWindow.reportViewer.LocalReport.EnableExternalImages = true;
 
-            return frm;
+            reportViewerWindow.reportViewer.SetDisplayMode(DisplayMode.PrintLayout);
+            reportViewerWindow.reportViewer.ZoomMode = ZoomMode.PageWidth;
+
+            reportViewerWindow.reportViewer.LocalReport.DataSources.Clear();
+
+            return reportViewerWindow;
         }
-
-        //private ReportViewerWindow NewReportViewerWPF(
-        //    string windowTitle,
-        //    Stream report,
-        //    string folderPath,
-        //    string fileName)
-        //{
-        //    ReportViewerWindow reportViewerWindow = new(folderPath, fileName);
-
-        //    reportViewerWindow.Title = windowTitle;
-
-        //    reportViewerWindow.reportViewer.LoadReport(report);
-        //    reportViewerWindow.reportViewer.DataSources.Clear();
-
-        //    return reportViewerWindow;
-        //}
 
         private void ConfigureDataModelMapping()
         {

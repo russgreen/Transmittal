@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+	  <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+	  <TargetFramework>net48</TargetFramework>
       <OutputType>WinExe</OutputType>
 	  <UseWPF>true</UseWPF>
 	  <LangVersion>latest</LangVersion>
 	  <PlatformTarget>x64</PlatformTarget>
 	  <ImplicitUsings>enable</ImplicitUsings>
-	  <TargetFramework>net48</TargetFramework>
 	  <NeutralLanguage>en</NeutralLanguage>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-	  <ApplicationIcon>Transmittal.ico</ApplicationIcon>
+	  <ApplicationIcon>Transmittal.ico</ApplicationIcon> 
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,8 +26,12 @@
     <None Remove="Resources\GreenCheck.png" />
     <None Remove="Resources\Hyperlink.png" />
     <None Remove="Resources\Information.png" />
+    <None Remove="Resources\Menu.png" />
+    <None Remove="Resources\New.png" />
+    <None Remove="Resources\Open.png" />
     <None Remove="Resources\Reload.png" />
     <None Remove="Resources\Report.png" />
+    <None Remove="Resources\Settings.png" />
     <None Remove="Resources\Transmittal_Button.png" />
     <None Remove="Transmittal.ico" />
   </ItemGroup>
@@ -36,35 +41,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Archive_Button.png" />
-    <Resource Include="Resources\Directory_Button.png" />
-    <Resource Include="Resources\Duplicate.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GreenCheck.png" />
-    <Resource Include="Resources\Hyperlink.png" />
-    <Resource Include="Resources\Information.png" />
+    <Resource Include="Resources\Archive_Button.png"/>
+    <Resource Include="Resources\Directory_Button.png"/>
+	<Resource Include="Resources\Duplicate.png"/>
+    <Resource Include="Resources\GreenCheck.png"/>
+    <Resource Include="Resources\Hyperlink.png"/>
+    <Resource Include="Resources\Information.png"/>
+    <Resource Include="Resources\Menu.png" />
+    <Resource Include="Resources\New.png" />
+    <Resource Include="Resources\Open.png" />
+    <Resource Include="Resources\Settings.png" />
     <Resource Include="Resources\Transmittal_Button.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\Add.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\ContactDetails.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\DataEdit.png" />
-    <Resource Include="Resources\DataMerge.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Delete.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Reload.png" />
-    <Resource Include="Resources\Report.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Resources\Add.png"/>
+    <Resource Include="Resources\ContactDetails.png"/>
+    <Resource Include="Resources\DataEdit.png"/>
+    <Resource Include="Resources\DataMerge.png"/>
+    <Resource Include="Resources\Delete.png"/>
+    <Resource Include="Resources\Reload.png"/>
+	<Resource Include="Resources\Report.png"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -82,10 +76,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
     <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Transmittal.ico" />
   </ItemGroup>
 
   <ItemGroup>

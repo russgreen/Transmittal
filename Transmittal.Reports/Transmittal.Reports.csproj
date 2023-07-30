@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
+	  <!--<TargetFramework>net6.0-windows</TargetFramework>-->
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>true</UseWindowsForms>
 	  <UseWPF>true</UseWPF>
@@ -11,14 +11,6 @@
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ReportViewerWindow.xaml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="ReportViewerWindow.xaml" />
-  </ItemGroup>
-
 	<ItemGroup>
     <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
@@ -27,8 +19,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<!--<PackageReference Include="BoldReports.WPF" Version="4.1.86" />-->
 		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1537.0" GeneratePathProperty="true" />
+		<!--<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.15" />-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,17 +53,4 @@
 	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
 	  </None>
 	</ItemGroup>
-<!--
-
-	<PropertyGroup>
-		<PreBuildEvent>
-			cd "$(SolutionDir)"
-			SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)Transmittal.Reports\Reports.cs $(SolutionDir)BoldReportsKey.txt
-		</PreBuildEvent>
-		<PostBuildEvent>
-			cd "$(SolutionDir)"
-			SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)Transmittal.Reports\Reports.cs $(SolutionDir)BoldReportsKey.txt
-		</PostBuildEvent>
-	</PropertyGroup>
--->	
 </Project>

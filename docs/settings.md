@@ -22,7 +22,7 @@ Sheet parameters with missing values shown on the sheets list with red warning f
 
 Selecting this option will prevent sheets with missing values from being issued.
 
-### Use extranet
+### Use extranet (Revit addin only)
 When this options is selected copies of the exported sheet files are mading using a seperate filename rule that can conform to project extranet requirements and making it easier to follow internal and external filename standards. If the output location rule includes the <Format> tag then the format is replaced with "Extranet".  If the <Format> tag is not used then an Extranet sub-folder is created in the output path. e.g.
 ```
 Rule:   P:\ProjectFolder\Output\<Format>\<DateYY><DateMM><DateDD>
@@ -36,13 +36,13 @@ Folder: P:\ProjectFolder\Output\220702\Extranet
 Lists of transmittal types and status codes used in the transmittal process
 
 ## Database
-### Use Project Database 
+### Use Project Database (Revit addin only)
 Enables transmittals to be recorded so transmittal issue sheets can be generated. 
 <!--
 ### Template database
 The template database defaults to the C:\Program Files\Transmittal\Data folder.-->
 
-### Project database 
+### Project database (Revit addin only) 
 Location of the project database file. Each project should have its own database but where multiple Revit files are used on a project they should all be set to use the same database.  
 
 The database engine used by Transmittal is [SQLite](https://www.sqlite.org/index.html) which allows concurrent reads of the database but not concurrent writes.  To protect the database from this during write operations a lock file is generated in the same location as the database. The lock file should only exist momentarily.
@@ -58,7 +58,7 @@ The path to the folder where transmittal reports should be saved when exported f
 ### Directory store
 The path to the folder where the project directory report should be saved when exported from the report viewer.
 
-## Advanced Settings
+## Advanced Settings (Revit addin only)
 ### Add standard transmittal parameters to your project
 Adds the default shared parameters required by Transmittal into your project. These can be added into a Revit template to avoid the need to do these on all new projects. The shared parameters are supplied in C:\Program Files\Transmittal\Resources\TransmittalParameters.txt so that can be manually edited as required.
 

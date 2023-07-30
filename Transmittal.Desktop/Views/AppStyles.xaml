@@ -17,6 +17,43 @@
     <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
     <BitmapImage x:Key="Hyperlink" UriSource="../Resources/Hyperlink.png" />
 
+    <Style x:Key="GroupBox" TargetType="{x:Type GroupBox}">
+        <!--<Setter Property="BorderBrush" Value="#D5DFE5" />
+        <Setter Property="BorderThickness" Value="1" />-->
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid>
+                        <!--Grid Rows split the GroupBox into two areas-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!--Header area-->
+                        <Border Grid.Row="0"
+                                Background="WhiteSmoke"                                
+                                BorderBrush="#FF93B8D9"                                
+                                BorderThickness="1"
+                                CornerRadius="2,2,0,0" >
+                            <ContentPresenter Margin="4"
+                                              ContentSource="Header"
+                                              RecognizesAccessKey="True"
+                                              TextBlock.FontFamily="Segoe UI"/>
+                        </Border>
+                        <!-- Main client area -->
+                        <Border Grid.Row="1"
+                                BorderBrush="#FF93B8D9"
+                                BorderThickness="1"
+                                CornerRadius="0,0,2,2" >
+                            <ContentPresenter Margin="4" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style x:Key="WizardControlStyle1" TargetType="{x:Type syncfusion:WizardControl}">
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderBrush" Value="#FF93B8D9"/>

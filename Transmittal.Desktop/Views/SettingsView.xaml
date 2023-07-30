@@ -1,0 +1,279 @@
+﻿<Window x:Class="Transmittal.Desktop.Views.SettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transmittal.Desktop.Views"
+        xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels" 
+        xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
+        Title="{Binding WindowTitle}"  
+        Width="800" Height="760" 
+        MinWidth="800" MinHeight="620"
+        FontSize="14" FontFamily="Segoe UI Light" 
+        WindowStartupLocation="CenterScreen" >
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!--<Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>-->
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModels:SettingsViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="10" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        
+        <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
+            <StackPanel Grid.Row="0">
+                <GroupBox Header="Project Settings" Style="{DynamicResource GroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="Project Number" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,5,5"
+                                         Text="{Binding ProjectNumber}" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                           Text="Project Name" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,5,5"
+                                         Text="{Binding ProjectName}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" 
+                                           Text="Client Name" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"  Margin="0,0,5,5"
+                                         Text="{Binding ClientName}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                           Text="Originator" />
+                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,5,5"
+                                         Text="{Binding Originator}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="2" 
+                                           Text="Role" Margin="30,0,0,0" />
+                        <TextBox Grid.Row="3" Grid.Column="3" Margin="0,0,5,5"
+                                         Text="{Binding Role}" />
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBox}" Margin="0,10,0,0">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="40" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="Filename filter/rule" />
+                                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,5,5"
+                                         Text="{Binding FileNameFilter}" />
+                                <ComboBox Grid.Row="0" Grid.Column="4" Margin="0,0,0,5"
+                                          x:Name="comboBoxFileNameParts" 
+                                          ItemsSource="{Binding FileNameParts, Mode=OneWay}">
+                                    <interactivity:Interaction.Triggers>
+                                        <interactivity:EventTrigger EventName="DropDownClosed">
+                                            <interactivity:InvokeCommandAction Command="{Binding AppendToFileNameFilterCommand, Mode=OneWay}" 
+                                                                   CommandParameter="{Binding SelectedValue, ElementName=comboBoxFileNameParts}"/>
+                                        </interactivity:EventTrigger>
+                                    </interactivity:Interaction.Triggers>
+                                </ComboBox>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" 
+                                           Text="Output location" />
+                                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                         Text="{Binding DrawingIssueStore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox Grid.Row="1" Grid.Column="3" Margin="0,0,5,5"
+                                          x:Name="comboBoxFolderNameParts" 
+                                          ItemsSource="{Binding FolderNameParts, Mode=OneWay}" >
+                                    <interactivity:Interaction.Triggers>
+                                        <interactivity:EventTrigger EventName="DropDownClosed">
+                                            <interactivity:InvokeCommandAction Command="{Binding AppendToFolderPathCommand, Mode=OneWay}" 
+                                                                   CommandParameter="{Binding SelectedValue, ElementName=comboBoxFolderNameParts}"/>
+                                        </interactivity:EventTrigger>
+                                    </interactivity:Interaction.Triggers>
+                                </ComboBox>
+                                <Button Grid.Row="1" Grid.Column="4" Margin="0,0,0,5"
+                                        x:Name="buttonFolderBrowse"
+                                        Content="..." 
+                                        Click="buttonFolderBrowse_Click" />
+
+                                <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,0,5"
+                                           Text="{Binding SampleFolderName}" />
+
+                                <TextBlock Grid.Row="3" Grid.Column="0"
+                                           Text="Date format string" />
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,5,5"
+                                         Text="{Binding DateFormatString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Grid.Row="3" Grid.Column="2"
+                                           Text="{Binding SampleDateString, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <CheckBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                          Content="Enforce ISO19650 parameter values"
+                                          IsChecked="{Binding UseISO19650}" />
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="200" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="Issue Formats" />
+                                <syncfusion:SfDataGrid x:Name="sfDataGridFormats" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0"
+                                                       ItemsSource="{Binding IssueFormats}"
+                                                       AutoGenerateColumns="False" 
+                                                       AllowGrouping="False" 
+                                                       AllowEditing="True"
+                                                       AllowDeleting="True"
+                                                       AllowResizingColumns="True" 
+                                                       SelectionMode="Single"                                               
+                                                       RowSelectionBrush="#9993B8D9" 
+                                                       GridValidationMode="InEdit"
+                                                       AddNewRowPosition="Bottom" 
+                                                       ColumnSizer="AutoWithLastColumnFill" >
+                                    <syncfusion:SfDataGrid.Columns>
+                                        <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
+                                        <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
+                                    </syncfusion:SfDataGrid.Columns>
+                                </syncfusion:SfDataGrid>
+
+                                <TextBlock Grid.Row="0" Grid.Column="1" 
+                                           Text="Document Statuses" />
+                                <syncfusion:SfDataGrid x:Name="sfDataGridStatuses" Grid.Row="1" Grid.Column="1" 
+                                                       ItemsSource="{Binding DocumentStatuses}"
+                                                       AutoGenerateColumns="False" 
+                                                       AllowGrouping="False" 
+                                                       AllowEditing="True"
+                                                       AllowDeleting="True"
+                                                       AllowResizingColumns="True" 
+                                                       SelectionMode="Single"                                               
+                                                       RowSelectionBrush="#9993B8D9" 
+                                                       GridValidationMode="InEdit"
+                                                       AddNewRowPosition="Bottom" 
+                                                       ColumnSizer="AutoWithLastColumnFill" >
+                                    <syncfusion:SfDataGrid.Columns>
+                                        <syncfusion:GridTextColumn MappingName="Code" HeaderText="Code" Width="50" />
+                                        <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
+                                    </syncfusion:SfDataGrid.Columns>
+                                </syncfusion:SfDataGrid>
+
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+
+                <GroupBox Header="Additional paths" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+    
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,5"
+                                       Text="Report templates"
+                                       IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                     Text="{Binding ReportTemplatePath}"
+                                     IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <Button Grid.Row="0" Grid.Column="3" Margin="0,0,0,5"
+                                    x:Name="buttonReportPathBrowse"
+                                    Content="..." 
+                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonReportPathBrowse_Click" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
+                                       Text="Issue sheet store"
+                                       IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                     Text="{Binding IssueSheetStorePath}"
+                                     IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <Button Grid.Row="1" Grid.Column="3" Margin="0,0,0,5"
+                                    x:Name="buttonIssueSheetStorePathBrowse"
+                                    Content="..." 
+                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonIssueSheetStorePathBrowse_Click" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
+                                       Text="Directory store"
+                                       IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                                     Text="{Binding DirectoryStorePath}"
+                                     IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                            <Button Grid.Row="2" Grid.Column="3" Margin="0,0,0,5"
+                                    x:Name="buttonDirectoryStorePathBrowse"
+                                    Content="..." 
+                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonDirectoryStorePathBrowse_Click"  />
+                        </Grid>
+                    </GroupBox>
+           </StackPanel>            
+        </ScrollViewer>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="buttonHelp" Height="23"
+                        Content="Help" Padding="5,0,5,0" Margin="0,5,0,0" 
+                        Click="buttonHelp_Click" />
+            
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Column="2" >
+                <Button Content="Save Settings" Padding="5,0,5,0" 
+                        Command="{Binding SaveSettingsCommand}" 
+                        IsEnabled="{Binding HasAnyErrors,  Converter={StaticResource InverseBooleanConverter}}" />
+                <Button x:Name="buttonCancel"
+                        Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" 
+                        IsCancel="True" 
+                        Click="buttonCancel_Click" />
+            </StackPanel>          
+        </Grid>
+
+
+    </Grid>
+</Window>

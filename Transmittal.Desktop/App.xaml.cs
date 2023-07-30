@@ -58,7 +58,21 @@ public partial class App : Application
                     }
                 }
             }
-            
+
+            //look for the database if just the path has been provided
+            foreach (string arg in e.Args)
+            {
+                if (arg.EndsWith(".tdb"))
+                {
+                    if (File.Exists(arg))
+                    {
+                        settings.GlobalSettings.DatabaseFile = arg;
+                        settings.GlobalSettings.RecordTransmittals = true;
+                        settings.GetSettings();
+                    }
+                }
+            }
+
             foreach (string arg in e.Args)
             {
                 // if the agument is --directory then launch the directory view
@@ -99,28 +113,6 @@ public partial class App : Application
                     return;
                 }
             }            
-        }
-
-        if(settings.GlobalSettings.DatabaseFile == "[NONE]" || settings.GlobalSettings.DatabaseFile == string.Empty)
-        {
-            //not using ookii file dilaog because it doesn't implement initialDirectory correctly
-            var dialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Filter = "Transmittal Database File (*.tdb)|*.tdb",
-                Title = "Select the Project Transmittal Database  File",
-                InitialDirectory = Path.GetDirectoryName(Environment.SpecialFolder.MyComputer.ToString())
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                if (dialog.CheckFileExists)
-                {
-                    settings.GlobalSettings.DatabaseFile = dialog.FileName;
-                    settings.GlobalSettings.RecordTransmittals = true;
-                    settings.GetSettings();
-                }
-            }
-
         }
 
         MainView mainView = new();
