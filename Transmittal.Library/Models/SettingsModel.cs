@@ -9,22 +9,22 @@ public partial class SettingsModel : ObservableValidator
     private string _dateFormatString = "dd.MM.yy";
 
     [ObservableProperty]
-    private string _projectNumber;
+    private string _projectNumber = string.Empty;
 
     [ObservableProperty]
-    private string _projectIdentifier;
+    private string _projectIdentifier = string.Empty;
 
     [ObservableProperty]
-    private string _projectName;
+    private string _projectName = string.Empty;
 
     [ObservableProperty]
-    private string _clientName;
+    private string _clientName = string.Empty;
 
     [ObservableProperty]
-    private string _originator;
+    private string _originator = string.Empty;
 
     [ObservableProperty]
-    private string _role;
+    private string _role = string.Empty;
 
     [ObservableProperty]
     private bool _recordTransmittals = false;
