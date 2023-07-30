@@ -1,24 +1,69 @@
-﻿<Window x:Class="Transmittal.Desktop.Views.MainView"
+﻿<Window x:Name="window" x:Class="Transmittal.Desktop.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:MainViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
-        Width="500" Height="250" 
+        Width="500" Height="290" 
         ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
         WindowStartupLocation="CenterScreen"
-        FontSize="14" FontFamily="Segoe UI Light" >
+        FontSize="14" FontFamily="Segoe UI Light"  >
+
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <StackPanel Margin="10" Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Menu Background="{x:Null}" >
+
+                <MenuItem x:Name="menuItemMain" Width="35" Height="35"   >
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Menu.png" Stretch="Uniform" Width="25" Height="25" Margin="0,-10,-10,-10" />
+                    </MenuItem.Icon>
+
+                    <MenuItem Header="New tdb file..." Click="MenuItem_New_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/New.png" Stretch="Uniform"  />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Open tdb file..." Click="MenuItem_Open_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Open.png" Stretch="Uniform" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Recent files" 
+                              ItemsSource="{Binding MostRecentlyUsedFiles}" 
+                              Click="MenuItem_MRU_Click"  />
+                    <Separator/>
+                    <MenuItem Header="About..." Click="MenuItem_About_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Information.png" Stretch="Uniform" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Exit" Click="MenuItem_Exit_Click" />
+                </MenuItem>
+            </Menu>
+
+            <!--<TextBlock Text="{Binding WindowTitle}"  FontSize="32" Margin="10,-5" />-->
+        </StackPanel>
+
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
@@ -61,33 +106,33 @@
             </Grid.RowDefinitions>
 
             <Button Grid.Column="0" 
-                    Margin="0,0,5,0" 
-                    x:Name="Button_Transmittal" 
-                    Background="#FF0072C6" 
-                    IsEnabled="{Binding HasDatabase}"
-                    Click="Button_Transmittal_Click" >
+                        Margin="0,0,5,0" 
+                        x:Name="Button_Transmittal" 
+                        Background="#FF0072C6" 
+                        IsEnabled="{Binding HasDatabase}"
+                        Click="Button_Transmittal_Click" >
                 <Button.Content>
                     <Image  Source="/Resources/Transmittal_Button.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
 
             <Button Grid.Column="1" 
-                    Margin="5,0,5,0"
-                    x:Name="Button_TransmittalArchive" 
-                    Background="#FF0072C6" 
-                    IsEnabled="{Binding HasDatabase}"
-                    Click="Button_TransmittalArchive_Click">
+                        Margin="5,0,5,0"
+                        x:Name="Button_TransmittalArchive" 
+                        Background="#FF0072C6" 
+                        IsEnabled="{Binding HasDatabase}"
+                        Click="Button_TransmittalArchive_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Archive_Button.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
 
             <Button Grid.Column="2" 
-                    Margin="5,0,0,0"
-                    x:Name="Button_Directory" 
-                    Background="#FF0072C6" 
-                    IsEnabled="{Binding HasDatabase}"
-                    Click="Button_Directory_Click">
+                        Margin="5,0,0,0"
+                        x:Name="Button_Directory" 
+                        Background="#FF0072C6" 
+                        IsEnabled="{Binding HasDatabase}"
+                        Click="Button_Directory_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Directory_Button.png" Stretch="Uniform" />
                 </Button.Content>
@@ -96,14 +141,19 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
             <Button Width="25" Margin="0,0,5,0" 
-                    x:Name="Button_About"
-                    Background="{x:Null}" 
-                    BorderBrush="{x:Null}" Click="Button_About_Click"  >
+                        x:Name="Button_Settings"
+                        Background="{x:Null}" 
+                        BorderBrush="{x:Null}" 
+                        IsEnabled="{Binding HasDatabase}"
+                        Click="Button_Settings_Click"  >
                 <Button.Content>
-                    <Image  Source="/Resources/Information.png" Stretch="Uniform" />
+                    <Image  Source="/Resources/Settings.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
+
             <TextBlock Text="{Binding Message}" />
         </StackPanel>
     </StackPanel>
+
+
 </Window>

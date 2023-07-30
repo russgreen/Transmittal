@@ -1,13 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using CommunityToolkit.Mvvm.Input;
+using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using Transmittal.Library.Enums;
-using Transmittal.Library.Extensions;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
 
@@ -19,31 +15,32 @@ internal partial class MainViewModel : BaseViewModel
 
     public string WindowTitle { get; private set; }
 
-    public string ProjectNo {  get; private set; }
-    public string ProjectName { get; private set; }
-    public string Database {  get; private set; }
+    [ObservableProperty]
+    private string _projectNo;
 
     [ObservableProperty]
-    private bool _hasDatabase = true;
+    private string _projectName;
+
+    [ObservableProperty]
+    private string _database;
+
+    [ObservableProperty]
+    private bool _hasDatabase = false;
 
     [ObservableProperty]
     private string _message;
+
+    [ObservableProperty]
+    private List<string> _mostRecentlyUsedFiles;
 
     public MainViewModel()
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion}";
 
-        ProjectNo = _settingsService.GlobalSettings.ProjectNumber;
-        ProjectName = _settingsService.GlobalSettings.ProjectName;
-        Database = System.IO.Path.GetFileName(_settingsService.GlobalSettings.DatabaseFile);
+        SetParameterValues();
 
-        if (Database == "[NONE]")
-        {
-            HasDatabase = false;
-        }
-
-        //CheckForUpdates();
+        MostRecentlyUsedFiles = GetMostRecentlyUsedFiles();
     }
 
     //don't want this to run every time the app launches
@@ -56,5 +53,64 @@ internal partial class MainViewModel : BaseViewModel
         }
     }
 
+    [RelayCommand]
+    private void SetParameterValues()
+    {
+        ProjectNo = _settingsService.GlobalSettings.ProjectNumber;
+        ProjectName = _settingsService.GlobalSettings.ProjectName;
+        Database = System.IO.Path.GetFileName(_settingsService.GlobalSettings.DatabaseFile);
+
+        HasDatabase = true;
+
+        if (Database == "[NONE]")
+        {
+            HasDatabase = false;
+        }
+    }
+
+    [RelayCommand]
+    private void UpdateMRU()
+    {
+        MostRecentlyUsedFiles.Clear();
+
+        MostRecentlyUsedFiles = GetMostRecentlyUsedFiles();
+    }
+
+    private List<string> GetMostRecentlyUsedFiles()
+    {
+        var recentFiles = new List<string>();
+
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.Recent);
+
+        var directory = new DirectoryInfo(path);
+        var shortcutFiles = directory.GetFiles("*.tdb.lnk")
+            .OrderByDescending(f => f.LastWriteTimeUtc)
+            .Take(10)
+            .ToList();
+
+        if (shortcutFiles.Count < 1)
+            return recentFiles;
+
+        dynamic script = CreateComInstance("Wscript.Shell");
+
+        foreach (var file in shortcutFiles)
+        {
+            dynamic sc = script.CreateShortcut(file.FullName);
+            recentFiles.Add(sc.TargetPath);
+            Marshal.FinalReleaseComObject(sc);
+        }
+        Marshal.FinalReleaseComObject(script);
+
+        return recentFiles;
+    }
+
+    private object CreateComInstance(string progId)
+    {
+        Type type = Type.GetTypeFromProgID(progId);
+        if (type == null)
+            return null;
+
+        return Activator.CreateInstance(type);
+    }
 
 }
