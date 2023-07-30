@@ -265,4 +265,9 @@ public partial class SettingsView : Window
     {
         this.Close();
     }
+
+    private void buttonHelp_Click(object sender, RoutedEventArgs e)
+    {
+        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/settings/");
+    }
 }
