@@ -155,10 +155,6 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
-        ProjectNumber = _settingsService.GlobalSettings.ProjectNumber;
-        Originator = _settingsService.GlobalSettings.Originator;
-        Role = _settingsService.GlobalSettings.Role;
-
         CheckForDatabaseFile();
 
         SetPropertiesFromGlobalSettings();
@@ -360,6 +356,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private void SetPropertiesFromImportedSettings(ImportSettingsModel settings)
     {
+        //PROJECT SETTINGS
+        ProjectNumber = _settingsService.GlobalSettings.ProjectNumber;
+        Originator = _settingsService.GlobalSettings.Originator;
+        Role = _settingsService.GlobalSettings.Role;
+
         //BASIC SETTINGS
         FileNameFilter = settings.FileNameFilter;
         DrawingIssueStore = settings.DrawingIssueStore;
