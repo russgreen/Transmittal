@@ -416,9 +416,6 @@
                     </Button>
 
 
-
-
-
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"
                                            SelectedItems="{Binding SelectedDistribution}"
@@ -427,10 +424,12 @@
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 
                                            AllowFiltering="True"
+                                           AllowSorting="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
                                            RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill">
+                                              
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
