@@ -22,26 +22,6 @@ public partial class ArchiveView : Window
         _viewModel = (ViewModels.ArchiveViewModel)this.DataContext;
     }
 
-    private void sfDataGridTransmittalItems_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
-    {
-        var projectIdentifier = string.Empty;
-
-        //check if we're using the project identifier on this project
-        if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
-        {
-            projectIdentifier = _settingsService.GlobalSettings.ProjectNumber;
-        }
-        else
-        {
-            projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
-        }
-
-        TransmittalItemModel itemModel = e.NewObject as TransmittalItemModel;
-        itemModel.DrgProj = projectIdentifier;
-        itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
-        itemModel.DrgRole = _settingsService.GlobalSettings.Role;
-    }
-
     private void Button_MergeTransmittals_Click(object sender, RoutedEventArgs e)
     {
         //Command="{Binding MergeTransmittalsCommand}"
@@ -61,6 +41,26 @@ public partial class ArchiveView : Window
         {
             _viewModel.MergeTransmittalsCommand.Execute(null);
         }
+    }
+
+    private void sfDataGridTransmittalItems_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
+    {
+        var projectIdentifier = string.Empty;
+
+        //check if we're using the project identifier on this project
+        if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
+        {
+            projectIdentifier = _settingsService.GlobalSettings.ProjectNumber;
+        }
+        else
+        {
+            projectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier;
+        }
+
+        TransmittalItemModel itemModel = e.NewObject as TransmittalItemModel;
+        itemModel.DrgProj = projectIdentifier;
+        itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
+        itemModel.DrgRole = _settingsService.GlobalSettings.Role;
     }
 
     private void sfDataGridTransmittals_RecordDeleting(object sender, RecordDeletingEventArgs e)

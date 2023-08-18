@@ -195,10 +195,12 @@
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 
                                            AllowFiltering="True"
+                                           AllowSorting="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
                                            RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill">
+                        
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />

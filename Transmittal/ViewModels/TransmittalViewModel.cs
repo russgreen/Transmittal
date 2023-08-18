@@ -261,7 +261,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             RecordTransmittal = true;
 
-            ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory());
+            ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory()
+                .OrderBy(x => x.Company.CompanyName)
+                .ThenBy(x => x.Person.FullNameReversed));
+
             ProjectDirectory.CollectionChanged += ProjectDirectory_CollectionChanged;
 
             SelectedProjectDirectory = new();

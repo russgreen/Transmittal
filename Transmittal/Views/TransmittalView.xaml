@@ -61,6 +61,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="ButtonRevise" 
@@ -76,6 +77,11 @@
                                 Margin="20,0,0,0" 
                                 IsEnabled="{Binding IsSheetsSelected}" 
                                 Click="ButtonStatus_Click"/>
+
+                        <TextBlock Grid.Column="2" Margin="20,5,0,0"  >
+                            <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
+                            <Run Text=" sheets selected."/>
+                        </TextBlock>
                     </Grid>
 
                     <syncfusion:SfDataGrid Grid.Row="1" Margin="0,10,0,0" 
@@ -416,9 +422,6 @@
                     </Button>
 
 
-
-
-
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"
                                            SelectedItems="{Binding SelectedDistribution}"
@@ -427,10 +430,12 @@
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 
                                            AllowFiltering="True"
+                                           AllowSorting="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
                                            RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill">
+                                              
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />

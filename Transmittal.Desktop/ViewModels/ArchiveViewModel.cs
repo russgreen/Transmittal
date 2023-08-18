@@ -43,6 +43,8 @@ internal partial class ArchiveViewModel : BaseViewModel
     [ObservableProperty]
     private bool _itemSelected = false;
     [ObservableProperty]
+    private bool _itemsSelected = false;
+    [ObservableProperty]
     private bool _canMergeTransmittals = false;
 
     public ArchiveViewModel()
@@ -128,6 +130,7 @@ internal partial class ArchiveViewModel : BaseViewModel
     {
         CanMergeTransmittals = false;
         ItemSelected = (SelectedTransmittals.Count == 1);
+        ItemsSelected = (SelectedTransmittals.Count > 1);
 
         if (SelectedTransmittals.Count == 0 & TransmittalItems != null)
         {
@@ -243,6 +246,13 @@ internal partial class ArchiveViewModel : BaseViewModel
     {
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalSummaryReport();
+    }
+
+    [RelayCommand]
+    private void ShowSummaryRangeReport()
+    {
+        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        reports.ShowTransmittalSummaryReport(SelectedTransmittals.Cast<TransmittalModel>().ToList());
     }
 
     [RelayCommand]
