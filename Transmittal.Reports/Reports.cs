@@ -163,7 +163,7 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
-        public void ShowTransmittalSummaryReport()//bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null)//bool useISO, string projectIdentifier, string projectName)
         {
             Stream report = GetReport(  "TransmittalSummary.rdlc");
 
@@ -185,7 +185,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 fileName);
 
-            List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();
+            if(transmittals == null)
+            {
+                transmittals = _transmittalService.GetTransmittals();
+            }
+            //List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();
 
             List<Models.TransmittalItemReportModel> transmittalItems = new List<Models.TransmittalItemReportModel>();
             List<Models.TransmittalDistributionReportModel> transmittalDistributions = new List<Models.TransmittalDistributionReportModel>();

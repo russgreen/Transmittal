@@ -58,6 +58,14 @@
                     <TextBlock Margin="3,0,0,0">Summary</TextBlock>
                 </StackPanel>
             </Button>
+            <Button IsEnabled="{Binding ItemsSelected}"
+                    Command="{Binding ShowSummaryRangeReportCommand}" Margin="0,0,5,0"
+                    ToolTip="View the transmittal summary report between two dates">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Summary Range</TextBlock>
+                </StackPanel>
+            </Button>
             <Button x:Name="Button_MergeTransmittals"  
                     IsEnabled="{Binding CanMergeTransmittals}" 
                     Click="Button_MergeTransmittals_Click" Margin="0,0,5,0" 
