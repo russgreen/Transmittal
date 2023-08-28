@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -12,7 +13,7 @@ namespace Transmittal.Commands;
 public class CommandTransmittal : IExternalCommand
 {
     private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-
+    private readonly ILogger<CommandTransmittal> _logger = Host.GetService<ILogger<CommandTransmittal>>();
     public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
     {        
         //UIApplication uiapp = commandData.Application;
@@ -64,6 +65,7 @@ public class CommandTransmittal : IExternalCommand
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error");
             message = ex.Message;
             return Result.Failed;
         }

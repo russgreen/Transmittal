@@ -41,31 +41,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Archive_Button.png"/>
-    <Resource Include="Resources\Directory_Button.png"/>
-	<Resource Include="Resources\Duplicate.png"/>
-    <Resource Include="Resources\GreenCheck.png"/>
-    <Resource Include="Resources\Hyperlink.png"/>
-    <Resource Include="Resources\Information.png"/>
+    <Resource Include="Resources\Archive_Button.png" />
+    <Resource Include="Resources\Directory_Button.png" />
+	<Resource Include="Resources\Duplicate.png" />
+    <Resource Include="Resources\GreenCheck.png" />
+    <Resource Include="Resources\Hyperlink.png" />
+    <Resource Include="Resources\Information.png" />
     <Resource Include="Resources\Menu.png" />
     <Resource Include="Resources\New.png" />
     <Resource Include="Resources\Open.png" />
     <Resource Include="Resources\Settings.png" />
     <Resource Include="Resources\Transmittal_Button.png" />
-    <Resource Include="Resources\Add.png"/>
-    <Resource Include="Resources\ContactDetails.png"/>
-    <Resource Include="Resources\DataEdit.png"/>
-    <Resource Include="Resources\DataMerge.png"/>
-    <Resource Include="Resources\Delete.png"/>
-    <Resource Include="Resources\Reload.png"/>
-	<Resource Include="Resources\Report.png"/>
+    <Resource Include="Resources\Add.png" />
+    <Resource Include="Resources\ContactDetails.png" />
+    <Resource Include="Resources\DataEdit.png" />
+    <Resource Include="Resources\DataMerge.png" />
+    <Resource Include="Resources\Delete.png" />
+    <Resource Include="Resources\Reload.png" />
+	<Resource Include="Resources\Report.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />

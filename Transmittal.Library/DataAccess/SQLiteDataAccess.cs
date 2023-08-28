@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Humanizer;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
 using System.Data;
 using System.IO;
 using Transmittal.Library.Extensions;
@@ -9,6 +9,13 @@ namespace Transmittal.Library.DataAccess;
 
 public class SQLiteDataAccess : IDataConnection
 {
+    private readonly ILogger<SQLiteDataAccess> _logger;
+
+    public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger)
+    {
+        _logger = logger;
+    }
+
     public bool CheckConnection(string dbFilePath)
     {
         using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
@@ -18,8 +25,9 @@ public class SQLiteDataAccess : IDataConnection
                 dbConnection.Open();
                 return true;
             }
-            catch (SqliteException)
+            catch (SqliteException ex)
             {
+                _logger.LogError(ex, "Failed to connect to database");
                 return false;
             }
         }
@@ -98,9 +106,9 @@ public class SQLiteDataAccess : IDataConnection
                 {
                     dbConnection.Execute(column.Value);
                 }
-                catch
+                catch(Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Failed to create column[{column.Key}]. Most likely it already exists, which is fine.");
+                   _logger.LogError(ex, "Failed to create column[{column}]. Most likely it already exists, which is fine.", column.Key);
                 }
             }
         }
@@ -133,11 +141,14 @@ public class SQLiteDataAccess : IDataConnection
                 }
             }
         }
+
+        _logger.LogDebug("Created lock file [{lockFilePath}]", lockFilePath);
     }
 
     private void DeleteLockFile(string dbFilePath)
     {
         var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
         File.Delete(lockFilePath);
+        _logger.LogDebug("Deleted lock file [{lockFilePath}]", lockFilePath);
     }
 }

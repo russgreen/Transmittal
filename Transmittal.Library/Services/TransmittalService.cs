@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using Microsoft.Extensions.Logging;
+using System.Data.Common;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 
@@ -8,18 +9,23 @@ public class TransmittalService : ITransmittalService
     private readonly IDataConnection _connection;
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly ILogger<TransmittalService> _logger;
 
     public TransmittalService(IDataConnection dataConnection,
         ISettingsService settingsService,
-        IContactDirectoryService contactDirectoryService)
+        IContactDirectoryService contactDirectoryService,
+        ILogger<TransmittalService> logger)
     {
         _connection = dataConnection;
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
+        _logger = logger;
     }
 
     public void CreateTransmittal(TransmittalModel model)
     {
+        _logger.LogDebug("Creating transmittal {model}", model);
+
         string sql = "INSERT INTO Transmittal (TransDate) VALUES (@TransDate); " +
             "SELECT last_insert_rowid();";
 
@@ -33,6 +39,8 @@ public class TransmittalService : ITransmittalService
 
     public void CreateTransmittalDist(TransmittalDistributionModel model)
     {
+        _logger.LogDebug("Creating transmittal distribution {model}", model);
+
         string sql = "INSERT INTO TransmittalDistribution (TransID, PersonID, TransFormat, TransCopies) " +
             "VALUES (@TransID, @PersonID, @TransFormat, @TransCopies); " +
             "SELECT last_insert_rowid();";
@@ -50,6 +58,8 @@ public class TransmittalService : ITransmittalService
 
     public void CreateTransmittalItem(TransmittalItemModel model)
     {
+        _logger.LogDebug("Creating transmittal item {model}", model);
+
         string sql = "INSERT INTO TransmittalItems ( TransID, DrgProj, DrgOriginator, DrgVolume, DrgLevel, DrgType, DrgRole, DrgNumber, DrgStatus, DrgRev, DrgName, DrgPaper, DrgScale, DrgDrawn, DrgChecked ) " +
             "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked ); " +
             "SELECT last_insert_rowid();";
@@ -78,6 +88,8 @@ public class TransmittalService : ITransmittalService
 
     public void DeleteTransmittal(TransmittalModel model)
     {
+        _logger.LogDebug("Deleting transmittal {model}", model);
+
         string sql = "DELETE FROM Transmittal WHERE (ID = @ID);";
 
         _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
@@ -86,6 +98,8 @@ public class TransmittalService : ITransmittalService
 
     public void DeleteTransmittalDist(TransmittalDistributionModel model)
     {
+        _logger.LogDebug("Deleting transmittal distribution {model}", model);
+
         string sql = "DELETE FROM TransmittalDistribution WHERE TransDistID = @TransDistID;";
 
         _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
@@ -94,6 +108,8 @@ public class TransmittalService : ITransmittalService
 
     public void DeleteTransmittalItem(TransmittalItemModel model)
     {
+        _logger.LogDebug("Deleting transmittal item {model}", model);
+
         string sql = "DELETE FROM TransmittalItems WHERE TransItemID = @TransItemID;";
 
         _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
@@ -102,6 +118,8 @@ public class TransmittalService : ITransmittalService
 
     public TransmittalModel GetTransmittal(int transmittalID)
     {
+        _logger.LogDebug("Get Transmittal {id}", transmittalID);
+
         string sql = "SELECT * FROM Transmittal WHERE (ID = @ID);";
 
         var transmittal = _connection.LoadData<TransmittalModel, dynamic>(
@@ -116,6 +134,8 @@ public class TransmittalService : ITransmittalService
 
     public List<TransmittalDistributionModel> GetTransmittalDistributions_ByTransmittal(int transmittalID)
     {
+        _logger.LogDebug("Get Transmittal Distributions {id}", transmittalID);
+
         string sql = "SELECT * FROM TransmittalDistribution " +
             "WHERE (TransID = @TransID);";
 
@@ -134,6 +154,8 @@ public class TransmittalService : ITransmittalService
 
     public List<TransmittalItemModel> GetTransmittalItems_ByTransmittal(int transmittalID)
     {
+        _logger.LogDebug("Get Transmittal Items {id}", transmittalID);
+
         string sql = "SELECT * FROM TransmittalItems " +
             "WHERE (TransID = @TransID);";
 
@@ -144,6 +166,8 @@ public class TransmittalService : ITransmittalService
 
     public List<TransmittalModel> GetTransmittals()
     {
+        _logger.LogDebug("Get Transmittals");
+
         string sql = "SELECT * FROM Transmittal;";
 
         var transmittals = _connection.LoadData<TransmittalModel, dynamic>(
@@ -161,6 +185,8 @@ public class TransmittalService : ITransmittalService
 
     public List<TransmittalModel> GetTransmittals_ByPerson(int personID)
     {
+        _logger.LogDebug("Get Transmittals by Person {id}", personID);
+
         string sql = "SELECT Transmittal.*, TransmittalDistribution.PersonID " +
             "FROM Transmittal " +
             "INNER JOIN TransmittalDistribution ON Transmittal.ID = TransmittalDistribution.TransID " +
@@ -181,6 +207,8 @@ public class TransmittalService : ITransmittalService
 
     public TransmittalModel MergeTransmittals(List<TransmittalModel> transmittalsToMerge)
     {
+        _logger.LogDebug("Merge transmittals {transmittals}", transmittalsToMerge);
+
         //create a new item
         TransmittalModel newTransmittal = new TransmittalModel
         {
@@ -231,6 +259,8 @@ public class TransmittalService : ITransmittalService
 
     public void UpdateTransmittal(TransmittalModel model)
     {
+        _logger.LogDebug("Update Transmittal {transmittal}", model);
+
         string sql = "UPDATE Transmittal SET TransDate = @TransDate WHERE ((ID = @ID));";
 
         _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
@@ -243,6 +273,8 @@ public class TransmittalService : ITransmittalService
 
     public void UpdateTransmittalDist(TransmittalDistributionModel model)
     {
+        _logger.LogDebug("Update Transmittal Distribution {transmittalDist}", model);
+
         string sql = "UPDATE TransmittalDistribution SET " +
             "TransID = @TransID, " +
             "PersonID = @PersonID, 	" +
@@ -264,6 +296,8 @@ public class TransmittalService : ITransmittalService
 
     public void UpdateTransmittalItem(TransmittalItemModel model)
     {
+        _logger.LogDebug("Update Transmittal Item {transmittalItem}", model);
+
         string sql = "UPDATE TransmittalItems SET " +
            "TransID = @TransID, " +
            "DrgNumber = @DrgNumber, " +
