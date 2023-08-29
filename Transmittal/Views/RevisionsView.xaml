@@ -9,6 +9,20 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
         Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ImageBrush x:Key="watermark" ImageSource="/Transmittal_2022;component/Resources/SearchRevisionsWatermark.png" AlignmentX="Left" Stretch="None" >
+            <ImageBrush.Transform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="3"/>
+                </TransformGroup>
+            </ImageBrush.Transform>
+        </ImageBrush>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -16,10 +30,23 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <Button x:Name="ButtonAddRevision" Grid.Row="0" Width="95" 
+        <Grid Grid.Row="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Grid.Row="0" x:Name="ButtonAddRevision" Width="95" 
                 Content="Add Revision"
                 HorizontalAlignment="Left" 
                 Click="ButtonAddRevision_Click"/>
+
+            <TextBox Grid.Column="1" Margin="5,0,0,0" x:Name="TextBoxSearch"
+                     TextChanged="TextBoxSearch_TextChanged"                      
+                     VerticalContentAlignment="Center" 
+                     Background="{StaticResource watermark}" />
+
+        </Grid>
 
         <syncfusion:SfDataGrid Grid.Row="1" Margin="0,10,0,0"
                                x:Name="sfDataGridRevisions"

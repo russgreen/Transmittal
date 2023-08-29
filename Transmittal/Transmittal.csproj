@@ -53,6 +53,10 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\SearchRevisionsWatermark.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
@@ -80,7 +84,8 @@
 		<Resource Include="Resources\DataMerge.png" />
 		<Resource Include="Resources\Delete.png" />		
 		<Resource Include="Resources\GreenCheck.png" />		
-		<Resource Include="Resources\Report.png" />
+		<Resource Include="Resources\Report.png" />		
+		<Resource Include="Resources\SearchRevisionsWatermark.png" />
 		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\About_Button.png" />		
 		<EmbeddedResource Include="Resources\Import_Button.png" />

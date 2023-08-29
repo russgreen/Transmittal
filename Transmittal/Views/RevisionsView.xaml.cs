@@ -1,5 +1,6 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
+using System.Windows.Media;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
 using Transmittal.ViewModels;
@@ -43,5 +44,20 @@ public partial class RevisionsView : Window
         Views.NewRevisionView dialog = new Views.NewRevisionView(_viewModel);
         dialog.Owner = this;
         dialog.ShowDialog();
+    }
+
+    private void TextBoxSearch_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.TextBox box)
+        {
+            if (string.IsNullOrEmpty(box.Text))
+                box.Background = (ImageBrush)FindResource("watermark");
+            else
+                box.Background = null;
+        }
+
+        this.sfDataGridRevisions.SearchHelper.SearchBrush = Brushes.Green;
+        this.sfDataGridRevisions.SearchHelper.AllowFiltering = true;
+        this.sfDataGridRevisions.SearchHelper.Search(this.TextBoxSearch.Text);
     }
 }
