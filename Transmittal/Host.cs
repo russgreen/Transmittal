@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Versioning;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+using Serilog;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -15,36 +13,54 @@ namespace Transmittal
     {
         private static IHost _host;
 
-        public static async Task StartHost()
+        public static void StartHost()
         {
+            var logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Transmittal", "Transmittal_Revit_Log.json");
+
+#if DEBUG
+            logPath = "log.json";
+#endif
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File(new JsonFormatter(), logPath,
+                    restrictedToMinimumLevel: LogEventLevel.Information,
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 7)
+                .CreateLogger();
+
             _host = Microsoft.Extensions.Hosting.Host
-            .CreateDefaultBuilder()
-            .ConfigureServices((_, services) =>
-            {
-                services.AddSingleton<ISettingsService, SettingsService>();
+                .CreateDefaultBuilder()
+                .UseSerilog()
+                .ConfigureServices((_, services) =>
+                {
+                    services.AddSingleton<ISettingsService, SettingsService>();
 
-                services.AddTransient<ISettingsServiceRvt, SettingsServiceRvt>();
-                services.AddTransient<IDataConnection, SQLiteDataAccess>();
-                services.AddTransient<IExportPDFService, ExportPDFService>();
-                services.AddTransient<IExportDWGService, ExportDWGService>();
-                services.AddTransient<IExportDWFService, ExportDWFService>();
-                services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
-                services.AddTransient<ITransmittalService, TransmittalService>();
-            })
-            .Build();
+                    services.AddTransient<ISettingsServiceRvt, SettingsServiceRvt>();
+                    services.AddTransient<IDataConnection, SQLiteDataAccess>();
+                    services.AddTransient<IExportPDFService, ExportPDFService>();
+                    services.AddTransient<IExportDWGService, ExportDWGService>();
+                    services.AddTransient<IExportDWFService, ExportDWFService>();
+                    services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
+                    services.AddTransient<ITransmittalService, TransmittalService>();
+                })
+                .Build();
 
-            await _host.StartAsync();
+            _host.Start();
         }
 
-        public static async Task StartHost(IHost host)
+        public static void StartHost(IHost host)
         {
             _host = host;
-            await host.StartAsync();
+            host.Start();
         }
 
-        public static async Task StopHost()
+        public static void StopHost()
         {
-            await _host.StopAsync();
+            _host.StopAsync();
             _host.Dispose();
         }
 

@@ -25,7 +25,7 @@ public class App : ExternalApplication
 
     private RibbonPanel _ribbonPanel;
 
-    public override async void OnStartup()
+    public override void OnStartup()
     {
         ThisApp = this;
         CachedUiCtrApp = Application;
@@ -33,7 +33,7 @@ public class App : ExternalApplication
 
         CachedUiCtrApp.ViewActivated += new EventHandler<ViewActivatedEventArgs>(OnViewActivated);
 
-        await Host.StartHost();
+        Host.StartHost();
 
         //allow end users to customise the ribbon tab name
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -52,11 +52,11 @@ public class App : ExternalApplication
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
     }
 
-    public override async void OnShutdown()
+    public override void OnShutdown()
     {
         RemoveAppDocEvents();
 
-        await Host.StopHost();
+        Host.StopHost();
     }
 
     #region Event Handling

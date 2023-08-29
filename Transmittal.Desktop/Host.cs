@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog.Events;
+using Serilog.Formatting.Json;
+using Serilog;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Versioning;
@@ -14,8 +17,26 @@ internal static class Host
 
     public static async Task StartHost()
     {
+        var logPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Transmittal", "Transmittal_Log.json");
+
+#if DEBUG
+        logPath = "log.json";
+#endif
+
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.File(new JsonFormatter(), logPath,
+                restrictedToMinimumLevel: LogEventLevel.Information,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7)
+            .CreateLogger();
+
         _host = Microsoft.Extensions.Hosting.Host
         .CreateDefaultBuilder()
+        .UseSerilog()
         .ConfigureAppConfiguration(builder =>
         {
             var assembly = Assembly.GetExecutingAssembly();

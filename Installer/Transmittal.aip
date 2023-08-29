@@ -14,10 +14,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{78AE2D67-D696-42B2-8DE8-950CEAAB7F5C} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{83C237B0-0C72-4346-ABE6-F9E0FFA2DF18} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="1.9.1" Options="32"/>
+    <ROW Property="ProductVersion" Value="1.9.2" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -94,6 +94,7 @@
     <ROW Component="Microsoft.SqlServer.Types.dll" ComponentId="{B1F33E68-535B-41DD-AB73-79F7AE4CB11C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.SqlServer.Types.dll"/>
     <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{8AC83B3A-417E-489C-9445-51CBE280B8FA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Component="NewValue" ComponentId="{26B3A65C-CED2-4733-9890-DAC343310E1C}" Directory_="APPDIR" Attributes="260" KeyPath="NewValue"/>
+    <ROW Component="Nice3point.Revit.Extensions.dll" ComponentId="{1946BB35-CFA3-47F3-85CC-1987E8F67AB1}" Directory_="APPDIR" Attributes="256" KeyPath="Nice3point.Revit.Extensions.dll"/>
     <ROW Component="Nice3point.Revit.Toolkit.dll" ComponentId="{EAB1063E-54BA-4AD3-9600-8FC34449C4FD}" Directory_="APPDIR" Attributes="256" KeyPath="Nice3point.Revit.Toolkit.dll"/>
     <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{46B7614E-8C22-480B-A4AE-2A38C60C8AE0}" Directory_="APPDIR" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
@@ -101,6 +102,11 @@
     <ROW Component="SQLitePCLRaw.batteries_v2.dll" ComponentId="{BEBA9873-1289-4992-8D96-D5C37DFB16F3}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.batteries_v2.dll"/>
     <ROW Component="SQLitePCLRaw.core.dll" ComponentId="{DD73F0DD-7AAB-4571-A69F-28FBCBB0316F}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.core.dll"/>
     <ROW Component="SQLitePCLRaw.provider.dynamic_cdecl.dll" ComponentId="{9693A81D-6202-4AAF-A4E5-708A9DF745F0}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.provider.dynamic_cdecl.dll"/>
+    <ROW Component="Serilog.Extensions.Hosting.dll" ComponentId="{4D6727C9-FDAA-4D30-834F-F6CF0D602A4A}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Hosting.dll"/>
+    <ROW Component="Serilog.Extensions.Logging.dll" ComponentId="{A7AFF416-014A-4787-A797-40C34500F324}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Logging.dll"/>
+    <ROW Component="Serilog.Sinks.Debug.dll" ComponentId="{7D2A4AC3-10E3-467A-B16B-17694872A926}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll"/>
+    <ROW Component="Serilog.Sinks.File.dll" ComponentId="{AD50075E-F9D4-4797-8861-46F0E4871635}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
+    <ROW Component="Serilog.dll" ComponentId="{C71DDE06-01C5-4D6D-B2AC-13708AB5AB58}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
     <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{1EBFDF9B-0E13-481B-A369-DE2123C13CAC}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
     <ROW Component="Syncfusion.Data.WPF.dll" ComponentId="{BCFA7FC6-0C08-455A-B661-DA8C5F930FA1}" Directory_="APPDIR" Attributes="0" KeyPath="Syncfusion.Data.WPF.dll"/>
@@ -233,6 +239,12 @@
     <ROW File="Transmittal_2024.dll" Component_="Transmittal_2024.dll" FileName="TRANSM~6.DLL|Transmittal_2024.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Transmittal_2024.dll" SelfReg="false"/>
     <ROW File="JetBrains.Annotations.dll" Component_="JetBrains.Annotations.dll" FileName="JETBRA~1.DLL|JetBrains.Annotations.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\JetBrains.Annotations.dll" SelfReg="false"/>
     <ROW File="Nice3point.Revit.Toolkit.dll" Component_="Nice3point.Revit.Toolkit.dll" FileName="NICE3P~1.DLL|Nice3point.Revit.Toolkit.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Nice3point.Revit.Toolkit.dll" SelfReg="false"/>
+    <ROW File="Serilog.dll" Component_="Serilog.dll" FileName="Serilog.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Serilog.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Hosting.dll" Component_="Serilog.Extensions.Hosting.dll" FileName="SERILO~1.DLL|Serilog.Extensions.Hosting.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Serilog.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Logging.dll" Component_="Serilog.Extensions.Logging.dll" FileName="SERILO~2.DLL|Serilog.Extensions.Logging.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Serilog.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Debug.dll" Component_="Serilog.Sinks.Debug.dll" FileName="SERILO~3.DLL|Serilog.Sinks.Debug.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Serilog.Sinks.Debug.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.File.dll" Component_="Serilog.Sinks.File.dll" FileName="SERILO~4.DLL|Serilog.Sinks.File.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Serilog.Sinks.File.dll" SelfReg="false"/>
+    <ROW File="Nice3point.Revit.Extensions.dll" Component_="Nice3point.Revit.Extensions.dll" FileName="NICE3P~2.DLL|Nice3point.Revit.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Nice3point.Revit.Extensions.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -397,6 +409,12 @@
     <ROW Feature_="MainFeature" Component_="Transmittal_2024.dll"/>
     <ROW Feature_="MainFeature" Component_="JetBrains.Annotations.dll"/>
     <ROW Feature_="MainFeature" Component_="Nice3point.Revit.Toolkit.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Logging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Debug.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.File.dll"/>
+    <ROW Feature_="MainFeature" Component_="Nice3point.Revit.Extensions.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>

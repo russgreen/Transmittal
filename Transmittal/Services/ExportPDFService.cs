@@ -1,24 +1,23 @@
 ﻿using Autodesk.Revit.DB;
-using System.IO;
-using Transmittal.Extensions;
-using Transmittal.Library.Services;
-using Transmittal.Library.Extensions;
-using System.Drawing.Printing;
-using System.Reflection;
-
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-using System.Runtime.InteropServices;
-
+using System.IO;
+using System.Reflection;
+using Transmittal.Extensions;
+using Transmittal.Library.Extensions;
+using Transmittal.Library.Services;
 
 namespace Transmittal.Services;
 internal class ExportPDFService : IExportPDFService
 {
     private readonly ISettingsService _settingsService;
+    private readonly ILogger<ExportPDFService> _logger;
 
-    public ExportPDFService(ISettingsService settingsService)
+    public ExportPDFService(ISettingsService settingsService, 
+        ILogger<ExportPDFService> logger)
     {
         _settingsService = settingsService;
+        _logger = logger;
     }
 
 #if REVIT2022_OR_GREATER
@@ -138,8 +137,9 @@ internal class ExportPDFService : IExportPDFService
                 {
                     File.Delete($"{fullPath}.pdf");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex, "Error deleting file pdf");
                     //TODO append a date time to the file name
                     exportFileName = $"{exportFileName} ({DateTime.Now.ToLongTimeString().Replace(":", "")})";
                     fullPath = Path.Combine(folderPath, exportFileName);
@@ -242,9 +242,9 @@ internal class ExportPDFService : IExportPDFService
             {
                 printManager.PrintSetup.SaveAs("transmittal");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //This is bad but do nothing and move on
+                _logger.LogError(ex, "Error saving print setup");
             }
 
             printManager.Apply();
@@ -260,9 +260,9 @@ internal class ExportPDFService : IExportPDFService
 
             SetDefaultPrinter(currentDefaultPrinterName);
         }
-        catch
+        catch(Exception ex)
         {
-            //TODO - report crashes
+            _logger.LogError(ex, "Error creating pdf");
         }
         finally
         {
@@ -299,8 +299,10 @@ internal class ExportPDFService : IExportPDFService
                 LoadInCreatorIfOpen = GetRegistryVal_Bool(@"Software\PDF24\Services\PDF", "LoadInCreatorIfOpen")
             };
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogDebug(ex, "Error getting PDF24 settings from registry");
+
             settings = new()
             {
                 AutoSaveDir = @"%USERPROFILE%\Documents\Transmittal\Temp\PDF",

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;

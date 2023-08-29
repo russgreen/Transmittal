@@ -8,15 +8,19 @@ using System.Threading.Tasks;
 using Transmittal.Extensions;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Transmittal.Services;
 internal class ExportDWFService : IExportDWFService
 {
     private readonly ISettingsService _settingsService;
+    private readonly ILogger<ExportDWFService> _logger;
 
-    public ExportDWFService(ISettingsService settingsService)
+    public ExportDWFService(ISettingsService settingsService,
+        ILogger<ExportDWFService> logger)
     {
         _settingsService = settingsService;
+        _logger = logger;
     }    
     
     public string ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
@@ -45,8 +49,9 @@ internal class ExportDWFService : IExportDWFService
                 {
                     File.Delete(fullPath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex, "Error deleting existing DWF");
                     exportFileName.Replace(".dwf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwf");
                     fullPath = Path.Combine(folderPath, exportFileName);
                 }
@@ -59,9 +64,9 @@ internal class ExportDWFService : IExportDWFService
             exportDocument.Export(folderPath, exportFileName, views, dwfExportOptions);
 
         }
-        catch
+        catch(Exception ex)
         {
-            //TODO - report crashes
+            _logger.LogError(ex, "Error exporting DWF");
         }
         finally
         {

@@ -2,6 +2,7 @@
 // This code is taken from the RevitLookup project and is licensed under the MIT license.
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +15,7 @@ namespace Transmittal.Library.Services;
 public sealed class SoftwareUpdateService : ISoftwareUpdateService
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<SoftwareUpdateService> _logger;
 
     private readonly Regex _versionRegex = new(@"(\d+\.)+\d+", RegexOptions.Compiled);
 
@@ -34,9 +36,12 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
     public string LocalFilePath { get; set; }
 
 
-    public SoftwareUpdateService(IConfiguration configuration)
+    public SoftwareUpdateService(IConfiguration configuration, 
+        ILogger<SoftwareUpdateService> logger) 
     {
         _configuration = configuration;
+        _logger = logger;
+
         CurrentVersion = _configuration["SoftwareVersion"];
         ReleaseNotesUrl = "https://github.com/russgreen/Transmittal/releases/";
     }
@@ -130,13 +135,15 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
             ReleaseNotesUrl = latestRelease.Url;
 
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "GitHub request limit exceeded");
             // GitHub request limit exceeded
             State = SoftwareUpdateState.UpToDate;
         }
-        catch
+        catch(Exception ex)
         {
+            _logger.LogError(ex, "An error occurred while checking for updates");
             State = SoftwareUpdateState.ErrorChecking;
             ErrorMessage = "An error occurred while checking for updates";
         }
@@ -156,8 +163,9 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
             LocalFilePath = fileName;
             State = SoftwareUpdateState.ReadyToInstall;
         }
-        catch
+        catch(Exception ex)
         {
+            _logger.LogError(ex, "An error occurred while downloading the update");
             State = SoftwareUpdateState.ErrorDownloading;
             ErrorMessage = "An error occurred while downloading the update";
         }

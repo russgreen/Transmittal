@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
@@ -11,12 +12,15 @@ namespace Transmittal.Library.Services;
 public class SettingsService : ISettingsService
 {
     private readonly IDataConnection _connection;
+    private readonly ILogger<SettingsService> _logger;  
 
     public SettingsModel GlobalSettings { get; set; }
     
-    public SettingsService(IDataConnection dataConnection)
+    public SettingsService(IDataConnection dataConnection,
+        ILogger<SettingsService> logger)
     {
-        _connection = dataConnection;        
+        _connection = dataConnection;   
+        _logger = logger;
         
         GlobalSettings = new();
     }
@@ -24,6 +28,7 @@ public class SettingsService : ISettingsService
     public void GetSettings()
     {
         //this is where additional settings related to desktop.exe and reporting are pulled form the project DB.
+        _logger.LogDebug("Getting settings from {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
 
         if (GlobalSettings.DatabaseFile != "[NONE]" || GlobalSettings.DatabaseFile != null)
         {
@@ -66,6 +71,8 @@ public class SettingsService : ISettingsService
 
     public void UpdateSettings()
     {
+        _logger.LogDebug("Updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+
         _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
 
         string sql = "UPDATE Settings SET " +
@@ -131,6 +138,8 @@ public class SettingsService : ISettingsService
 
     private List<IssueFormatModel> GetIssueFormats()
     {
+        _logger.LogDebug("Getting issue formats from {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+
         //build the issue formats list  
         string sql = "SELECT * FROM IssueFormat;";
 
@@ -143,6 +152,8 @@ public class SettingsService : ISettingsService
 
     private List<DocumentStatusModel> GetDocumentStatuses()
     {
+        _logger.LogDebug("Getting document statuses from {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+
         string sql = "SELECT * FROM DocumentStatus;";
 
         List<DocumentStatusModel> documentStatuses = _connection.LoadData<DocumentStatusModel, dynamic>(
@@ -154,6 +165,8 @@ public class SettingsService : ISettingsService
 
     private void SaveIssueFormats()
     {
+        _logger.LogDebug("Saving issue formats to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+
         //clear the records in the table
         string sql = "DELETE FROM IssueFormat;";
         _connection.SaveData(
@@ -169,6 +182,8 @@ public class SettingsService : ISettingsService
 
     private void SaveDocumentStatuses()
     {
+        _logger.LogDebug("Saving document statuses to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+
         //clear the records in the table
         string sql = "DELETE FROM DocumentStatus;";
         _connection.SaveData(

@@ -53,14 +53,20 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\SearchRevisionsWatermark.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
 		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />
-		<!--<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*"/>-->
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="21.1.39" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
-		<!--<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />-->
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
@@ -78,7 +84,8 @@
 		<Resource Include="Resources\DataMerge.png" />
 		<Resource Include="Resources\Delete.png" />		
 		<Resource Include="Resources\GreenCheck.png" />		
-		<Resource Include="Resources\Report.png" />
+		<Resource Include="Resources\Report.png" />		
+		<Resource Include="Resources\SearchRevisionsWatermark.png" />
 		<Resource Include="Resources\Transmittal.ico" />
 		<EmbeddedResource Include="Resources\About_Button.png" />		
 		<EmbeddedResource Include="Resources\Import_Button.png" />

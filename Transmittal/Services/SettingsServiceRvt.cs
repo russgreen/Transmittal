@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using Microsoft.Extensions.Logging;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -23,14 +24,18 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private readonly ISettingsService _settingsService;
     private readonly IDataConnection _dataConnection;
+    private readonly ILogger<SettingsServiceRvt> _logger;   
 
     private Schema _oldSchema = null;
     private Schema _schema = null;
 
-    public SettingsServiceRvt(IDataConnection dataConnection, ISettingsService settingsService)
+    public SettingsServiceRvt(IDataConnection dataConnection, 
+        ISettingsService settingsService,
+        ILogger<SettingsServiceRvt> logger)
     {
         _settingsService = settingsService;
         _dataConnection = dataConnection;
+        _logger = logger;
 
         _schema = null;
     }

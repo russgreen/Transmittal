@@ -8,6 +8,7 @@ using Transmittal.Library.Extensions;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Extensions.Logging;
 
 namespace Transmittal.Reports
 {
@@ -21,6 +22,7 @@ namespace Transmittal.Reports
         private readonly ISettingsService _settingsService;
         private readonly IContactDirectoryService _contactDirectoryService;
         private readonly ITransmittalService _transmittalService;
+        private readonly ILogger<Reports> _logger;
 
         public Reports(IServiceProvider serviceProvider, string reportStore)
         {

@@ -9,15 +9,19 @@ using Transmittal.Extensions;
 using Transmittal.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Transmittal.Services;
 internal class ExportDWGService : IExportDWGService
 {
     private readonly ISettingsService _settingsService;
+    private readonly ILogger<ExportDWGService> _logger;
 
-    public ExportDWGService(ISettingsService settingsService)
+    public ExportDWGService(ISettingsService settingsService,
+        ILogger<ExportDWGService> logger)
     {
         _settingsService = settingsService;
+        _logger = logger;
     }
     
     public string ExportDWG(string exportFileName, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
@@ -54,8 +58,9 @@ internal class ExportDWGService : IExportDWGService
                 {
                     File.Delete(fullPath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex, "Error deleting existing DWG");
                     exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
                     fullPath = Path.Combine(folderPath, exportFileName);
                 }
@@ -110,9 +115,9 @@ internal class ExportDWGService : IExportDWGService
                 }
             }
         }
-        catch
+        catch(Exception ex)
         {
-            //TODO - report crashes
+            _logger.LogError(ex, "Error exporting DWG");
         }
         finally
         {
