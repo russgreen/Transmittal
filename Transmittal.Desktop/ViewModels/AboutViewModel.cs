@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using Transmittal.Library.Enums;
@@ -163,6 +164,14 @@ internal partial class AboutViewModel : BaseViewModel
             SoftwareUri = "https://github.com/dotnet/runtime",
             LicenseName = "MIT License",
             LicenseUri = "https://github.com/dotnet/runtime/blob/main/LICENSE.TXT"
+        });
+
+        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
+        {
+            SoftwareName = "Serilog",
+            SoftwareUri = "https://serilog.net/",
+            LicenseName = "Apache 2.0 License",
+            LicenseUri = "https://github.com/serilog/serilog/blob/dev/LICENSE"
         });
 
         OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()

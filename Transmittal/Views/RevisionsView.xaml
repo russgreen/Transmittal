@@ -10,19 +10,6 @@
         d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
         Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
 
-    <Window.Resources>
-        <ImageBrush x:Key="watermark" ImageSource="/Transmittal_2022;component/Resources/SearchRevisionsWatermark.png" AlignmentX="Left" Stretch="None" >
-            <ImageBrush.Transform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="3"/>
-                </TransformGroup>
-            </ImageBrush.Transform>
-        </ImageBrush>
-    </Window.Resources>
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -43,8 +30,7 @@
 
             <TextBox Grid.Column="1" Margin="5,0,0,0" x:Name="TextBoxSearch"
                      TextChanged="TextBoxSearch_TextChanged"                      
-                     VerticalContentAlignment="Center" 
-                     Background="{StaticResource watermark}" />
+                     VerticalContentAlignment="Center"  />
 
         </Grid>
 
@@ -52,7 +38,7 @@
                                x:Name="sfDataGridRevisions"
                                ItemsSource="{Binding Revisions}" 
                                SelectedItem="{Binding SelectedRevision}"
-                               AutoGenerateColumns="False" 
+                               AutoGenerateColumns="True" 
                                AllowGrouping="False" 
                                AllowResizingColumns="True" 
                                AllowFiltering="False"
