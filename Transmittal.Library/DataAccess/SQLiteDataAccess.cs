@@ -103,11 +103,6 @@ public class SQLiteDataAccess : IDataConnection
             },
             {
                 //added at v2.0.0
-                "SheetPackageParamName",
-                "ALTER TABLE Settings ADD COLUMN SheetPackageParamName TEXT"
-            },
-            {
-                //added at v2.0.0
                 "SheetPackageParamGuid",
                 "ALTER TABLE Settings ADD COLUMN SheetPackageParamGuid TEXT"
             },
