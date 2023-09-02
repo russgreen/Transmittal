@@ -61,7 +61,6 @@ public partial class ArchiveView : Window
         itemModel.DrgProj = projectIdentifier;
         itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
         itemModel.DrgRole = _settingsService.GlobalSettings.Role;
-        itemModel.DrgNumber = " ";
     }
 
     private void sfDataGridTransmittals_RecordDeleting(object sender, RecordDeletingEventArgs e)
