@@ -120,9 +120,16 @@ public class SQLiteDataAccess : IDataConnection
     // To prevent concurrent write attempts on the database a lock file will be created
     private void WaitForLockFileToClear(string dbFilePath)
     {
+        bool loggedWaitingMessage = false;
+
         var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
         while (File.Exists(lockFilePath))
         {
+            if(!loggedWaitingMessage)
+            {
+                _logger.LogInformation("Waiting for lock file [{lockFilePath}] to clear", lockFilePath);
+                loggedWaitingMessage = true;
+            }
             Thread.Sleep(100);
         }
     }
