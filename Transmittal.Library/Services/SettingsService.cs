@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
-using System.Reflection;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -51,12 +48,24 @@ public class SettingsService : ISettingsService
                     GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2;
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
+                    GlobalSettings.UseRevit = dbSettings.UseRevit;
                     GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
                     GlobalSettings.ProjectName = dbSettings.ProjectName;
                     GlobalSettings.ProjectIdentifier = dbSettings.ProjectIdentifier;
                     GlobalSettings.ClientName = dbSettings.ClientName;
                     GlobalSettings.Originator = dbSettings.Originator;
                     GlobalSettings.Role = dbSettings.Role;
+
+                    GlobalSettings.ProjectIdentifierParamGuid = dbSettings.ProjectIdentifierParamGuid;
+                    GlobalSettings.OriginatorParamGuid = dbSettings.OriginatorParamGuid;
+                    GlobalSettings.RoleParamGuid = dbSettings.RoleParamGuid;
+
+                    GlobalSettings.SheetVolumeParamGuid = dbSettings.SheetVolumeParamGuid;
+                    GlobalSettings.SheetLevelParamGuid = dbSettings.SheetLevelParamGuid;
+                    GlobalSettings.DocumentTypeParamGuid = dbSettings.DocumentTypeParamGuid;
+                    GlobalSettings.SheetStatusParamGuid = dbSettings.SheetStatusParamGuid;
+                    GlobalSettings.SheetStatusDescriptionParamGuid = dbSettings.SheetStatusDescriptionParamGuid;
+                    GlobalSettings.SheetPackageParamGuid = dbSettings.SheetPackageParamGuid;
                 }
 
                 //get status and issue formats from database
@@ -89,6 +98,7 @@ public class SettingsService : ISettingsService
             "ClientName = @ClientName, " +
             "UseExtranet = @UseExtranet, " +
             "UseISO19650 = @UseISO19650, " +
+            "UseRevit = @UseRevit, " +
             "Originator = @Originator, " +
             "Role = @Role, " +
             "ProjectIdentifierParamGuid = @ProjectIdentifierParamGuid, " +
@@ -98,7 +108,8 @@ public class SettingsService : ISettingsService
             "SheetLevelParamGuid = @SheetLevelParamGuid, " +
             "DocumentTypeParamGuid = @DocumentTypeParamGuid, " +
             "SheetStatusParamGuid = @SheetStatusParamGuid, " +
-            "SheetStatusDescriptionParamGuid = @SheetStatusDescriptionParamGuid " +
+            "SheetStatusDescriptionParamGuid = @SheetStatusDescriptionParamGuid, " +
+            "SheetPackageParamGuid = @SheetPackageParamGuid " +
             "WHERE ID=1;";
 
         _connection.SaveData(
@@ -118,6 +129,7 @@ public class SettingsService : ISettingsService
                 ClientName = GlobalSettings.ClientName,
                 UseExtranet = GlobalSettings.UseExtranet,
                 UseISO19650 = GlobalSettings.UseISO19650,
+                UseRevit = GlobalSettings.UseRevit,
                 Originator = GlobalSettings.Originator,
                 Role = GlobalSettings.Role,
                 ProjectIdentifierParamGuid = GlobalSettings.ProjectIdentifierParamGuid,
@@ -127,7 +139,8 @@ public class SettingsService : ISettingsService
                 SheetLevelParamGuid = GlobalSettings.SheetLevelParamGuid,
                 DocumentTypeParamGuid = GlobalSettings.DocumentTypeParamGuid,
                 SheetStatusParamGuid = GlobalSettings.SheetStatusParamGuid,
-                SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid
+                SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid,
+                SheetPackageParamGuid = GlobalSettings.SheetPackageParamGuid
             });
 
         SaveIssueFormats();

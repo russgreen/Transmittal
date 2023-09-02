@@ -103,56 +103,29 @@ public partial class SettingsModel : ObservableValidator
 
     // project paramaters
     [ObservableProperty]
-    private string _projectIdentifierParamName;
-
-    [ObservableProperty]
     private string _projectIdentifierParamGuid;
 
     [ObservableProperty]
-    private string _originatorParamName;
-
-    [ObservableProperty]
     private string _originatorParamGuid;
-
-    [ObservableProperty]
-    private string _roleParamName;
 
     [ObservableProperty]
     private string _roleParamGuid;
 
     // sheet parameters
     [ObservableProperty]
-    private string _sheetVolumeParamName;
-
-    [ObservableProperty]
     private string _sheetVolumeParamGuid;
-
-    [ObservableProperty]
-    private string _sheetLevelParamName;
 
     [ObservableProperty]
     private string _sheetLevelParamGuid;
 
     [ObservableProperty]
-    private string _documentTypeParamName;
-
-    [ObservableProperty]
     private string _documentTypeParamGuid;
-
-    [ObservableProperty]
-    private string _sheetStatusParamName;
 
     [ObservableProperty]
     private string _sheetStatusParamGuid;
 
     [ObservableProperty]
-    private string _sheetStatusDescriptionParamName;
-
-    [ObservableProperty]
     private string _sheetStatusDescriptionParamGuid;
-
-    [ObservableProperty]
-    private string _sheetPackageParamName;
 
     [ObservableProperty]
     private string _sheetPackageParamGuid;
