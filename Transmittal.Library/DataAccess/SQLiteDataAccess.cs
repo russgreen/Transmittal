@@ -108,7 +108,7 @@ public class SQLiteDataAccess : IDataConnection
                 }
                 catch(Exception ex)
                 {
-                   _logger.LogError(ex, "Failed to create column[{column}]. Most likely it already exists, which is fine.", column.Key);
+                   _logger.LogDebug(ex, "Failed to create column[{column}]. Most likely it already exists, which is fine.", column.Key);
                 }
             }
         }
