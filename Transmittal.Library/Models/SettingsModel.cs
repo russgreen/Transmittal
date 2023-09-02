@@ -60,6 +60,9 @@ public partial class SettingsModel : ObservableValidator
     private bool _useISO19650 = false;
 
     [ObservableProperty]
+    private bool _useRevit = false;
+
+    [ObservableProperty]
     private List<IssueFormatModel> _issueFormats = new List<IssueFormatModel>()
     {
         new IssueFormatModel() { Code = "P", Description = "Paper" },
@@ -147,4 +150,10 @@ public partial class SettingsModel : ObservableValidator
 
     [ObservableProperty]
     private string _sheetStatusDescriptionParamGuid;
+
+    [ObservableProperty]
+    private string _sheetPackageParamName;
+
+    [ObservableProperty]
+    private string _sheetPackageParamGuid;
 }
