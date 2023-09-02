@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -19,6 +20,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
+    private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
 
     public string WindowTitle { get; private set; }
 
@@ -221,8 +223,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
             this.OnClosingRequest();
             return;
         }
-        catch
+        catch(Exception ex)
         {
+            _logger.LogError(ex, "Error processing transmittal");
             this.OnClosingRequest();
             return;
         }
@@ -310,9 +313,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
     private void LaunchTransmittalReport()
     {
-        Reports.Reports report = new(Ioc.Default.GetService<ISettingsService>(),
-                       Ioc.Default.GetService<IContactDirectoryService>(),
-                       Ioc.Default.GetService<ITransmittalService>());
+        Reports.Reports report = new(Host.GetService<ISettingsService>(),
+     Host.GetService<IContactDirectoryService>(),
+     Host.GetService<ITransmittalService>());
 
         report.ShowTransmittalReport(_newTransmittal.ID);
     }
