@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F7D733C9-F
 		docs\index.md = docs\index.md
 		docs\logo.png = docs\logo.png
 		docs\reports.md = docs\reports.md
+		docs\reports_v2upgrade.md = docs\reports_v2upgrade.md
 		docs\settings.md = docs\settings.md
 		docs\tags.md = docs\tags.md
 		docs\transmittal-revit.md = docs\transmittal-revit.md
