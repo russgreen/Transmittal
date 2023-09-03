@@ -13,5 +13,6 @@ Transmittal reports in version 2 of the app can now use an additional parameter 
     <rd:TypeName>System.String</rd:TypeName>
 </Field>
 ```
+![Screenshot 2023-09-03 090822](https://github.com/russgreen/Transmittal/assets/1886088/1ea084c8-a57a-423c-9f67-40cce6ef3c58)
 
 4.
