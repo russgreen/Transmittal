@@ -26,48 +26,50 @@ internal partial class SettingsViewModel : BaseViewModel
     public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
 
-    public bool HasAnyErrors => GetAnyErrors();
+    public bool SaveEnabled => !GetAnyErrors() && !_settingsService.GlobalSettings.UseRevit;
+
+    //public bool HasAnyErrors => !GetAnyErrors();
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
-    private string _projectNumber;
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
+    private string _projectNumber; 
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _projectName;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _clientName;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _originator;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _role;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _fileNameFilter;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _drawingIssueStore;
 
     [ObservableProperty]
@@ -76,7 +78,7 @@ internal partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
     private string _dateFormatString;
 
     [ObservableProperty]
@@ -147,7 +149,7 @@ internal partial class SettingsViewModel : BaseViewModel
         foreach (var item in value)
         {
             item.PropertyChanged += IssueFormat_PropertyChanged;
-            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
         }
     }
 
@@ -156,7 +158,7 @@ internal partial class SettingsViewModel : BaseViewModel
         foreach (var item in value)
         {
             item.PropertyChanged += DocumentStatus_PropertyChanged;
-            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+            item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
         }
     }
 
@@ -194,7 +196,7 @@ internal partial class SettingsViewModel : BaseViewModel
             foreach (IssueFormatModel item in e.NewItems)
             {
                 item.PropertyChanged += IssueFormat_PropertyChanged;
-                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -202,11 +204,11 @@ internal partial class SettingsViewModel : BaseViewModel
             foreach (IssueFormatModel item in e.OldItems)
             {
                 item.PropertyChanged -= IssueFormat_PropertyChanged;
-                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
             }
         }
 
-        this.OnPropertyChanged(nameof(this.HasAnyErrors));
+        this.OnPropertyChanged(nameof(this.SaveEnabled));
     }
 
     private void DocumentStatuses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -218,7 +220,7 @@ internal partial class SettingsViewModel : BaseViewModel
             foreach (DocumentStatusModel item in e.NewItems)
             {
                 item.PropertyChanged += DocumentStatus_PropertyChanged;
-                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+                item.ErrorsChanged += (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -226,11 +228,11 @@ internal partial class SettingsViewModel : BaseViewModel
             foreach (DocumentStatusModel item in e.OldItems)
             {
                 item.PropertyChanged -= DocumentStatus_PropertyChanged;
-                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.HasAnyErrors)); };
+                item.ErrorsChanged -= (s, args) => { this.OnPropertyChanged(nameof(this.SaveEnabled)); };
             }
         }
 
-        this.OnPropertyChanged(nameof(this.HasAnyErrors));
+        this.OnPropertyChanged(nameof(this.SaveEnabled));
     }
 
     private void IssueFormat_PropertyChanged(object sender, PropertyChangedEventArgs e)
