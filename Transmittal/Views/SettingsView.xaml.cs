@@ -261,6 +261,16 @@ public partial class SettingsView : Window
         dialog.ShowDialog();
     }
 
+    private void buttonParamPackage_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new ParameterSelectorView(
+            _viewModel,
+    nameof(SettingsModel.SheetPackageParamGuid),
+    BuiltInCategory.OST_Sheets);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
     private void buttonCancel_Click(object sender, RoutedEventArgs e)
     {
         this.Close();

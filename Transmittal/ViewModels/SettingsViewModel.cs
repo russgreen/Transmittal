@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace Transmittal.ViewModels;
 
@@ -28,6 +29,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ILogger<SettingsViewModel> _logger = Host.GetService<ILogger<SettingsViewModel>>();
 
     public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
@@ -148,6 +150,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [Required]
     private string _sheetStatusDescriptionParamGuid;
 
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
+    private string _sheetPackageParamGuid;
+
     public SettingsViewModel()
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -218,7 +225,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private void IssueFormats_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        Debug.WriteLine("IssueFormats changed");
+        _logger.LogDebug("IssueFormats changed");
 
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
@@ -242,7 +249,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private void DocumentStatuses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        Debug.WriteLine("DocumentStatuses changed");
+        _logger.LogDebug("DocumentStatuses changed");
 
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
@@ -266,7 +273,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private void IssueFormat_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        Debug.WriteLine("IssueFormat property changed");
+        _logger.LogDebug("IssueFormat property changed");
 
         var values = new HashSet<string>();
         var duplicates = new HashSet<string>();
@@ -285,7 +292,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         if (duplicates.Count > 0)
         {
-            Debug.WriteLine("IssueFormats contain duplicates");
+            _logger.LogDebug("IssueFormats contain duplicates");
             var model = (IssueFormatModel)sender;
             model.Code = string.Empty; // (nameof(IssueFormatModel.Code), "Issue formats contain duplicate codes");
         }
@@ -293,7 +300,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     private void DocumentStatus_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        Debug.WriteLine("DocumentStatus property changed");
+        _logger.LogDebug("DocumentStatus property changed");
 
         var values = new HashSet<string>();
         var duplicates = new HashSet<string>();
@@ -312,7 +319,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         if (duplicates.Count > 0)
         {
-            Debug.WriteLine("DocumentStatuses contain duplicates");
+            _logger.LogDebug("DocumentStatuses contain duplicates");
             var model = (DocumentStatusModel)sender;
             model.Code = string.Empty; // (nameof(IssueFormatModel.Code), "Issue formats contain duplicate codes");
         }
@@ -352,6 +359,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         DocumentTypeParamGuid = _settingsService.GlobalSettings.DocumentTypeParamGuid;
         SheetStatusParamGuid = _settingsService.GlobalSettings.SheetStatusParamGuid;
         SheetStatusDescriptionParamGuid = _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid;
+        SheetPackageParamGuid = _settingsService.GlobalSettings.SheetPackageParamGuid;
     }
 
     private void SetPropertiesFromImportedSettings(ImportSettingsModel settings)
@@ -393,6 +401,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         DocumentTypeParamGuid = settings.DocumentTypeParamGuid;
         SheetStatusParamGuid = settings.SheetStatusParamGuid;
         SheetStatusDescriptionParamGuid = settings.SheetStatusDescriptionParamGuid;
+        SheetPackageParamGuid = settings.SheetPackageParamGuid;
 
         //TODO check if all the parameters exist in the project or load them from the shared parameters file.
     }
@@ -411,6 +420,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.IssueFormats = IssueFormats.ToList();
         _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses.ToList();
 
+        _settingsService.GlobalSettings.UseRevit = true;
         
         _settingsService.GlobalSettings.RecordTransmittals = RecordTransmittals;
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
@@ -429,6 +439,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.DocumentTypeParamGuid = DocumentTypeParamGuid;
         _settingsService.GlobalSettings.SheetStatusParamGuid = SheetStatusParamGuid;
         _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid = SheetStatusDescriptionParamGuid;
+        _settingsService.GlobalSettings.SheetPackageParamGuid = SheetPackageParamGuid;
 
         _settingsServiceRvt.UpdateSettingsRvt();
 
@@ -499,9 +510,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         var groupSheets = sharedParameterDefinitionFile.Groups.get_Item("Sheet Information");
 
         //add project parameters
-        var projectIdentifierParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.ProjectIdentifierParamName);
-        var originatorParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.OriginatorParamName);
-        var roleParam = groupProject.Definitions.get_Item(_settingsService.GlobalSettings.RoleParamName);
+        var projectIdentifierParam = groupProject.Definitions.get_Item("ProjectIdentifier");
+        var originatorParam = groupProject.Definitions.get_Item("Originator");
+        var roleParam = groupProject.Definitions.get_Item("Role");
 
         var categoryProjectInfo = App.RevitDocument.Settings.Categories.get_Item( BuiltInCategory.OST_ProjectInformation);
 
@@ -517,11 +528,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
 
         //add sheet parameters
-        var sheetVolumeParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetVolumeParamName);
-        var sheetLevelParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetLevelParamName);
-        var documentTypeParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.DocumentTypeParamName);
-        var sheetStatusParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetStatusParamName);
-        var sheetStatusDescriptionParam = groupSheets.Definitions.get_Item(_settingsService.GlobalSettings.SheetStatusDescriptionParamName);
+        var sheetVolumeParam = groupSheets.Definitions.get_Item("SheetVolume");
+        var sheetLevelParam = groupSheets.Definitions.get_Item("SheetLevel");
+        var documentTypeParam = groupSheets.Definitions.get_Item("DocumentType");
+        var sheetStatusParam = groupSheets.Definitions.get_Item("SheetStatus");
+        var sheetStatusDescriptionParam = groupSheets.Definitions.get_Item("SheetStatusDescription");
+        var sheetPackageParam = groupSheets.Definitions.get_Item("SheetPackage");
 
         var categorySheets = App.RevitDocument.Settings.Categories.get_Item(BuiltInCategory.OST_Sheets);
 #if REVIT2024_OR_GREATER
@@ -530,12 +542,14 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         BindSharedParameter(documentTypeParam, categorySheets, GroupTypeId.Title);
         BindSharedParameter(sheetStatusParam, categorySheets, GroupTypeId.Title);
         BindSharedParameter(sheetStatusDescriptionParam, categorySheets, GroupTypeId.Title);
+        BindSharedParameter(sheetPackageParam, categorySheets, GroupTypeId.Title);
 #else
         BindSharedParameter(sheetVolumeParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetLevelParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(documentTypeParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetStatusParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
         BindSharedParameter(sheetStatusDescriptionParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
+        BindSharedParameter(sheetPackageParam, categorySheets, BuiltInParameterGroup.PG_TITLE);
 #endif
 
         //set shared parameters file back to original
@@ -657,6 +671,10 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
             case nameof(SettingsModel.SheetStatusDescriptionParamGuid):
                 SheetStatusDescriptionParamGuid = parameterGuid;
+                break;
+
+            case nameof(SettingsModel.SheetPackageParamGuid):
+                SheetPackageParamGuid = parameterGuid;
                 break;
 
             default:
