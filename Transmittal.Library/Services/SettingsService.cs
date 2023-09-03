@@ -65,7 +65,10 @@ public class SettingsService : ISettingsService
                     GlobalSettings.DocumentTypeParamGuid = dbSettings.DocumentTypeParamGuid;
                     GlobalSettings.SheetStatusParamGuid = dbSettings.SheetStatusParamGuid;
                     GlobalSettings.SheetStatusDescriptionParamGuid = dbSettings.SheetStatusDescriptionParamGuid;
-                    GlobalSettings.SheetPackageParamGuid = dbSettings.SheetPackageParamGuid;
+
+                    //this is a new setting, so we need to check if it exists in the database
+                    GlobalSettings.SheetPackageParamGuid = dbSettings.SheetPackageParamGuid ?? GlobalSettings.SheetPackageParamGuid;
+
                 }
 
                 //get status and issue formats from database
