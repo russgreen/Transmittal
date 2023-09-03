@@ -148,6 +148,7 @@
                         <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" />
                         <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" />
                         <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" ColumnSizer="AutoLastColumnFill" />
+                        <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" />
                         <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" />
                         <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" />
                         <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" />
