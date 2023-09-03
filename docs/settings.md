@@ -5,7 +5,7 @@ permalink: /settings/
 ---
 ## Basic Settings
 
-Settings for Transmittal are stored in the Autodesk® Revit® model in extensible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.
+Settings for Transmittal are stored in the Autodesk® Revit® model in extensible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.  If Transmittal is being used without Revit then some settings can be edited from the Transmittal.Desktop settings window.  If Revit is being used then settings can only be configured via the Revit addin.
 
 ### Filename filter/rule
 The rule used to construct the filename of exported sheet files.  The [available tags](/Transmittal/settings/tags) get replaced with parameter values. The filename rule should not include file extensions.

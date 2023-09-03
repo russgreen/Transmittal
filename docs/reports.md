@@ -17,3 +17,5 @@ Report files can be edited in either [Syncfusion Standalone Report Designer](htt
 Microsoft Report builder only appears to support RDL files.  However, if you right click on an RDLC file and choose Open with > Choose another app, the Report Builder can be chosen and the RDLC files can be opened, edited and saved.
 
 ![image](https://user-images.githubusercontent.com/1886088/175804963-6846002a-68fc-49c8-9987-27133c3c7763.png)
+
+Instructions for upgrading older reports to the latest version of the report template that supports version 2.* can be found [here](/Transmittal/settings/reports_v2upgrade/)
