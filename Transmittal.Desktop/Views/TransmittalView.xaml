@@ -96,6 +96,7 @@
                                                            ItemsSource="{Binding DocumentStatuses}"
                                                            MinimumWidth="200"/>
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" Width="150"/>
                             <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="50" />
                         </syncfusion:SfDataGrid.Columns>
