@@ -8,9 +8,9 @@ Reports used by the addin default to embedded report templates.  Reports can be 
 Sample report templates can be found in C:\Program Files\Transmittal\Reports when installed or on the [Github repo](https://github.com/russgreen/Transmittal/tree/main/SampleReports).
 
 Report names __must__ be:
-ProjectDirectory.rdlc
-TransmittalSheet.rdlc
-TransmittalSummary.rdlc
+- ProjectDirectory.rdlc
+- TransmittalSheet.rdlc
+- TransmittalSummary.rdlc
 
 Report files can be edited in either [Syncfusion Standalone Report Designer](https://www.boldreports.com/standalone-report-designer) or [Microsoft Report Builder](https://www.microsoft.com/en-us/download/details.aspx?id=53613). Both tools are free.
 
