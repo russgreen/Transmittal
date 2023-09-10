@@ -9,10 +9,10 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:ArchiveViewModel}, IsDesignTimeCreatable=True}"
-        Title="{Binding WindowTitle}"  Width="800" Height="450" 
+        Title="{Binding WindowTitle}"  Width="850" Height="450" 
         FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" 
-        MinWidth="800" MinHeight="450">
+        MinWidth="850" MinHeight="450">
     <Window.Resources>
         <ResourceDictionary>
             <converters:AddNewRowPositionConverter x:Key="AddNewRowPositionConverter"/>
@@ -90,6 +90,15 @@
                     <TextBlock Margin="3,0,0,0">Delete</TextBlock>
                 </StackPanel>
             </Button>-->
+            <Button x:Name="AddPackage" Margin="0,0,5,0" 
+                    IsEnabled="{Binding IsChecked, ElementName=EnableEditButton}"
+                    ToolTip="Add a package name to the current list" 
+                     Click="Button_AddPackage_Click" >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Package.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Add package</TextBlock>
+                </StackPanel>
+            </Button>
             <ToggleButton x:Name="EnableEditButton" 
                           IsEnabled="{Binding ItemSelected}" >
                 <StackPanel Orientation="Horizontal">
@@ -148,7 +157,10 @@
                         <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" />
                         <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" />
                         <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" ColumnSizer="AutoLastColumnFill" />
-                        <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" />
+                        <syncfusion:GridComboBoxColumn MappingName="DrgPackage" HeaderText="Package" 
+                                ColumnSizer="AutoLastColumnFill"
+                                ItemsSource="{Binding Packages}" >
+                        </syncfusion:GridComboBoxColumn>
                         <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" />
                         <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" />
                         <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" />

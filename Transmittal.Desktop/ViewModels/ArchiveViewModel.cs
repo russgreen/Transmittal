@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
+using Transmittal.Desktop.Requesters;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -12,11 +13,12 @@ using Transmittal.Library.ViewModels;
 
 namespace Transmittal.Desktop.ViewModels;
 
-internal partial class ArchiveViewModel : BaseViewModel
+internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
 {
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
+    private readonly ILogger<ArchiveViewModel> _logger = Host.GetService<ILogger<ArchiveViewModel>>();
 
     public string WindowTitle { get; private set; }
 
@@ -29,6 +31,9 @@ internal partial class ArchiveViewModel : BaseViewModel
     private ObservableCollection<TransmittalItemModel> _transmittalItems;
     [ObservableProperty]
     private ObservableCollection<TransmittalDistributionModel> _transmittalDistribution;
+
+    [ObservableProperty]
+    private ObservableCollection<string> _packages;
 
     [ObservableProperty]
     private ObservableCollection<object> _selectedTransmittalItems = new();
@@ -84,6 +89,8 @@ internal partial class ArchiveViewModel : BaseViewModel
         if(item != null)
         {
             _transmittalService.UpdateTransmittalItem(item);
+
+            LoadPackages();
         }
     }
 
@@ -164,6 +171,11 @@ internal partial class ArchiveViewModel : BaseViewModel
             }
 
         }
+    }  
+
+    private void LoadPackages()
+    {
+        Packages = new ObservableCollection<string>(_transmittalService.GetPackages());
     }
 
     [RelayCommand]
@@ -171,6 +183,8 @@ internal partial class ArchiveViewModel : BaseViewModel
     {
         ProjectDirectory = new ObservableCollection<ProjectDirectoryModel>(_contactDirectoryService.GetProjectDirectory());
         Transmittals = new ObservableCollection<TransmittalModel>(_transmittalService.GetTransmittals());
+
+        LoadPackages();
 
         WireUpTransmittalPropertyChangedEvents();
 
@@ -287,4 +301,8 @@ internal partial class ArchiveViewModel : BaseViewModel
         }
     }
 
+    public void PackageComplete(string packageName)
+    {
+        Packages.Add(packageName);
+    }
 }

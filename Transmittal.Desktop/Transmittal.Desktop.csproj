@@ -29,6 +29,7 @@
     <None Remove="Resources\Menu.png" />
     <None Remove="Resources\New.png" />
     <None Remove="Resources\Open.png" />
+    <None Remove="Resources\Package.png" />
     <None Remove="Resources\Reload.png" />
     <None Remove="Resources\Report.png" />
     <None Remove="Resources\Settings.png" />
@@ -50,6 +51,7 @@
     <Resource Include="Resources\Menu.png" />
     <Resource Include="Resources\New.png" />
     <Resource Include="Resources\Open.png" />
+    <Resource Include="Resources\Package.png" />
     <Resource Include="Resources\Settings.png" />
     <Resource Include="Resources\Transmittal_Button.png" />
     <Resource Include="Resources\Add.png" />
