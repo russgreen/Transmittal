@@ -57,12 +57,21 @@ public partial class TransmittalView : Window
         //TODO stop the main window closing if the no button is clicked
     }
 
+    private void Button_AddPackage_Click(object sender, RoutedEventArgs e)
+    {
+        Views.NewPackageView dialog = new Views.NewPackageView(_viewModel);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
     private void Button_AddToDirectory_Click(object sender, RoutedEventArgs e)
     {
         Views.NewPersonView dialog = new Views.NewPersonView(_viewModel);
         dialog.Owner = this;
         dialog.ShowDialog();
     }
+
+
 
     private void sfDataGridDocuments_DragEnter(object sender, DragEventArgs e)
     {
