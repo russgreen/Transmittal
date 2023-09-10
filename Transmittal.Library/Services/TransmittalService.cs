@@ -258,6 +258,19 @@ public class TransmittalService : ITransmittalService
         return newTransmittal;
     }
 
+    public List<string> GetPackages()
+    {
+        _logger.LogDebug("Get Packages");
+
+        string sql = "SELECT DISTINCT DrgPackage FROM TransmittalItems ORDER BY DrgPackage ASC;";
+
+        var packages = _connection.LoadData<string, dynamic>(
+            _settingsService.GlobalSettings.DatabaseFile,
+            sql, null).ToList();
+
+        return packages;
+    }
+
     public void UpdateTransmittal(TransmittalModel model)
     {
         _logger.LogDebug("Update Transmittal {transmittal}", model);

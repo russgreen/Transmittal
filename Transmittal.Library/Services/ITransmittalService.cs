@@ -35,6 +35,11 @@ public interface ITransmittalService
     /// <returns>List of TransmittalDistributionModel</returns>
     List<TransmittalDistributionModel> GetTransmittalDistributions_ByTransmittal(int transmittalID);
     /// <summary>
+    /// Get all packages used in the project
+    /// </summary>
+    /// <returns></returns>
+    List<string> GetPackages();
+    /// <summary>
     /// Create a new transmittal record
     /// </summary>
     /// <param name="model"></param>
