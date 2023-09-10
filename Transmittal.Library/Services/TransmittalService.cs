@@ -60,8 +60,8 @@ public class TransmittalService : ITransmittalService
     {
         _logger.LogDebug("Creating transmittal item {model}", model);
 
-        string sql = "INSERT INTO TransmittalItems ( TransID, DrgProj, DrgOriginator, DrgVolume, DrgLevel, DrgType, DrgRole, DrgNumber, DrgStatus, DrgRev, DrgName, DrgPaper, DrgScale, DrgDrawn, DrgChecked ) " +
-            "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked ); " +
+        string sql = "INSERT INTO TransmittalItems ( TransID, DrgProj, DrgOriginator, DrgVolume, DrgLevel, DrgType, DrgRole, DrgNumber, DrgStatus, DrgRev, DrgName, DrgPaper, DrgScale, DrgDrawn, DrgChecked, DrgPackage ) " +
+            "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked, @DrgPackage ); " +
             "SELECT last_insert_rowid();";
 
         model.TransItemID = _connection.CreateData<TransmittalItemModel, dynamic>(
@@ -82,7 +82,8 @@ public class TransmittalService : ITransmittalService
                 DrgPaper = model.DrgPaper,
                 DrgScale = model.DrgScale,
                 DrgDrawn = model.DrgDrawn,
-                DrgChecked = model.DrgChecked
+                DrgChecked = model.DrgChecked,
+                DrgPackage = model.DrgPackage
             }, nameof(model.TransItemID)).TransItemID;
     }
 
@@ -257,6 +258,19 @@ public class TransmittalService : ITransmittalService
         return newTransmittal;
     }
 
+    public List<string> GetPackages()
+    {
+        _logger.LogDebug("Get Packages");
+
+        string sql = "SELECT DISTINCT DrgPackage FROM TransmittalItems ORDER BY DrgPackage ASC;";
+
+        var packages = _connection.LoadData<string, dynamic>(
+            _settingsService.GlobalSettings.DatabaseFile,
+            sql, null).ToList();
+
+        return packages;
+    }
+
     public void UpdateTransmittal(TransmittalModel model)
     {
         _logger.LogDebug("Update Transmittal {transmittal}", model);
@@ -313,7 +327,8 @@ public class TransmittalService : ITransmittalService
            "DrgLevel = @DrgLevel, " +
            "DrgType = @DrgType, " +
            "DrgRole = @DrgRole, " +
-           "DrgStatus = @DrgStatus  " +
+           "DrgStatus = @DrgStatus, " +
+           "DrgPackage = @DrgPackage " +
            "WHERE (TransItemID = @TransItemID);";
 
         _connection.SaveData(
@@ -335,6 +350,7 @@ public class TransmittalService : ITransmittalService
                 DrgType = model.DrgType,
                 DrgRole = model.DrgRole,
                 DrgStatus = model.DrgStatus,
+                DrgPackage = model.DrgPackage,
                 TransItemID = model.TransItemID
             });
     }

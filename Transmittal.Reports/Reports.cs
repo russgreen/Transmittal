@@ -22,7 +22,6 @@ namespace Transmittal.Reports
         private readonly ISettingsService _settingsService;
         private readonly IContactDirectoryService _contactDirectoryService;
         private readonly ITransmittalService _transmittalService;
-        private readonly ILogger<Reports> _logger;
 
         public Reports(IServiceProvider serviceProvider, string reportStore)
         {
@@ -39,7 +38,7 @@ namespace Transmittal.Reports
         {
             _settingsService = settingsService;
             _contactDirectoryService = contactDirectoryService;
-            _transmittalService = transmittalService;          
+            _transmittalService = transmittalService; 
 
             ConfigureDataModelMapping();
         }

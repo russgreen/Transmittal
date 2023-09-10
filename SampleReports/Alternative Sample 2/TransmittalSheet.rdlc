@@ -118,6 +118,10 @@
           <DataField>DrgStatus</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DrgPackage">
+          <DataField>DrgPackage</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
     </DataSet>
     <DataSet Name="dsTransmittal">

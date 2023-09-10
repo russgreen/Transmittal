@@ -60,6 +60,9 @@ public partial class SettingsModel : ObservableValidator
     private bool _useISO19650 = false;
 
     [ObservableProperty]
+    private bool _useRevit = false;
+
+    [ObservableProperty]
     private List<IssueFormatModel> _issueFormats = new List<IssueFormatModel>()
     {
         new IssueFormatModel() { Code = "P", Description = "Paper" },
@@ -100,51 +103,30 @@ public partial class SettingsModel : ObservableValidator
 
     // project paramaters
     [ObservableProperty]
-    private string _projectIdentifierParamName;
-
-    [ObservableProperty]
     private string _projectIdentifierParamGuid;
 
     [ObservableProperty]
-    private string _originatorParamName;
-
-    [ObservableProperty]
     private string _originatorParamGuid;
-
-    [ObservableProperty]
-    private string _roleParamName;
 
     [ObservableProperty]
     private string _roleParamGuid;
 
     // sheet parameters
     [ObservableProperty]
-    private string _sheetVolumeParamName;
-
-    [ObservableProperty]
     private string _sheetVolumeParamGuid;
-
-    [ObservableProperty]
-    private string _sheetLevelParamName;
 
     [ObservableProperty]
     private string _sheetLevelParamGuid;
 
     [ObservableProperty]
-    private string _documentTypeParamName;
-
-    [ObservableProperty]
     private string _documentTypeParamGuid;
-
-    [ObservableProperty]
-    private string _sheetStatusParamName;
 
     [ObservableProperty]
     private string _sheetStatusParamGuid;
 
     [ObservableProperty]
-    private string _sheetStatusDescriptionParamName;
+    private string _sheetStatusDescriptionParamGuid;
 
     [ObservableProperty]
-    private string _sheetStatusDescriptionParamGuid;
+    private string _sheetPackageParamGuid;
 }

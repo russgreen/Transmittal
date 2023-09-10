@@ -7,7 +7,8 @@
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"  
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
-        Title="New Person" Height="450" Width="400">
+        Title="New Person" Height="450" Width="400"
+        ResizeMode="NoResize" >
     <!--<Window.DataContext>
         <viewModels:NewPersonViewModel />
     </Window.DataContext>-->

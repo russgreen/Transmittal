@@ -15,7 +15,7 @@ using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
 
 namespace Transmittal.Desktop.ViewModels;
-internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
+internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, IPackageRequester
 {
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
@@ -28,10 +28,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
     [ObservableProperty]
     private ObservableCollection<DocumentModel> _documents = new ObservableCollection<DocumentModel>();
 
+    [ObservableProperty]
+    private ObservableCollection<string> _packages;
+
     public List<DocumentTypeModel> DocumentTypes { get; private set; }
     public List<DocumentStatusModel> DocumentStatuses { get; private set; }
     public List<IssueFormatModel> IssueFormats { get; private set; }
     public bool IsDistributionValid => ValidateDistribution();
+
     [ObservableProperty]
     private bool _hasDocuments;
 
@@ -65,9 +69,16 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
 
         _settingsService.GetSettings();
 
+        LoadPackages();
+
         WireUpDocumentsPage();
 
         WireUpDistributionPage();
+    }
+
+    private void LoadPackages()
+    {
+        Packages = new ObservableCollection<string>(_transmittalService.GetPackages());
     }
 
     private void WireUpDocumentsPage()
@@ -318,5 +329,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester
      Host.GetService<ITransmittalService>());
 
         report.ShowTransmittalReport(_newTransmittal.ID);
+    }
+
+    public void PackageComplete(string packageName)
+    {
+        Packages.Add(packageName);
     }
 }

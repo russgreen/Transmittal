@@ -90,7 +90,22 @@ public class SQLiteDataAccess : IDataConnection
                 //added at v1.2.2
                 "FileNameFilter2",
                 "ALTER TABLE Settings ADD COLUMN FileNameFilter2 TEXT"
-            }
+            },
+            {
+                //added at v2.0.0
+                "DrgPackage",
+                "ALTER TABLE TransmittalItems ADD COLUMN DrgPackage TEXT"
+            },
+            {
+                //added at v2.0.0
+                "UseRevit",
+                "ALTER TABLE Settings ADD COLUMN UseRevit INTEGER"
+            },
+            {
+                //added at v2.0.0
+                "SheetPackageParamGuid",
+                "ALTER TABLE Settings ADD COLUMN SheetPackageParamGuid TEXT"
+            },
         };
 
         WaitForLockFileToClear(dbFilePath);

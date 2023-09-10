@@ -13,7 +13,7 @@ public partial class TransmittalItemModel : ObservableValidator
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required]
-    private string _drgNumber;
+    private string _drgNumber = " ";
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -87,4 +87,7 @@ public partial class TransmittalItemModel : ObservableValidator
 
     [ObservableProperty]
     private string _drgStatusDescription;
+
+    [ObservableProperty]
+    private string _drgPackage;
 }

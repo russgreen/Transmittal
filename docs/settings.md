@@ -5,7 +5,7 @@ permalink: /settings/
 ---
 ## Basic Settings
 
-Settings for Transmittal are stored in the Autodesk® Revit® model in extensible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.
+Settings for Transmittal are stored in the Autodesk® Revit® model in extensible storage. If multiple models are used on a project then settings need to be configured correctly in each model file.  If Transmittal is being used without Revit then some settings can be edited from the Transmittal.Desktop settings window.  If Revit is being used then settings can only be configured via the Revit addin.
 
 ### Filename filter/rule
 The rule used to construct the filename of exported sheet files.  The [available tags](/Transmittal/settings/tags) get replaced with parameter values. The filename rule should not include file extensions.
@@ -23,7 +23,7 @@ Sheet parameters with missing values shown on the sheets list with red warning f
 Selecting this option will prevent sheets with missing values from being issued.
 
 ### Use extranet (Revit addin only)
-When this options is selected copies of the exported sheet files are mading using a seperate filename rule that can conform to project extranet requirements and making it easier to follow internal and external filename standards. If the output location rule includes the <Format> tag then the format is replaced with "Extranet".  If the <Format> tag is not used then an Extranet sub-folder is created in the output path. e.g.
+When this options is selected copies of the exported sheet files are made using a separate filename rule that can conform to project extranet requirements and making it easier to follow internal and external filename standards. If the output location rule includes the <Format> tag then the format is replaced with "Extranet".  If the <Format> tag is not used then an Extranet sub-folder is created in the output path. e.g.
 ```
 Rule:   P:\ProjectFolder\Output\<Format>\<DateYY><DateMM><DateDD>
 Folder: P:\ProjectFolder\Output\Extranet\220702
@@ -63,4 +63,4 @@ The path to the folder where the project directory report should be saved when e
 Adds the default shared parameters required by Transmittal into your project. These can be added into a Revit template to avoid the need to do these on all new projects. The shared parameters are supplied in C:\Program Files\Transmittal\Resources\TransmittalParameters.txt so that can be manually edited as required.
 
 ### Use your own custom shared parameters
-Where shared parameters are already in use the GUID's of the paramaters can be entered in each box. Transmittal will then use the existing paramaters instead of the defaults. These settings can be configured and saved into a Revit template.
+Where shared parameters are already in use the GUID's of the parameters can be entered in each box. Transmittal will then use the existing parameters instead of the defaults. These settings can be configured and saved into a Revit template.

@@ -154,6 +154,10 @@
           <DataField>DrgStatus</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DrgPackage">
+          <DataField>DrgPackage</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Project">
           <DataField>Project</DataField>
           <rd:TypeName>System.String</rd:TypeName>

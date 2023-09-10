@@ -43,6 +43,13 @@ public partial class ArchiveView : Window
         }
     }
 
+    private void Button_AddPackage_Click(object sender, RoutedEventArgs e)
+    {
+        Views.NewPackageView dialog = new Views.NewPackageView(_viewModel);
+        dialog.Owner = this;
+        dialog.ShowDialog();
+    }
+
     private void sfDataGridTransmittalItems_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
     {
         var projectIdentifier = string.Empty;
@@ -61,7 +68,6 @@ public partial class ArchiveView : Window
         itemModel.DrgProj = projectIdentifier;
         itemModel.DrgOriginator = _settingsService.GlobalSettings.Originator;
         itemModel.DrgRole = _settingsService.GlobalSettings.Role;
-        itemModel.DrgNumber = " ";
     }
 
     private void sfDataGridTransmittals_RecordDeleting(object sender, RecordDeletingEventArgs e)
@@ -129,6 +135,5 @@ public partial class ArchiveView : Window
 
         e.Cancel = true;
     }
-
 
 }
