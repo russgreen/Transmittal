@@ -311,6 +311,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             drawingSheet.DrgType = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.DocumentTypeParamGuid);
             drawingSheet.DrgStatus = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusParamGuid);
             drawingSheet.DrgStatusDescription = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
+            drawingSheet.DrgPackage = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetPackageParamGuid);
 
             drawingSheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
             drawingSheet.DrgRole = _settingsService.GlobalSettings.Role;
