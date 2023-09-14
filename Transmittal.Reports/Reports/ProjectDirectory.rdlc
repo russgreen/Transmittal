@@ -7,7 +7,6 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>6c34c856-7e4d-4524-9ae0-893086665d85</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -125,16 +124,12 @@
 + IIF(String.IsNullOrEmpty(Fields!Email.Value),"", System.Environment.NewLine + Fields!Email.Value)
 + IIF(String.IsNullOrEmpty(Fields!DDI.Value),"", System.Environment.NewLine + "T: " + Fields!DDI.Value)
 + IIF(String.IsNullOrEmpty(Fields!Mobile.Value),"", System.Environment.NewLine + "M: " + Fields!Mobile.Value)</Value>
-                                      <Style>
-                                        <FontFamily>lato</FontFamily>
-                                      </Style>
+                                      <Style />
                                     </TextRun>
                                   </TextRuns>
                                   <Style />
                                 </Paragraph>
                               </Paragraphs>
-                              <Top>0in</Top>
-                              <Left>0in</Left>
                               <Height>0.6cm</Height>
                               <Width>10.60167cm</Width>
                               <Style>
@@ -196,7 +191,6 @@
 IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Environment.NewLine )
 + Fields!CompanyName.Value</Value>
                                 <Style>
-                                  <FontFamily>lato</FontFamily>
                                   <FontWeight>Bold</FontWeight>
                                 </Style>
                               </TextRun>
@@ -210,9 +204,7 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
 + IIF(String.IsNullOrEmpty(Fields!Tel.Value),"", System.Environment.NewLine + "T: " + Fields!Tel.Value)
 + IIF(String.IsNullOrEmpty(Fields!Fax.Value),"", System.Environment.NewLine + "F: " + Fields!Fax.Value)
 + IIF(String.IsNullOrEmpty(Fields!Website.Value),"", System.Environment.NewLine + Fields!Website.Value)</Value>
-                                <Style>
-                                  <FontFamily>lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -221,9 +213,7 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
                             <TextRuns>
                               <TextRun>
                                 <Value />
-                                <Style>
-                                  <FontFamily>lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -254,7 +244,6 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
             </TablixRowHierarchy>
             <DataSetName>dsProjectDirectory</DataSetName>
             <Top>0.31862cm</Top>
-            <Left>0in</Left>
             <Height>1.05833cm</Height>
             <Width>18.49437cm</Width>
             <Style>
@@ -286,7 +275,6 @@ IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Envir
                     <TextRun>
                       <Value>Project Directory</Value>
                       <Style>
-                        <FontFamily>fira Sans</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -302,7 +290,6 @@ IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")),
 First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.Value, "dsProject")) 
 + " " + First(Fields!ProjectName.Value, "dsProject")</Value>
                       <Style>
-                        <FontFamily>fira Sans</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -314,14 +301,11 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   <TextRuns>
                     <TextRun>
                       <Value>Report date: </Value>
-                      <Style>
-                        <FontFamily>lato</FontFamily>
-                      </Style>
+                      <Style />
                     </TextRun>
                     <TextRun>
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
-                        <FontFamily>lato</FontFamily>
                         <Format>dddd, d MMMM yyyy</Format>
                       </Style>
                     </TextRun>
@@ -329,8 +313,6 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.27cm</Top>
-              <Left>0.03389cm</Left>
               <Height>2cm</Height>
               <Width>12.39555cm</Width>
               <Style>

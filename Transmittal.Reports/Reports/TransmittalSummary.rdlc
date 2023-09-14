@@ -7,7 +7,6 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>e001f4e0-9b0a-4ec9-a520-2a11184dda7f</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -200,7 +199,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox40">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -230,7 +228,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox41">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -262,7 +259,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox42">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -296,16 +292,13 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox36">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>Month</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -328,7 +321,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox37">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -360,7 +352,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox38">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -394,7 +385,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox32">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -402,7 +392,6 @@
                               <TextRun>
                                 <Value>Day</Value>
                                 <Style>
-                                  <FontFamily>Lato</FontFamily>
                                   <FontWeight>Normal</FontWeight>
                                 </Style>
                               </TextRun>
@@ -427,7 +416,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox33">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -459,7 +447,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox34">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -493,7 +480,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox63">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -527,7 +513,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox66">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -561,7 +546,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox68">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -598,7 +582,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.80667cm</Width>
+                  <Width>1cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -608,16 +592,13 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="DrgRev">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Max(Fields!DrgRev.Value)</Value>
-                                  <Style>
-                                    <FontFamily>Lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -658,16 +639,13 @@
                     <Size>0.6cm</Size>
                     <CellContents>
                       <Textbox Name="DateYear">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>=Fields!DateYear.Value</Value>
-                                <Style>
-                                  <FontFamily>lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style>
@@ -695,16 +673,13 @@
                         <Size>0.6cm</Size>
                         <CellContents>
                           <Textbox Name="DateMonth">
-                            <CanGrow>true</CanGrow>
                             <KeepTogether>true</KeepTogether>
                             <Paragraphs>
                               <Paragraph>
                                 <TextRuns>
                                   <TextRun>
                                     <Value>=Fields!DateMonth.Value</Value>
-                                    <Style>
-                                      <FontFamily>Lato</FontFamily>
-                                    </Style>
+                                    <Style />
                                   </TextRun>
                                 </TextRuns>
                                 <Style>
@@ -732,7 +707,6 @@
                             <Size>0.6cm</Size>
                             <CellContents>
                               <Textbox Name="DateDay">
-                                <CanGrow>true</CanGrow>
                                 <KeepTogether>true</KeepTogether>
                                 <Paragraphs>
                                   <Paragraph>
@@ -740,7 +714,6 @@
                                       <TextRun>
                                         <Value>=Fields!DateDay.Value</Value>
                                         <Style>
-                                          <FontFamily>Lato</FontFamily>
                                           <FontWeight>Normal</FontWeight>
                                         </Style>
                                       </TextRun>
@@ -770,13 +743,12 @@
                                 <Size>0.6cm</Size>
                                 <CellContents>
                                   <Textbox Name="Textbox61">
-                                    <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>Rev</Value>
+                                            <Value />
                                             <Style>
                                               <FontFamily>Fira sans</FontFamily>
                                               <FontWeight>Bold</FontWeight>
@@ -845,7 +817,6 @@
                     <Size>5.47439cm</Size>
                     <CellContents>
                       <Textbox Name="DrgNumber">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -859,9 +830,7 @@
 +Last(Fields!DrgType.Value)+IIF(Last(Fields!DrgType.Value) Is Nothing,"","-")
 +Last(Fields!DrgRole.Value)+IIF(Last(Fields!DrgRole.Value) Is Nothing,"","-")
 +Fields!DrgNumber.Value</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -887,16 +856,13 @@
                         <Size>6.37583cm</Size>
                         <CellContents>
                           <Textbox Name="DrgName">
-                            <CanGrow>true</CanGrow>
                             <KeepTogether>true</KeepTogether>
                             <Paragraphs>
                               <Paragraph>
                                 <TextRuns>
                                   <TextRun>
                                     <Value>=Last(Fields!DrgName.Value)</Value>
-                                    <Style>
-                                      <FontFamily>Lato</FontFamily>
-                                    </Style>
+                                    <Style />
                                   </TextRun>
                                 </TextRuns>
                                 <Style />
@@ -922,16 +888,13 @@
                             <Size>1.19cm</Size>
                             <CellContents>
                               <Textbox Name="DrgPaper">
-                                <CanGrow>true</CanGrow>
                                 <KeepTogether>true</KeepTogether>
                                 <Paragraphs>
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
                                         <Value>=Last(Fields!DrgPaper.Value)</Value>
-                                        <Style>
-                                          <FontFamily>Lato</FontFamily>
-                                        </Style>
+                                        <Style />
                                       </TextRun>
                                     </TextRuns>
                                     <Style />
@@ -971,12 +934,11 @@
             </SortExpressions>
             <Top>0.2326cm</Top>
             <Height>3cm</Height>
-            <Width>13.84689cm</Width>
+            <Width>14.04022cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <FontFamily>lato</FontFamily>
             </Style>
           </Tablix>
           <Tablix Name="Tablix1">
@@ -986,16 +948,13 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox8">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>Year</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -1020,16 +979,13 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox12">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>Month</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -1054,16 +1010,13 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox15">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>Day</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -1088,7 +1041,6 @@
                   <TablixCornerCell>
                     <CellContents>
                       <Textbox Name="Textbox4">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -1096,7 +1048,6 @@
                               <TextRun>
                                 <Value>Recipient  /  Format</Value>
                                 <Style>
-                                  <FontFamily>Fira sans</FontFamily>
                                   <FontWeight>Bold</FontWeight>
                                 </Style>
                               </TextRun>
@@ -1125,7 +1076,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.80667cm</Width>
+                  <Width>1cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1135,16 +1086,13 @@
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="TransCopies">
-                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Sum(Fields!TransCopies.Value)</Value>
-                                  <Style>
-                                    <FontFamily>Lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -1185,7 +1133,6 @@
                     <Size>0.6cm</Size>
                     <CellContents>
                       <Textbox Name="DateYear1">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
@@ -1193,7 +1140,6 @@
                               <TextRun>
                                 <Value>=Fields!DateYear.Value</Value>
                                 <Style>
-                                  <FontFamily>Lato</FontFamily>
                                   <FontWeight>Normal</FontWeight>
                                 </Style>
                               </TextRun>
@@ -1223,7 +1169,6 @@
                         <Size>0.6cm</Size>
                         <CellContents>
                           <Textbox Name="DateMonth1">
-                            <CanGrow>true</CanGrow>
                             <KeepTogether>true</KeepTogether>
                             <Paragraphs>
                               <Paragraph>
@@ -1231,7 +1176,6 @@
                                   <TextRun>
                                     <Value>=Fields!DateMonth.Value</Value>
                                     <Style>
-                                      <FontFamily>Lato</FontFamily>
                                       <FontWeight>Normal</FontWeight>
                                     </Style>
                                   </TextRun>
@@ -1261,7 +1205,6 @@
                             <Size>0.6cm</Size>
                             <CellContents>
                               <Textbox Name="DateDay1">
-                                <CanGrow>true</CanGrow>
                                 <KeepTogether>true</KeepTogether>
                                 <Paragraphs>
                                   <Paragraph>
@@ -1269,7 +1212,6 @@
                                       <TextRun>
                                         <Value>=Fields!DateDay.Value</Value>
                                         <Style>
-                                          <FontFamily>Lato</FontFamily>
                                           <FontWeight>Normal</FontWeight>
                                         </Style>
                                       </TextRun>
@@ -1299,7 +1241,6 @@
                                 <Size>0.6cm</Size>
                                 <CellContents>
                                   <Textbox Name="TransFormat">
-                                    <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
@@ -1307,7 +1248,6 @@
                                           <TextRun>
                                             <Value>=Fields!TransFormat.Value</Value>
                                             <Style>
-                                              <FontFamily>Fira sans</FontFamily>
                                               <FontWeight>Bold</FontWeight>
                                             </Style>
                                           </TextRun>
@@ -1356,16 +1296,13 @@
                     <Size>13.04022cm</Size>
                     <CellContents>
                       <Textbox Name="Name">
-                        <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
                                 <Value>=Fields!Name.Value</Value>
-                                <Style>
-                                  <FontFamily>Lato</FontFamily>
-                                </Style>
+                                <Style />
                               </TextRun>
                             </TextRuns>
                             <Style />
@@ -1401,13 +1338,12 @@
             </SortExpressions>
             <Top>3.72649cm</Top>
             <Height>3cm</Height>
-            <Width>13.84689cm</Width>
+            <Width>14.04022cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <FontFamily>lato</FontFamily>
             </Style>
           </Tablix>
         </ReportItems>
@@ -1430,7 +1366,6 @@
                     <TextRun>
                       <Value>Transmittal Summary</Value>
                       <Style>
-                        <FontFamily>fira sans</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -1446,7 +1381,6 @@ IIF(String.IsNullOrEmpty(First(Fields!ProjectIdentifier.Value, "dsProject")),
 First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.Value, "dsProject")) 
 + " " + First(Fields!ProjectName.Value, "dsProject")</Value>
                       <Style>
-                        <FontFamily>fira sans</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -1458,22 +1392,18 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   <TextRuns>
                     <TextRun>
                       <Value>Report date: </Value>
-                      <Style>
-                        <FontFamily>lato</FontFamily>
-                      </Style>
+                      <Style />
                     </TextRun>
                     <TextRun>
                       <Value>=FormatDateTime(Now, DateFormat.LongDate)</Value>
-                      <Style>
-                        <FontFamily>lato</FontFamily>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox23</rd:DefaultName>
-              <Top>0.30969cm</Top>
+              <Top>0.02747cm</Top>
               <Height>2cm</Height>
               <Width>11.35944cm</Width>
               <Style>
@@ -1493,7 +1423,6 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                     <TextRun>
                       <Value>Document ID format: &lt;Project&gt;-&lt;Originator&gt;-&lt;Volume&gt;-&lt;Level&gt;-&lt;Type&gt;-&lt;Role&gt;-&lt;DocNo&gt;</Value>
                       <Style>
-                        <FontFamily>Lato</FontFamily>
                         <FontSize>9pt</FontSize>
                       </Style>
                     </TextRun>
@@ -1536,9 +1465,7 @@ First(Fields!ProjectNumber.Value, "dsProject"), First(Fields!ProjectIdentifier.V
                   <TextRuns>
                     <TextRun>
                       <Value>=Globals!PageNumber</Value>
-                      <Style>
-                        <FontFamily>Lato</FontFamily>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>
