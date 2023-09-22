@@ -100,16 +100,7 @@ namespace Transmittal.Desktop.Views
 
             if (dialog.ShowDialog() == true)
             {
-                if (dialog.CheckFileExists)
-                {
-                    _settingsService.GlobalSettings.DatabaseFile = dialog.FileName;
-                    _settingsService.GlobalSettings.RecordTransmittals = true;
-                    _settingsService.GetSettings();
-
-                    _viewModel.SetParameterValuesCommand.Execute(null);
-
-                    _viewModel.UpdateMRUCommand.Execute(null);
-                }
+                OpenDatabase(dialog.FileName);
             }
         }
 
@@ -129,6 +120,12 @@ namespace Transmittal.Desktop.Views
             //get the header value from the clicked submenu item
             string filePath = ((System.Windows.Controls.MenuItem)e.OriginalSource).Header.ToString();
 
+            OpenDatabase(filePath);
+
+        }
+
+        private void OpenDatabase(string filePath)
+        {
             if (File.Exists(filePath))
             {
                 _settingsService.GlobalSettings.DatabaseFile = filePath;
@@ -143,7 +140,6 @@ namespace Transmittal.Desktop.Views
             {
                 MessageBox.Show("The file does not exist.  It may have been moved or deleted.", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-        }
+        }   
     }
 }
