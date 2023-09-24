@@ -77,15 +77,17 @@ public class SettingsService : ISettingsService
 
                 GlobalSettings.IssueFormats.Clear();
                 GlobalSettings.IssueFormats = GetIssueFormats();
+
+                _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
+
             }
         }
+
     }
 
     public void UpdateSettings()
     {
         _logger.LogDebug("Updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
-
-        _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
 
         try
         {
@@ -152,12 +154,11 @@ public class SettingsService : ISettingsService
         {
             _logger.LogError(ex, "Error updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
         }
-        
+       
 
         SaveIssueFormats();
         SaveDocumentStatuses();
     }
-
     //TODO save document statuses and issue formats to the database
 
     private List<IssueFormatModel> GetIssueFormats()

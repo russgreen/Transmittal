@@ -79,34 +79,45 @@ public class SQLiteDataAccess : IDataConnection
 
     public void UpgradeDatabase(string dbFilePath)
     {
-        Dictionary<string, string> columnsToAdd = new Dictionary<string, string>
+         Dictionary<string, string> columnsToAdd = new Dictionary<string, string>();
+
+        //first check of the required columns exist before adding to the dictionary to create them.
+        //added at v1.2.0
+        if(!ColumnExists(dbFilePath, "ClientName", "Settings"))
         {
-            {
-                //added at v1.2.0
-                "ClientName",
-                "ALTER TABLE Settings ADD COLUMN ClientName TEXT"
-            },
-            {
-                //added at v1.2.2
-                "FileNameFilter2",
-                "ALTER TABLE Settings ADD COLUMN FileNameFilter2 TEXT"
-            },
-            {
-                //added at v2.0.0
-                "DrgPackage",
-                "ALTER TABLE TransmittalItems ADD COLUMN DrgPackage TEXT"
-            },
-            {
-                //added at v2.0.0
-                "UseRevit",
-                "ALTER TABLE Settings ADD COLUMN UseRevit INTEGER"
-            },
-            {
-                //added at v2.0.0
-                "SheetPackageParamGuid",
-                "ALTER TABLE Settings ADD COLUMN SheetPackageParamGuid TEXT"
-            },
-        };
+            _logger.LogDebug("Column ClientName does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("ClientName", "ALTER TABLE Settings ADD COLUMN ClientName TEXT");
+        }
+
+        //added at v1.2.2
+        if (!ColumnExists(dbFilePath, "FileNameFilter2", "Settings"))
+        {
+            _logger.LogDebug("Column FileNameFilter2 does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("FileNameFilter2", "ALTER TABLE Settings ADD COLUMN FileNameFilter2 TEXT");
+        }
+
+        //added at v2.0.0
+        if(!ColumnExists(dbFilePath, "DrgPackage", "TransmittalItems"))
+        {
+            _logger.LogDebug("Column DrgPackage does not exist in TransmittalItems table. Adding to columns to add dictionary");
+            columnsToAdd.Add("DrgPackage", "ALTER TABLE TransmittalItems ADD COLUMN DrgPackage TEXT");
+        }
+        if(!ColumnExists(dbFilePath, "UseRevit", "Settings"))
+        {
+            _logger.LogDebug("Column UseRevit does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("UseRevit", "ALTER TABLE Settings ADD COLUMN UseRevit INTEGER");
+        }
+        if(!ColumnExists(dbFilePath, "SheetPackageParamGuid", "Settings"))
+        {
+            _logger.LogDebug("Column SheetPackageParamGuid does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("SheetPackageParamGuid", "ALTER TABLE Settings ADD COLUMN SheetPackageParamGuid TEXT");
+        }
+
+        if(columnsToAdd.Count == 0)
+        {
+            _logger.LogDebug("No columns to add to database");
+            return;
+        }
 
         WaitForLockFileToClear(dbFilePath);
         CreateLockFile(dbFilePath);
@@ -132,7 +143,10 @@ public class SQLiteDataAccess : IDataConnection
     }
 
 
-    // To prevent concurrent write attempts on the database a lock file will be created
+    /// <summary>
+    /// To prevent concurrent write attempts on the database a lock file will be created
+    /// </summary>
+    /// <param name="dbFilePath"></param>
     private void WaitForLockFileToClear(string dbFilePath)
     {
         bool loggedWaitingMessage = false;
@@ -172,5 +186,19 @@ public class SQLiteDataAccess : IDataConnection
         var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
         File.Delete(lockFilePath);
         _logger.LogDebug("Deleted lock file [{lockFilePath}]", lockFilePath);
+    }
+
+    private bool ColumnExists(string dbFilePath, string columnName, string tableName)
+    {
+        string sql = $"SELECT INSTR(sql, '{columnName}') FROM sqlite_master WHERE type='table' AND name='{tableName}';";
+
+        var result = LoadData<int, dynamic>(dbFilePath, sql, null).FirstOrDefault();
+
+        if (result == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
