@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1537.0" GeneratePathProperty="true" />
+		<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1586.0" GeneratePathProperty="true" />
 		<!--<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.15" />-->
 	</ItemGroup>
 

@@ -77,79 +77,88 @@ public class SettingsService : ISettingsService
 
                 GlobalSettings.IssueFormats.Clear();
                 GlobalSettings.IssueFormats = GetIssueFormats();
+
+                _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
+
             }
         }
+
     }
 
     public void UpdateSettings()
     {
         _logger.LogDebug("Updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
 
-        _connection.UpgradeDatabase(GlobalSettings.DatabaseFile);
+        try
+        {
+            string sql = "UPDATE Settings SET " +
+                "DateFormatString = @DateFormatString, " +
+                "DrawingIssueStore = @DrawingIssueStore, " +
+                "IssueSheetStore = @IssueSheetStore, " +
+                "ReportStore = @ReportStore, " +
+                "DirectoryStore = @DirectoryStore, " +
+                "FileNameFilter = @FileNameFilter, " +
+                "FileNameFilter2 = @FileNameFilter2, " +
+                "ProjectIdentifier = @ProjectIdentifier, " +
+                "ProjectNumber = @ProjectNumber, " +           
+                "ProjectName = @ProjectName, " +
+                "ClientName = @ClientName, " +
+                "UseExtranet = @UseExtranet, " +
+                "UseISO19650 = @UseISO19650, " +
+                "UseRevit = @UseRevit, " +
+                "Originator = @Originator, " +
+                "Role = @Role, " +
+                "ProjectIdentifierParamGuid = @ProjectIdentifierParamGuid, " +
+                "OriginatorParamGuid = @OriginatorParamGuid, " +
+                "RoleParamGuid = @RoleParamGuid, " +
+                "SheetVolumeParamGuid = @SheetVolumeParamGuid, " +
+                "SheetLevelParamGuid = @SheetLevelParamGuid, " +
+                "DocumentTypeParamGuid = @DocumentTypeParamGuid, " +
+                "SheetStatusParamGuid = @SheetStatusParamGuid, " +
+                "SheetStatusDescriptionParamGuid = @SheetStatusDescriptionParamGuid, " +
+                "SheetPackageParamGuid = @SheetPackageParamGuid " +
+                "WHERE ID=1;";
 
-        string sql = "UPDATE Settings SET " +
-            "DateFormatString = @DateFormatString, " +
-            "DrawingIssueStore = @DrawingIssueStore, " +
-            "IssueSheetStore = @IssueSheetStore, " +
-            "ReportStore = @ReportStore, " +
-            "DirectoryStore = @DirectoryStore, " +
-            "FileNameFilter = @FileNameFilter, " +
-            "FileNameFilter2 = @FileNameFilter2, " +
-            "ProjectIdentifier = @ProjectIdentifier, " +
-            "ProjectNumber = @ProjectNumber, " +           
-            "ProjectName = @ProjectName, " +
-            "ClientName = @ClientName, " +
-            "UseExtranet = @UseExtranet, " +
-            "UseISO19650 = @UseISO19650, " +
-            "UseRevit = @UseRevit, " +
-            "Originator = @Originator, " +
-            "Role = @Role, " +
-            "ProjectIdentifierParamGuid = @ProjectIdentifierParamGuid, " +
-            "OriginatorParamGuid = @OriginatorParamGuid, " +
-            "RoleParamGuid = @RoleParamGuid, " +
-            "SheetVolumeParamGuid = @SheetVolumeParamGuid, " +
-            "SheetLevelParamGuid = @SheetLevelParamGuid, " +
-            "DocumentTypeParamGuid = @DocumentTypeParamGuid, " +
-            "SheetStatusParamGuid = @SheetStatusParamGuid, " +
-            "SheetStatusDescriptionParamGuid = @SheetStatusDescriptionParamGuid, " +
-            "SheetPackageParamGuid = @SheetPackageParamGuid " +
-            "WHERE ID=1;";
-
-        _connection.SaveData(
-            GlobalSettings.DatabaseFile,
-            sql, new
-            {
-                DateFormatString = GlobalSettings.DateFormatString,
-                DrawingIssueStore = GlobalSettings.DrawingIssueStore,
-                IssueSheetStore = GlobalSettings.IssueSheetStore,
-                ReportStore = GlobalSettings.ReportStore,
-                DirectoryStore = GlobalSettings.DirectoryStore,
-                FileNameFilter = GlobalSettings.FileNameFilter,
-                FileNameFilter2 = GlobalSettings.FileNameFilter2,
-                ProjectIdentifier = GlobalSettings.ProjectIdentifier,
-                ProjectNumber = GlobalSettings.ProjectNumber,
-                ProjectName = GlobalSettings.ProjectName,
-                ClientName = GlobalSettings.ClientName,
-                UseExtranet = GlobalSettings.UseExtranet,
-                UseISO19650 = GlobalSettings.UseISO19650,
-                UseRevit = GlobalSettings.UseRevit,
-                Originator = GlobalSettings.Originator,
-                Role = GlobalSettings.Role,
-                ProjectIdentifierParamGuid = GlobalSettings.ProjectIdentifierParamGuid,
-                OriginatorParamGuid = GlobalSettings.OriginatorParamGuid,
-                RoleParamGuid = GlobalSettings.RoleParamGuid,
-                SheetVolumeParamGuid = GlobalSettings.SheetVolumeParamGuid,
-                SheetLevelParamGuid = GlobalSettings.SheetLevelParamGuid,
-                DocumentTypeParamGuid = GlobalSettings.DocumentTypeParamGuid,
-                SheetStatusParamGuid = GlobalSettings.SheetStatusParamGuid,
-                SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid,
-                SheetPackageParamGuid = GlobalSettings.SheetPackageParamGuid
-            });
+            _connection.SaveData(
+                GlobalSettings.DatabaseFile,
+                sql, new
+                {
+                    DateFormatString = GlobalSettings.DateFormatString,
+                    DrawingIssueStore = GlobalSettings.DrawingIssueStore,
+                    IssueSheetStore = GlobalSettings.IssueSheetStore,
+                    ReportStore = GlobalSettings.ReportStore,
+                    DirectoryStore = GlobalSettings.DirectoryStore,
+                    FileNameFilter = GlobalSettings.FileNameFilter,
+                    FileNameFilter2 = GlobalSettings.FileNameFilter2,
+                    ProjectIdentifier = GlobalSettings.ProjectIdentifier,
+                    ProjectNumber = GlobalSettings.ProjectNumber,
+                    ProjectName = GlobalSettings.ProjectName,
+                    ClientName = GlobalSettings.ClientName,
+                    UseExtranet = GlobalSettings.UseExtranet,
+                    UseISO19650 = GlobalSettings.UseISO19650,
+                    UseRevit = GlobalSettings.UseRevit,
+                    Originator = GlobalSettings.Originator,
+                    Role = GlobalSettings.Role,
+                    ProjectIdentifierParamGuid = GlobalSettings.ProjectIdentifierParamGuid,
+                    OriginatorParamGuid = GlobalSettings.OriginatorParamGuid,
+                    RoleParamGuid = GlobalSettings.RoleParamGuid,
+                    SheetVolumeParamGuid = GlobalSettings.SheetVolumeParamGuid,
+                    SheetLevelParamGuid = GlobalSettings.SheetLevelParamGuid,
+                    DocumentTypeParamGuid = GlobalSettings.DocumentTypeParamGuid,
+                    SheetStatusParamGuid = GlobalSettings.SheetStatusParamGuid,
+                    SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid,
+                    SheetPackageParamGuid = GlobalSettings.SheetPackageParamGuid
+                });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+        }
+       
 
         SaveIssueFormats();
         SaveDocumentStatuses();
     }
-
     //TODO save document statuses and issue formats to the database
 
     private List<IssueFormatModel> GetIssueFormats()
@@ -183,34 +192,50 @@ public class SettingsService : ISettingsService
     {
         _logger.LogDebug("Saving issue formats to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
 
-        //clear the records in the table
-        string sql = "DELETE FROM IssueFormat;";
-        _connection.SaveData(
-            GlobalSettings.DatabaseFile,
-            sql, new { });
+        try
+        {
+            //clear the records in the table
+            string sql = "DELETE FROM IssueFormat;";
+            _connection.SaveData(
+                GlobalSettings.DatabaseFile,
+                sql, new { });
 
-        //save the new records
-        sql = "INSERT INTO IssueFormat (Code, Description) VALUES (@Code, @Description )";
-        _connection.SaveData(
-    GlobalSettings.DatabaseFile,
-    sql, GlobalSettings.IssueFormats);
+            //save the new records
+            sql = "INSERT INTO IssueFormat (Code, Description) VALUES (@Code, @Description )";
+            _connection.SaveData(
+        GlobalSettings.DatabaseFile,
+        sql, GlobalSettings.IssueFormats);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error saving issue formats to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+        }
+
     }
 
     private void SaveDocumentStatuses()
     {
         _logger.LogDebug("Saving document statuses to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
 
-        //clear the records in the table
-        string sql = "DELETE FROM DocumentStatus;";
-        _connection.SaveData(
-    GlobalSettings.DatabaseFile,
-    sql, new { });
+        try
+        {
+            //clear the records in the table
+            string sql = "DELETE FROM DocumentStatus;";
+            _connection.SaveData(
+        GlobalSettings.DatabaseFile,
+        sql, new { });
 
-        //save the new records
-        sql = "INSERT INTO DocumentStatus  (Code, Description) VALUES (@Code, @Description )";
-        _connection.SaveData(
-    GlobalSettings.DatabaseFile,
-    sql, GlobalSettings.DocumentStatuses);
+            //save the new records
+            sql = "INSERT INTO DocumentStatus  (Code, Description) VALUES (@Code, @Description )";
+            _connection.SaveData(
+        GlobalSettings.DatabaseFile,
+        sql, GlobalSettings.DocumentStatuses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error saving document statuses to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+        }
+
     }
 }
     

@@ -7,7 +7,6 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>c649d533-64c3-42b6-9805-19adbfccd468</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -204,7 +203,6 @@
                                 <TextRun>
                                   <Value>Document ID</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -238,7 +236,6 @@
                                 <TextRun>
                                   <Value>Description</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -272,7 +269,6 @@
                                 <TextRun>
                                   <Value>Scale</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -306,7 +302,6 @@
                                 <TextRun>
                                   <Value>Paper</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -353,9 +348,7 @@
 +Fields!DrgNumber.Value+IIF(Fields!DrgStatus.Value Is Nothing,"","-")
 +Fields!DrgStatus.Value+IIF(Fields!DrgRev.Value Is Nothing,"","-")
 +Fields!DrgRev.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -385,9 +378,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!DrgName.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -417,9 +408,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!DrgScale.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -449,9 +438,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!DrgPaper.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -545,7 +532,6 @@
                                 <TextRun>
                                   <Value>Contact Name</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -579,7 +565,6 @@
                                 <TextRun>
                                   <Value>Format</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -613,7 +598,6 @@
                                 <TextRun>
                                   <Value>Copies</Value>
                                   <Style>
-                                    <FontFamily>fira sans</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -651,9 +635,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!ContactName.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -683,9 +665,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!TransFormat.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -715,9 +695,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!TransCopies.Value</Value>
-                                  <Style>
-                                    <FontFamily>lato</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -847,7 +825,6 @@ Report date: </Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox23</rd:DefaultName>
-              <Top>0.3cm</Top>
               <Height>2cm</Height>
               <Width>12.47951cm</Width>
               <Style>
@@ -867,7 +844,6 @@ Report date: </Value>
                     <TextRun>
                       <Value>Document ID format: &lt;Project&gt;-&lt;Originator&gt;-&lt;Volume&gt;-&lt;Level&gt;-&lt;Type&gt;-&lt;Role&gt;-&lt;DocNo&gt;-&lt;Status&gt;-&lt;Rev&gt;</Value>
                       <Style>
-                        <FontFamily>Lato</FontFamily>
                         <FontSize>9pt</FontSize>
                       </Style>
                     </TextRun>
@@ -910,9 +886,7 @@ Report date: </Value>
                   <TextRuns>
                     <TextRun>
                       <Value>=Globals!PageNumber</Value>
-                      <Style>
-                        <FontFamily>lato</FontFamily>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>

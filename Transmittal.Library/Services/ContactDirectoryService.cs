@@ -25,45 +25,61 @@ public class ContactDirectoryService : IContactDirectoryService
     {
         _logger.LogDebug("Creating company {model}", model);
 
-        string sql = "INSERT INTO Company (CompanyName, Role, Address, Tel, Fax, Website) " +
-            "VALUES (@CompanyName, @Role, @Address, @Tel, @Fax, @Website); " +
-            "SELECT last_insert_rowid();";
+        try
+        {
+            string sql = "INSERT INTO Company (CompanyName, Role, Address, Tel, Fax, Website) " +
+                "VALUES (@CompanyName, @Role, @Address, @Tel, @Fax, @Website); " +
+                "SELECT last_insert_rowid();";
 
-        model.ID = _connection.CreateData<CompanyModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile,
-            sql, model, new
-            {
-                CompanyName = model.CompanyName,
-                Role = model.Role,
-                Address = model.Address,
-                Tel = model.Tel,
-                Fax = model.Fax,
-                Website = model.Website
-            }, nameof(model.ID)).ID;
+            model.ID = _connection.CreateData<CompanyModel, dynamic>(
+                _settingsService.GlobalSettings.DatabaseFile,
+                sql, model, new
+                {
+                    CompanyName = model.CompanyName,
+                    Role = model.Role,
+                    Address = model.Address,
+                    Tel = model.Tel,
+                    Fax = model.Fax,
+                    Website = model.Website
+                }, nameof(model.ID)).ID;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create company {model}", model);
+        }
+
     }
 
     public void CreatePerson(PersonModel model)
     {
         _logger.LogDebug("Creating person {model}", model);
 
-        string sql = "INSERT INTO Person (LastName, FirstName, Email, Tel, Mobile, Position, Notes, CompanyID, ShowInReport) " +
-            "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport); " +
-            "SELECT last_insert_rowid();";
+        try
+        {
+            string sql = "INSERT INTO Person (LastName, FirstName, Email, Tel, Mobile, Position, Notes, CompanyID, ShowInReport) " +
+                "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport); " +
+                "SELECT last_insert_rowid();";
 
-        model.ID = _connection.CreateData<PersonModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile, 
-            sql, model, new
-            {
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                Email = model.Email,
-                Tel = model.Tel,
-                Mobile = model.Mobile,
-                CompanyID = model.CompanyID,
-                Position = model.Position,
-                Notes = model.Notes,
-                ShowInReport = model.ShowInReport
-            }, nameof(model.ID)).ID;
+            model.ID = _connection.CreateData<PersonModel, dynamic>(
+                _settingsService.GlobalSettings.DatabaseFile, 
+                sql, model, new
+                {
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    Email = model.Email,
+                    Tel = model.Tel,
+                    Mobile = model.Mobile,
+                    CompanyID = model.CompanyID,
+                    Position = model.Position,
+                    Notes = model.Notes,
+                    ShowInReport = model.ShowInReport
+                }, nameof(model.ID)).ID;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create person {model}", model);
+        }
+
     }
 
     public List<CompanyModel> GetCompanies_All()
@@ -165,79 +181,111 @@ public class ContactDirectoryService : IContactDirectoryService
     {
         _logger.LogDebug("Update company {model}", model);
 
-        string sql = "UPDATE Company SET " +
-            "CompanyName = @CompanyName, " +
-            "Role = @Role, " +
-            "Address = @Address, " +
-            "Tel = @Tel, " +
-            "Fax = @Fax, " +
-            "Website = @Website " +
-            "WHERE(ID = @ID);";
+        try
+        {
+            string sql = "UPDATE Company SET " +
+                "CompanyName = @CompanyName, " +
+                "Role = @Role, " +
+                "Address = @Address, " +
+                "Tel = @Tel, " +
+                "Fax = @Fax, " +
+                "Website = @Website " +
+                "WHERE(ID = @ID);";
 
-        _connection.SaveData(
-            _settingsService.GlobalSettings.DatabaseFile,
-            sql, new
-            {
-                CompanyName = model.CompanyName,
-                Role = model.Role,
-                Address = model.Address,
-                Tel = model.Tel,
-                Fax = model.Fax,
-                Website = model.Website,
-                ID = model.ID
-            });
+            _connection.SaveData(
+                _settingsService.GlobalSettings.DatabaseFile,
+                sql, new
+                {
+                    CompanyName = model.CompanyName,
+                    Role = model.Role,
+                    Address = model.Address,
+                    Tel = model.Tel,
+                    Fax = model.Fax,
+                    Website = model.Website,
+                    ID = model.ID
+                });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update company {model}", model);
+        }
+
     }
 
     public void DeleteCompany(CompanyModel model) 
     {
         _logger.LogDebug("Delete company {model}", model);
 
-        string sql = "DELETE FROM Company WHERE (ID = @ID);";
+        try
+        {
+            string sql = "DELETE FROM Company WHERE (ID = @ID);";
 
-        _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
-            sql, new { ID = model.ID });
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
+                sql, new { ID = model.ID });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete company {model}", model);
+        }
+
     }
 
     public void UpdatePerson(PersonModel model)
     {
         _logger.LogDebug("Update person {model}", model);
 
-        string sql = "UPDATE Person SET " +
-            "LastName = @LastName, " +
-            "FirstName = @FirstName, " +
-            "Email = @Email, " +
-            "Tel = @Tel, " +
-            "Mobile = @Mobile, " +
-            "CompanyID = @CompanyID, " +
-            "Position = @Position, " +
-            "Notes = @Notes, " +
-            "ShowInReport = @ShowInReport " +
-            "WHERE (ID = @ID);";
+        try
+        {
+            string sql = "UPDATE Person SET " +
+                "LastName = @LastName, " +
+                "FirstName = @FirstName, " +
+                "Email = @Email, " +
+                "Tel = @Tel, " +
+                "Mobile = @Mobile, " +
+                "CompanyID = @CompanyID, " +
+                "Position = @Position, " +
+                "Notes = @Notes, " +
+                "ShowInReport = @ShowInReport " +
+                "WHERE (ID = @ID);";
 
-        _connection.SaveData(
-            _settingsService.GlobalSettings.DatabaseFile,
-            sql, new
-            {
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                Email = model.Email,
-                Tel = model.Tel,
-                Mobile = model.Mobile,
-                CompanyID = model.CompanyID,
-                Position = model.Position,
-                Notes = model.Notes,
-                ShowInReport = model.ShowInReport,
-                ID = model.ID
-            });
+            _connection.SaveData(
+                _settingsService.GlobalSettings.DatabaseFile,
+                sql, new
+                {
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    Email = model.Email,
+                    Tel = model.Tel,
+                    Mobile = model.Mobile,
+                    CompanyID = model.CompanyID,
+                    Position = model.Position,
+                    Notes = model.Notes,
+                    ShowInReport = model.ShowInReport,
+                    ID = model.ID
+                });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update person {model}", model);
+        }
+
     }
 
     public void DeletePerson(PersonModel model)
     {
         _logger.LogDebug("Delete person {model}", model);
 
-        string sql = "DELETE FROM Person WHERE (ID = @ID);";
+        try
+        {
+            string sql = "DELETE FROM Person WHERE (ID = @ID);";
 
-        _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
-            sql, new { ID = model.ID });
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
+                sql, new { ID = model.ID });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete person {model}", model);
+        }
+
     }
 }

@@ -71,8 +71,8 @@
     <PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="21.1.39" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="21.1.39" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="22.2.12" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="22.2.12" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
 	<!--<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
 	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />-->
