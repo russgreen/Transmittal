@@ -56,7 +56,7 @@ public partial class ReportViewerWindow : Window
             System.IO.File.WriteAllBytes(path, bytes);
             System.Windows.MessageBox.Show($"The report was exported to file {path}");
         }
-        catch ()
+        catch
         {
             System.Windows.MessageBox.Show($"The report could not be saved to {path}. Check the file is not open and you have write access to the folder.");
         }
