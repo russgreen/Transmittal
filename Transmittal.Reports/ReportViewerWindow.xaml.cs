@@ -1,17 +1,5 @@
 ﻿using Microsoft.Reporting.WinForms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Transmittal.Reports;
 /// <summary>
@@ -66,11 +54,11 @@ public partial class ReportViewerWindow : Window
         try
         {
             System.IO.File.WriteAllBytes(path, bytes);
-            //MessageBox.Show($"The report was exported to file {path}");
+            System.Windows.MessageBox.Show($"The report was exported to file {path}");
         }
-        catch (Exception)
+        catch
         {
-            //MessageBox.Show($"The report could not be saved to {path}. Check the file is not open and you have write access to the folder.");
+            System.Windows.MessageBox.Show($"The report could not be saved to {path}. Check the file is not open and you have write access to the folder.");
         }
     }
 }

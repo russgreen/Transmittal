@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window x:Class="Transmittal.Views.SettingsView" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,6 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:Converters="clr-namespace:Transmittal.Converters" 
-        x:Class="Transmittal.Views.SettingsView" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
@@ -16,6 +15,11 @@
         MinWidth="800" MinHeight="650"
         FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" >
+
+    <Window.DataContext>
+        <viewModels:SettingsViewModel />
+    </Window.DataContext>
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,10 +28,6 @@
             <!--<Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>-->
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.DataContext>
-        <viewModels:SettingsViewModel />
-    </Window.DataContext>
 
     <Grid Margin="10" >
         <Grid.RowDefinitions>
@@ -177,9 +177,9 @@
                                     <syncfusion:GridTextColumn MappingName="Description" HeaderText="Description" />
                                 </syncfusion:SfDataGrid.Columns>
                             </syncfusion:SfDataGrid>
-                            
-                            </Grid>
-                        </StackPanel>
+
+                        </Grid>
+                    </StackPanel>
                 </GroupBox>
 
                 <GroupBox Header="Database" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
@@ -210,7 +210,7 @@
                                 Content="Load settings from database"
                                 Visibility="{Binding IsChecked, ElementName=UseDatabase, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Click="buttonLoadSettingsFromDatabase_Click"/>
-                                <!--Command="{Binding LoadSettingsFromDatabaseCommand}"/>-->
+                        <!--Command="{Binding LoadSettingsFromDatabaseCommand}"/>-->
 
                         <!--<TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Template database" 
@@ -247,7 +247,7 @@
                                 x:Name="buttonReportPathBrowse"
                                 Content="..." 
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonReportPathBrowse_Click" />
-                        
+
                         <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"
                                    Text="Issue sheet store"
                                    IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
@@ -320,7 +320,7 @@
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}"
                                 Click="buttonParamProjId_Click"  />
-                        
+
                         <TextBlock Grid.Row="3" Grid.Column="0" 
                                    Text="Originator"  />
                         <TextBox Grid.Row="3" Grid.Column="1"  Margin="0,0,5,5"
@@ -330,7 +330,7 @@
                                 x:Name="buttonParamOriginator"
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamOriginator_Click"  />
-                        
+
                         <TextBlock Grid.Row="4" Grid.Column="0" 
                                    Text="Role" />
                         <TextBox Grid.Row="4" Grid.Column="1"  Margin="0,0,5,5"
@@ -353,7 +353,7 @@
                                 x:Name="buttonParamVolume"
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamVolume_Click"  />
-                        
+
                         <TextBlock Grid.Row="7" Grid.Column="0" 
                                    Text="Sheet Level / Spatial" />
                         <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,5,5"
@@ -363,7 +363,7 @@
                                 x:Name="buttonParamLevel"
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamLevel_Click"  />
-                        
+
                         <TextBlock Grid.Row="8" Grid.Column="0" 
                                    Text="Document Type"  />
                         <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,5,5"
@@ -373,7 +373,7 @@
                                 x:Name="buttonParamType"
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamType_Click"  />
-                        
+
                         <TextBlock Grid.Row="9" Grid.Column="0" 
                                    Text="Sheet Status Code"  />
                         <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,5,5"
@@ -383,7 +383,7 @@
                                 x:Name="buttonParamStatusCode"
                                 Content="..." 
                                 IsEnabled="{Binding UseCustomSharedParameters}" Click="buttonParamStatusCode_Click"  />
-                        
+
                         <TextBlock Grid.Row="10" Grid.Column="0" 
                                    Text="Sheet Status Description"  />
                         <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,5,5"
@@ -406,7 +406,7 @@
 
                     </Grid>
                 </GroupBox>
-                
+
             </StackPanel>
         </ScrollViewer>
 
@@ -414,13 +414,19 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="70" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="150" />
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="buttonHelp" Height="23"
-                Content="Help" Padding="5,0,5,0" Margin="0,5,0,0" 
+            <Button x:Name="buttonHelp"
+                Content="Help" Padding="5,0,5,0" Margin="0,6,0,1" 
                 Click="buttonHelp_Click" />
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Column="2" >
+            <TextBlock Foreground="Red" 
+                       Grid.Column="1" 
+                       VerticalAlignment="Center"
+                       Text="{Binding DisplayMessage, Mode=OneWay}" Margin="10,0,0,0" Height="18" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,1" Grid.Column="2" Width="146" >
                 <Button Content="Save Settings" Padding="5,0,5,0" 
                 Command="{Binding SaveSettingsCommand}" 
                 IsEnabled="{Binding HasAnyErrors,  Converter={StaticResource InverseBooleanConverter}}" />
@@ -430,8 +436,8 @@
                 Click="buttonCancel_Click" />
             </StackPanel>
         </Grid>
-       
-        
+
+
     </Grid>
 
 </Window>

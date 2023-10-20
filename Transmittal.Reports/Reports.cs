@@ -1,14 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Reporting.WinForms;
+using System.IO;
 using System.Reflection;
+using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
-using Transmittal.Library.Extensions;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using Microsoft.Extensions.Logging;
 
 namespace Transmittal.Reports
 {

@@ -20,6 +20,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Transmittal.Library.Messages;
+using System.Windows;
 
 namespace Transmittal.ViewModels;
 
@@ -39,6 +41,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     public string Role;
 
     public bool HasAnyErrors => GetAnyErrors();
+
+    [ObservableProperty]
+    private string _displayMessage = string.Empty;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -172,6 +177,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         WeakReferenceMessenger.Default.Register<ImportSettingsMessage>(this, (r, m) =>
         {
             SetPropertiesFromImportedSettings(m.Value);
+        });
+
+        WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
+        {
+            ProcessLockFileMessage(m.Value);
         });
     }
 
@@ -448,7 +458,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             // we have a database file so save a copy of settings to the database for use by desktop.exe
             _settingsService.UpdateSettings();
         }
-
+       
         this.OnClosingRequest();
     }
 
@@ -593,6 +603,21 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.DatabaseFile = DatabaseFile;
 
         CheckForDatabaseFile();
+    }
+
+    private void ProcessLockFileMessage(string value)
+    {
+        if (value == "")
+        {
+            DisplayMessage = "";
+            return;
+        }
+
+        //so we have a lock file
+        DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
+
+        DispatcherHelper.DoEvents();
+      
     }
 
     public void CheckForDatabaseFile()

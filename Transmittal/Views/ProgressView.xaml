@@ -37,11 +37,17 @@
                 <ProgressBar Height="30" Width="500" 
                                          Maximum="{Binding DrawingSheetsToProcess}"
                                          Value="{Binding DrawingSheetsProcessed}"/>
-                <TextBlock Text="{Binding DrawingSheetProgressLabel}" />
+                <TextBlock TextWrapping="WrapWithOverflow"
+                           Text="{Binding DrawingSheetProgressLabel}" />
                 <ProgressBar Height="30" Width="500" Margin="0,20,0,0" 
                                          Maximum="{Binding SheetTasksToProcess}"
                                          Value="{Binding SheetTaskProcessed}"/>
-                <TextBlock Text="{Binding SheetTaskProgressLabel}"/>
+                <TextBlock TextWrapping="WrapWithOverflow"
+                           Text="{Binding SheetTaskProgressLabel}"/>
+
+                <TextBlock Foreground="Red"
+                           TextWrapping="WrapWithOverflow"
+                           Text="{Binding DisplayMessage}" />
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
