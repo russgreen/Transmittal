@@ -1,9 +1,11 @@
-﻿using Dapper;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.IO;
 using Transmittal.Library.Extensions;
+using Transmittal.Library.Messages;
 
 namespace Transmittal.Library.DataAccess;
 
@@ -157,10 +159,19 @@ public class SQLiteDataAccess : IDataConnection
             if(!loggedWaitingMessage)
             {
                 _logger.LogInformation("Waiting for lock file [{lockFilePath}] to clear", lockFilePath);
+
+                //send a message that a lock file exists
+                WeakReferenceMessenger.Default.Send(new LockFileMessage(lockFilePath));
+
                 loggedWaitingMessage = true;
             }
             Thread.Sleep(100);
         }
+
+        //lock file has been cleared
+        WeakReferenceMessenger.Default.Send(new LockFileMessage(""));
+
+        _logger.LogInformation("[{lockFilePath}] cleared", lockFilePath);
     }
 
     private void CreateLockFile(string dbFilePath)
