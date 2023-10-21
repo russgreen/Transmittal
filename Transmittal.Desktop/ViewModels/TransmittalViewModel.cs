@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.IO.Compression;
 using System.Reflection;
 using Transmittal.Desktop.Requesters;
 using Transmittal.Library.Extensions;
+using Transmittal.Library.Messages;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -62,6 +64,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     [ObservableProperty]
     private bool _isBackEnabled = true;
 
+    [ObservableProperty]
+    private string _displayMessage = string.Empty;
+
     public TransmittalViewModel()
     {
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -74,6 +79,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         WireUpDocumentsPage();
 
         WireUpDistributionPage();
+
+        WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
+        {
+            ProcessLockFileMessage(m.Value);
+        });
     }
 
     private void LoadPackages()
@@ -334,5 +344,19 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     public void PackageComplete(string packageName)
     {
         Packages.Add(packageName);
+    }
+
+    private void ProcessLockFileMessage(string value)
+    {
+        if (value == "")
+        {
+            DisplayMessage = "";
+            return;
+        }
+
+        //so we have a lock file
+        DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
+
+        DispatcherHelper.DoEvents();
     }
 }

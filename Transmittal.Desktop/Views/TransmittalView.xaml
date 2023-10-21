@@ -222,6 +222,13 @@
                             <syncfusion:GridTextColumn HeaderText="Format" MappingName="TransFormat" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
+
+                    <TextBlock Foreground="Red" 
+                               Grid.Row="9"
+                               Grid.Column="0" 
+                               Grid.ColumnSpan="3"
+                               VerticalAlignment="Center"
+                               Text="{Binding DisplayMessage, Mode=OneWay}" Margin="10,0,0,0" Height="18" />        
                 </Grid>
             </syncfusion:WizardPage>
 
