@@ -163,7 +163,7 @@ public class App : ExternalApplication
 
     private System.Windows.Media.ImageSource PngImageSource(string embeddedPath)
     {
-        var stream = GetType().Assembly.GetManifestResourceStream(embeddedPath);
+        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedPath);
         System.Windows.Media.ImageSource imageSource;
         try
         {
