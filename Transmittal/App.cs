@@ -92,10 +92,10 @@ public class App : ExternalApplication
         }
         catch { }
 
-        RibbonPanel panel = CachedUiCtrApp.CreateRibbonPanel(_tabName, "Transmittal_Panel");
+        var panel = CachedUiCtrApp.CreateRibbonPanel(_tabName, "Transmittal_Panel");
         panel.Title = "Transmittal";
         
-        PushButton buttonTransmittal = (PushButton)panel.AddItem(
+        var buttonTransmittal = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.Commands.CommandTransmittal),
                 "Transmittal",
@@ -106,7 +106,7 @@ public class App : ExternalApplication
         buttonTransmittal.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/transmittal/"));
 
 
-        PushButton buttonDirectory = (PushButton)panel.AddItem(
+        var buttonDirectory = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.Commands.CommandDirectory),
                 $"Project{Environment.NewLine}Directory",
@@ -116,7 +116,7 @@ public class App : ExternalApplication
         buttonDirectory.LargeImage = PngImageSource("Transmittal.Resources.Directory_Button.png");
         buttonDirectory.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/directory/"));
 
-        PushButton buttonTransmittalArchive = (PushButton)panel.AddItem(
+        var buttonTransmittalArchive = (PushButton)panel.AddItem(
             new PushButtonData(
                 nameof(Transmittal.Commands.CommandTransmittalsArchive),
                 $"Transmittal{Environment.NewLine}Archive",
@@ -126,10 +126,11 @@ public class App : ExternalApplication
         buttonTransmittalArchive.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
         buttonTransmittalArchive.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
 
-        SplitButtonData splitButtonData = new SplitButtonData("SettingsSplit", "Settings");
-        SplitButton splitButton = panel.AddItem(splitButtonData) as SplitButton;
+        var splitButtonData = new SplitButtonData("SettingsSplit", "Settings");
+        var splitButton = panel.AddItem(splitButtonData) as SplitButton;
+        splitButton.IsSynchronizedWithCurrentItem = false;
 
-        PushButton pushButton = splitButton.AddPushButton(
+        var pushButton = splitButton.AddPushButton(
             new PushButtonData(
                 nameof(Transmittal.Commands.CommandSettings),  
                 "Settings",
