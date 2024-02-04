@@ -1,14 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public class TransmittalDistributionModel : ProjectDirectoryModel
+public partial class TransmittalDistributionModel : ProjectDirectoryModel
 {
     public int TransDistID { get; set; }
     public int TransID { get; set; }
+
+
+
+    [ObservableProperty]
     [Required]
-    public string TransFormat { get; set; } = "E";
+    private string _transFormat = "E";
+
+    [ObservableProperty]
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0")]
-    public int TransCopies { get; set; } = 1;
-    public int PersonID { get; set; }
+    private  int _transCopies = 1;
+
+    [ObservableProperty]
+    private int _personID;
 }

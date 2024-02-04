@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Transmittal.Library.Models;
-public partial class ProjectDirectoryModel : ObservableObject
+public partial class ProjectDirectoryModel : ObservableValidator
 {
     [ObservableProperty]
     private int _iD;
