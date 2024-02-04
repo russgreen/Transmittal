@@ -257,13 +257,19 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="70" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="150" />
             </Grid.ColumnDefinitions>
 
             <Button x:Name="buttonHelp" Height="23"
                         Content="Help" Padding="5,0,5,0" Margin="0,5,0,0" 
                         Click="buttonHelp_Click" />
-            
-              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Column="2" >
+
+            <TextBlock Foreground="Red" 
+               Grid.Column="1" 
+               VerticalAlignment="Center"
+               Text="{Binding DisplayMessage, Mode=OneWay}" Margin="10,0,0,0" Height="18" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Column="2" >
                 <Button Content="Save Settings" Padding="5,0,5,0" 
                         Command="{Binding SaveSettingsCommand}" 
                         IsEnabled="{Binding SaveEnabled}" />

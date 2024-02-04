@@ -15,6 +15,8 @@ using Transmittal.Library.Extensions;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using Transmittal.Library.Messages;
 
 namespace Transmittal.Desktop.ViewModels;
 internal partial class SettingsViewModel : BaseViewModel
@@ -26,9 +28,13 @@ internal partial class SettingsViewModel : BaseViewModel
     public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
 
-    public bool SaveEnabled => !GetAnyErrors() && !_settingsService.GlobalSettings.UseRevit;
+    public bool SaveEnabled => !GetAnyErrors() && !_settingsService.GlobalSettings.UseRevit && DisplayMessage == string.Empty;
 
     //public bool HasAnyErrors => !GetAnyErrors();
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SaveEnabled))]
+    private string _displayMessage = string.Empty;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -112,6 +118,24 @@ internal partial class SettingsViewModel : BaseViewModel
         IssueFormats.CollectionChanged += IssueFormats_CollectionChanged;
         DocumentStatuses.CollectionChanged += DocumentStatuses_CollectionChanged;
 
+        WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
+        {
+            ProcessLockFileMessage(m.Value);
+        });
+    }
+
+    private void ProcessLockFileMessage(string value)
+    {
+        if (value == "")
+        {
+            DisplayMessage = "";
+            return;
+        }
+
+        //so we have a lock file
+        DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
+
+        DispatcherHelper.DoEvents();
     }
 
     private bool GetAnyErrors()
