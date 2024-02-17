@@ -6,21 +6,21 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Transmittal.Library.Controls;
+namespace Transmittal.Desktop.Controls;
 public class Hyperlink : Button
 {
     /// <summary>
     /// Property for <see cref="NavigateUri"/>.
     /// </summary>
     public static readonly DependencyProperty NavigateUriProperty = DependencyProperty.Register(nameof(NavigateUri),
-        typeof(string), typeof(Hyperlink), new PropertyMetadata(String.Empty));
+        typeof(string), typeof(Hyperlink), new PropertyMetadata(string.Empty));
 
     /// <summary>
     /// The URL (or application shortcut) to open.
     /// </summary>
     public string NavigateUri
     {
-        get => GetValue(NavigateUriProperty) as string ?? String.Empty;
+        get => GetValue(NavigateUriProperty) as string ?? string.Empty;
         set => SetValue(NavigateUriProperty, value);
     }
 
@@ -31,7 +31,7 @@ public class Hyperlink : Button
 
     private void RequestNavigate(object sender, RoutedEventArgs eventArgs)
     {
-        if (String.IsNullOrEmpty(NavigateUri))
+        if (string.IsNullOrEmpty(NavigateUri))
             return;
 
         System.Diagnostics.ProcessStartInfo sInfo = new(new Uri(NavigateUri).AbsoluteUri)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels" 
-        xmlns:controls="clr-namespace:Transmittal.Library.Controls;assembly=Transmittal.Library"
+        xmlns:controls="clr-namespace:Transmittal.Desktop.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:AboutViewModel}, IsDesignTimeCreatable=True}"
         Title="About" Height="500" Width="600"

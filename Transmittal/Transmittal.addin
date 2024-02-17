@@ -2,7 +2,7 @@
 <RevitAddIns>
   <AddIn Type="Application">
     <Name>Transmittal</Name>
-    <Assembly>Transmittal.dll</Assembly>
+    <Assembly>.\Transmittal\Transmittal.dll</Assembly>
     <ClientId>A8DCC200-6A73-4EDF-BA81-8BEC385AEDF3</ClientId>
     <FullClassName>Transmittal.App</FullClassName>
     <VendorId>Transmittal</VendorId>

@@ -5,7 +5,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
                     xmlns:converters="clr-namespace:Transmittal.Desktop.Converters"
-                    xmlns:controls="clr-namespace:Transmittal.Library.Controls;assembly=Transmittal.Library" >
+                    xmlns:controls="clr-namespace:Transmittal.Desktop.Controls" >
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
