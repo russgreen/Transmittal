@@ -115,7 +115,20 @@ public class SQLiteDataAccess : IDataConnection
             columnsToAdd.Add("SheetPackageParamGuid", "ALTER TABLE Settings ADD COLUMN SheetPackageParamGuid TEXT");
         }
 
-        if(columnsToAdd.Count == 0)
+        //added at v2.0.4
+        if (!ColumnExists(dbFilePath, "ProjectNumber", "Settings"))
+        {
+            _logger.LogDebug("Column ProjectNumber does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("ProjectNumber", "ALTER TABLE Settings ADD COLUMN ProjectNumber TEXT");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectName", "Settings"))
+        {
+            _logger.LogDebug("Column ProjectName does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("ProjectName", "ALTER TABLE Settings ADD COLUMN ProjectName TEXT");
+        }
+
+
+        if (columnsToAdd.Count == 0)
         {
             _logger.LogDebug("No columns to add to database");
             return;

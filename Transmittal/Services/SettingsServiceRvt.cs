@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Microsoft.Extensions.Logging;
+using Nice3point.Revit.Extensions;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -64,19 +65,19 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         SetParameters();
 
         //check for the schema and load data from it if it exists
-        if (SchemaExists(_schemaName))
+        if (SchemaExists(new Guid(_schemaGuid)))
         {
-            _oldSchema = GetSchema(_schemaName);
+            _oldSchema = GetSchema(new Guid(_schemaGuid));
             _logger.LogDebug("Found old schema");
         }
-        if (SchemaExists(_schemaNameV1))
+        if (SchemaExists(new Guid(_schemaGuidV1)))
         {
-            _oldSchemaV1 = GetSchema(_schemaNameV1);
+            _oldSchemaV1 = GetSchema(new Guid(_schemaGuidV1));
             _logger.LogDebug("Found old schema V1");
         }
-        if (SchemaExists(_schemaNameV2))
+        if (SchemaExists(new Guid(_schemaGuidV2)))
         {
-            _schema = GetSchema(_schemaNameV2);
+            _schema = GetSchema(new Guid(_schemaGuidV2));
             _logger.LogDebug("Found schema V2");
         }
 
@@ -320,6 +321,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
                 createSchema.Commit();
             }
+
+            
         }
         catch (Exception ex)
         {
@@ -331,7 +334,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         try
         {
-            _schema = GetSchema(_schemaNameV2);
+            _schema = GetSchema(new Guid(_schemaGuidV2));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, _schema);
 
             using (Transaction storeData = new Transaction(App.RevitDocument, "TransmittalSettings"))
@@ -384,7 +387,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     
     private void GetSettingsFromSchema()
     {
-        Schema schema = GetSchema(_schemaName);
+        Schema schema = GetSchema(new Guid(_schemaGuid));
         DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
         Entity entity = dataStorageElement.GetEntity(_oldSchema);
 
@@ -436,7 +439,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         try
         {
-            Schema schema = GetSchema(_schemaNameV1);
+            Schema schema = GetSchema(new Guid(_schemaGuidV1));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
             Entity entity = dataStorageElement.GetEntity(_oldSchemaV1);
 
@@ -503,7 +506,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         try
         {
-            Schema schema = GetSchema(_schemaNameV2);
+            Schema schema = GetSchema(new Guid(_schemaGuidV2));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
             Entity entity = dataStorageElement.GetEntity(_schema);
 
@@ -568,15 +571,15 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         
     }
 
-    private Schema GetSchema(string schemaName)
+    private Schema GetSchema(Guid schemaGUID)
     {
-        Schema s = Schema.ListSchemas().FirstOrDefault(q => q.SchemaName == schemaName);
+        Schema s = Schema.ListSchemas().FirstOrDefault(q => q.GUID == schemaGUID);
         _logger.LogDebug("Schema {schemaName} found: {s}", s.SchemaName, s);
 
         return s;
     }
 
-    private bool SchemaExists(string schemaName)
+    private bool SchemaExists(Guid schemaGuid)
     {
         IList<Schema> schemas = Schema.ListSchemas();
         if (schemas.Count == 0)
@@ -587,7 +590,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             foreach (Schema schema in schemas)
             {
-                if(schema.SchemaName == schemaName)
+                if(schema.GUID == schemaGuid)
                 {
                     List<ElementId> ids = ElementsWithStorage(App.RevitDocument, schema);
                     if (ids.Count > 0)
@@ -602,11 +605,18 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private DataStorage FindDataStorageElement(Document doc, Schema schema)
     {
-        FilteredElementCollector collector = new FilteredElementCollector(doc);
-        collector.OfClass(typeof(DataStorage));
-        collector.WherePasses(new ExtensibleStorageFilter(schema.GUID));
+        //FilteredElementCollector collector = new FilteredElementCollector(doc);
+        //collector.OfClass(typeof(DataStorage));
+        //collector.WherePasses(new ExtensibleStorageFilter(schema.GUID));
 
-        return collector.FirstElement() as DataStorage;
+        //return collector.FirstElement() as DataStorage;
+
+        var collector = new FilteredElementCollector(doc)
+            .OfClass(typeof(DataStorage))
+            .WherePasses(new ExtensibleStorageFilter(schema.GUID))
+            .Where(e => _dataStorageElementName.Equals(e.Name));
+
+        return collector.FirstOrDefault() as DataStorage;
     }
 
     private List<ElementId> ElementsWithStorage(Document doc, Schema schema)
