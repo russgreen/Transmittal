@@ -61,7 +61,7 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<AssemblyName>Transmittal_$(RevitVersion)</AssemblyName>
+		<AssemblyName>Transmittal</AssemblyName>
 	</PropertyGroup>
 	
 	<ItemGroup>
