@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	  <!--<TargetFramework>net6.0-windows</TargetFramework>-->
-	  <TargetFramework>net48</TargetFramework>
+	  <TargetFramework>net8.0-windows</TargetFramework>
+	  <!--<TargetFramework>net48</TargetFramework>-->
       <OutputType>WinExe</OutputType>
 	  <UseWPF>true</UseWPF>
 	  <LangVersion>latest</LangVersion>
 	  <PlatformTarget>x64</PlatformTarget>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <NeutralLanguage>en</NeutralLanguage>
 	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 	  <ApplicationIcon>Transmittal.ico</ApplicationIcon> 
   </PropertyGroup>
@@ -74,8 +76,6 @@
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="22.2.12" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="22.2.12" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-	<!--<PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
-	<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />-->
   </ItemGroup>
 
   <ItemGroup>
