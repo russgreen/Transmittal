@@ -13,9 +13,9 @@ internal class CommandAbout : IExternalCommand
 
 #if DEBUG
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\..\"));
+        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
 
-        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\x64\Debug\net48", "Transmittal.Desktop.exe");
+        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\Debug", "Transmittal.Desktop.exe");
 #else
         var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
 #endif

@@ -67,7 +67,7 @@ public partial class SettingsView : Window
             Filter = "Transmittal Database File (*.tdb)|*.tdb",
             Multiselect = false,
             Title = "Select a Transmittal Database Template File",
-            InitialDirectory = Path.Combine(Path.GetDirectoryName(App.ExecutingAssemblyPath), "Data")
+            InitialDirectory = Path.Combine(Path.GetDirectoryName(App.DesktopAssemblyFolder), "Data")
         };
 
         if (dialog.ShowDialog() == true)

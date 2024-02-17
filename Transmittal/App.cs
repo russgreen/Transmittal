@@ -10,8 +10,9 @@ namespace Transmittal;
 public class App : ExternalApplication
 {
     // get the absolute path of this assembly
-    public static readonly string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-    
+    //public static readonly string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+    public static readonly string DesktopAssemblyFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal");
+
     // class instance
     public static App ThisApp;
     
@@ -36,8 +37,7 @@ public class App : ExternalApplication
         Host.StartHost();
 
         //allow end users to customise the ribbon tab name
-        var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        var customTabNameFile = System.IO.Path.Combine(currentPath, "ribbontab.txt");
+        var customTabNameFile = System.IO.Path.Combine(App.DesktopAssemblyFolder, "ribbontab.txt");
 
         if(System.IO.File.Exists(customTabNameFile))
         {
