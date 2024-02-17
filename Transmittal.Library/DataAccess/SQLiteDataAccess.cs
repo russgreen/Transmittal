@@ -127,6 +127,12 @@ public class SQLiteDataAccess : IDataConnection
             columnsToAdd.Add("ProjectName", "ALTER TABLE Settings ADD COLUMN ProjectName TEXT");
         }
 
+        //added at v2.1.0
+        if (!ColumnExists(dbFilePath, "Role", "Company"))
+        {
+            _logger.LogDebug("Column Role does not exist in Company table. Adding to columns to add dictionary");
+            columnsToAdd.Add("Role", "ALTER TABLE Company ADD COLUMN Role TEXT");
+        }
 
         if (columnsToAdd.Count == 0)
         {

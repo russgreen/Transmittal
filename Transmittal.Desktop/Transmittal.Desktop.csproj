@@ -13,7 +13,8 @@
 	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-	  <ApplicationIcon>Transmittal.ico</ApplicationIcon> 
+	  <ApplicationIcon>Transmittal.ico</ApplicationIcon>
+	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
