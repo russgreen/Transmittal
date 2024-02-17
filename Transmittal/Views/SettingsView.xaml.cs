@@ -109,6 +109,7 @@ public partial class SettingsView : Window
                 if (dialog.CheckFileExists)
                 {
                     _viewModel.DatabaseFile = dialog.FileName;
+                    _viewModel.UpgradeDatabase();
                 }
             }
         }

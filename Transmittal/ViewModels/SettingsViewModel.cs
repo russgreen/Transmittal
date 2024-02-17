@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Transmittal.Library.Messages;
 using System.Windows;
+using Transmittal.Library.DataAccess;
 
 namespace Transmittal.ViewModels;
 
@@ -32,6 +33,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly ILogger<SettingsViewModel> _logger = Host.GetService<ILogger<SettingsViewModel>>();
+    private readonly IDataConnection _dataConnection = Host.GetService<IDataConnection>();
 
     public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
@@ -633,6 +635,16 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
                     DatabaseNotFound = true;
                 }
             }
+        }
+    }
+
+    public void UpgradeDatabase()
+    {
+        if (DatabaseNotFound) return;
+
+        if (_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile.Trim(), true))
+        {
+            _dataConnection.UpgradeDatabase(DatabaseFile.Trim());
         }
     }
 
