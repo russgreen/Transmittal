@@ -31,6 +31,7 @@
     </Window.Resources>
 
     <Grid>
+        
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
                                   NextEnabled="True" 
@@ -314,6 +315,7 @@
                 </Grid>
 
             </syncfusion:WizardPage>
+          
             <syncfusion:WizardPage x:Name="wizardPage3" 
                                    Title="Distribution" 
                                    Description="Select recipients of the drawing transmittal" 
@@ -449,6 +451,12 @@
             </syncfusion:WizardPage>
 
         </syncfusion:WizardControl>
+
+        <Label Content="{Binding DisplayMessage}" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Bottom" 
+               Margin="85,0,0,5" 
+               Foreground="Red"  />
 
     </Grid>
 </Window>

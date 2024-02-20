@@ -13,6 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
+using Transmittal.Library.Messages;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -36,7 +37,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public string WindowTitle { get; private set; }
 
-
+    [ObservableProperty]
+    private string _displayMessage = string.Empty;
 
     private Thread _progressWindowThread;
 
@@ -192,6 +194,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         WeakReferenceMessenger.Default.Register<CancelTransmittalMessage>(this, (r, m) =>
         {
             _abortFlag = true;
+        });
+
+        WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
+        {
+            ProcessLockFileMessage(m.Value);
         });
     }
 
@@ -1218,6 +1225,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
     }
 
+    private void ProcessLockFileMessage(string value)
+    {
+        if (value == "")
+        {
+            DisplayMessage = "";
+            return;
+        }
+
+        //so we have a lock file
+        DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
+
+        DispatcherHelper.DoEvents();
+
+    } 
 
     private bool IsPrinterInstalled(string PrinterName)
     {
