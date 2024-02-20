@@ -117,6 +117,7 @@
                             <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
