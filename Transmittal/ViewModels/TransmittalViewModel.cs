@@ -10,9 +10,11 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
+using Transmittal.Library.Messages;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -36,7 +38,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public string WindowTitle { get; private set; }
 
-
+    [ObservableProperty]
+    private string _displayMessage = string.Empty;
 
     private Thread _progressWindowThread;
 
@@ -193,6 +196,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             _abortFlag = true;
         });
+
+        WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
+        {
+            ProcessLockFileMessage(m.Value);
+        });
     }
 
     private void WireUpSheetsPage()
@@ -334,6 +342,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 drawingSheet.IssueDate = sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).AsString();
                 drawingSheet.DrgDrawn = sheet.get_Parameter(BuiltInParameter.SHEET_DRAWN_BY).AsString();
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
+                drawingSheet.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();
                 drawingSheet.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
 
                 drawingSheets.Add(drawingSheet);
@@ -787,6 +796,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 SendProgressMessage();
 
                 LaunchTransmittalReport();
+
+                CopyDistributionToClipboard();
             }
 
             if(GenerateExtranetCopies == true)
@@ -1169,6 +1180,27 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
      
     }
 
+    private void CopyDistributionToClipboard()
+    {
+        if (!Distribution.Any())
+        {
+            return;
+        }
+
+        var emailAddresses = new StringBuilder();
+
+        foreach (var distributionModel in Distribution)
+        {
+            if (distributionModel.Person.Email.IsValidEmailAddress())
+            {
+                emailAddresses.Append(distributionModel.Person.Email);
+                emailAddresses.Append("; ");
+            }
+        }
+
+        System.Windows.Clipboard.SetText(emailAddresses.ToString());
+    }
+
     private void OpenProgressWindow()
     {
         // Create a thread
@@ -1217,6 +1249,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         Dispatcher.FromThread(_progressWindowThread).InvokeShutdown();
     }
 
+    private void ProcessLockFileMessage(string value)
+    {
+        if (value == "")
+        {
+            DisplayMessage = "";
+            return;
+        }
+
+        //so we have a lock file
+        DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
+
+        DispatcherHelper.DoEvents();
+
+    } 
 
     private bool IsPrinterInstalled(string PrinterName)
     {

@@ -1,4 +1,6 @@
 ﻿using Humanizer;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Transmittal.Library.Extensions;
 
@@ -144,5 +146,42 @@ public static class NamingExtensions
             inputString = inputString.Remove(inputString.Length - 1, 1);
         }
         return inputString;
+    }
+
+    public static bool IsValidEmailAddress(this string inputString)
+    {
+        if (string.IsNullOrWhiteSpace(inputString))
+            return false;
+
+        try
+        {
+            // Normalize the domain
+            inputString = Regex.Replace(inputString, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+            // Examines if the email is in proper form
+            if (!Regex.IsMatch(inputString, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250)))
+                return false;
+        }
+        catch (RegexMatchTimeoutException)
+        {
+            return false;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static string DomainMapper(Match match)
+    {
+        // Use IdnMapping class to convert Unicode domain names.
+        var idn = new IdnMapping();
+
+        // Pull out and process domain name (throws ArgumentException on invalid)
+        var domainName = idn.GetAscii(match.Groups[2].Value);
+
+        return match.Groups[1].Value + domainName;
     }
 }

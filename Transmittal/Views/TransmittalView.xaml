@@ -31,6 +31,7 @@
     </Window.Resources>
 
     <Grid>
+        
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
                                   NextEnabled="True" 
@@ -117,6 +118,7 @@
                             <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
@@ -313,6 +315,7 @@
                 </Grid>
 
             </syncfusion:WizardPage>
+          
             <syncfusion:WizardPage x:Name="wizardPage3" 
                                    Title="Distribution" 
                                    Description="Select recipients of the drawing transmittal" 
@@ -448,6 +451,12 @@
             </syncfusion:WizardPage>
 
         </syncfusion:WizardControl>
+
+        <TextBlock Foreground="Red" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Bottom" 
+               Margin="85,0,0,10"                
+               Text="{Binding DisplayMessage, Mode=OneWay}" /> 
 
     </Grid>
 </Window>
