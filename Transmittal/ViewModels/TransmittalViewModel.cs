@@ -10,6 +10,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
@@ -795,6 +796,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 SendProgressMessage();
 
                 LaunchTransmittalReport();
+
+                CopyDistributionToClipboard();
             }
 
             if(GenerateExtranetCopies == true)
@@ -1175,6 +1178,27 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             Process.Start(processStartInfo);   
         }
      
+    }
+
+    private void CopyDistributionToClipboard()
+    {
+        if (!Distribution.Any())
+        {
+            return;
+        }
+
+        var emailAddresses = new StringBuilder();
+
+        foreach (var distributionModel in Distribution)
+        {
+            if (distributionModel.Person.Email.IsValidEmailAddress())
+            {
+                emailAddresses.Append(distributionModel.Person.Email);
+                emailAddresses.Append("; ");
+            }
+        }
+
+        System.Windows.Clipboard.SetText(emailAddresses.ToString());
     }
 
     private void OpenProgressWindow()
