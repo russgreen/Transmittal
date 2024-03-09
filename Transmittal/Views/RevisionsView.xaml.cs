@@ -12,6 +12,12 @@ public partial class RevisionsView : Window
     private readonly RevisionsViewModel _viewModel;
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
+
+    public RevisionsView()
+    {
+        
+    }
+
     public RevisionsView(IRevisionRequester caller)
     {
         InitializeComponent();

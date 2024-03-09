@@ -11,19 +11,11 @@
         Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     
     <Window.Resources>
-        <ImageBrush x:Key="watermark" AlignmentX="Left" Stretch="None" >
-            <ImageBrush.ImageSource>
-                <BitmapImage UriSource="../Resources/SearchRevisionsWatermark.png"/>                
-            </ImageBrush.ImageSource>
-            <ImageBrush.Transform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="3"/>
-                </TransformGroup>
-            </ImageBrush.Transform>
-        </ImageBrush>
+         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     
     <Grid Margin="10">
@@ -61,7 +53,6 @@
                                AllowFiltering="False"
                                NavigationMode="Row" 
                                SelectionMode="Single" 
-                               RowSelectionBrush="#9993B8D9" 
                                GridValidationMode="InView" >
         </syncfusion:SfDataGrid>
         

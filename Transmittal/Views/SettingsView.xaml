@@ -37,7 +37,7 @@
 
         <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
             <StackPanel>
-                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBox}" >
+                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBoxStyled}" >
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -148,7 +148,6 @@
                                                    AllowDeleting="True"
                                                    AllowResizingColumns="True" 
                                                    SelectionMode="Single"                                               
-                                                   RowSelectionBrush="#9993B8D9" 
                                                    GridValidationMode="InEdit"
                                                    AddNewRowPosition="Bottom" 
                                                    ColumnSizer="AutoWithLastColumnFill" >
@@ -167,8 +166,7 @@
                                                    AllowEditing="True"
                                                    AllowDeleting="True"
                                                    AllowResizingColumns="True" 
-                                                   SelectionMode="Single"                                               
-                                                   RowSelectionBrush="#9993B8D9" 
+                                                   SelectionMode="Single"                                                                    
                                                    GridValidationMode="InEdit"
                                                    AddNewRowPosition="Bottom" 
                                                    ColumnSizer="AutoWithLastColumnFill" >
@@ -182,7 +180,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Database" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                <GroupBox Header="Database" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
@@ -272,7 +270,7 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Advanced Settings" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                <GroupBox Header="Advanced Settings" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0" >
                     <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />

@@ -16,11 +16,73 @@
     <BitmapImage x:Key="ContactImage" UriSource="../Resources/ContactDetails.png" />
     <BitmapImage x:Key="ReportImage" UriSource="../Resources/Report.png" />
     <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
-        
-    <Style x:Key="GroupBox" TargetType="{x:Type GroupBox}">
+
+    <ImageBrush x:Key="watermark" AlignmentX="Left" Stretch="None" >
+        <ImageBrush.ImageSource>
+            <BitmapImage UriSource="../Resources/SearchRevisionsWatermark.png"/>
+        </ImageBrush.ImageSource>
+        <ImageBrush.Transform>
+            <TransformGroup>
+                <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+                <SkewTransform/>
+                <RotateTransform/>
+                <TranslateTransform Y="3"/>
+            </TransformGroup>
+        </ImageBrush.Transform>
+    </ImageBrush>
+
+    <Color x:Key="AColour.Foreground" A="255" R="0" G="0" B="0"/>
+    <Color x:Key="AColour.Background" A="255" R="255" G="255" B="255"/>
+    <Color x:Key="AColour.Border" A="255" R="147" G="184" B="217"/>
+
+    <SolidColorBrush x:Key="WindowBackground" Color="White" />
+    <SolidColorBrush x:Key="ControlDefaultForeground" Color="Black"/>
+    <SolidColorBrush x:Key="ControlDefaultBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="ControlDefaultBorder" Color="#FF93B8D9"/>
+
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <!--<Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />-->
+    </Style>
+
+    <Style TargetType="{x:Type DataGrid}">
+      <!--We're not using the default datagrid so we don't need to set any styles here-->
+    </Style>
+
+    <Style TargetType="{x:Type DatePicker}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type Expander}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type GroupBox}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />        
+    </Style>
+       
+    <Style x:Key="GroupBoxStyled" TargetType="{x:Type GroupBox}">
         <!--<Setter Property="BorderBrush" Value="#D5DFE5" />
         <Setter Property="BorderThickness" Value="1" />-->
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
@@ -33,7 +95,7 @@
                         <!--Header area-->
                         <Border Grid.Row="0"
                                 Background="WhiteSmoke"                                
-                                BorderBrush="#FF93B8D9"                                
+                                BorderBrush="{StaticResource ControlDefaultBorder}"                                
                                 BorderThickness="1"
                                 CornerRadius="2,2,0,0" >
                             <ContentPresenter Margin="4"
@@ -43,7 +105,7 @@
                         </Border>
                         <!-- Main client area -->
                         <Border Grid.Row="1"
-                                BorderBrush="#FF93B8D9"
+                                BorderBrush="{StaticResource ControlDefaultBorder}"
                                 BorderThickness="1"
                                 CornerRadius="0,0,2,2" >
                             <ContentPresenter Margin="4" />
@@ -53,10 +115,50 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ListBox}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ListView}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type RadioButton}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ProgressBar}">
+        <!--<Setter Property="Foreground" Value="" />-->
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type ScrollBar}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Foreground" Value="WhiteSmoke" />
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style TargetType="{x:Type TextBox}">
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
     <Style x:Key="WizardControlStyle1" TargetType="{x:Type syncfusion:WizardControl}">
-        <Setter Property="Background" Value="White" />
-        <Setter Property="BorderBrush" Value="#FF93B8D9"/>
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorder }"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -73,11 +175,19 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <ItemsPresenter x:Name="PART_PagesPresenter"/>
-                        <syncfusion:WizardNavigationArea Background="White" Grid.Row="1"/>
+                        <syncfusion:WizardNavigationArea Background="{StaticResource WindowBackground}" Grid.Row="1"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type syncfusion:SfDataGrid}" >
+        <Setter Property="RowSelectionBrush" Value="{StaticResource ControlDefaultBorder}" />
+    </Style>
+
+    <Style TargetType="{x:Type syncfusion:GridCell}">
+        <Setter Property="Background" Value="Transparent" />
     </Style>
 
 </ResourceDictionary>

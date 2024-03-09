@@ -96,8 +96,7 @@
                                            AllowSorting="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Extended" 
-                                           RowSelectionBrush="#9993B8D9" 
-                                           GridValidationMode="InView" >
+                                           GridValidationMode="InView" >                        
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="DrgNumber" SortDirection="Ascending" />
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
@@ -131,7 +130,7 @@
                                    FinishVisible="False" 
                                    NextEnabled="{Binding IsExportFormatSelected}"
                                    BackVisible="True"
-                                   BannerBackground="White">
+                                   BannerBackground="{StaticResource WindowBackground}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -147,7 +146,7 @@
                                       Margin="0,5,0,5" 
                                       Padding="2"
                                       IsEnabled="{Binding IsChecked, ElementName=checkBoxExportDWF}"
-                                      Style="{DynamicResource GroupBox}"  >
+                                      Style="{DynamicResource GroupBoxStyled}"  >
                             <Grid Margin="0,5,0,0" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="225" />
@@ -197,7 +196,7 @@
                                       Margin="0,5,0,0" 
                                       Padding="2"
                                       IsEnabled="{Binding IsChecked, ElementName=checkBoxExportDWG}"
-                                      Style="{DynamicResource GroupBox}" >
+                                      Style="{DynamicResource GroupBoxStyled}" >
                             <StackPanel>
                                 <CheckBox IsChecked="{Binding DwgExportOptions.SharedCoords}">
                                     <TextBlock Text="Use shared co-ordinates (DWG files for each view on the sheet and the sheet view will be created)"
@@ -271,7 +270,7 @@
                       Margin="0,5,0,0" 
                       Padding="2"
                       IsEnabled="{Binding IsChecked, ElementName=checkBoxExportPDF}"
-                      Style="{DynamicResource GroupBox}">
+                      Style="{DynamicResource GroupBoxStyled}">
                             <Grid Margin="0,5,0,0" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="225" />
@@ -359,7 +358,6 @@
                                            AllowFiltering="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
-                                           RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill" >
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
@@ -437,7 +435,6 @@
                                            AllowSorting="True"
                                            NavigationMode="Row" 
                                            SelectionMode="Multiple" 
-                                           RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill">
                                               
                         <syncfusion:SfDataGrid.Columns>
