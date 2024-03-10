@@ -9,10 +9,23 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:ParameterSelectorViewModel, IsDesignTimeCreatable=True}"
         Title="Select Parameter" Height="450" Width="300">
+    
     <!--<Window.DataContext>
         <viewModels:ParameterSelectorViewModel/>
     </Window.DataContext>-->
-    
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

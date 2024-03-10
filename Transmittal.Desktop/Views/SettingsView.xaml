@@ -12,17 +12,8 @@
         Title="{Binding WindowTitle}"  
         Width="800" Height="760" 
         MinWidth="800" MinHeight="620"
-        FontSize="14" FontFamily="Segoe UI Light" 
-        WindowStartupLocation="CenterScreen" >
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="AppStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <!--<Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>-->
-        </ResourceDictionary>
-    </Window.Resources>
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowStyle}">
 
     <Window.DataContext>
         <viewModels:SettingsViewModel />
@@ -36,7 +27,7 @@
         
         <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" >
             <StackPanel Grid.Row="0">
-                <GroupBox Header="Project Settings" Style="{DynamicResource GroupBox}">
+                <GroupBox Header="Project Settings" Style="{DynamicResource GroupBoxStyled}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
@@ -79,7 +70,7 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBox}" Margin="0,10,0,0">
+                <GroupBox Header="Basic Settings" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0">
                         <StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -202,7 +193,7 @@
                         </StackPanel>
                     </GroupBox>
 
-                <GroupBox Header="Additional paths" Style="{DynamicResource GroupBox}" Margin="0,10,0,0" >
+                <GroupBox Header="Additional paths" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0" >
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="150" />

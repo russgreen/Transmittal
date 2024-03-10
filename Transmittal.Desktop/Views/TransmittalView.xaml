@@ -10,22 +10,15 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}" 
-        FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" 
         Height="620" Width="860" 
         MinHeight="620" MinWidth="860" 
-        WindowStyle="SingleBorderWindow">
+        WindowStyle="SingleBorderWindow"
+        Style="{StaticResource WindowStyle}">
+    
     <Window.DataContext>
         <viewModels:TransmittalViewModel />
     </Window.DataContext>
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="AppStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
 
     <Grid>
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"

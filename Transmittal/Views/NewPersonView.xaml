@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
         Title="New Person" Height="450" Width="400">
+    
     <!--<Window.DataContext>
         <viewModels:NewPersonViewModel />
     </Window.DataContext>-->
@@ -19,6 +20,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>

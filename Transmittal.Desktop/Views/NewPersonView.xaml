@@ -8,18 +8,12 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
         Title="New Person" Height="450" Width="400"
-        ResizeMode="NoResize" >
+        ResizeMode="NoResize"
+        Style="{StaticResource WindowStyle}">
+    
     <!--<Window.DataContext>
         <viewModels:NewPersonViewModel />
     </Window.DataContext>-->
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="AppStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>

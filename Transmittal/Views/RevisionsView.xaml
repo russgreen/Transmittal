@@ -8,24 +8,22 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
-        Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="Revisions" Height="450" Width="800" 
+        WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterOwner">
     
     <Window.Resources>
-        <ImageBrush x:Key="watermark" AlignmentX="Left" Stretch="None" >
-            <ImageBrush.ImageSource>
-                <BitmapImage UriSource="../Resources/SearchRevisionsWatermark.png"/>                
-            </ImageBrush.ImageSource>
-            <ImageBrush.Transform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="3"/>
-                </TransformGroup>
-            </ImageBrush.Transform>
-        </ImageBrush>
+         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
-    
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -61,7 +59,6 @@
                                AllowFiltering="False"
                                NavigationMode="Row" 
                                SelectionMode="Single" 
-                               RowSelectionBrush="#9993B8D9" 
                                GridValidationMode="InView" >
         </syncfusion:SfDataGrid>
         

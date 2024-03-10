@@ -10,9 +10,10 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:ArchiveViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="850" Height="450" 
-        FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" 
-        MinWidth="850" MinHeight="450">
+        MinWidth="850" MinHeight="450"
+        Style="{StaticResource WindowStyle}">
+    
     <Window.Resources>
         <ResourceDictionary>
             <converters:AddNewRowPositionConverter x:Key="AddNewRowPositionConverter"/>

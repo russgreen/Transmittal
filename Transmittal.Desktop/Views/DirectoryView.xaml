@@ -9,12 +9,14 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:DirectoryViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="800" Height="450" 
-        FontSize="12" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" 
-        MinWidth="800" MinHeight="450">
+        MinWidth="800" MinHeight="450"
+        Style="{StaticResource WindowStyle}" >
+
     <Window.DataContext>
         <viewModels:DirectoryViewModel />
     </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
