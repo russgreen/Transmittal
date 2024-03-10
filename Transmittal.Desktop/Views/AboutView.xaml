@@ -9,22 +9,14 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:AboutViewModel}, IsDesignTimeCreatable=True}"
         Title="About" Height="500" Width="600"
-        FontSize="14" FontFamily="Segoe UI Light" 
         ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
-        WindowStartupLocation="CenterScreen" >
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowStyle}">
     
     <Window.DataContext>
         <viewModels:AboutViewModel />
     </Window.DataContext>
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="AppStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
 
     <StackPanel Margin="10">
         <TextBlock FontSize="32" 

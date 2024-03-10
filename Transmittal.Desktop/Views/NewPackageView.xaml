@@ -8,15 +8,8 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:NewPackageViewModel}, IsDesignTimeCreatable=True}"
         Title="New Package Name" Height="140" Width="400"
-        ResizeMode="NoResize" >
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="AppStyles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        ResizeMode="NoResize" 
+        Style="{StaticResource WindowStyle}">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
