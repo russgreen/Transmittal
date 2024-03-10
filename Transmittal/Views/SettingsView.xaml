@@ -13,7 +13,6 @@
         Title="{Binding WindowTitle}"  
         Width="800" Height="650" 
         MinWidth="800" MinHeight="650"
-        FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" >
 
     <Window.DataContext>
@@ -28,6 +27,10 @@
             <!--<Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>-->
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
 
     <Grid Margin="10" >
         <Grid.RowDefinitions>

@@ -10,7 +10,8 @@
         Title="Sheet Status" Width="375" Height="120"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="NoResize" 
-        WindowStartupLocation="CenterOwner" >
+        WindowStartupLocation="CenterOwner">
+    
     <!--<Window.DataContext>
         <viewModels:StatusViewModel />
     </Window.DataContext>-->
@@ -22,6 +23,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
 
     <StackPanel Margin="10" Orientation="Vertical" >
         <!--<TextBlock Text="Sheet Status" FontWeight="Bold" FontSize="14" />-->

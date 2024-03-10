@@ -8,7 +8,9 @@
         xmlns:r2021="R2021"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:NewRevisionViewModel, IsDesignTimeCreatable=True}"
-        Title="New Revision" Height="300" Width="345" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Topmost="True">
+        Title="New Revision" Height="300" Width="345" 
+        WindowStyle="ToolWindow" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterOwner" Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -17,6 +19,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>

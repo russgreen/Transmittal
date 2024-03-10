@@ -8,7 +8,9 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
-        Title="Revisions" Height="450" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="Revisions" Height="450" Width="800" 
+        WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterOwner">
     
     <Window.Resources>
          <ResourceDictionary>
@@ -17,7 +19,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

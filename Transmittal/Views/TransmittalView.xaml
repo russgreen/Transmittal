@@ -12,7 +12,6 @@
         d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
         Visibility="{Binding IsWindowVisible, Mode=TwoWay}"
-        FontSize="14" FontFamily="Segoe UI Light" 
         WindowStartupLocation="CenterScreen" 
         Height="620" Width="860" 
         MinHeight="620" MinWidth="860" 
@@ -29,6 +28,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle" />
+    </Window.Style>
 
     <Grid>
         

@@ -10,6 +10,7 @@
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>  
     <converters:BrushColorConverter x:Key="BrushColorConverter"/>
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    
     <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
     <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
     <BitmapImage x:Key="MergeImage" UriSource="../Resources/DataMerge.png" />
@@ -31,11 +32,8 @@
         </ImageBrush.Transform>
     </ImageBrush>
 
-    <Color x:Key="AColour.Foreground" A="255" R="0" G="0" B="0"/>
-    <Color x:Key="AColour.Background" A="255" R="255" G="255" B="255"/>
-    <Color x:Key="AColour.Border" A="255" R="147" G="184" B="217"/>
-
     <SolidColorBrush x:Key="WindowBackground" Color="White" />
+    <SolidColorBrush x:Key="WindowForeground" Color="Black" />
     <SolidColorBrush x:Key="ControlDefaultForeground" Color="Black"/>
     <SolidColorBrush x:Key="ControlDefaultBackground" Color="Transparent"/>
     <SolidColorBrush x:Key="ControlDefaultBorder" Color="#FF93B8D9"/>
@@ -154,6 +152,13 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+    </Style>
+
+    <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource WindowForeground}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontFamily" Value="Segoe UI"/>
     </Style>
 
     <Style x:Key="WizardControlStyle1" TargetType="{x:Type syncfusion:WizardControl}">
