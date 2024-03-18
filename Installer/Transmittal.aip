@@ -430,6 +430,8 @@
     <ROW Component="e_sqlite3.dll_1" ComponentId="{CC8B027A-C1FA-471D-9666-360BF2C5ECB9}" Directory_="Transmittal_4_Dir" Attributes="256" KeyPath="e_sqlite3.dll_1"/>
     <ROW Component="e_sqlite3.dll_2" ComponentId="{B576EF81-B033-4AFC-ADBC-E5A2DFE73CE8}" Directory_="Transmittal_3_Dir" Attributes="256" KeyPath="e_sqlite3.dll_2"/>
     <ROW Component="e_sqlite3.dll_3" ComponentId="{FA3D1A8A-C6E5-4F32-B1A2-C7AD5980462B}" Directory_="Transmittal_2_Dir" Attributes="256" KeyPath="e_sqlite3.dll_3"/>
+    <ROW Component="e_sqlite3.dll_4" ComponentId="{6EC5077B-6ED5-435D-90AF-0C6FE6078719}" Directory_="Transmittal_1_Dir" Attributes="256" KeyPath="e_sqlite3.dll_4"/>
+    <ROW Component="e_sqlite3.dll_5" ComponentId="{35BA5025-CD32-493B-80E5-FF3828F19936}" Directory_="Transmittal_Dir" Attributes="256" KeyPath="e_sqlite3.dll_5"/>
     <ROW Component="open" ComponentId="{9171744F-BFB8-4FF6-A33B-2CEC275EE02B}" Directory_="APPDIR" Attributes="260" KeyPath="open"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -818,6 +820,8 @@
     <ROW File="Transmittal.deps.json" Component_="Transmittal.deps.json" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_4" Component_="Transmittal.dll_4" FileName="TRANSM~2.DLL|Transmittal.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Transmittal.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_3" Component_="e_sqlite3.dll_3" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_4" Component_="e_sqlite3.dll_4" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_5" Component_="e_sqlite3.dll_5" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\e_sqlite3.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1284,6 +1288,8 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.deps.json"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.dll_4"/>
     <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_5"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
