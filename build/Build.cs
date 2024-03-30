@@ -13,18 +13,14 @@ using static Nuke.Common.IO.PathConstruction;
 
 partial class Build : NukeBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode <summary>
-
     readonly AbsolutePath ArtifactsDirectory = RootDirectory / "output";
+
+    readonly string[] CompiledAssemblies = { "Transmittal.dll", "Transmittal.Desktop.exe", "Transmittal.Desktop.dll", "Transmittal.Library.dll", "Transmittal.Reports.dll" };
 
     [Solution(GenerateProjects = true)]
     Solution Solution;
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main () => Execute<Build>(x => x.Installer);
 
     //[Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     //readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;

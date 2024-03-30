@@ -19,7 +19,7 @@ partial class Build
             {
                 DotNetBuild(settings => settings
                     .SetConfiguration(configuration)
-                    .SetVerbosity(DotNetVerbosity.minimal));
+                    .SetVerbosity(DotNetVerbosity.quiet));
             }
         }
     });
@@ -29,9 +29,8 @@ partial class Build
         var configurations = Solution.Configurations
             .Select(pair => pair.Key)
             .Select(config => config.Remove(config.LastIndexOf('|')))
+            .Distinct()
             .ToList();
-        //.Where(config => Configurations.Any(wildcard => FileSystemName.MatchesSimpleExpression(wildcard, config)))
-        //.ToList();
 
         //Assert.NotEmpty(configurations, $"No solution configurations have been found. Pattern: {string.Join(" | ", Configurations)}");
         return configurations;
