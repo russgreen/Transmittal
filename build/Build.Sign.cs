@@ -13,7 +13,6 @@ partial class Build
         .DependsOn(Compile)
         .Executes(() =>
         {
-            var assemblies = new List<string>();
             var compiledAssemblies = new List<string>();
 
             //var project = Solution.Transmittal;
@@ -36,12 +35,14 @@ partial class Build
                  }
             }
 
-            SignTool(s => s
+            SignFiles(compiledAssemblies);
+
+        });
+
+    static void SignFiles(List<string> compiledAssemblies) => SignTool(s => s
                 .SetFileDigestAlgorithm("sha256")
                 .SetTimestampServerUrl(@$"http://timestamp.comodoca.com")
                 .SetFile(@"D:\Development\Code Signing\RussellGreen.pfx")
                 .SetPassword(System.IO.File.ReadLines(@"D:\Development\Code Signing\PFXPassword.txt").First())
                 .SetFiles(compiledAssemblies.ToArray()));
-
-        });
 }

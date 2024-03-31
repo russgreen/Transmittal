@@ -21,7 +21,7 @@ partial class Build
         {
             DotNetClean(settings => settings
                 .SetConfiguration(configuration)
-                .SetVerbosity(DotNetVerbosity.minimal));
+                .SetVerbosity(DotNetVerbosity.quiet));
         }
 
 
