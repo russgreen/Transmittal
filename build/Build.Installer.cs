@@ -1,4 +1,5 @@
 ﻿using Nuke.Common;
+using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
 using Serilog;
 using System;
@@ -10,6 +11,7 @@ partial class Build
 {
     Target Installer => _ => _
         .DependsOn(Sign)
+        .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
         .Executes(() =>
         {
             var aipProjectPath = Path.Combine(RootDirectory, @"Installer\Transmittal.aip");
