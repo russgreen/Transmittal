@@ -24,9 +24,6 @@ partial class Build
             AdvancedInstallerCLI($"/edit {aipProjectPath} /SetProductCode -langid 1033");
             AdvancedInstallerCLI($"/build {aipProjectPath}");
 
-            //sleep for 2 seconds to allow the build to complete
-            System.Threading.Thread.Sleep(2000);
-
             SignMSI(version);
         });
 
@@ -57,7 +54,8 @@ partial class Build
         p.FileName = applicationFullPath;
         p.Arguments = args;
 
-        Process.Start(p);
+        var process = Process.Start(p);
+        process.WaitForExit();
     }
 
     static string GetAdvancedInstallerPath()
