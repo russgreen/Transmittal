@@ -14,7 +14,7 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources> <!--added so nuke works-->
 		<!-- Copy dependacies to output folder on build -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
@@ -70,63 +70,32 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="24.2.7" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />		
+		
+		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="24.2.7" />		
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
-		<!--<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />-->
-		<!--<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />		
-		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />-->	
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />	
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*-*" />	
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*-*" />	
+
+		<!--IOC-->
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" />
+		<!--<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="$(RevitVersion) == '2025'"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="$(RevitVersion) != '' And $(RevitVersion) &lt; '2025'"/>-->
+
+		<!--Logging-->
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.*" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" />
+		<!--<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="$(RevitVersion) == '2025'"/>
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="$(RevitVersion) != '' And $(RevitVersion) &lt; '2025'"/>-->
+
 	</ItemGroup>
-	
-	<Choose>
-		<When Condition="$(Configuration.Contains('R25'))">
-			<ItemGroup>
-				<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="2025.0.0-preview0111" />
-				<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="2025.0.0-preview0111" />
 
-				<Reference Include="Nice3point.Revit.Toolkit">
-					<HintPath>..\..\RevitToolkit\Nice3point.Revit.Toolkit\bin\Debug R25\net8.0-windows\Nice3point.Revit.Toolkit.dll</HintPath>
-				</Reference>
-
-				<Reference Include="Nice3point.Revit.Extensions">
-					<HintPath>..\..\RevitExtensions\Nice3point.Revit.Extensions\bin\Debug R25\net8.0-windows\Nice3point.Revit.Extensions.dll</HintPath>
-				</Reference>
-			</ItemGroup>
-		</When>
-		<Otherwise>
-			<ItemGroup>
-				<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
-				<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />
-
-				<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
-				<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
-			</ItemGroup>		
-		</Otherwise>
-	</Choose>
-
-	<!--<PropertyGroup>
-		<Path_DLL_API>..\..\MyRevitAPI\</Path_DLL_API>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Reference Include="RevitAPI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="RevitAPIUI">
-			<HintPath>$(Path_DLL_API)\$(RevitVersion)\RevitAPIUI.dll</HintPath>
-			<EmbedInteropTypes>false</EmbedInteropTypes>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>-->
 
 	<ItemGroup Condition="$(TargetFramework.Contains('net4'))">
 	  <Reference Include="System.Printing" />

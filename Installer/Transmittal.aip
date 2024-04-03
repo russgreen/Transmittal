@@ -16,7 +16,7 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{574AB440-CD86-4A1B-B193-99319F6A14B9} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{9502630F-1B5C-45A1-9C25-9564A5B38D01} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
     <ROW Property="ProductVersion" Value="2.1.2" Options="32"/>
@@ -80,6 +80,7 @@
     <ROW Component="JetBrains.Annotations.dll_1" ComponentId="{03E54DC2-9F12-4833-8B6F-89AB7BAC4AA4}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll_1"/>
     <ROW Component="JetBrains.Annotations.dll_2" ComponentId="{E6FD78D0-F017-486B-9FD3-83E3EF3EECAA}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll_2"/>
     <ROW Component="JetBrains.Annotations.dll_3" ComponentId="{C8A3A102-BA8A-495B-93DC-241ABB5AE45B}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll_3"/>
+    <ROW Component="JetBrains.Annotations.dll_4" ComponentId="{60B0B0E5-60E2-4F13-A71E-541D829B50B0}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll_4"/>
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll" ComponentId="{2DCBE26E-DF96-42E2-9CB6-4774D9EFFE3B}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll"/>
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll_1" ComponentId="{77F18356-0624-4422-B01A-6BA23C73FC4B}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll_1"/>
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll_2" ComponentId="{4995C5B2-AE74-4149-A0EB-E001B9EE4DF6}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll_2"/>
@@ -380,6 +381,11 @@
     <ROW Component="System.Numerics.Vectors.dll_1" ComponentId="{379938D1-CE60-4715-9A16-22EDB844CB79}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="System.Numerics.Vectors.dll_1"/>
     <ROW Component="System.Numerics.Vectors.dll_2" ComponentId="{3D252E51-8443-4DD7-BD4C-3C60CEFCEDBD}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Numerics.Vectors.dll_2"/>
     <ROW Component="System.Numerics.Vectors.dll_3" ComponentId="{AA696044-5D4F-4E5D-8458-A6E089C611D0}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.Numerics.Vectors.dll_3"/>
+    <ROW Component="System.Resources.Extensions.dll" ComponentId="{A8CD1833-02D3-457D-8DA1-A5D13A1F6B12}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll"/>
+    <ROW Component="System.Resources.Extensions.dll_1" ComponentId="{A2053EE0-A3F2-4437-8851-41A220F739C3}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll_1"/>
+    <ROW Component="System.Resources.Extensions.dll_2" ComponentId="{3FEB856F-F3D8-4DF5-B3D4-3726678BFD15}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll_2"/>
+    <ROW Component="System.Resources.Extensions.dll_3" ComponentId="{1AD6629E-039A-4B4A-9B21-04F6BA79E3DF}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll_3"/>
+    <ROW Component="System.Resources.Extensions.dll_4" ComponentId="{E03DA58F-7D24-4FA4-9FD4-639067531FDB}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll_4"/>
     <ROW Component="System.Runtime.CompilerServices.Unsa_1_fe.dll" ComponentId="{B930B7B3-6499-4A36-94BC-48B4D6E58914}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsa_1_fe.dll"/>
     <ROW Component="System.Runtime.CompilerServices.Unsa_2_fe.dll" ComponentId="{B3D9FC9A-C00E-4CB8-A072-E30C0E7096E6}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsa_2_fe.dll"/>
     <ROW Component="System.Runtime.CompilerServices.Unsa_3_fe.dll" ComponentId="{9FD84AD2-C402-46C9-A299-B69E7C665765}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsa_3_fe.dll"/>
@@ -430,6 +436,8 @@
     <ROW Component="e_sqlite3.dll_1" ComponentId="{CC8B027A-C1FA-471D-9666-360BF2C5ECB9}" Directory_="Transmittal_4_Dir" Attributes="256" KeyPath="e_sqlite3.dll_1"/>
     <ROW Component="e_sqlite3.dll_2" ComponentId="{B576EF81-B033-4AFC-ADBC-E5A2DFE73CE8}" Directory_="Transmittal_3_Dir" Attributes="256" KeyPath="e_sqlite3.dll_2"/>
     <ROW Component="e_sqlite3.dll_3" ComponentId="{FA3D1A8A-C6E5-4F32-B1A2-C7AD5980462B}" Directory_="Transmittal_2_Dir" Attributes="256" KeyPath="e_sqlite3.dll_3"/>
+    <ROW Component="e_sqlite3.dll_4" ComponentId="{6EC5077B-6ED5-435D-90AF-0C6FE6078719}" Directory_="Transmittal_1_Dir" Attributes="256" KeyPath="e_sqlite3.dll_4"/>
+    <ROW Component="e_sqlite3.dll_5" ComponentId="{35BA5025-CD32-493B-80E5-FF3828F19936}" Directory_="Transmittal_Dir" Attributes="256" KeyPath="e_sqlite3.dll_5"/>
     <ROW Component="open" ComponentId="{9171744F-BFB8-4FF6-A33B-2CEC275EE02B}" Directory_="APPDIR" Attributes="260" KeyPath="open"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -743,9 +751,7 @@
     <ROW File="Microsoft.Extensions.Primitives.dll_4" Component_="Microsoft.Extensions.Primitives.dll_4" FileName="MICRO~26.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
     <ROW File="Microsoft.Xaml.Behaviors.dll_4" Component_="Microsoft.Xaml.Behaviors.dll_4" FileName="MICRO~27.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
     <ROW File="Nice3point.Revit.Extensions.dll_3" Component_="Nice3point.Revit.Extensions.dll_3" FileName="NICE3P~1.DLL|Nice3point.Revit.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Nice3point.Revit.Extensions.dll" SelfReg="false"/>
-    <ROW File="Nice3point.Revit.Extensions.pdb" Component_="Nice3point.Revit.Extensions.dll_3" FileName="NICE3P~1.PDB|Nice3point.Revit.Extensions.pdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Nice3point.Revit.Extensions.pdb" SelfReg="false"/>
     <ROW File="Nice3point.Revit.Toolkit.dll_3" Component_="Nice3point.Revit.Toolkit.dll_3" FileName="NICE3P~2.DLL|Nice3point.Revit.Toolkit.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Nice3point.Revit.Toolkit.dll" SelfReg="false"/>
-    <ROW File="Nice3point.Revit.Toolkit.pdb" Component_="Nice3point.Revit.Toolkit.dll_3" FileName="NICE3P~2.PDB|Nice3point.Revit.Toolkit.pdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Nice3point.Revit.Toolkit.pdb" SelfReg="false"/>
     <ROW File="Transmittal.dll" Component_="Transmittal.dll" FileName="TRANSM~3.DLL|Transmittal.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\Transmittal.dll" SelfReg="false"/>
     <ROW File="Transmittal.dll_1" Component_="Transmittal.dll_1" FileName="TRANSM~2.DLL|Transmittal.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\Transmittal.dll" SelfReg="false"/>
     <ROW File="System.Text.Json.dll_3" Component_="System.Text.Json.dll_3" FileName="SYSTEM~1.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R23\System.Text.Json.dll" SelfReg="false"/>
@@ -818,6 +824,14 @@
     <ROW File="Transmittal.deps.json" Component_="Transmittal.deps.json" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_4" Component_="Transmittal.dll_4" FileName="TRANSM~2.DLL|Transmittal.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Transmittal.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_3" Component_="e_sqlite3.dll_3" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_4" Component_="e_sqlite3.dll_4" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="e_sqlite3.dll_5" Component_="e_sqlite3.dll_5" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\e_sqlite3.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll" Component_="System.Resources.Extensions.dll" FileName="SYSTE~11.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll_1" Component_="System.Resources.Extensions.dll_1" FileName="SYSTE~11.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll_2" Component_="System.Resources.Extensions.dll_2" FileName="SYSTE~11.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R23\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll_3" Component_="System.Resources.Extensions.dll_3" FileName="SYSTE~11.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="JetBrains.Annotations.dll_4" Component_="JetBrains.Annotations.dll_4" FileName="JETBRA~1.DLL|JetBrains.Annotations.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\JetBrains.Annotations.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll_4" Component_="System.Resources.Extensions.dll_4" FileName="SYSTEM~1.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\System.Resources.Extensions.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1284,6 +1298,14 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.deps.json"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.dll_4"/>
     <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="e_sqlite3.dll_5"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="JetBrains.Annotations.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_4"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
