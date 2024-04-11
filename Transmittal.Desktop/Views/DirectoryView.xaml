@@ -68,7 +68,8 @@
                     </syncfusion:SfDataGrid.SortColumnDescriptions>
 
                     <syncfusion:SfDataGrid.Columns>
-                        <syncfusion:GridCheckBoxColumn MappingName="ShowInReport" HeaderText="Print" Width="50" />
+                        <syncfusion:GridCheckBoxColumn MappingName="ShowInReport" HeaderText="Print in report" Width="50" ShowHeaderToolTip="True" />
+                        <syncfusion:GridCheckBoxColumn MappingName="Archive" HeaderText="Hide user from project distribution list" Width="50" ShowHeaderToolTip="True" />
                         <syncfusion:GridComboBoxColumn Width="350" 
                                                        HeaderText="Company" 
                                                        ItemsSource="{Binding Companies}" 

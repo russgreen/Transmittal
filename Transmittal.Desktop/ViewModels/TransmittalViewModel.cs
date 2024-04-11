@@ -105,7 +105,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
-            ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory()
+            ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory(false)
                 .OrderBy(x => x.Company.CompanyName)
                 .ThenBy(x => x.Person.FullNameReversed));
 

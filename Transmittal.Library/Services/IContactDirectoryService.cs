@@ -68,5 +68,5 @@ public interface IContactDirectoryService
     ///// Get the project directory list 
     ///// </summary>
     ///// <returns>List of ProjectDirectoryModel</returns>
-    List<ProjectDirectoryModel> GetProjectDirectory();
+    List<ProjectDirectoryModel> GetProjectDirectory(bool IncludeArchivedUsers = true);
 }

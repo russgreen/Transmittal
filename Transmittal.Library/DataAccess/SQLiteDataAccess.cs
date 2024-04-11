@@ -134,6 +134,13 @@ public class SQLiteDataAccess : IDataConnection
             columnsToAdd.Add("Role", "ALTER TABLE Company ADD COLUMN Role TEXT");
         }
 
+        //added at v2.2.0
+        if (!ColumnExists(dbFilePath, "Archive", "Person"))
+        {
+            _logger.LogDebug("Column Archive does not exist in Person table. Adding to columns to add dictionary");
+            columnsToAdd.Add("Archive", "ALTER TABLE Person ADD COLUMN Archive INTEGER NOT NULL DEFAULT 0");
+        }
+
         if (columnsToAdd.Count == 0)
         {
             _logger.LogDebug("No columns to add to database");
