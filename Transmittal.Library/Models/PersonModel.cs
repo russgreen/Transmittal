@@ -54,4 +54,7 @@ public partial class PersonModel : ObservableValidator
 
     [ObservableProperty]
     private bool _showInReport = true;
+
+    [ObservableProperty]
+    private bool _archive = false;
 }

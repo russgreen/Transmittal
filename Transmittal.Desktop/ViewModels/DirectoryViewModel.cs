@@ -112,6 +112,11 @@ internal partial class DirectoryViewModel : BaseViewModel
             return;
         }
 
+        if (e.PropertyName == nameof(PersonModel.Archive))
+        {
+            SelectedPerson.ShowInReport = !SelectedPerson.Archive;
+        }
+
         if(SelectedPerson != null)
         {
             _contactDirectoryService.UpdatePerson(SelectedPerson);

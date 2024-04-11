@@ -56,8 +56,8 @@ public class ContactDirectoryService : IContactDirectoryService
 
         try
         {
-            string sql = "INSERT INTO Person (LastName, FirstName, Email, Tel, Mobile, Position, Notes, CompanyID, ShowInReport) " +
-                "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport); " +
+            string sql = "INSERT INTO Person (LastName, FirstName, Email, Tel, Mobile, Position, Notes, CompanyID, ShowInReport, Archive) " +
+                "VALUES (@LastName, @FirstName, @Email, @Tel, @Mobile, @Position, @Notes, @CompanyID, @ShowInReport, @Archive); " +
                 "SELECT last_insert_rowid();";
 
             model.ID = _connection.CreateData<PersonModel, dynamic>(
@@ -72,7 +72,8 @@ public class ContactDirectoryService : IContactDirectoryService
                     CompanyID = model.CompanyID,
                     Position = model.Position,
                     Notes = model.Notes,
-                    ShowInReport = model.ShowInReport
+                    ShowInReport = model.ShowInReport,
+                    Archive = model.Archive
                 }, nameof(model.ID)).ID;
         }
         catch (Exception ex)
@@ -148,11 +149,11 @@ public class ContactDirectoryService : IContactDirectoryService
             sql, new { ID = personID }).FirstOrDefault();
     }
 
-    public List<ProjectDirectoryModel> GetProjectDirectory()
+    public List<ProjectDirectoryModel> GetProjectDirectory(bool IncludeArchivedUsers = true)
     {
         _logger.LogDebug("Get project directory");
 
-        var people = GetPeople_All();
+        var people = GetPeople_All().Where(p => p.Archive == IncludeArchivedUsers).ToList();
 
         List<ProjectDirectoryModel> directoryContacts = new();
 
@@ -245,7 +246,8 @@ public class ContactDirectoryService : IContactDirectoryService
                 "CompanyID = @CompanyID, " +
                 "Position = @Position, " +
                 "Notes = @Notes, " +
-                "ShowInReport = @ShowInReport " +
+                "ShowInReport = @ShowInReport, " +
+                "Archive = @Archive " +
                 "WHERE (ID = @ID);";
 
             _connection.SaveData(
@@ -261,6 +263,7 @@ public class ContactDirectoryService : IContactDirectoryService
                     Position = model.Position,
                     Notes = model.Notes,
                     ShowInReport = model.ShowInReport,
+                    Archive = model.Archive,
                     ID = model.ID
                 });
         }
