@@ -38,9 +38,19 @@
     <ROW Directory="Addins_Dir" Directory_Parent="Revit_Dir" DefaultDir="Addins"/>
     <ROW Directory="Autodesk_Dir" Directory_Parent="CommonAppDataFolder" DefaultDir="Autodesk"/>
     <ROW Directory="CommonAppDataFolder" Directory_Parent="TARGETDIR" DefaultDir="COMMON~1|CommonAppDataFolder" IsPseudoRoot="1"/>
+    <ROW Directory="Data_1_Dir" Directory_Parent="Transmittal_Dir" DefaultDir="Data"/>
+    <ROW Directory="Data_2_Dir" Directory_Parent="Transmittal_1_Dir" DefaultDir="Data"/>
+    <ROW Directory="Data_3_Dir" Directory_Parent="Transmittal_4_Dir" DefaultDir="Data"/>
+    <ROW Directory="Data_4_Dir" Directory_Parent="Transmittal_3_Dir" DefaultDir="Data"/>
+    <ROW Directory="Data_5_Dir" Directory_Parent="Transmittal_2_Dir" DefaultDir="Data"/>
     <ROW Directory="Data_Dir" Directory_Parent="APPDIR" DefaultDir="Data"/>
     <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="ReportTemplates_Dir" Directory_Parent="APPDIR" DefaultDir="REPORT~1|Report Templates"/>
+    <ROW Directory="Resources_1_Dir" Directory_Parent="Transmittal_Dir" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="Resources_2_Dir" Directory_Parent="Transmittal_1_Dir" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="Resources_3_Dir" Directory_Parent="Transmittal_4_Dir" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="Resources_4_Dir" Directory_Parent="Transmittal_3_Dir" DefaultDir="RESOUR~1|Resources"/>
+    <ROW Directory="Resources_5_Dir" Directory_Parent="Transmittal_2_Dir" DefaultDir="RESOUR~1|Resources"/>
     <ROW Directory="Resources_Dir" Directory_Parent="APPDIR" DefaultDir="RESOUR~1|Resources"/>
     <ROW Directory="Revit_Dir" Directory_Parent="Autodesk_Dir" DefaultDir="Revit"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
@@ -407,6 +417,11 @@
     <ROW Component="System.ValueTuple.dll_2" ComponentId="{13D92803-7DB0-48BD-A1B3-A6EB301424E0}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.ValueTuple.dll_2"/>
     <ROW Component="System.ValueTuple.dll_3" ComponentId="{0C5A7D29-B931-46C0-860A-410C071B41DB}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.ValueTuple.dll_3"/>
     <ROW Component="TemplateDatabase.tdb" ComponentId="{67545C2E-56FF-4D86-8626-0B6EC14D63BA}" Directory_="Data_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb" Type="0"/>
+    <ROW Component="TemplateDatabase.tdb_1" ComponentId="{4A67569F-42FE-4FB7-85B8-EA1CAE4D4542}" Directory_="Data_1_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_1" Type="0"/>
+    <ROW Component="TemplateDatabase.tdb_2" ComponentId="{5E23C14F-7637-4C78-9A5D-1189397C7397}" Directory_="Data_2_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_2" Type="0"/>
+    <ROW Component="TemplateDatabase.tdb_3" ComponentId="{3E83C8CA-26EF-40E4-A07E-7157E8EA2699}" Directory_="Data_3_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_3" Type="0"/>
+    <ROW Component="TemplateDatabase.tdb_4" ComponentId="{D6CEBFEE-8A46-4A4E-A15E-5E5EE432BE32}" Directory_="Data_4_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_4" Type="0"/>
+    <ROW Component="TemplateDatabase.tdb_5" ComponentId="{3C9B71D8-D009-4495-ADBD-D2A086FCF6EB}" Directory_="Data_5_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_5" Type="0"/>
     <ROW Component="Transmittal.Desktop.dll" ComponentId="{84A05E8C-1FCF-43E5-85A2-CB1A04F4BF70}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.dll"/>
     <ROW Component="Transmittal.Desktop.exe" ComponentId="{518C98AF-F70D-4888-A2E3-4D7E7B9CC798}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.exe"/>
     <ROW Component="Transmittal.Desktop.runtimeconfig.json" ComponentId="{5F2FF946-6630-42B1-925A-1CC1536A5B74}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Desktop.runtimeconfig.json" Type="0"/>
@@ -426,7 +441,12 @@
     <ROW Component="Transmittal.dll_2" ComponentId="{9E75FC74-6FD9-4A15-B1C5-C58BC6D57B06}" Directory_="Transmittal_4_Dir" Attributes="256" KeyPath="Transmittal.dll_2"/>
     <ROW Component="Transmittal.dll_3" ComponentId="{8A449D3B-A6DF-42DE-BF91-C5E96F8D2055}" Directory_="Transmittal_3_Dir" Attributes="256" KeyPath="Transmittal.dll_3"/>
     <ROW Component="Transmittal.dll_4" ComponentId="{254158C0-C6CE-40AF-AC9E-D9F45E6AE987}" Directory_="Transmittal_2_Dir" Attributes="256" KeyPath="Transmittal.dll_4"/>
+    <ROW Component="TransmittalParameters.txt" ComponentId="{FCC365EC-FCEF-4F8C-AE93-F62216DDF1F6}" Directory_="Resources_1_Dir" Attributes="0" KeyPath="TransmittalParameters.txt" Type="0"/>
     <ROW Component="TransmittalParameters.txt_1" ComponentId="{AB012B2F-118B-4C3A-834C-7454D63BA6F8}" Directory_="Resources_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_1" Type="0"/>
+    <ROW Component="TransmittalParameters.txt_2" ComponentId="{D74FDAF8-157D-4AB7-B1CE-8162C4F7A54A}" Directory_="Resources_2_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_2" Type="0"/>
+    <ROW Component="TransmittalParameters.txt_3" ComponentId="{9E4D604C-AB2D-4740-84B0-949B2FA33D02}" Directory_="Resources_3_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_3" Type="0"/>
+    <ROW Component="TransmittalParameters.txt_4" ComponentId="{FC674B8A-058B-4A4B-9EB0-CBE3C1D4F464}" Directory_="Resources_4_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_4" Type="0"/>
+    <ROW Component="TransmittalParameters.txt_5" ComponentId="{A90C70FD-0D15-43A9-BEAB-D23B736B3A91}" Directory_="Resources_5_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_5" Type="0"/>
     <ROW Component="Transmittal_2021.addin" ComponentId="{F0EF6284-25D9-4001-B756-820DB9097E0A}" Directory_="__3_Dir" Attributes="0" KeyPath="Transmittal.addin" Type="0"/>
     <ROW Component="Transmittal_2024.addin" ComponentId="{ECFB1431-B31F-483D-AD17-DB66F93D6567}" Directory_="__2_Dir" Attributes="0" KeyPath="Transmittal.addin_2" Type="0"/>
     <ROW Component="_" ComponentId="{01ACBF6A-1168-401F-8D69-F975A7028420}" Directory_="APPDIR" Attributes="260" KeyPath="_"/>
@@ -832,6 +852,16 @@
     <ROW File="System.Resources.Extensions.dll_3" Component_="System.Resources.Extensions.dll_3" FileName="SYSTE~11.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\System.Resources.Extensions.dll" SelfReg="false"/>
     <ROW File="JetBrains.Annotations.dll_4" Component_="JetBrains.Annotations.dll_4" FileName="JETBRA~1.DLL|JetBrains.Annotations.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\JetBrains.Annotations.dll" SelfReg="false"/>
     <ROW File="System.Resources.Extensions.dll_4" Component_="System.Resources.Extensions.dll_4" FileName="SYSTEM~1.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="TemplateDatabase.tdb_1" Component_="TemplateDatabase.tdb_1" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\Data\TemplateDatabase.tdb" SelfReg="false"/>
+    <ROW File="TransmittalParameters.txt" Component_="TransmittalParameters.txt" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\Transmittal\bin\Release R21\Resources\TransmittalParameters.txt" SelfReg="false"/>
+    <ROW File="TemplateDatabase.tdb_2" Component_="TemplateDatabase.tdb_2" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\Data\TemplateDatabase.tdb" SelfReg="false"/>
+    <ROW File="TransmittalParameters.txt_2" Component_="TransmittalParameters.txt_2" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\Transmittal\bin\Release R22\Resources\TransmittalParameters.txt" SelfReg="false"/>
+    <ROW File="TemplateDatabase.tdb_3" Component_="TemplateDatabase.tdb_3" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R23\Data\TemplateDatabase.tdb" SelfReg="false"/>
+    <ROW File="TransmittalParameters.txt_3" Component_="TransmittalParameters.txt_3" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\Transmittal\bin\Release R23\Resources\TransmittalParameters.txt" SelfReg="false"/>
+    <ROW File="TemplateDatabase.tdb_4" Component_="TemplateDatabase.tdb_4" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Data\TemplateDatabase.tdb" SelfReg="false"/>
+    <ROW File="TransmittalParameters.txt_4" Component_="TransmittalParameters.txt_4" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\Transmittal\bin\Release R24\Resources\TransmittalParameters.txt" SelfReg="false"/>
+    <ROW File="TemplateDatabase.tdb_5" Component_="TemplateDatabase.tdb_5" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Data\TemplateDatabase.tdb" SelfReg="false"/>
+    <ROW File="TransmittalParameters.txt_5" Component_="TransmittalParameters.txt_5" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\Transmittal\bin\Release R25\Resources\TransmittalParameters.txt" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1306,6 +1336,16 @@
     <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_3"/>
     <ROW Feature_="MainFeature" Component_="JetBrains.Annotations.dll_4"/>
     <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll_4"/>
+    <ROW Feature_="MainFeature" Component_="TemplateDatabase.tdb_1"/>
+    <ROW Feature_="MainFeature" Component_="TransmittalParameters.txt"/>
+    <ROW Feature_="MainFeature" Component_="TemplateDatabase.tdb_2"/>
+    <ROW Feature_="MainFeature" Component_="TransmittalParameters.txt_2"/>
+    <ROW Feature_="MainFeature" Component_="TemplateDatabase.tdb_3"/>
+    <ROW Feature_="MainFeature" Component_="TransmittalParameters.txt_3"/>
+    <ROW Feature_="MainFeature" Component_="TemplateDatabase.tdb_4"/>
+    <ROW Feature_="MainFeature" Component_="TransmittalParameters.txt_4"/>
+    <ROW Feature_="MainFeature" Component_="TemplateDatabase.tdb_5"/>
+    <ROW Feature_="MainFeature" Component_="TransmittalParameters.txt_5"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\Transmittal\Resources\Transmittal.ico" Index="0"/>
