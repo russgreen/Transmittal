@@ -16,7 +16,7 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{88609A1C-55D2-439A-90AD-554EA92A98AC} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{730AFC16-0D1A-4A84-AAA2-3D7789B7AAFD} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
     <ROW Property="ProductVersion" Value="2.2.0" Options="32"/>
