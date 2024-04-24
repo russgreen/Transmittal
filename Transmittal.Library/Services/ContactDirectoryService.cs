@@ -153,7 +153,12 @@ public class ContactDirectoryService : IContactDirectoryService
     {
         _logger.LogDebug("Get project directory");
 
-        var people = GetPeople_All().Where(p => p.Archive == IncludeArchivedUsers).ToList();
+        var people = GetPeople_All().ToList();
+
+        if (!IncludeArchivedUsers)
+        {
+            people = people.Where(p => p.Archive == false).ToList();
+        }
 
         List<ProjectDirectoryModel> directoryContacts = new();
 
