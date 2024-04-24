@@ -1,0 +1,119 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug 2021" />
+    <BuildType Name="Debug 2022" />
+    <BuildType Name="Debug 2023" />
+    <BuildType Name="Debug 2024" />
+    <BuildType Name="Debug 2025" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release 2021" />
+    <BuildType Name="Release 2022" />
+    <BuildType Name="Release 2023" />
+    <BuildType Name="Release 2024" />
+    <BuildType Name="Release 2025" />
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="BoldReportsKey.txt" />
+    <File Path="Directory.Build.props" />
+    <File Path="ImportTemplate.json" />
+    <File Path="README.md" />
+    <File Path="SyncfusionKey.txt" />
+    <File Path="SyncfusionLicenseRegister.bat" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs\404.html" />
+    <File Path="docs\archive.md" />
+    <File Path="docs\directory.md" />
+    <File Path="docs\index.md" />
+    <File Path="docs\logo.png" />
+    <File Path="docs\reports.md" />
+    <File Path="docs\reports_v2upgrade.md" />
+    <File Path="docs\settings.md" />
+    <File Path="docs\tags.md" />
+    <File Path="docs\transmittal-revit.md" />
+    <File Path="docs\transmittal.md" />
+    <File Path="docs\update_database.md" />
+    <File Path="docs\_config.yml" />
+  </Folder>
+  <Project Path="build\_build.csproj">
+    <Configuration Solution="*|*" Project="*|*|NoBuild" />
+    <Configuration Solution="*|x64" Project="*|*|NoBuild" />
+    <Configuration Solution="Debug 2021|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug|*" />
+    <Configuration Solution="Release 2021|*" Project="Release|*" />
+    <Configuration Solution="Release 2022|*" Project="Release|*" />
+    <Configuration Solution="Release 2023|*" Project="Release|*" />
+    <Configuration Solution="Release 2024|*" Project="Release|*" />
+    <Configuration Solution="Release 2025|*" Project="Release|*" />
+  </Project>
+  <Project Path="source\Transmittal.Desktop\Transmittal.Desktop.csproj">
+    <Configuration Solution="Debug 2021|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug|*" />
+    <Configuration Solution="Release 2021|*" Project="Release|*|NoBuild" />
+    <Configuration Solution="Release 2022|*" Project="Release|*|NoBuild" />
+    <Configuration Solution="Release 2023|*" Project="Release|*|NoBuild" />
+    <Configuration Solution="Release 2024|*" Project="Release|*|NoBuild" />
+    <Configuration Solution="Release 2025|*" Project="Release|*|NoBuild" />
+  </Project>
+  <Project Path="source\Transmittal.Library.Tests\Transmittal.Library.Tests.csproj">
+    <Configuration Solution="Debug 2021|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug|*" />
+    <Configuration Solution="Release 2021|*" Project="Release|*" />
+    <Configuration Solution="Release 2022|*" Project="Release|*" />
+    <Configuration Solution="Release 2023|*" Project="Release|*" />
+    <Configuration Solution="Release 2024|*" Project="Release|*" />
+    <Configuration Solution="Release 2025|*" Project="Release|*" />
+  </Project>
+  <Project Path="source\Transmittal.Library\Transmittal.Library.csproj">
+    <Configuration Solution="Debug 2021|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug|*" />
+    <Configuration Solution="Release 2021|*" Project="Release|*" />
+    <Configuration Solution="Release 2022|*" Project="Release|*" />
+    <Configuration Solution="Release 2023|*" Project="Release|*" />
+    <Configuration Solution="Release 2024|*" Project="Release|*" />
+    <Configuration Solution="Release 2025|*" Project="Release|*" />
+  </Project>
+  <Project Path="source\Transmittal.Reports\Transmittal.Reports.csproj">
+    <Configuration Solution="*|*" Project="*|x64" />
+    <Configuration Solution="*|x64" Project="*|x64" />
+    <Configuration Solution="Debug 2021|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug|*" />
+    <Configuration Solution="Release 2021|*" Project="Release|*" />
+    <Configuration Solution="Release 2022|*" Project="Release|*" />
+    <Configuration Solution="Release 2023|*" Project="Release|*" />
+    <Configuration Solution="Release 2024|*" Project="Release|*" />
+    <Configuration Solution="Release 2025|*" Project="Release|*" />
+  </Project>
+  <Project Path="source\Transmittal\Transmittal.csproj">
+    <Configuration Solution="Debug 2021|*" Project="Debug R21|*" />
+    <Configuration Solution="Debug 2022|*" Project="Debug R22|*" />
+    <Configuration Solution="Debug 2023|*" Project="Debug R23|*" />
+    <Configuration Solution="Debug 2024|*" Project="Debug R24|*" />
+    <Configuration Solution="Debug 2025|*" Project="Debug R25|*" />
+    <Configuration Solution="Debug|*" Project="Debug R22|*|NoBuild" />
+    <Configuration Solution="Release 2021|*" Project="Release R21|*" />
+    <Configuration Solution="Release 2022|*" Project="Release R22|*" />
+    <Configuration Solution="Release 2023|*" Project="Release R23|*" />
+    <Configuration Solution="Release 2024|*" Project="Release R24|*" />
+    <Configuration Solution="Release 2025|*" Project="Release R25|*" />
+    <Configuration Solution="Release|*" Project="Release R22|*|NoBuild" />
+  </Project>
+</Solution>

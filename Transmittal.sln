@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal", "Transmittal\Transmittal.csproj", "{D195D01A-2F4E-4BE2-839B-7196FE8560AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal", "source\Transmittal\Transmittal.csproj", "{D195D01A-2F4E-4BE2-839B-7196FE8560AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B230A017-8A16-4418-B58D-2D9948FC46B7}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,11 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SyncfusionLicenseRegister.bat = SyncfusionLicenseRegister.bat
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Library", "Transmittal.Library\Transmittal.Library.csproj", "{0CB601A3-04E0-430B-B59D-CE488D95FD2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Library", "source\Transmittal.Library\Transmittal.Library.csproj", "{0CB601A3-04E0-430B-B59D-CE488D95FD2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Reports", "Transmittal.Reports\Transmittal.Reports.csproj", "{B228238A-C218-495F-AA8A-0805BC5E8ABE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Reports", "source\Transmittal.Reports\Transmittal.Reports.csproj", "{B228238A-C218-495F-AA8A-0805BC5E8ABE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Desktop", "Transmittal.Desktop\Transmittal.Desktop.csproj", "{F0665B9A-18BE-41CB-846C-1B970E352BBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Desktop", "source\Transmittal.Desktop\Transmittal.Desktop.csproj", "{F0665B9A-18BE-41CB-846C-1B970E352BBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F7D733C9-F838-4BB2-B16A-5FD176F37105}"
 	ProjectSection(SolutionItems) = preProject
@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F7D733C9-F
 		docs\_config.yml = docs\_config.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Library.Tests", "Transmittal.Library.Tests\Transmittal.Library.Tests.csproj", "{F04838CE-9ECA-4776-85E9-D5ECEBDE18F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmittal.Library.Tests", "source\Transmittal.Library.Tests\Transmittal.Library.Tests.csproj", "{F04838CE-9ECA-4776-85E9-D5ECEBDE18F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{35415DFB-1340-43AD-B62C-A8B234458CF9}"
 EndProject
