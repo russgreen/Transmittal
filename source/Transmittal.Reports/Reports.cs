@@ -236,6 +236,66 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
+
+        public void ShowMasterDocumentsListReport()
+        {
+            Stream report = GetReport("MasterDocumentsList.rdlc");
+
+            var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                _settingsService.GlobalSettings.ProjectIdentifier,
+                _settingsService.GlobalSettings.ProjectName,
+                _settingsService.GlobalSettings.Originator,
+                "ZZ",
+                "XX",
+                "MX",
+                _settingsService.GlobalSettings.Role,
+                "0002",
+                "MasterDocumentsList",
+                null, null, null);
+
+            var frm = NewReportViewerWPF(
+                "Master Documents List",
+                report,
+                _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
+                fileName);
+
+            List<TransmittalModel> transmittals = _transmittalService.GetTransmittals();
+
+            List<Models.TransmittalItemReportModel> transmittalItems = new List<Models.TransmittalItemReportModel>();
+
+            IMapper iMapper;
+            foreach (var transmittal in transmittals)
+            {
+                iMapper = _configTransmittalItem.CreateMapper();
+                foreach (var item in transmittal.Items)
+                {
+                    var newItem = iMapper.Map<TransmittalItemModel, Models.TransmittalItemReportModel>(item);
+                    newItem.Project = $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}";
+                    newItem.TransDate = transmittal.TransDate;
+                    transmittalItems.Add(newItem);
+                }
+            }
+
+            //we need to pass in a list<T> to the datasets
+            Models.ProjectModel project = new()
+            {
+                ProjectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier,
+                ProjectNumber = _settingsService.GlobalSettings.ProjectNumber,
+                ProjectName = _settingsService.GlobalSettings.ProjectName,
+                ClientName = _settingsService.GlobalSettings.ClientName,
+            };
+            List<Models.ProjectModel> projects = new List<Models.ProjectModel>
+            {
+                project
+            };
+
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsProject", projects));
+            frm.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("dsSummaryItems", transmittalItems));
+           
+            frm.reportViewer.RefreshReport();
+            frm.ShowDialog();
+        }
+
         private ReportViewerWindow NewReportViewerWPF(
             string windowTitle,
             Stream report,

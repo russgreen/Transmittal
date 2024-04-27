@@ -11,9 +11,14 @@
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Reports\MasterDocumentsList.rdlc" />
+  </ItemGroup>
+
 	<ItemGroup>
     <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
+    <EmbeddedResource Include="Reports\MasterDocumentsList.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSummary.rdlc" />
   </ItemGroup>
 
