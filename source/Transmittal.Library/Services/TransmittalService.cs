@@ -248,7 +248,9 @@ public class TransmittalService : ITransmittalService
         foreach (TransmittalModel transmittal in transmittals)
         {
             transmittal.Items = GetTransmittalItems_ByTransmittal(transmittal.ID);
-            transmittal.Distribution = GetTransmittalDistributions_ByTransmittal(transmittal.ID);
+            transmittal.Distribution = GetTransmittalDistributions_ByTransmittal(transmittal.ID)
+                .Where(x => x.PersonID == personID)
+                .ToList();
         }
 
         return transmittals;

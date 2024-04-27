@@ -40,6 +40,14 @@
                     <TextBlock Margin="3,0,0,0">Directory Report</TextBlock>
                 </StackPanel>
             </Button>
+            <Button IsEnabled="{Binding HasDatabase}"
+                    Command="{Binding ShowTransmittalHistoryReportCommand}" Margin="0,0,5,0"
+                    ToolTip="View the transmittal summary report for the selected person">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">History</TextBlock>
+                </StackPanel>
+            </Button>
         </ToolBar>
 
         <TabControl Grid.Row="1" Margin="5" >
