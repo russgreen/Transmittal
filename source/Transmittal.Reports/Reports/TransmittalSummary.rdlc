@@ -1046,7 +1046,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Recipient  /  Format</Value>
+                                <Value>Recipient  </Value>
                                 <Style>
                                   <FontWeight>Bold</FontWeight>
                                 </Style>
@@ -1091,7 +1091,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!TransCopies.Value)</Value>
+                                  <Value>=Fields!TransFormat.Value &amp; Fields!TransCopies.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -1246,7 +1246,7 @@
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=Fields!TransFormat.Value</Value>
+                                            <Value />
                                             <Style>
                                               <FontWeight>Bold</FontWeight>
                                             </Style>
