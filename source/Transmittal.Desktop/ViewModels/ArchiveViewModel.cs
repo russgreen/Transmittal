@@ -278,6 +278,13 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     }
 
     [RelayCommand]
+    private void MasterDocumentsListReport()
+    {
+        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        reports.ShowMasterDocumentsListReport();
+    }
+
+    [RelayCommand]
     private void DeleteSelectedTransmittalItem()
     {
         foreach (var item in SelectedTransmittalItems)

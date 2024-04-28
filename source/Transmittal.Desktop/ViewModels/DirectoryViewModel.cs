@@ -49,6 +49,11 @@ internal partial class DirectoryViewModel : BaseViewModel
         People = new ObservableCollection<PersonModel>(_contactDirectoryService.GetPeople_All());
         Companies = new ObservableCollection<CompanyModel>(_contactDirectoryService.GetCompanies_All());
 
+        if(People.Count > 0)
+        {
+            SelectedPerson = People[0];
+        }
+
         WireUpPeoplePropertyChangedEvents();
         WireUpCompaniesPropertyChangedEvents();
     }
@@ -203,5 +208,17 @@ internal partial class DirectoryViewModel : BaseViewModel
             _transmittalService);
 
         reports.ShowProjectDirectoryReport(_projectDirectory);
+    }
+
+    [RelayCommand]
+    private void ShowTransmittalHistoryReport()
+    {
+        Reports.Reports reports = new(_settingsService,
+            _contactDirectoryService,
+            _transmittalService);
+
+        var transmittals = _transmittalService.GetTransmittals_ByPerson(SelectedPerson.ID);
+
+        reports.ShowTransmittalSummaryReport(transmittals);
     }
 }

@@ -11,15 +11,20 @@
 	  <Platforms>x64</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Reports\MasterDocumentsList.rdlc" />
+  </ItemGroup>
+
 	<ItemGroup>
     <EmbeddedResource Include="Reports\ProjectDirectory.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSheet.rdlc" />
+    <EmbeddedResource Include="Reports\MasterDocumentsList.rdlc" />
     <EmbeddedResource Include="Reports\TransmittalSummary.rdlc" />
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" />
 		<!--<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1586.0" GeneratePathProperty="true" />-->
 		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.19" />
 	</ItemGroup>

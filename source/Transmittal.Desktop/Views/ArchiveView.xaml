@@ -67,6 +67,14 @@
                     <TextBlock Margin="3,0,0,0">Summary Range</TextBlock>
                 </StackPanel>
             </Button>
+            <Button IsEnabled="{Binding HasDatabase}"
+                    Command="{Binding MasterDocumentsListReportCommand}" Margin="0,0,5,0"
+                    ToolTip="View the master document list report">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Report.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Master Docs</TextBlock>
+                </StackPanel>
+            </Button>
             <Button x:Name="Button_MergeTransmittals"  
                     IsEnabled="{Binding CanMergeTransmittals}" 
                     Click="Button_MergeTransmittals_Click" Margin="0,0,5,0" 
