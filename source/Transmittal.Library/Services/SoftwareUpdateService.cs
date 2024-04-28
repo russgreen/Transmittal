@@ -157,8 +157,12 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
             Directory.CreateDirectory(downloadFolder);
             var fileName = Path.Combine(downloadFolder, Path.GetFileName(_downloadUrl));
 
-            using var webClient = new WebClient();
-            await webClient.DownloadFileTaskAsync(_downloadUrl!, fileName);
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStreamAsync(_downloadUrl);
+
+            //using var fileStream = new FileStream(fileName, FileMode.Create);
+            using var fileStream = new FileStream(fileName, FileMode.Create);
+            await response.CopyToAsync(fileStream);
 
             LocalFilePath = fileName;
             State = SoftwareUpdateState.ReadyToInstall;
