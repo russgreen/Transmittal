@@ -5,7 +5,7 @@ permalink: /archive/
 ---
 The archive screen is where all document transmittals that have been saved to the database can be viewed, edited, and reported.
 
-![transmittal_archive_dialog](https://github.com/russgreen/Transmittal/assets/1886088/7ab59e8a-b040-4054-9af1-35f2a80db6e0)
+<img src="assets/images/ArchiveView.png" width="850" >
 
 Sample summary reports: 
 - [Sample Report 1](https://github.com/russgreen/Transmittal/blob/c7fdffdd12050c8f0e3a58e386e9d8e5d9843659/SampleReports/Alternative%20Sample%201/TransmittalSummary.pdf)

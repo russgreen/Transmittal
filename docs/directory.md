@@ -7,9 +7,11 @@ The project directory screen is where database records can be created or edited 
 
 Records can be exported as vCards into Outlook.
 
-A project directory report can be generated for export to PDF, Word or Excel.  The first column in the people datagrid determines whether or not that person appears on the directory report.
+A project directory report can be generated for export to PDF, Word or Excel.  The first column in the people datagrid determines whether or not that person appears on the directory report. The second column determines if the person appears in the transmittal distrubution list. Deselected people who may have left the project helps keep things manageable.
 
-![image](https://user-images.githubusercontent.com/1886088/178133489-fdd5f878-f75f-442b-9e86-3773e31d5229.png)
+The history report will generate the Transmittal Summary report for the selected person.
+
+<img src="assets/images/DirectoryViewPeople.png" width="850" >
 
 Clicking into a cell allows the values to be edited. Use the <kbd>Esc</kbd> key to cancel a change or simply <kbd>Tab</kbd> into another cell to finish editing. 
 

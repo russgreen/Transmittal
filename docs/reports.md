@@ -11,6 +11,7 @@ Report names __must__ be:
 - ProjectDirectory.rdlc
 - TransmittalSheet.rdlc
 - TransmittalSummary.rdlc
+- MasterDocumentsList.rdlc
 
 Report files can be edited in either [Syncfusion Standalone Report Designer](https://www.boldreports.com/standalone-report-designer) or [Microsoft Report Builder](https://www.microsoft.com/en-us/download/details.aspx?id=53613). Both tools are free.
 
