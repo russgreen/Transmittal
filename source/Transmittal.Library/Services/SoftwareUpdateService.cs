@@ -123,13 +123,17 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
             var downloadFolder = _configuration["DownloadFolder"];
             NewVersion = newVersionTag.ToString(3);
             if (Directory.Exists(downloadFolder))
+            {
                 foreach (var file in Directory.EnumerateFiles(downloadFolder))
+                {
                     if (file.EndsWith(Path.GetFileName(_downloadUrl)!))
                     {
                         LocalFilePath = file;
                         State = SoftwareUpdateState.ReadyToInstall;
                         return;
                     }
+                }
+            }
 
             State = SoftwareUpdateState.ReadyToDownload;
             ReleaseNotesUrl = latestRelease.Url;
