@@ -1043,7 +1043,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var paths = folderPaths.Distinct();
         foreach (var path in paths)
         {
-            Process.Start("explorer.exe", $"/root, {path}");
+            Process.Start("explorer.exe", $"/root, \"{path}\"");
         }
 
     }
