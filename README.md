@@ -19,6 +19,8 @@ The UI used Syncfusion controls and so a license key should be obtained (free co
  
 Version numbering is manually by editing Directory.Build.props <VersionPrefix> and <VersionSuffix> properties prior to a release build.
 
+NUKE should be called when in the main branch to build the solution and create the installer.  
+
 Major.Minor.Build
 
 InformationalVersion	$(Version) (this is a combination of VersionPrefix and VersionSuffix)
