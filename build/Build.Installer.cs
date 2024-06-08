@@ -39,6 +39,10 @@ partial class Build
         {
             SignFiles(new System.Collections.Generic.List<string> { msiPath });
         }
+        else
+        {
+            Log.Error("MSI file not found.");
+        }
     }
 
 
