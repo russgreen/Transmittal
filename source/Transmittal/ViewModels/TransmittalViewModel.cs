@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -35,6 +36,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IExportDWFService _exportDWFService = Host.GetService<IExportDWFService>();
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
+    private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
 
     public string WindowTitle { get; private set; }
 
@@ -150,9 +152,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
 
-    public bool CanGenerateExtranetCopies { get; private set; }
+    public bool CanGenerateCDECopies { get; private set; }
     [ObservableProperty]
-    private bool _generateExtranetCopies = false;
+    private bool _generateCDECopies = false;
 
 
     /// SUMMARY PROGRESS
@@ -259,8 +261,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         CanRecordTransmittal = _settingsService.GlobalSettings.RecordTransmittals;
 
-        CanGenerateExtranetCopies = _settingsService.GlobalSettings.UseExtranet;
-        GenerateExtranetCopies = CanGenerateExtranetCopies;
+        CanGenerateCDECopies = _settingsService.GlobalSettings.UseExtranet;
+        GenerateCDECopies = CanGenerateCDECopies;
 
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         IssueFormat = IssueFormats.FirstOrDefault();
@@ -800,10 +802,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 CopyDistributionToClipboard();
             }
 
-            if(GenerateExtranetCopies == true)
+            if(GenerateCDECopies == true)
             {
-                CopyFilesForExtranet();
-                GenerateExtranetImportFile();
+                CopyFilesForCDE();
+                GenerateCDEImportFile();
             }
 
             OpenExplorerToExportedFilesLocations();
@@ -818,6 +820,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error processing sheets");
+
             Autodesk.Revit.UI.TaskDialog.Show("Error", 
                 $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", 
                 Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
@@ -919,9 +923,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SendProgressMessage();
     }
 
-    private void CopyFilesForExtranet()
+    private void CopyFilesForCDE()
     {
-        string folderPath = GetExtranetFolderPath();
+        string folderPath = GetCDEFolderPath();
+
+        _logger.LogInformation("Copying {count} exported files to {folderPath}", _exportedFiles.Count, folderPath);
 
         foreach (var document in _exportedFiles)
         {
@@ -946,6 +952,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             var fullPath = System.IO.Path.Combine(folderPath, fileName + fileInfo.Extension);
 
+            _logger.LogInformation("Exported file to copy : {file}", document.FileName);
+
             fileInfo.CopyTo(fullPath, true);
 
         }
@@ -954,9 +962,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     }
 
-    private void GenerateExtranetImportFile()
+    private void GenerateCDEImportFile()
     {
-        string folderPath = GetExtranetFolderPath();
+        string folderPath = GetCDEFolderPath();
         string excelFilePath = Path.Combine(folderPath, "ImportData.xlsx");
         bool columnHeaders = true;
 
@@ -1001,9 +1009,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     }
 
-    private string GetExtranetFolderPath()
+    private string GetCDEFolderPath()
     {
-        var extranetFolderName = "Extranet";
+        var extranetFolderName = "CDE";
 
         var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(extranetFolderName);
 

@@ -75,7 +75,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private bool _useISO19650;
 
     [ObservableProperty]
-    private bool _useExtranet;
+    private bool _useCDE;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -345,7 +345,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         DateFormatString = _settingsService.GlobalSettings.DateFormatString;
 
         UseISO19650 = _settingsService.GlobalSettings.UseISO19650;
-        UseExtranet = _settingsService.GlobalSettings.UseExtranet;
+        UseCDE = _settingsService.GlobalSettings.UseExtranet;
         FileNameFilter2 = _settingsService.GlobalSettings.FileNameFilter2;
 
         IssueFormats = new ObservableCollection<IssueFormatModel>(_settingsService.GlobalSettings.IssueFormats);
@@ -387,7 +387,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         DateFormatString = settings.DateFormatString;
 
         UseISO19650 = settings.UseISO19650;
-        UseExtranet = settings.UseExtranet;
+        UseCDE = settings.UseExtranet;
         FileNameFilter2 = settings.FileNameFilter2;
 
         IssueFormats = new ObservableCollection<IssueFormatModel>(settings.IssueFormats);
@@ -426,7 +426,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.DateFormatString = DateFormatString?.Trim();
 
         _settingsService.GlobalSettings.UseISO19650 = UseISO19650;
-        _settingsService.GlobalSettings.UseExtranet = UseExtranet;
+        _settingsService.GlobalSettings.UseExtranet = UseCDE;
         _settingsService.GlobalSettings.FileNameFilter2 = FileNameFilter2?.Trim();
 
         _settingsService.GlobalSettings.IssueFormats = IssueFormats.ToList();

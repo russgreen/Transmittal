@@ -53,6 +53,9 @@ public partial class SettingsModel : ObservableValidator
     [ObservableProperty]
     private string _fileNameFilter2 = "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>";
 
+    /// <summary>
+    /// Old terminology. The UI now refers to CDE instead of extranet.
+    /// </summary>
     [ObservableProperty]
     private bool _useExtranet = false;
 

@@ -109,9 +109,9 @@
                                       IsChecked="{Binding UseISO19650}" />
 
                             <CheckBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
-                                      x:Name="UseExtranet"
-                                      Content="Create copies for extranet using the filename rule below"
-                                      IsChecked="{Binding UseExtranet}" />
+                                      x:Name="UseCDE"
+                                      Content="Create copies for CDE using the filename rule below"
+                                      IsChecked="{Binding UseCDE}" />
 
                             <TextBlock Grid.Row="6" Grid.Column="0" 
                                        Text="Filename filter/rule" />

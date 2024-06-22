@@ -381,10 +381,10 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" >
-                        <CheckBox x:Name="GenerateExtranetCopy" HorizontalAlignment="Center"
-                                  IsEnabled="{Binding CanGenerateExtranetCopies}"
-                                  IsChecked="{Binding GenerateExtranetCopies}" />
-                        <TextBlock Text="Generate files for extranet"    
+                        <CheckBox x:Name="GenerateCloudCopy" HorizontalAlignment="Center"
+                                  IsEnabled="{Binding CanGenerateCDECopies}"
+                                  IsChecked="{Binding GenerateCDECopies}" />
+                        <TextBlock Text="Generate files for cloud"    
                                    Width="150"
                                    HorizontalAlignment="Center" 
                                    TextAlignment="Center"
