@@ -1206,15 +1206,35 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
         }
 
-        try
+        if (emailAddresses.Length > 0)
         {
-            System.Windows.Clipboard.SetText(emailAddresses.ToString());
+            var retryCount = 0;
+
+            while (true)
+            {
+                try
+                {
+                    System.Windows.Clipboard.SetText(emailAddresses.ToString());
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    retryCount++;
+                    if (retryCount > 3)
+                    {
+                        _logger.LogError(ex, "Error copying email addresses to clipboard");
+                        _logger.LogError("Email addresses : {emailAddresses}", emailAddresses.ToString());
+                        break;
+                    }
+                    Thread.Sleep(100);
+                }
+            }
         }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Error copying email addresses to clipboard");
-            _logger.LogError("Email addresses : {emailAddresses}", emailAddresses.ToString());
-        }
+
+
+
+
+
     }
 
     private void OpenProgressWindow()
