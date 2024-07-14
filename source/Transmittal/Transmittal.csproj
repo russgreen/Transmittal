@@ -79,8 +79,10 @@
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />	
-		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />	
-		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />	
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
+
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).0.0" Condition="$(RevitVersion) == '2025'"/>
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" Condition="$(RevitVersion) &lt; '2025'"/>
 
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" />
