@@ -1,14 +1,15 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Nice3point.Revit.Toolkit.External;
 using System.Diagnostics;
 
 namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
-internal class CommandAbout : IExternalCommand
+internal class CommandAbout : ExternalCommand
 {
-    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+    public override void Execute()
     {
 
 #if DEBUG
@@ -25,7 +26,5 @@ internal class CommandAbout : IExternalCommand
         processStartInfo.Arguments = $"--about";
 
         Process.Start(processStartInfo);
-
-        return Result.Succeeded;
     }
 }

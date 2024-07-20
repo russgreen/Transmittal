@@ -1,6 +1,8 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Nice3point.Revit.Toolkit;
+using Nice3point.Revit.Toolkit.External;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -8,14 +10,18 @@ using Transmittal.Services;
 namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
-internal class CommandDirectory : IExternalCommand
+internal class CommandDirectory : ExternalCommand
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private ISettingsServiceRvt _settingsServiceRvt;
+    private ISettingsService _settingsService;
 
-    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+    public override void Execute()
     {
-        App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
+        _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+        _settingsService = Host.GetService<ISettingsService>();
+
+        App.CachedUiApp = Context.UiApplication;
+        App.RevitDocument = Context.Document;
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
@@ -32,7 +38,7 @@ internal class CommandDirectory : IExternalCommand
             };
             td.Show();
 
-            return Result.Cancelled;
+            return;
         }
 
 #if DEBUG
@@ -49,7 +55,5 @@ internal class CommandDirectory : IExternalCommand
         processStartInfo.Arguments = $"--directory \"--database={dbFile}\"";
 
         Process.Start(processStartInfo);
-
-        return Result.Succeeded;
     }
 }

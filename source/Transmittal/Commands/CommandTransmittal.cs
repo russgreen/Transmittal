@@ -3,6 +3,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nice3point.Revit.Toolkit;
+using Nice3point.Revit.Toolkit.External;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -10,15 +12,18 @@ using Transmittal.Services;
 namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
-public class CommandTransmittal : IExternalCommand
+public class CommandTransmittal : ExternalCommand
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-    private readonly ILogger<CommandTransmittal> _logger = Host.GetService<ILogger<CommandTransmittal>>();
-    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-    {        
-        //UIApplication uiapp = commandData.Application;
-        App.CachedUiApp = commandData.Application;
-        App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
+    private ISettingsServiceRvt _settingsServiceRvt;
+    private ILogger<CommandTransmittal> _logger;
+
+    public override void Execute()
+    {       
+        _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+        _logger = Host.GetService<ILogger<CommandTransmittal>>();
+
+        App.CachedUiApp = Context.UiApplication;
+        App.RevitDocument = Context.Document;
 
         try
         {
@@ -43,7 +48,7 @@ public class CommandTransmittal : IExternalCommand
             else if (taskDialogResult == TaskDialogResult.Cancel)
             {
                 // cancel clicked
-                return Result.Failed;
+                return;
             }
 
             // add a showdialog watcher
@@ -60,14 +65,14 @@ public class CommandTransmittal : IExternalCommand
                 transmittalView.ShowDialog();
             }
 
-            return Result.Succeeded;            
+            return;            
             
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error");
-            message = ex.Message;
-            return Result.Failed;
+            //message = ex.Message;
+            return;
         }
         finally
         {

@@ -7,13 +7,13 @@ public class DocumentModel : TransmittalItemModel
 {
     public string FilePath { get; set; }
 
-    [BeginsWith(nameof(DocumentModel.DrgProj), 
+    [BeginsWith(nameof(DocumentModel.DrgProj),
         ErrorMessage = "The file name doesn't begin with the project number. Are you sure you want to record a transmittal?")]
     public string FileName { get; set; }
 
     public DocumentTypeModel DocumentType { get; set; }
 
-    public string DocumentStatus => $"{DrgStatus} - {DrgStatusDescription.Transform(To.LowerCase, To.TitleCase)}";
+    public string DocumentStatus => string.IsNullOrEmpty(DrgStatusDescription) ? DrgStatus : $"{DrgStatus} - {DrgStatusDescription.Transform(To.LowerCase, To.TitleCase)}";
 
     public DocumentModel()
     {
@@ -39,7 +39,7 @@ public class DocumentModel : TransmittalItemModel
     }
 
     public DocumentModel(TransmittalItemModel model)
-    { 
+    {
         DrgNumber = model.DrgNumber;
         DrgRev = model.DrgRev;
         DrgName = model.DrgName;
@@ -55,5 +55,5 @@ public class DocumentModel : TransmittalItemModel
         DrgRole = model.DrgRole;
         DrgStatus = model.DrgStatus;
         DrgStatusDescription = model.DrgStatusDescription;
-     }
+    }
 }

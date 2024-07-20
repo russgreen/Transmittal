@@ -86,7 +86,7 @@ public partial class TransmittalItemModel : ObservableValidator
     private string _drgStatus = "S0";
 
     [ObservableProperty]
-    private string _drgStatusDescription;
+    private string _drgStatusDescription = "";
 
     [ObservableProperty]
     private string _drgPackage;
