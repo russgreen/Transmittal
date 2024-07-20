@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CommunityToolkit.Mvvm.Messaging;
+using Nice3point.Revit.Toolkit;
+using Nice3point.Revit.Toolkit.External;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Text.Json;
@@ -12,12 +14,12 @@ using Transmittal.Models;
 namespace Transmittal.Commands;
 
 [Transaction(TransactionMode.Manual)]
-internal class CommandImportSettings : IExternalCommand
+internal class CommandImportSettings : ExternalCommand
 {
-    public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+    public override void Execute()
     {
-        App.RevitDocument = commandData.Application.ActiveUIDocument.Document;
-        App.CachedUiApp = commandData.Application;
+        App.CachedUiApp = Context.UiApplication;
+        App.RevitDocument = Context.Document;
 
         string jsonFilePath;
 
@@ -44,13 +46,7 @@ internal class CommandImportSettings : IExternalCommand
                 WeakReferenceMessenger.Default.Send(new ImportSettingsMessage(settings));
 
                 newView.ShowDialog();
-
-
-
-                return Result.Succeeded;
             }
         }
-
-        return Result.Cancelled;
     }
 }

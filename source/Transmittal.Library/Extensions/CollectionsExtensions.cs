@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Transmittal.Library.Extensions;
+﻿namespace Transmittal.Library.Extensions;
 public static class CollectionsExtensions
 {
+#if NET8_0_OR_GREATER
+    // This method is available in .NET but not in Framework
+#else
     public static TValue GetValueOrDefault<TKey, TValue>(
         this IDictionary<TKey, TValue> dictionary,
         TKey key,
@@ -16,4 +15,6 @@ public static class CollectionsExtensions
         }
         return defaultValue;
     }
+#endif
+
 }
