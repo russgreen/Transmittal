@@ -69,10 +69,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.112" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />		
+		<PackageReference Include="System.Resources.Extensions" Version="8.*" />		
 		
 		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="24.2.7" />		
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
@@ -84,15 +84,15 @@
 
 		<!--IOC-->
 		<!--<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" />-->
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'"/>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 		<!--Logging-->
-		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*"/>
-		<PackageReference Include="Serilog.Sinks.File" Version="5.*"/>
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.*" />
 		<!--<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" />-->
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'"/>
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 	</ItemGroup>
 
