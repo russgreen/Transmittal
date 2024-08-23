@@ -116,9 +116,9 @@ public partial class SettingsView : Window
 
         if (button == newButton)
         {
-            var fileName = $"{_viewModel.ProjectNumber}-" +
-                                $"{_viewModel.Originator}-XX-XX-DB-" +
-                                $"{_viewModel.Role}-0001.tdb";
+            var fileName = $"{(_viewModel.ProjectNumber ?? "PROJECTNUMBER")}-" +
+                                $"{(_viewModel.Originator ?? "ORIGINATOR" )}-XX-XX-DB-" +
+                                $"{(_viewModel.Role ?? "ROLE")}-0001.tdb";
             
             var dialog = new Microsoft.Win32.SaveFileDialog
             {
