@@ -176,6 +176,10 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         IssueFormats.CollectionChanged += IssueFormats_CollectionChanged;
         DocumentStatuses.CollectionChanged += DocumentStatuses_CollectionChanged;
 
+        ProjectNumber = _settingsService.GlobalSettings.ProjectNumber;
+        Originator = _settingsService.GlobalSettings.Originator;
+        Role = _settingsService.GlobalSettings.Role;
+
         WeakReferenceMessenger.Default.Register<ImportSettingsMessage>(this, (r, m) =>
         {
             SetPropertiesFromImportedSettings(m.Value);

@@ -53,6 +53,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     ///  DRAWING SHEETS
     public List<DrawingSheetModel> DrawingSheets { get; private set; }
     
+    
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
     private ObservableCollection<object> _selectedDrawingSheets;
@@ -304,6 +306,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return drawingSheets;
         }
 
+#if REVIT2025_OR_GREATER
+        // get the sheet collections in the model
+        var sheetCollections = new FilteredElementCollector(App.RevitDocument);
+        sheetCollections.OfClass(typeof(SheetCollection));
+
+        Dictionary<ElementId, string> sheetDictionary = new Dictionary<ElementId, string>();
+        foreach (SheetCollection sheetCollection in sheetCollections)
+        {
+            sheetDictionary.Add(sheetCollection.Id, sheetCollection.Name);
+        }
+#endif
+
         foreach (ViewSheet sheet in sheets)
         {
             // Create a new drawing sheet model to add to the list
@@ -346,6 +360,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
                 drawingSheet.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();
                 drawingSheet.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
+
+#if REVIT2025_OR_GREATER
+                drawingSheet.SheetCollection = GetSheetCollectionName(sheetDictionary, sheet.SheetCollectionId);
+#endif
 
                 drawingSheets.Add(drawingSheet);
             }
@@ -551,9 +569,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         trans.Commit();
     }
-   
 
-    #endregion
+#if REVIT2025_OR_GREATER
+    private string GetSheetCollectionName(Dictionary<ElementId, string> sheetDictionary, ElementId sheetCollectionId)
+    {
+        if (sheetDictionary.TryGetValue(sheetCollectionId, out string sheetCollectionName))
+        {
+            return sheetCollectionName;
+        }
+        else
+        {
+            return string.Empty; // or handle the case where the ID is not found
+        }
+    }
+#endif
+
+#endregion
 
     #region Export Formats
     [RelayCommand]

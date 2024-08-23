@@ -9,4 +9,5 @@ public class DrawingSheetModel : TransmittalItemModel
     public string IssueDate { get; set; }
     public string RevDate { get; set; }
     public string RevNotes { get; set; }
+    public string SheetCollection { get; set; } = string.Empty;
 }
