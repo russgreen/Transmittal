@@ -25,6 +25,7 @@ public partial class TransmittalView : Window
         this.sfDataGridSheets.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "SheetCollection" });
         this.sfDataGridSheets.Columns["SheetCollection"].GroupMode = DataReflectionMode.Display;
         this.sfDataGridSheets.AutoExpandGroups = true;
+        this.sfDataGridSheets.AllowFrozenGroupHeaders = true;
 #endif
     }
 
