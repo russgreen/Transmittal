@@ -1,4 +1,5 @@
 ﻿using Ookii.Dialogs.Wpf;
+using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
 using Transmittal.Models;
@@ -19,6 +20,12 @@ public partial class TransmittalView : Window
 
         _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
+
+#if REVIT2025_OR_GREATER
+        this.sfDataGridSheets.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "SheetCollection" });
+        this.sfDataGridSheets.Columns["SheetCollection"].GroupMode = DataReflectionMode.Display;
+        this.sfDataGridSheets.AutoExpandGroups = true;
+#endif
     }
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
