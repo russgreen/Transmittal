@@ -17,7 +17,7 @@ public partial class App : Application
         
     void App_Startup(object sender, StartupEventArgs e)
     {
-        //build dependancy injection system
+        //build dependency injection system
         Host.StartHost().Wait();
 
         //register the syncfusion license
@@ -43,7 +43,7 @@ public partial class App : Application
                     }
                     else
                     {
-                        TaskDialogButton okButon = new TaskDialogButton(ButtonType.Ok);
+                        TaskDialogButton okButton = new TaskDialogButton(ButtonType.Ok);
 
                         TaskDialog dialog = new TaskDialog()
                         {
@@ -51,7 +51,7 @@ public partial class App : Application
                             MainInstruction = @$"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
                             MainIcon = TaskDialogIcon.Error,
                             ButtonStyle = TaskDialogButtonStyle.Standard,
-                            Buttons = { okButon }
+                            Buttons = { okButton }
                         };
 
                         dialog.ShowDialog();
@@ -76,7 +76,7 @@ public partial class App : Application
 
             foreach (string arg in e.Args)
             {
-                // if the agument is --directory then launch the directory view
+                // if the argument is --directory then launch the directory view
                 if (arg == "--directory")
                 {
                     DirectoryView directoryView = new();
@@ -84,7 +84,7 @@ public partial class App : Application
                     return;
                 }
 
-                // if the agument is --archive then launch the archive view 
+                // if the argument is --archive then launch the archive view 
                 if (arg == "--archive")
                 {
                     ArchiveView archiveView = new();
@@ -92,7 +92,7 @@ public partial class App : Application
                     return;
                 }
 
-                // if the agument is --about then launch the about view 
+                // if the argument is --about then launch the about view 
                 if (arg == "--about")
                 {
                     AboutView aboutView = new();
@@ -100,7 +100,7 @@ public partial class App : Application
                     return;
                 }
 
-                // if the agument is --transmittal then launch the transmittal report view
+                // if the argument is --transmittal then launch the transmittal report view
                 if (arg.StartsWith("--transmittal"))
                 {
                     TransmittalID = int.Parse(e.Args[0].Substring(e.Args[0].IndexOf("=") + 1));
