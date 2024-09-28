@@ -21,7 +21,7 @@ internal class CommandTransmittalsArchive : ExternalCommand
         _settingsService = Host.GetService<ISettingsService>();
 
         App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.Document;
+        App.RevitDocument = Context.ActiveDocument;
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
@@ -50,9 +50,11 @@ internal class CommandTransmittalsArchive : ExternalCommand
         var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
 #endif
 
-        ProcessStartInfo processStartInfo = new ProcessStartInfo();
-        processStartInfo.FileName = pathToExe;
-        processStartInfo.Arguments = $"--archive \"--database={dbFile}\"";
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
+        {
+            FileName = pathToExe,
+            Arguments = $"--archive \"--database={dbFile}\""
+        };
 
         Process.Start(processStartInfo);
     }

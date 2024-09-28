@@ -26,7 +26,7 @@ public interface IContactDirectoryService
     /// <param name="model"></param>
     void UpdateCompany(CompanyModel model);
     /// <summary>
-    /// Delete a compabny
+    /// Delete a company
     /// </summary>
     /// <param name="companyID"></param>
     void DeleteCompany(CompanyModel model);

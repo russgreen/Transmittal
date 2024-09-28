@@ -23,7 +23,7 @@ public class CommandTransmittal : ExternalCommand
         _logger = Host.GetService<ILogger<CommandTransmittal>>();
 
         App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.Document;
+        App.RevitDocument = Context.ActiveDocument;
 
         try
         {

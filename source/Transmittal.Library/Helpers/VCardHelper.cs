@@ -46,8 +46,10 @@ public static class VCardHelper
         
         File.WriteAllText(file.FullName, sb.ToString(), System.Text.Encoding.ASCII);
 
-        ProcessStartInfo startInfo = new ProcessStartInfo(vcfPath);
-        startInfo.UseShellExecute = true;
+        ProcessStartInfo startInfo = new ProcessStartInfo(vcfPath)
+        {
+            UseShellExecute = true
+        };
         Process.Start(startInfo);
     }
 
