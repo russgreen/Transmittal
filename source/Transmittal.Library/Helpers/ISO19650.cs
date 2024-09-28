@@ -5,7 +5,7 @@ public static class ISO19650
 {
     public static List<DocumentTypeModel> GetDocumentTypes()
     {
-        List<DocumentTypeModel> documentTypes = new List<DocumentTypeModel>();
+        var documentTypes = new List<DocumentTypeModel>();
 
         documentTypes.Clear();
         documentTypes.Add(new DocumentTypeModel() { Code = "AF", Description = "Animation file (of a model)" });
