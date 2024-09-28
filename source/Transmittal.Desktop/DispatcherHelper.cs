@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Permissions;
 using System.Windows.Threading;
 
 namespace Transmittal;
@@ -12,7 +7,7 @@ internal static class DispatcherHelper
         /// <summary>
         /// Simulate Application.DoEvents function of <see cref=" System.Windows.Forms.Application"/> class.
         /// </summary>
-        [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        //[SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         internal static void DoEvents()
         {
             DispatcherFrame frame = new DispatcherFrame();
