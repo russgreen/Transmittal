@@ -19,7 +19,7 @@ internal class CommandImportSettings : ExternalCommand
     public override void Execute()
     {
         App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.Document;
+        App.RevitDocument = Context.ActiveDocument;
 
         string jsonFilePath;
 
