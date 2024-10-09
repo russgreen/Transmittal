@@ -47,7 +47,10 @@
                                          Value="{Binding SheetTaskProcessed}"/>
                 <TextBlock TextWrapping="WrapWithOverflow"
                            Text="{Binding SheetTaskProgressLabel}"/>
-
+                
+                <TextBlock TextWrapping="WrapWithOverflow"
+                           Text="{Binding TimeMessage}" />
+                
                 <TextBlock Foreground="Red"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding DisplayMessage}" />

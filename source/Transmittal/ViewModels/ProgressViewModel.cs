@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System;
 using System.IO;
 using Transmittal.Library.Messages;
 using Transmittal.Library.ViewModels;
@@ -27,10 +28,15 @@ internal partial class ProgressViewModel : BaseViewModel
     private string _sheetTaskProgressLabel = string.Empty;
 
     [ObservableProperty]
+    private string _timeMessage = string.Empty;
+
+    [ObservableProperty]
     private string _displayMessage = string.Empty;
 
     public ProgressViewModel()
     {
+        var startTime = DateTime.Now;
+
         WeakReferenceMessenger.Default.Register<ProgressUpdateMessage>(this, (r, m) =>
         {
             CurrentStepProgressLabel = m.Value.CurrentStepProgressLabel;
@@ -42,6 +48,24 @@ internal partial class ProgressViewModel : BaseViewModel
             SheetTasksToProcess = m.Value.SheetTasksToProcess;
             SheetTaskProcessed = m.Value.SheetTaskProcessed;
             SheetTaskProgressLabel  = m.Value.SheetTaskProgressLabel;
+
+            var workDone = DrawingSheetsProcessed / DrawingSheetsToProcess;
+
+            if (workDone == 0)
+            {
+                TimeMessage = "Calculating time remaining...";
+                return;
+            }
+            else
+            {
+                var timeElapsed = DateTime.Now - startTime;
+                var timeOverall = TimeSpan.FromTicks((long)(timeElapsed.Ticks / workDone));
+                var timeRemaining = timeOverall - timeElapsed;
+
+                TimeMessage = $"Time elapsed: {timeElapsed.Minutes:D2}:{timeElapsed.Seconds:D2} Time remaining: {timeRemaining.Minutes:D2}:{timeRemaining.Seconds:D2}";
+            }
+
+
         });
 
         WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
