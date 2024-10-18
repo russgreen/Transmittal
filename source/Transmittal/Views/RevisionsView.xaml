@@ -52,7 +52,7 @@
         <syncfusion:SfDataGrid Grid.Row="1" Margin="0,10,0,0"
                                x:Name="sfDataGridRevisions"
                                ItemsSource="{Binding Revisions}" 
-                               SelectedItem="{Binding SelectedRevision}"
+                               SelectedItem="{Binding SelectedRevision,Mode=TwoWay}"
                                AutoGenerateColumns="True" 
                                AllowGrouping="False" 
                                AllowResizingColumns="True" 

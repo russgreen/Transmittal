@@ -83,6 +83,8 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         }
 
         LoadRevisions();
+
+        SelectedRevision = Revisions.LastOrDefault();
     }
 
     [RelayCommand]
