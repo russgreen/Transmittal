@@ -182,7 +182,8 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     private void LoadData()
     {
         ProjectDirectory = new ObservableCollection<ProjectDirectoryModel>(_contactDirectoryService.GetProjectDirectory());
-        Transmittals = new ObservableCollection<TransmittalModel>(_transmittalService.GetTransmittals());
+        Transmittals = new ObservableCollection<TransmittalModel>(_transmittalService.GetTransmittals()
+            .OrderBy(x => x.TransDate));
 
         LoadPackages();
 

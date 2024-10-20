@@ -1,5 +1,6 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
@@ -43,6 +44,8 @@ public partial class RevisionsView : Window
         this.sfDataGridRevisions.Columns.Add(new GridCheckBoxColumn() { MappingName = "Issued", HeaderText = "Issued", Width = 60 });
         this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedBy", HeaderText = "Issued By", Width = 80 });
         this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedTo", HeaderText = "Issued To", Width = 80 });
+
+        this.sfDataGridRevisions.SelectionController = new GridSelectionControllerExt(sfDataGridRevisions);
     }
 
     private void ButtonAddRevision_Click(object sender, RoutedEventArgs e)
@@ -66,4 +69,19 @@ public partial class RevisionsView : Window
         this.sfDataGridRevisions.SearchHelper.AllowFiltering = true;
         this.sfDataGridRevisions.SearchHelper.Search(this.TextBoxSearch.Text);
     }
+}
+
+public class GridSelectionControllerExt : GridSelectionController
+{
+    public GridSelectionControllerExt(SfDataGrid datagrid)
+        : base(datagrid)
+    {
+    }
+    protected override void ProcessSelectedItemChanged(SelectionPropertyChangedHandlerArgs handle)
+    {
+        base.ProcessSelectedItemChanged(handle);
+        if (handle.NewValue != null)
+            this.DataGrid.ScrollInView(this.CurrentCellManager.CurrentRowColumnIndex);
+    }
+
 }
