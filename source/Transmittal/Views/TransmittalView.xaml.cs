@@ -91,4 +91,17 @@ public partial class TransmittalView : Window
             _viewModel.SelectedProjectDirectory.Clear();
         }
     }
+
+    private void sfDataGridSheets_CurrentCellValidated(object sender, CurrentCellValidatedEventArgs e)
+    {
+        if (e.NewValue != e.OldValue)
+        {
+            DrawingSheetModel sheet = e.RowData as DrawingSheetModel;
+            if (sheet != null)
+            {
+                _viewModel.UpdateSheet(sheet);
+            }
+
+        }
+    }
 }

@@ -93,36 +93,38 @@
                                            ItemsSource="{Binding DrawingSheets}" 
                                            SelectedItems="{Binding SelectedDrawingSheets}"
                                            AutoGenerateColumns="False" 
+                                           AllowEditing="True"
+                                           AllowDeleting="False"
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 
                                            AllowFiltering="True"
                                            AllowSorting="True"
-                                           NavigationMode="Row" 
+                                           NavigationMode="Cell" 
                                            SelectionMode="Extended" 
-                                           GridValidationMode="InView" >                        
+                                           GridValidationMode="InView" CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="DrgNumber" SortDirection="Ascending" />
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
                         
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34" />
-                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100"  />
-                            <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" AllowEditing="False"  />
+                            <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
                             <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume / Functional" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level / Spatial" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />
-                            <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" />
-                            <syncfusion:GridTextColumn MappingName="DrgStatusDescription" HeaderText="Status Description" Width="120" />
-                            <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" Width="120"/>
+                            <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" AllowEditing="False"/>
+                            <syncfusion:GridTextColumn MappingName="DrgStatusDescription" HeaderText="Status Description" Width="120" AllowEditing="False"/>
+                            <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" Width="120" AllowEditing="False"/>
                             <!--<syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="75" />-->
                             <syncfusion:GridTextColumn MappingName="SheetCollection" HeaderText="Sheet Collection" Width="120" IsHidden="True" />
-                            <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="75" />
+                            <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="75" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
-                            <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" />
-                            <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" />
+                            <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" AllowEditing="False"/>
+                            <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" AllowEditing="False"/>
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
                 </Grid>
