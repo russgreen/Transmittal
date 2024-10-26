@@ -48,14 +48,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private System.Windows.Visibility _isWindowVisible = System.Windows.Visibility.Visible;
+     
+    private TransmittalModel _newTransmittal = new();
 
-    private TransmittalModel _newTransmittal = new();    
-    
-    ///  DRAWING SHEETS
+    ///  DRAWING SHEETS 
     public List<DrawingSheetModel> DrawingSheets { get; private set; }
     
-    
-
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
     private ObservableCollection<object> _selectedDrawingSheets;
@@ -68,6 +66,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private bool _abortFlag = false;
+
     [ObservableProperty]
     private bool _processingsheets = false;
 
@@ -418,7 +417,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var sheets = new FilteredElementCollector(App.RevitDocument)
             .OfClass(typeof(ViewSheet));
 
-        //loop throught the selected items in the grid
+        //loop though the selected items in the grid
         foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
         {
             //set the model values
@@ -547,7 +546,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var sheets = new FilteredElementCollector(App.RevitDocument)
             .OfClass(typeof(ViewSheet));
 
-
         foreach (ViewSheet sheet in sheets)
         {
             if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
@@ -559,9 +557,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     sheet.FindParameter(BuiltInParameter.SHEET_DRAWN_BY).Set(sheetModel.DrgDrawn);
                     sheet.FindParameter(BuiltInParameter.SHEET_CHECKED_BY).Set(sheetModel.DrgChecked);
 
-                    sheet.FindParameter(new Guid(_settingsService.GlobalSettings.SheetVolumeParamGuid)).Set(sheetModel.DrgVolume);
-                    sheet.FindParameter(new Guid(_settingsService.GlobalSettings.SheetLevelParamGuid)).Set(sheetModel.DrgLevel);
-                    sheet.FindParameter(new Guid(_settingsService.GlobalSettings.DocumentTypeParamGuid)).Set(sheetModel.DrgType);
+                    var paramGuids = new Dictionary<string, string>
+                    {
+                        { _settingsService.GlobalSettings.SheetVolumeParamGuid, sheetModel.DrgVolume },
+                        { _settingsService.GlobalSettings.SheetLevelParamGuid, sheetModel.DrgLevel },
+                        { _settingsService.GlobalSettings.DocumentTypeParamGuid, sheetModel.DrgType },
+                        { _settingsService.GlobalSettings.SheetPackageParamGuid, sheetModel.DrgPackage }
+                    };
+
+                    foreach (var paramGuid in paramGuids)
+                    {
+                        var param = sheet.FindParameter(new Guid(paramGuid.Key));
+                        if (param is not null)
+                        {
+                            param.Set(paramGuid.Value);
+                        }
+                    }
                 }
                 catch
                 {

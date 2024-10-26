@@ -101,7 +101,6 @@ public partial class TransmittalView : Window
             {
                 _viewModel.UpdateSheet(sheet);
             }
-
         }
     }
 }
