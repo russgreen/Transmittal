@@ -1113,7 +1113,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return folderPath;
     }
 
-
     private void OpenExplorerToExportedFilesLocations()
     {
         List<string> folderPaths = new();
