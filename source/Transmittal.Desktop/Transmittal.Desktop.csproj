@@ -69,10 +69,12 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />	 
+	  
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+	  
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
 
 	  <!--IOC-->
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />

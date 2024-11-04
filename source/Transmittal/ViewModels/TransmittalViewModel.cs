@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
+using Nice3point.Revit.Extensions;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -47,14 +48,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private System.Windows.Visibility _isWindowVisible = System.Windows.Visibility.Visible;
+     
+    private TransmittalModel _newTransmittal = new();
 
-    private TransmittalModel _newTransmittal = new();    
-    
-    ///  DRAWING SHEETS
+    ///  DRAWING SHEETS 
     public List<DrawingSheetModel> DrawingSheets { get; private set; }
     
-    
-
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSheetsSelected))]
     private ObservableCollection<object> _selectedDrawingSheets;
@@ -67,6 +66,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private bool _abortFlag = false;
+
     [ObservableProperty]
     private bool _processingsheets = false;
 
@@ -417,7 +417,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var sheets = new FilteredElementCollector(App.RevitDocument)
             .OfClass(typeof(ViewSheet));
 
-        //loop throught the selected items in the grid
+        //loop though the selected items in the grid
         foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
         {
             //set the model values
@@ -533,6 +533,60 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ValidateSelections();
     }
 
+    public void UpdateSheet(DrawingSheetModel sheetModel)
+    {
+        _logger.LogDebug("UpdateSelectedSheet {sheetModel}", sheetModel);
+
+        Transaction trans = new(App.RevitDocument, "Update sheet parameter values");
+        var failOpt = trans.GetFailureHandlingOptions();
+        failOpt.SetFailuresPreprocessor(new WarningSwallower());
+        trans.SetFailureHandlingOptions(failOpt);
+        trans.Start();
+
+        var sheets = new FilteredElementCollector(App.RevitDocument)
+            .OfClass(typeof(ViewSheet));
+
+        foreach (ViewSheet sheet in sheets)
+        {
+            if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
+            {
+                try
+                {
+                    sheet.FindParameter(BuiltInParameter.SHEET_NAME).Set(sheetModel.DrgName);
+                    sheet.FindParameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(sheetModel.IssueDate);
+                    sheet.FindParameter(BuiltInParameter.SHEET_DRAWN_BY).Set(sheetModel.DrgDrawn);
+                    sheet.FindParameter(BuiltInParameter.SHEET_CHECKED_BY).Set(sheetModel.DrgChecked);
+
+                    var paramGuids = new Dictionary<string, string>
+                    {
+                        { _settingsService.GlobalSettings.SheetVolumeParamGuid, sheetModel.DrgVolume },
+                        { _settingsService.GlobalSettings.SheetLevelParamGuid, sheetModel.DrgLevel },
+                        { _settingsService.GlobalSettings.DocumentTypeParamGuid, sheetModel.DrgType },
+                        { _settingsService.GlobalSettings.SheetPackageParamGuid, sheetModel.DrgPackage }
+                    };
+
+                    foreach (var paramGuid in paramGuids)
+                    {
+                        var param = sheet.FindParameter(new Guid(paramGuid.Key));
+                        if (param is not null)
+                        {
+                            param.Set(paramGuid.Value);
+                        }
+                    }
+                }
+                catch
+                {
+                    trans.RollBack();
+                    return;
+                }
+
+                break;
+            }
+        }
+
+        trans.Commit();
+    }
+
     private void AddAdditionalRevisionsToSheet(ViewSheet sheet, string revSeq)
     {
         Transaction trans = new(App.RevitDocument, "Add Revision to Sheet");
@@ -584,7 +638,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     }
 #endif
 
-#endregion
+    #endregion
 
     #region Export Formats
     [RelayCommand]
@@ -1058,7 +1112,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         return folderPath;
     }
-
 
     private void OpenExplorerToExportedFilesLocations()
     {

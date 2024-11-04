@@ -15,7 +15,7 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources> <!--added so nuke works-->
-		<!-- Copy dependacies to output folder on build -->
+		<!-- Copy dependancies to output folder on build -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -69,14 +69,17 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />		
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.*" />
+		<PackageReference Include="System.Text.Json" Version="8.*" />		
+		
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-		<PackageReference Include="System.Resources.Extensions" Version="8.*" />		
 		
 		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="24.2.7" />		
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
+		
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />	
 		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
