@@ -15,7 +15,7 @@
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources> <!--added so nuke works-->
-		<!-- Copy dependacies to output folder on build -->
+		<!-- Copy dependancies to output folder on build -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
