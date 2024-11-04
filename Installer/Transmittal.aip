@@ -239,6 +239,7 @@
     <ROW Component="Microsoft.Extensions.Logging.dll_3" ComponentId="{992F9098-5213-4840-9FB9-E3D0D22FB42A}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll_3"/>
     <ROW Component="Microsoft.Extensions.Logging.dll_4" ComponentId="{504ADA3B-ABE3-458D-A48C-3DD73D1140F0}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll_4"/>
     <ROW Component="Microsoft.Extensions.Logging.dll_5" ComponentId="{EDC27625-2C66-443A-8397-9DEA70F20E57}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll_5"/>
+    <ROW Component="Microsoft.Extensions.ObjectPool.dll" ComponentId="{C6E8A7B3-E2C1-4FCB-8579-314AD7FCB185}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.ObjectPool.dll"/>
     <ROW Component="Microsoft.Extensions.Options.Configu_1_rationExtensions.dll" ComponentId="{E6DD6E0E-647B-4942-86A8-D43A02E04E0A}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.Configu_1_rationExtensions.dll"/>
     <ROW Component="Microsoft.Extensions.Options.Configu_2_rationExtensions.dll" ComponentId="{77BFAFA2-E306-46A5-BD72-F5631CFF31A2}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.Configu_2_rationExtensions.dll"/>
     <ROW Component="Microsoft.Extensions.Options.Configu_3_rationExtensions.dll" ComponentId="{EC2A3A31-EE97-406E-98B5-F0FCEF07C18D}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.Configu_3_rationExtensions.dll"/>
@@ -387,6 +388,9 @@
     <ROW Component="System.Diagnostics.DiagnosticSource._2_dll" ComponentId="{0237D840-42C3-4586-A078-E421BF1884C7}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource._2_dll"/>
     <ROW Component="System.Diagnostics.DiagnosticSource._3_dll" ComponentId="{4163270D-0A3E-4DD8-A506-F404D30F0FB9}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource._3_dll"/>
     <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{7AB89EAB-0D8B-43BD-9373-A9A52E330020}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B97395F2-893B-4B6F-9ADE-DAFEB65B77E5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll_1" ComponentId="{431233E8-1167-4917-BDF8-9B6E9CD29699}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll_1"/>
+    <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
     <ROW Component="System.Memory.dll" ComponentId="{C2F5573E-5F97-469A-8741-73C3303B35DC}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="System.Memory.dll"/>
     <ROW Component="System.Memory.dll_1" ComponentId="{59767374-4F7A-4D2E-BA72-DDEE988E9767}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="System.Memory.dll_1"/>
     <ROW Component="System.Memory.dll_2" ComponentId="{C3F3F926-FE76-4A22-8D59-0F065D473C25}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Memory.dll_2"/>
@@ -403,6 +407,9 @@
     <ROW Component="System.Runtime.CompilerServices.Unsa_2_fe.dll" ComponentId="{B3D9FC9A-C00E-4CB8-A072-E30C0E7096E6}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsa_2_fe.dll"/>
     <ROW Component="System.Runtime.CompilerServices.Unsa_3_fe.dll" ComponentId="{9FD84AD2-C402-46C9-A299-B69E7C665765}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsa_3_fe.dll"/>
     <ROW Component="System.Runtime.CompilerServices.Unsafe.dll" ComponentId="{A9CF71F1-56A9-4A6E-BB23-05A7911B90EF}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="System.Runtime.CompilerServices.Unsafe.dll"/>
+    <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
+    <ROW Component="System.ServiceModel.Http.dll" ComponentId="{B288569A-A330-4A32-9A9E-D2FFC6E2D901}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Http.dll"/>
+    <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{C7CB46A3-638A-4FF5-A246-40860C711945}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
     <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{C34C87FE-C3CE-48F6-9CEC-2E3FD23E2AA8}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
     <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{4C859DFE-D48D-4AAC-9BE7-4CCC780E891E}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
     <ROW Component="System.Text.Encodings.Web.dll_2" ComponentId="{D81733C5-1410-4AEE-8219-83C42316BB82}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_2"/>
@@ -867,6 +874,14 @@
     <ROW File="Transmittal.Library.pdb_4" Component_="Transmittal.Library.dll_3" FileName="TRANSM~1.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R25\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Diagnostics.Abs_1_tractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abs_1_tractions.dll" FileName="MICRO~34.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Diagnostics.dll_1" Component_="Microsoft.Extensions.Diagnostics.dll_1" FileName="MICRO~35.DLL|Microsoft.Extensions.Diagnostics.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
+    <ROW File="MasterDocumentsList.rdlc" Component_="ProjectDirectory.rdlc" FileName="MASTER~1.RDL|MasterDocumentsList.rdlc" Attributes="0" SourcePath="..\source\Transmittal.Reports\Reports\MasterDocumentsList.rdlc" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.IO.Packaging.dll" Component_="System.IO.Packaging.dll" FileName="SYSTEM~2.DLL|System.IO.Packaging.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.IO.Packaging.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Pkcs.dll" Component_="System.Security.Cryptography.Pkcs.dll" FileName="SYSTEM~3.DLL|System.Security.Cryptography.Pkcs.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Security.Cryptography.Pkcs.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Http.dll" Component_="System.ServiceModel.Http.dll" FileName="SYSTEM~4.DLL|System.ServiceModel.Http.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Http.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Primitives.dll" Component_="System.ServiceModel.Primitives.dll" FileName="SYSTEM~5.DLL|System.ServiceModel.Primitives.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Primitives.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.ObjectPool.dll" Component_="Microsoft.Extensions.ObjectPool.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.ObjectPool.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.ObjectPool.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll_1" Component_="System.Diagnostics.EventLog.dll_1" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R25\System.Diagnostics.EventLog.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1354,6 +1369,13 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.Library.dll_3"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.Abs_1_tractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Packaging.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.Pkcs.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.ObjectPool.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
