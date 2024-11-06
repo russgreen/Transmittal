@@ -128,14 +128,6 @@ internal partial class AboutViewModel : BaseViewModel
     {
         OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
         {
-            SoftwareName = "AutoMapper",
-            SoftwareUri = "https://github.com/AutoMapper/AutoMapper",
-            LicenseName = "MIT License",
-            LicenseUri = "https://github.com/AutoMapper/AutoMapper/blob/master/LICENSE.txt"
-        });
-
-        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
-        {
             SoftwareName = "CommunityToolkit.MVVM",
             SoftwareUri = "https://github.com/CommunityToolkit/dotnet",
             LicenseName = "MIT License",
@@ -204,6 +196,14 @@ internal partial class AboutViewModel : BaseViewModel
             SoftwareUri = "https://github.com/ookii-dialogs/ookii-dialogs-wpf",
             LicenseName = "BSD 3-Clause License",
             LicenseUri = "https://github.com/ookii-dialogs/ookii-dialogs-wpf/blob/master/LICENSE.md"
+        });
+
+        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
+        {
+            SoftwareName = "Nuke",
+            SoftwareUri = "https://github.com/nuke-build/nuke",
+            LicenseName = "MIT License",
+            LicenseUri = "https://github.com/nuke-build/nuke/blob/develop/LICENSE"
         });
 
     }
