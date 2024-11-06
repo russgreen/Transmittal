@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Reporting.WinForms;
 using System.IO;
@@ -6,16 +5,12 @@ using System.Reflection;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
+using Transmittal.Reports.Mapping;
 
 namespace Transmittal.Reports
 {
     public class Reports
     {
-        private MapperConfiguration _configDirectory;
-        private MapperConfiguration _configTransmittal;
-        private MapperConfiguration _configTransmittalItem;
-        private MapperConfiguration _configTransmittalDist;
-
         private readonly ISettingsService _settingsService;
         private readonly IContactDirectoryService _contactDirectoryService;
         private readonly ITransmittalService _transmittalService;
@@ -25,8 +20,6 @@ namespace Transmittal.Reports
             _settingsService = serviceProvider.GetRequiredService<ISettingsService>();
             _contactDirectoryService = serviceProvider.GetRequiredService<IContactDirectoryService>();
             _transmittalService = serviceProvider.GetRequiredService<ITransmittalService>();
-
-            ConfigureDataModelMapping();
         }
 
         public Reports(ISettingsService settingsService, 
@@ -36,8 +29,6 @@ namespace Transmittal.Reports
             _settingsService = settingsService;
             _contactDirectoryService = contactDirectoryService;
             _transmittalService = transmittalService; 
-
-            ConfigureDataModelMapping();
         }
 
         public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory) //, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
@@ -65,12 +56,9 @@ namespace Transmittal.Reports
             List<Models.ProjectDirectoryReportModel> projectDirectoryReportModels = new();
             var filteredProjectDirectory = projectDirectory.Where(x => x.Person.ShowInReport == true).ToList();   
 
-            //map to the derived model type
-            IMapper iMapper = _configDirectory.CreateMapper();
-
             foreach (var item in filteredProjectDirectory)
             {
-                var newItem = iMapper.Map<ProjectDirectoryModel, Models.ProjectDirectoryReportModel>(item);
+                var newItem = item.ToProjectDirectoryReportModel();
 
                 projectDirectoryReportModels.Add(newItem);
             }
@@ -119,21 +107,17 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables(),
                 fileName);
 
-            //map to the derived model type
-            IMapper iMapper = _configTransmittal.CreateMapper();
-            var transmittalReport = iMapper.Map<TransmittalModel, Models.TransmittalReportModel>(transmittal);
-
             //we need to pass in a list<T> to the datasets
-            List<Models.TransmittalReportModel> transmittals = new List<Models.TransmittalReportModel>
+            List<TransmittalModel> transmittals = new List<TransmittalModel>
             {
-                transmittalReport
+                transmittal
             };
+
             List<Models.TransmittalDistributionReportModel> transmittalDistributions = new List<Models.TransmittalDistributionReportModel>();
 
-            iMapper = _configTransmittalDist.CreateMapper();
             foreach (var item in transmittal.Distribution)
             {
-                var newDist = iMapper.Map<TransmittalDistributionModel, Models.TransmittalDistributionReportModel>(item);
+                var newDist = item.ToTransmittalDistributionReportModel();
                 newDist.Person = _contactDirectoryService.GetPerson(newDist.PersonID);
                 newDist.Company = _contactDirectoryService.GetCompany(newDist.Person.CompanyID);
 
@@ -192,22 +176,19 @@ namespace Transmittal.Reports
             List<Models.TransmittalItemReportModel> transmittalItems = new List<Models.TransmittalItemReportModel>();
             List<Models.TransmittalDistributionReportModel> transmittalDistributions = new List<Models.TransmittalDistributionReportModel>();
             
-            IMapper iMapper;
             foreach (var transmittal in transmittals)
             {
-                iMapper = _configTransmittalItem.CreateMapper();
                 foreach (var item in transmittal.Items)
                 {
-                    var newItem = iMapper.Map<TransmittalItemModel, Models.TransmittalItemReportModel>(item);
+                    var newItem = item.ToTransmittalItemReportModel();
                     newItem.Project = $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}";
                     newItem.TransDate = transmittal.TransDate;
                     transmittalItems.Add(newItem);
                 }
 
-                iMapper = _configTransmittalDist.CreateMapper();
                 foreach (var dist in transmittal.Distribution)
                 {
-                    var newDist = iMapper.Map<TransmittalDistributionModel, Models.TransmittalDistributionReportModel>(dist);
+                    var newDist = dist.ToTransmittalDistributionReportModel();
                     newDist.TransDate = transmittal.TransDate;
                     newDist.Person = _contactDirectoryService.GetPerson(newDist.PersonID);
                     newDist.Company = _contactDirectoryService.GetCompany(newDist.Person.CompanyID);
@@ -263,13 +244,11 @@ namespace Transmittal.Reports
 
             List<Models.TransmittalItemReportModel> transmittalItems = new List<Models.TransmittalItemReportModel>();
 
-            IMapper iMapper;
             foreach (var transmittal in transmittals)
             {
-                iMapper = _configTransmittalItem.CreateMapper();
                 foreach (var item in transmittal.Items)
                 {
-                    var newItem = iMapper.Map<TransmittalItemModel, Models.TransmittalItemReportModel>(item);
+                    var newItem = item.ToTransmittalItemReportModel();
                     newItem.Project = $"{_settingsService.GlobalSettings.ProjectNumber} {_settingsService.GlobalSettings.ProjectName}";
                     newItem.TransDate = transmittal.TransDate;
                     transmittalItems.Add(newItem);
@@ -317,29 +296,6 @@ namespace Transmittal.Reports
             reportViewerWindow.reportViewer.LocalReport.DataSources.Clear();
 
             return reportViewerWindow;
-        }
-
-        private void ConfigureDataModelMapping()
-        {
-            _configDirectory = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ProjectDirectoryModel, Models.ProjectDirectoryReportModel>();
-            });
-
-            _configTransmittal = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<TransmittalModel, Models.TransmittalReportModel>();
-            });
-
-            _configTransmittalItem = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<TransmittalItemModel, Models.TransmittalItemReportModel>();
-            });
-
-            _configTransmittalDist = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<TransmittalDistributionModel, Models.TransmittalDistributionReportModel>();
-            });
         }
 
         private System.IO.Stream GetReport(string reportName)
