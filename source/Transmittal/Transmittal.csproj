@@ -91,8 +91,8 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 		<!--Logging-->
-		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.*" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.*" />
 		<!--<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" />-->
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
