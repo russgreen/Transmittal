@@ -67,7 +67,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{E01C92EA-6614-48B0-8086-1ABBE9BD1B59}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="AutoMapper.dll" ComponentId="{6EEB8FE9-F941-4DAD-8EDD-DBE8C7DAE9F6}" Directory_="APPDIR" Attributes="0" KeyPath="AutoMapper.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll_1" ComponentId="{500E8DC7-C78C-4C6F-BEA2-AEEA12044257}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll_1"/>
     <ROW Component="CommunityToolkit.Mvvm.dll_2" ComponentId="{8E7BB15C-4880-4070-8D5F-5059C6FAB0E3}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll_2"/>
@@ -487,7 +486,6 @@
     <ROW File="Transmittal.Library.pdb" Component_="Transmittal.Library.dll" FileName="TRANSM~2.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Library.pdb" SelfReg="false"/>
     <ROW File="Transmittal.Reports.dll" Component_="Transmittal.Reports.dll" FileName="TRANSM~2.DLL|Transmittal.Reports.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Reports.dll" SelfReg="false"/>
     <ROW File="Transmittal.Reports.pdb" Component_="Transmittal.Reports.dll" FileName="TRANSM~3.PDB|Transmittal.Reports.pdb" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Reports.pdb" SelfReg="false"/>
-    <ROW File="AutoMapper.dll" Component_="AutoMapper.dll" FileName="AUTOMA~1.DLL|AutoMapper.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\AutoMapper.dll" SelfReg="false"/>
     <ROW File="CommunityToolkit.Mvvm.dll" Component_="CommunityToolkit.Mvvm.dll" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
     <ROW File="Dapper.dll" Component_="Dapper.dll" FileName="Dapper.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Dapper.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll" Component_="e_sqlite3.dll" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\e_sqlite3.dll" SelfReg="false"/>
@@ -988,7 +986,6 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.Desktop.runtimeconfig.json"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.Library.dll"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.Reports.dll"/>
-    <ROW Feature_="MainFeature" Component_="AutoMapper.dll"/>
     <ROW Feature_="MainFeature" Component_="CommunityToolkit.Mvvm.dll"/>
     <ROW Feature_="MainFeature" Component_="Dapper.dll"/>
     <ROW Feature_="MainFeature" Component_="e_sqlite3.dll"/>
