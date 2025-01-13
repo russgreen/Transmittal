@@ -65,7 +65,12 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\About_Button_Small.png" />
+	  <None Remove="Resources\Archive_Button_Small.png" />
+	  <None Remove="Resources\Directory_Button_Small.png" />
+	  <None Remove="Resources\Import_Button_Small.png" />
 	  <None Remove="Resources\SearchRevisionsWatermark.png" />
+	  <None Remove="Resources\Settings_Button_Small.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -95,8 +100,8 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.*" Condition="'$(TargetFramework)' == 'net48'" />
 		
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
-		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'"/>
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 	</ItemGroup>
 
@@ -114,8 +119,13 @@
 		<Resource Include="Resources\Report.png" />		
 		<Resource Include="Resources\SearchRevisionsWatermark.png" />
 		<Resource Include="Resources\Transmittal.ico" />
-		<EmbeddedResource Include="Resources\About_Button.png" />		
-		<EmbeddedResource Include="Resources\Import_Button.png" />
+		<EmbeddedResource Include="Resources\About_Button.png" />
+		<EmbeddedResource Include="Resources\About_Button_Small.png" />
+		<EmbeddedResource Include="Resources\Archive_Button_Small.png" />
+		<EmbeddedResource Include="Resources\Directory_Button_Small.png" />		
+		<EmbeddedResource Include="Resources\Import_Button.png" />		
+		<EmbeddedResource Include="Resources\Import_Button_Small.png" />		
+		<EmbeddedResource Include="Resources\Settings_Button_Small.png" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 		<EmbeddedResource Include="Resources\Archive_Button.png" />
 		<EmbeddedResource Include="Resources\Directory_Button.png" />
