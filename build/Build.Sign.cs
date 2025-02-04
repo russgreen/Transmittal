@@ -41,9 +41,8 @@ partial class Build
         });
 
     static void SignFiles(List<string> compiledAssemblies) => SignTool(s => s
-                .SetFileDigestAlgorithm("sha256")
-                .SetTimestampServerUrl(@$"http://timestamp.comodoca.com")
-                .SetFile(Environment.GetEnvironmentVariable("CODECERT_PFX"))
-                .SetPassword(System.IO.File.ReadLines(Environment.GetEnvironmentVariable("CODECERT_PASS")).First())
-                .SetFiles(compiledAssemblies.ToArray()));
+            .SetFileDigestAlgorithm("sha256")
+            .SetTimestampServerUrl(@$"http://time.certum.pl")
+            .SetSigningSubjectName("Open Source Developer, Russell Green")
+            .SetFiles(compiledAssemblies.ToArray()));
 }
