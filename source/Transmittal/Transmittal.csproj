@@ -164,7 +164,7 @@
 	</Target>
 	
 	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild"  Condition="!$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
+	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild"  Condition="$(Configuration.Contains('Debug')) And !$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
 		</ItemGroup>
@@ -173,7 +173,7 @@
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
 	</Target>
 	
-	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild"  Condition="$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
+	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild"  Condition="$(Configuration.Contains('Debug')) And $(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
 		</ItemGroup>
