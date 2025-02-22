@@ -164,7 +164,7 @@
 	</Target>
 	
 	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
+	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild"  Condition="!$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
 		</ItemGroup>
@@ -172,6 +172,15 @@
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
 	</Target>
+	
+	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild"  Condition="$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
+		<ItemGroup>
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
+		</ItemGroup>
+		<ReplaceFileText InputFilename="Transmittal_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>	
 
 	<!-- Clean up debug manifest -->
 	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
@@ -218,3 +227,4 @@
 	</UsingTask>
 
 </Project>
+ 
