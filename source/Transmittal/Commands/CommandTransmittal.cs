@@ -30,7 +30,7 @@ public class CommandTransmittal : ExternalCommand
             //first check if the document is saved as a large publish job might crash revit
             var td = new TaskDialog("Save Project")
             {
-                MainContent = "Are all your recent changes to the model saved?  Recomended in case a crash occurs during transmittal exports",
+                MainContent = "Are all your recent changes to the model saved?  Recommended in case a crash occurs during transmittal exports",
                 CommonButtons = TaskDialogCommonButtons.Cancel
             };
             td.AddCommandLink(TaskDialogCommandLinkId.CommandLink1, "Save the project then continue to launch Transmittal");
