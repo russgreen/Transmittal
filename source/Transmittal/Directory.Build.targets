@@ -1,0 +1,123 @@
+<Project>
+	<!--
+    ===============================================================
+                         Copy Manifest
+    
+    Target for copying the manifest file to the Revit Addins folder
+    ===============================================================
+    -->
+
+	<!-- Build debug manifest at build time -->
+	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
+		<ItemGroup>
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
+		</ItemGroup>
+		<ReplaceFileText InputFilename="$(AssemblyName).addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>
+
+	<!-- Clean up debug manifest -->
+	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
+		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
+	</Target>
+
+	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<InputFilename ParameterType="System.String" Required="true" />
+			<OutputFilename ParameterType="System.String" Required="true" />
+			<MatchExpression ParameterType="System.String" Required="true" />
+			<ReplacementText ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Reference Include="System.Core" />
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Core'" TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<InputFilename ParameterType="System.String" Required="true" />
+			<OutputFilename ParameterType="System.String" Required="true" />
+			<MatchExpression ParameterType="System.String" Required="true" />
+			<ReplacementText ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+
+	<!--
+    ============================================================
+                         Repack Output files
+    
+    Target for repacking the build output into a single assembly
+    ============================================================
+    -->
+
+	<Target Name="RepackAddinFiles"
+            AfterTargets="AfterBuild"
+            BeforeTargets="CreateAddinManifest"
+			Condition="'$(IsRepackable)' == 'true'">
+
+		<ItemGroup>
+			<ILRepackVersion Include="@(PackageVersion)" Condition="'%(PackageVersion.Identity)' == 'ILRepack'"/>
+		</ItemGroup>
+
+		<ItemGroup Condition="'@(ILRepackVersion->Count())' == '0'">
+			<ILRepackVersion Include="@(PackageReference)" Condition="'%(PackageReference.Identity)' == 'ILRepack'"/>
+		</ItemGroup>
+
+		<Error Condition="'@(ILRepackVersion->Count())' == '0'" Text="ILRepack is required but not installed. The IsRepackable property is set to true, indicating that ILRepack should be used. Ensure that ILRepack is referenced in your project. To resolve this, add a PackageReference to ILRepack in your project file. If repacking is not needed, unset the IsRepackable property."/>
+
+		<ItemGroup>
+			<ILRepackInputNamesExcludes Include="$(RepackBinariesExcludes.Split(';'))"/>
+			<ILRepackInputAssembliesExcludes Include="$(OutputPath)%(ILRepackInputNamesExcludes.Identity)"/>
+		</ItemGroup>
+
+		<ItemGroup>
+			<ILRepackInputAssemblies Include="$(OutputPath)$(AssemblyName).dll"/>
+			<ILRepackInputAssemblies Include="$(OutputPath)*.dll"
+                                     Exclude="@(ILRepackInputAssembliesExcludes)"/>
+		</ItemGroup>
+
+		<PropertyGroup>
+			<ILRepackOutputName>$(AssemblyName)</ILRepackOutputName>
+			<ILRepackOutput>/out:&quot;$(OutputPath)$(ILRepackOutputName).dll&quot;</ILRepackOutput>
+			<ILRepackInput>@(ILRepackInputAssemblies -> '&quot;%(FullPath)&quot;', ' ')</ILRepackInput>
+			<ILRepackPath>&quot;$(NuGetPackageRoot)\ilrepack\%(ILRepackVersion.Version)\tools\ILRepack.exe&quot;</ILRepackPath>
+			<ILRepackLib>@(ReferencePath->'%(RelativeDir)'->Distinct()->'/lib:&quot;%(identity) &quot;', ' ')</ILRepackLib>
+		</PropertyGroup>
+
+		<Message Text="Repacking $(MSBuildProjectDirectory)\$(OutputPath)$(AssemblyName).dll" Importance="high"/>
+
+		<Exec Command="$(ILRepackPath) /union /illink /parallel $(ILRepackOutput) $(ILRepackLib) $(ILRepackInput)"
+              Condition="$(Configuration.Contains('Debug'))"/>
+
+		<Exec Command="$(ILRepackPath) /union /illink /parallel /noRepackRes /ndebug $(ILRepackOutput) $(ILRepackLib) $(ILRepackInput)"
+              StandardOutputImportance="Low"
+              Condition="$(Configuration.Contains('Release'))"/>
+
+		<ItemGroup>
+			<RepackedFiles Include="@(ILRepackInputAssemblies -> '%(RootDir)%(Directory)%(Filename).dll')" Condition="%(Filename) != $(ILRepackOutputName)"/>
+			<RepackedFiles Include="@(ILRepackInputAssemblies -> '%(RootDir)%(Directory)%(Filename).pdb')" Condition="%(Filename) != $(ILRepackOutputName)"/>
+		</ItemGroup>
+
+		<Delete Files="@(RepackedFiles)"/>
+	</Target>
+</Project>

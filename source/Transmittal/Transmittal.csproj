@@ -69,6 +69,11 @@
 	<PropertyGroup>
 		<AssemblyName>Transmittal</AssemblyName>
 	</PropertyGroup>
+
+	<!--<PropertyGroup>
+		<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
+		<RepackBinariesExcludes>e_sqlite3.dll</RepackBinariesExcludes>
+	</PropertyGroup>-->
 	
 	<ItemGroup>
 	  <None Remove="Resources\About_Button_Small.png" />
@@ -109,6 +114,8 @@
 		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
+		<!--Repacking
+		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>-->
 	</ItemGroup>
 
 
@@ -154,77 +161,6 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
-	</Target>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
-	</Target>
-	
-	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild"  Condition="$(Configuration.Contains('Debug')) And !$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
-		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
-		</ItemGroup>
-		<ReplaceFileText InputFilename="Transmittal.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
-	</Target>
-	
-	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild"  Condition="$(Configuration.Contains('Debug')) And $(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
-		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
-		</ItemGroup>
-		<ReplaceFileText InputFilename="Transmittal_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
-	</Target>	
-
-	<!-- Clean up debug manifest -->
-	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
-		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
-	</Target>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Reference Include="System.Core" />
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Core'" TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
 
 </Project>
  
