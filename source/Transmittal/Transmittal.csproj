@@ -70,10 +70,10 @@
 		<AssemblyName>Transmittal</AssemblyName>
 	</PropertyGroup>
 
-	<!--<PropertyGroup>
-		<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
-		<RepackBinariesExcludes>e_sqlite3.dll</RepackBinariesExcludes>
-	</PropertyGroup>-->
+	<PropertyGroup>
+		<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2026'">true</IsRepackable>
+		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Syncfusion*.dll</RepackBinariesExcludes>
+	</PropertyGroup>
 	
 	<ItemGroup>
 	  <None Remove="Resources\About_Button_Small.png" />
@@ -114,8 +114,8 @@
 		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
-		<!--Repacking
-		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>-->
+		<!--Repacking-->
+		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>
 	</ItemGroup>
 
 

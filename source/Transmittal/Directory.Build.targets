@@ -1,5 +1,20 @@
 <Project>
 	<!--
+    =====================================================
+                         Set License Key
+    
+    Set license key for Syncfusion controls at build time
+    =====================================================
+    -->
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
+	</Target>
+	
+	<!--
     ===============================================================
                          Copy Manifest
     
@@ -8,11 +23,20 @@
     -->
 
 	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
+	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild" Condition="!$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
 		</ItemGroup>
 		<ReplaceFileText InputFilename="$(AssemblyName).addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+	</Target>
+
+	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild" Condition="$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
+		<ItemGroup>
+			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
+		</ItemGroup>
+		<ReplaceFileText InputFilename="$(AssemblyName)_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
 		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
 	</Target>
