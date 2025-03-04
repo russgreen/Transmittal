@@ -16,6 +16,17 @@ public partial class AboutView : Window
     private void OpenLink(object sender, RoutedEventArgs e)
     {
         if (e.OriginalSource is not Hyperlink link) return;
-        Process.Start(link.NavigateUri.OriginalString);
+
+
+        var uri = link.NavigateUri;
+        if (uri == null) return;
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = uri.OriginalString,
+            UseShellExecute = true
+        };
+
+        Process.Start(psi);
     }
 }

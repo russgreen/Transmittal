@@ -28,10 +28,8 @@
 		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.*" />	
 		<PackageReference Include="System.Formats.Asn1" Version="8.*" />		
 		
-		<PackageReference Include="AutoMapper" Version="13.0.1" />
-
 		<!--<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1586.0" GeneratePathProperty="true" />-->
-		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.23" />
+		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.25" />
 	</ItemGroup>
 
 	<ItemGroup>

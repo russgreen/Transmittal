@@ -4,9 +4,6 @@ namespace Transmittal.Reports.Models;
 
 public class TransmittalDistributionReportModel : TransmittalDistributionModel
 {
-    //public CompanyModel Company { get; set; }
-    //public PersonModel Person { get; set; }
-
     public string ContactName => $"{Person.FullNameReversed} ({Company.CompanyName})";
     public string CompanyName => Company.CompanyName;
 

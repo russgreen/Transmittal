@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25</Configurations>
-		<Configurations>$(Configurations);Release R21;Release R22;Release R23;Release R24;Release R25</Configurations>
+		<Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;Debug R26</Configurations>
+		<Configurations>$(Configurations);Release R21;Release R22;Release R23;Release R24;Release R25;Release R26</Configurations>
 		<Description>Revit addin to manage drawing sheet transmittals</Description>
 		<UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
@@ -59,13 +59,29 @@
 		<DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
 		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R26'))">
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RevitVersion>2026</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2026</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER;REVIT2026_OR_GREATER</DefineConstants>
+	</PropertyGroup>	
 	
 	<PropertyGroup>
 		<AssemblyName>Transmittal</AssemblyName>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2026'">true</IsRepackable>
+		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Syncfusion*.dll</RepackBinariesExcludes>
+	</PropertyGroup>
 	
 	<ItemGroup>
+	  <None Remove="Resources\About_Button_Small.png" />
+	  <None Remove="Resources\Archive_Button_Small.png" />
+	  <None Remove="Resources\Directory_Button_Small.png" />
+	  <None Remove="Resources\Import_Button_Small.png" />
 	  <None Remove="Resources\SearchRevisionsWatermark.png" />
+	  <None Remove="Resources\Settings_Button_Small.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -80,23 +96,26 @@
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
 		
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />	
-		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
-		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />	
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*-*" />
 
 		<!--IOC-->
-		<!--<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" />-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 		<!--Logging-->
-		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.*" />
-		<!--<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" />-->
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" Condition="'$(TargetFramework)' == 'net48'" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.*" Condition="'$(TargetFramework)' == 'net48'" />
+		
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
+		<!--Repacking-->
+		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>
 	</ItemGroup>
 
 
@@ -113,8 +132,13 @@
 		<Resource Include="Resources\Report.png" />		
 		<Resource Include="Resources\SearchRevisionsWatermark.png" />
 		<Resource Include="Resources\Transmittal.ico" />
-		<EmbeddedResource Include="Resources\About_Button.png" />		
-		<EmbeddedResource Include="Resources\Import_Button.png" />
+		<EmbeddedResource Include="Resources\About_Button.png" />
+		<EmbeddedResource Include="Resources\About_Button_Small.png" />
+		<EmbeddedResource Include="Resources\Archive_Button_Small.png" />
+		<EmbeddedResource Include="Resources\Directory_Button_Small.png" />		
+		<EmbeddedResource Include="Resources\Import_Button.png" />		
+		<EmbeddedResource Include="Resources\Import_Button_Small.png" />		
+		<EmbeddedResource Include="Resources\Settings_Button_Small.png" />
 		<EmbeddedResource Include="Resources\Transmittal_Button.png" />
 		<EmbeddedResource Include="Resources\Archive_Button.png" />
 		<EmbeddedResource Include="Resources\Directory_Button.png" />
@@ -138,66 +162,5 @@
 		</None>
 	</ItemGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
-	</Target>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.cs $(SolutionDir)SyncfusionKey.txt" />
-	</Target>
-	
-	<!-- Build debug manifest at build time -->
-	<Target Name="CreateAddinManifest" AfterTargets="AfterBuild">
-		<ItemGroup>
-			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
-		</ItemGroup>
-		<ReplaceFileText InputFilename="Transmittal.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
-	</Target>
-
-	<!-- Clean up debug manifest -->
-	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
-		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Transmittal.addin" />
-	</Target>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Full'" TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Reference Include="System.Core" />
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-
-	<UsingTask Condition="'$(MSBuildRuntimeType)' == 'Core'" TaskName="ReplaceFileText" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-		<ParameterGroup>
-			<InputFilename ParameterType="System.String" Required="true" />
-			<OutputFilename ParameterType="System.String" Required="true" />
-			<MatchExpression ParameterType="System.String" Required="true" />
-			<ReplacementText ParameterType="System.String" Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Using Namespace="System" />
-			<Using Namespace="System.IO" />
-			<Using Namespace="System.Text.RegularExpressions" />
-			<Code Type="Fragment" Language="cs">
-				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-
 </Project>
+ 

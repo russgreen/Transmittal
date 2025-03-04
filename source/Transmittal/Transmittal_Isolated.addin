@@ -9,4 +9,8 @@
 		<VisibilityMode>NotVisibleInFamily</VisibilityMode>
 		<VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
 	</AddIn>
+	<ManifestSettings>
+		<UseRevitContext>False</UseRevitContext>
+		<ContextName>Transmittal</ContextName>
+	</ManifestSettings>
 </RevitAddIns>

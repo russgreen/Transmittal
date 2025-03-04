@@ -2,6 +2,7 @@ using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Events;
 using Nice3point.Revit.Toolkit.External;
+using SQLitePCL;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
@@ -105,59 +106,82 @@ public class App : ExternalApplication
         buttonTransmittal.LargeImage = PngImageSource("Transmittal.Resources.Transmittal_Button.png");
         buttonTransmittal.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/transmittal/"));
 
-
-        var buttonDirectory = (PushButton)panel.AddItem(
-            new PushButtonData(
+        var buttonDataDirectory = new PushButtonData(
                 nameof(Transmittal.Commands.CommandDirectory),
                 $"Project{Environment.NewLine}Directory",
                 Assembly.GetExecutingAssembly().Location,
-                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandDirectory)}"));
-        buttonDirectory.ToolTip = "Edit the the project directory";
-        buttonDirectory.LargeImage = PngImageSource("Transmittal.Resources.Directory_Button.png");
-        buttonDirectory.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/directory/"));
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandDirectory)}");
+        buttonDataDirectory.ToolTip = "Edit the the project directory";
+        buttonDataDirectory.Image = PngImageSource("Transmittal.Resources.Directory_Button_Small.png");
+        buttonDataDirectory.LargeImage = PngImageSource("Transmittal.Resources.Directory_Button.png");
+        buttonDataDirectory.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/directory/"));
 
-        var buttonTransmittalArchive = (PushButton)panel.AddItem(
-            new PushButtonData(
+        var buttonDataArchive = new PushButtonData(
                 nameof(Transmittal.Commands.CommandTransmittalsArchive),
                 $"Transmittal{Environment.NewLine}Archive",
                 Assembly.GetExecutingAssembly().Location,
-                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandTransmittalsArchive)}"));
-        buttonTransmittalArchive.ToolTip = "View the transmittal archive";
-        buttonTransmittalArchive.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
-        buttonTransmittalArchive.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandTransmittalsArchive)}");
+        buttonDataArchive.ToolTip = "View the transmittal archive";
+        buttonDataArchive.Image = PngImageSource("Transmittal.Resources.Archive_Button_Small.png");
+        buttonDataArchive.LargeImage = PngImageSource("Transmittal.Resources.Archive_Button.png");
+        buttonDataArchive.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
 
         var splitButtonData = new SplitButtonData("SettingsSplit", "Settings");
-        var splitButton = panel.AddItem(splitButtonData) as SplitButton;
-        splitButton.IsSynchronizedWithCurrentItem = false;
 
-        var pushButton = splitButton.AddPushButton(
-            new PushButtonData(
-                nameof(Transmittal.Commands.CommandSettings),  
-                "Settings",
-            Assembly.GetExecutingAssembly().Location,
-            $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandSettings)}"));
-        pushButton.ToolTip = "Edit the settings";
-        pushButton.LargeImage = PngImageSource("Transmittal.Resources.Settings_Button.png");
-        pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
+        var buttonDataSettings = new PushButtonData(
+                nameof(Transmittal.Commands.CommandSettings),
+                $"Settings",
+                Assembly.GetExecutingAssembly().Location,
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandSettings)}");
+        buttonDataSettings.ToolTip = "Edit the settings";
+        buttonDataSettings.Image = PngImageSource("Transmittal.Resources.Settings_Button_Small.png");
+        buttonDataSettings.LargeImage = PngImageSource("Transmittal.Resources.Settings_Button.png");
+        buttonDataSettings.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
 
-        pushButton = splitButton.AddPushButton(
-            new PushButtonData(
-                nameof(Transmittal.Commands.CommandImportSettings), 
-                "Import Settings",
-            Assembly.GetExecutingAssembly().Location,
-            $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandImportSettings)}"));
-        pushButton.ToolTip = "Import settings from template file";
-        pushButton.LargeImage = PngImageSource("Transmittal.Resources.Import_Button.png");
-        pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
+        var buttonDataImportSettings = new PushButtonData(
+                nameof(Transmittal.Commands.CommandImportSettings),
+                $"Import{Environment.NewLine}Settings",
+                Assembly.GetExecutingAssembly().Location,
+                $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandImportSettings)}");
+        buttonDataImportSettings.ToolTip = "Import settings from template file";
+        buttonDataImportSettings.Image = PngImageSource("Transmittal.Resources.Import_Button_Small.png");
+        buttonDataImportSettings.LargeImage = PngImageSource("Transmittal.Resources.Import_Button.png");
+        buttonDataImportSettings.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/settings/"));
 
-        pushButton = splitButton.AddPushButton(
-        new PushButtonData(nameof(Transmittal.Commands.CommandAbout), 
+        var buttonDataAbout = new PushButtonData(nameof(Transmittal.Commands.CommandAbout),
             "About",
         Assembly.GetExecutingAssembly().Location,
-        $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandAbout)}"));
-        pushButton.ToolTip = "About Transmittal";
-        pushButton.LargeImage = PngImageSource("Transmittal.Resources.About_Button.png");
-        pushButton.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
+        $"{nameof(Transmittal)}.{nameof(Transmittal.Commands)}.{nameof(Transmittal.Commands.CommandAbout)}");
+        buttonDataAbout.ToolTip = "About Transmittal";
+        buttonDataAbout.Image = PngImageSource("Transmittal.Resources.About_Button_Small.png");
+        buttonDataAbout.LargeImage = PngImageSource("Transmittal.Resources.About_Button.png");
+        buttonDataAbout.SetContextualHelp(new ContextualHelp(ContextualHelpType.Url, "https://russgreen.github.io/Transmittal/archive/"));
+
+        if (_tabName != "Transmittal")
+        {
+
+            var stackedItems = panel.AddStackedItems(buttonDataDirectory, buttonDataArchive, splitButtonData);
+
+            var split = stackedItems.Last() as SplitButton;
+            split.IsSynchronizedWithCurrentItem = false;
+
+            split.AddPushButton(buttonDataSettings);
+            split.AddPushButton(buttonDataImportSettings);
+            split.AddPushButton(buttonDataAbout);
+        }
+        else
+        {
+            panel.AddItem(buttonDataDirectory);
+            panel.AddItem(buttonDataArchive);
+
+            var splitButton = panel.AddItem(splitButtonData) as SplitButton;
+            splitButton.IsSynchronizedWithCurrentItem = false;
+
+            splitButton.AddPushButton(buttonDataSettings);
+            splitButton.AddPushButton(buttonDataImportSettings);
+            splitButton.AddPushButton(buttonDataAbout);
+        }
+            
 
         return panel;
     }
