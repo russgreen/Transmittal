@@ -208,7 +208,7 @@ internal partial class AboutViewModel : BaseViewModel
 
         OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
         {
-            SoftwareName = "ricaun.Revit.UI.StatusBar",
+            SoftwareName = "ILRepack",
             SoftwareUri = "https://github.com/gluck/il-repack",
             LicenseName = "Apache 2.0 License",
             LicenseUri = "https://github.com/gluck/il-repack?tab=Apache-2.0-1-ov-file#readme"
