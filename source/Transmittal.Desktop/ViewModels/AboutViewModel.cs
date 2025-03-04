@@ -206,5 +206,12 @@ internal partial class AboutViewModel : BaseViewModel
             LicenseUri = "https://github.com/nuke-build/nuke/blob/develop/LICENSE"
         });
 
+        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
+        {
+            SoftwareName = "ricaun.Revit.UI.StatusBar",
+            SoftwareUri = "https://github.com/gluck/il-repack",
+            LicenseName = "Apache 2.0 License",
+            LicenseUri = "https://github.com/gluck/il-repack?tab=Apache-2.0-1-ov-file#readme"
+        });
     }
 }
