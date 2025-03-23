@@ -21,10 +21,8 @@ public class WarningSwallower : Autodesk.Revit.DB.IFailuresPreprocessor
         foreach (Autodesk.Revit.DB.FailureMessageAccessor msgAccessor in msgAccessorList)
         {
             _ = FailuresAccessor.GetTransactionName();
-            if (msgAccessor.GetDescriptionText().ToString().ToLower()
-                .Contains("revit will use raster printing") == true | 
-                msgAccessor.GetDescriptionText().ToLower().ToLower()
-                .Contains("the <in-session> print settings will be used"))
+            if (msgAccessor.GetDescriptionText().ToString().Contains("revit will use raster printing", StringComparison.CurrentCultureIgnoreCase) == true | 
+                msgAccessor.GetDescriptionText().ToLower().Contains("the <in-session> print settings will be used", StringComparison.CurrentCultureIgnoreCase))
             {
                 FailuresAccessor.DeleteWarning(msgAccessor);
             }
