@@ -301,7 +301,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         // get the sheets in the model
         var sheets = new FilteredElementCollector(App.RevitDocument);
         sheets.OfClass(typeof(ViewSheet));
-        if (sheets.Count() == 0)
+        if (!sheets.Any())
         {
             return drawingSheets;
         }
