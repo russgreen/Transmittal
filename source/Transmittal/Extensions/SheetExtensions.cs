@@ -20,85 +20,85 @@ internal static class SheetExtensions
 
     public static ExportPaperFormat GetExportPaperFormat(this ViewSheet sheet)
     {
-        ExportPaperFormat retval;
+        ExportPaperFormat result;
 
         var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
 
         if (paper is null)
         {
-            retval = ExportPaperFormat.Default;
+            result = ExportPaperFormat.Default;
         }
 
         switch (paper.Name ?? "")
         {
             case "A0":
                 {
-                    retval = ExportPaperFormat.ISO_A0;
+                    result = ExportPaperFormat.ISO_A0;
                     break;
                 }
 
             case "A1":
                 {
-                    retval = ExportPaperFormat.ISO_A1;
+                    result = ExportPaperFormat.ISO_A1;
                     break;
                 }
 
             case "A2":
                 {
-                    retval = ExportPaperFormat.ISO_A2;
+                    result = ExportPaperFormat.ISO_A2;
                     break;
                 }
 
             case "A3":
                 {
-                    retval = ExportPaperFormat.ISO_A3;
+                    result = ExportPaperFormat.ISO_A3;
                     break;
                 }
 
             case "A4":
                 {
-                    retval = ExportPaperFormat.ISO_A4;
+                    result = ExportPaperFormat.ISO_A4;
                     break;
                 }
 
             case "B0":
                 {
-                    retval = ExportPaperFormat.Default; // ISO_B0 does not exist in API
+                    result = ExportPaperFormat.Default; // ISO_B0 does not exist in API
                     break;
                 }
 
             case "B1":
                 {
-                    retval = ExportPaperFormat.ISO_B1;
+                    result = ExportPaperFormat.ISO_B1;
                     break;
                 }
 
             case "B2":
                 {
-                    retval = ExportPaperFormat.ISO_B2;
+                    result = ExportPaperFormat.ISO_B2;
                     break;
                 }
 
             case "B3":
                 {
-                    retval = ExportPaperFormat.ISO_B3;
+                    result = ExportPaperFormat.ISO_B3;
                     break;
                 }
 
             case "B4":
                 {
-                    retval = ExportPaperFormat.ISO_B4;
+                    result = ExportPaperFormat.ISO_B4;
                     break;
                 }
 
             default:
                 {
-                    retval = ExportPaperFormat.Default;
+                    result = ExportPaperFormat.Default;
                     break;
                 }
         }
 
-        return retval;
+        return result;
     }
 
     public static PaperSizeModel GetPaperSizeModel(this FamilyInstance titleBlock)
@@ -115,8 +115,10 @@ internal static class SheetExtensions
             height = Math.Round(p.AsDouble().FootToMm(), 0);
         }
 
-        var paper = (from p in SupportedPaperSizes() where 
-                     p.Width == width & p.Height ==  height select p)
+        var paper = (from p in SupportedPaperSizes()
+                     where
+                     p.Width == width & p.Height == height
+                     select p)
                      .FirstOrDefault();
 
         if (paper != null)
@@ -125,7 +127,7 @@ internal static class SheetExtensions
         }
 
         //we didn't find a match, so we'll create a new one
-        return new PaperSizeModel { Name = $"{width} x {height}", Width = width, Height = height};
+        return new PaperSizeModel { Name = $"{width} x {height}", Width = width, Height = height };
     }
 
     private static List<Models.PaperSizeModel> SupportedPaperSizes()
