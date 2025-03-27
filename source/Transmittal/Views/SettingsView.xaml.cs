@@ -38,6 +38,21 @@ public partial class SettingsView : Window
         }
     }
 
+    private void buttonFolderBrowse2_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new VistaFolderBrowserDialog
+        {
+            Description = "Please select a folder to save the Transmittal CDE copy files.",
+            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
+            RootFolder = Environment.SpecialFolder.MyComputer
+        };
+
+        if ((bool)dialog.ShowDialog(this))
+        {
+            _viewModel.DrawingIssueStore2 = dialog.SelectedPath;
+        }
+    }
+
     private void buttonLoadSettingsFromDatabase_Click(object sender, RoutedEventArgs e)
     {
         Ookii.Dialogs.Wpf.TaskDialogButton openButton = new Ookii.Dialogs.Wpf.TaskDialogButton("Load settings from database");
