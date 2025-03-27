@@ -12,14 +12,20 @@ public class NamingExtensionsTests
     public void ParseFolderName_ShouldReplaceTagsInFolderPath() //string expected, string path, string format, int year, int month, int day)
     {
         // Arrange
-        var path = @"C:\Users\<Format>\<DateYYYY>\<DateMM>\<DateDD>";
+        var path = @"C:\Users\<Format>\<SheetCollection>\<Package>\<DateYYYY>\<DateMM>\<DateDD>";
         var format = "PDF";
+        var package = "package name";
+        var sheetCollection = "sheet collection";
 
         // Act
-        var result = path.ParseFolderName(format);
+        var result = path.ParseFolderName(format, package, sheetCollection);
 
         // Assert
         Assert.Contains(format, result);
+
+        Assert.Contains(package, result);
+        Assert.Contains(sheetCollection, result);
+
         Assert.Contains(DateTime.Now.Year.ToString(), result);
         Assert.Contains(DateTime.Now.ToString("MM"), result);
         Assert.Contains(DateTime.Now.ToString("dd"), result);

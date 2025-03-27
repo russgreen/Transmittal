@@ -7,24 +7,33 @@ namespace Transmittal.Library.Extensions;
 public static class NamingExtensions
 {
     /// <summary>
-    /// Parses out folder paths that contain an optional <Format>, <DateDD>, <DateMM>, <DateYY>, <DateYYYY> tags
+    /// Parses out folder paths that contain an optional <Format>, <DateDD>, <DateMM>, <DateYY>, <DateYYYY>, <Package>, <SheetCollection> tags
     /// </summary>
     /// <param name="path">the path the the folder containing the <FORMAT> tag</param>
     /// <param name="format">the text to replace the <FORMAT>  tag with, e.g. PDF, DWG, etc</param>
     /// <returns></returns>
-    public static string ParseFolderName(this string path, string format)
+    public static string ParseFolderName(this string path, string format, string package = null, string sheetCollection = null)
     {
         path = path.ParsePathWithEnvironmentVariables();
-        //path.Replace("%UserProfile%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-        //path = path.Replace("%OneDriveConsumer%", Environment.GetEnvironmentVariable("OneDriveConsumer"));
-        //path = path.Replace("%OneDriveCommercial%", Environment.GetEnvironmentVariable("OneDriveCommercial"));
 
-        path = path.Replace("<DateDD>", DateTime.Now.ToStringDD());
-        path = path.Replace("<DateMM>", DateTime.Now.ToStringMM());
-        path = path.Replace("<DateYY>", DateTime.Now.ToStringYY());
-        path = path.Replace("<DateYYYY>", DateTime.Now.Year.ToString());
+        var replacements = new Dictionary<string, string>
+        {
+            { "<DateDD>", DateTime.Now.ToStringDD() },
+            { "<DateMM>", DateTime.Now.ToStringMM() },
+            { "<DateYY>", DateTime.Now.ToStringYY() },
+            { "<DateYYYY>", DateTime.Now.Year.ToString() },
+            { "<Format>", format },
+            { "<Package>", package },
+            { "<SheetCollection>", sheetCollection }
+        };
 
-        path = path.Replace("<Format>", format);
+        foreach (var replacement in replacements)
+        {
+            if (!string.IsNullOrEmpty(replacement.Value))
+            {
+                path = path.Replace(replacement.Key, replacement.Value);
+            }
+        }
 
         return path;
     }
