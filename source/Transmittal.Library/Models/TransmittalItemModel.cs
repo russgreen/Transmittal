@@ -90,4 +90,7 @@ public partial class TransmittalItemModel : ObservableValidator
 
     [ObservableProperty]
     private string _drgPackage;
+
+    [ObservableProperty]
+    private string _drgSheetCollection;
 }
