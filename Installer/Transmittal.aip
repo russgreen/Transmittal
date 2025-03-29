@@ -13,10 +13,10 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{53C31422-5581-46B2-8BC1-EBB18C228E6A} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{5B5BB380-0168-4CCC-8F2F-990F1257655B} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="2.3.10" Options="32"/>
+    <ROW Property="ProductVersion" Value="3.0.0" Options="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -174,8 +174,12 @@
     <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B97395F2-893B-4B6F-9ADE-DAFEB65B77E5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
     <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
     <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
+    <ROW Component="System.Security.Cryptography.Xml.dll" ComponentId="{5F719FC0-DF06-4837-9067-EBA3DF5EFACF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Xml.dll"/>
+    <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{00DA1B9C-2EAB-41CD-BEDF-05C9B5BD5F27}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
     <ROW Component="System.ServiceModel.Http.dll" ComponentId="{B288569A-A330-4A32-9A9E-D2FFC6E2D901}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Http.dll"/>
     <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{C7CB46A3-638A-4FF5-A246-40860C711945}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
+    <ROW Component="System.ServiceModel.Security.dll" ComponentId="{D1F414CB-C244-42D9-A6F1-C227F7D618F0}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Security.dll"/>
+    <ROW Component="System.ServiceModel.dll" ComponentId="{33F59649-E4BF-4B0F-9350-A5C879E38CF7}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.dll"/>
     <ROW Component="TemplateDatabase.tdb" ComponentId="{67545C2E-56FF-4D86-8626-0B6EC14D63BA}" Directory_="Data_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_1" ComponentId="{4A67569F-42FE-4FB7-85B8-EA1CAE4D4542}" Directory_="Data_1_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_1" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_2" ComponentId="{5E23C14F-7637-4C78-9A5D-1189397C7397}" Directory_="Data_2_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_2" Type="0"/>
@@ -370,6 +374,10 @@
     <ROW File="System.ServiceModel.Http.dll" Component_="System.ServiceModel.Http.dll" FileName="SYSTEM~4.DLL|System.ServiceModel.Http.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Http.dll" SelfReg="false"/>
     <ROW File="System.ServiceModel.Primitives.dll" Component_="System.ServiceModel.Primitives.dll" FileName="SYSTEM~5.DLL|System.ServiceModel.Primitives.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Primitives.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.ObjectPool.dll" Component_="Microsoft.Extensions.ObjectPool.dll" FileName="MICRO~36.DLL|Microsoft.Extensions.ObjectPool.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.ObjectPool.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.Xml.dll" Component_="System.Security.Cryptography.Xml.dll" FileName="SYSTEM~6.DLL|System.Security.Cryptography.Xml.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Security.Cryptography.Xml.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.dll" Component_="System.ServiceModel.dll" FileName="SYSTEM~7.DLL|System.ServiceModel.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Duplex.dll" Component_="System.ServiceModel.Duplex.dll" FileName="SYSTEM~8.DLL|System.ServiceModel.Duplex.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Duplex.dll" SelfReg="false"/>
+    <ROW File="System.ServiceModel.Security.dll" Component_="System.ServiceModel.Security.dll" FileName="SYSTEM~9.DLL|System.ServiceModel.Security.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.ServiceModel.Security.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -612,6 +620,10 @@
     <ROW Feature_="MainFeature" Component_="System.ServiceModel.Http.dll"/>
     <ROW Feature_="MainFeature" Component_="System.ServiceModel.Primitives.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.ObjectPool.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.Xml.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Duplex.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceModel.Security.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
