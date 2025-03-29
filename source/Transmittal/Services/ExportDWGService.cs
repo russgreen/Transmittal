@@ -24,7 +24,7 @@ internal class ExportDWGService : IExportDWGService
         _logger = logger;
     }
     
-    public string ExportDWG(string exportFileName, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
+    public string ExportDWG(string exportFileName, string folderPath, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
     {
         var fullPath = string.Empty;
 
@@ -44,7 +44,6 @@ internal class ExportDWGService : IExportDWGService
                 lviews.Add(View.Id);
             }
 
-            string folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString());
             fullPath = Path.Combine(folderPath, exportFileName);
 
             if (Directory.Exists(folderPath) == false)
