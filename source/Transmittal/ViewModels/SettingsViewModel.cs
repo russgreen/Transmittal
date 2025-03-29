@@ -83,8 +83,14 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [ObservableProperty]
     private bool _useCDE;
 
-  [ObservableProperty]
+    [ObservableProperty]
     private bool _useDrawingIssueStore2;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MustBeFalse(ErrorMessage = "CDE output folder is not found")]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private bool _drawingIssueStore2NotFound;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -178,9 +184,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
+        SetPropertiesFromGlobalSettings();
+
         CheckForDatabaseFile();
 
-        SetPropertiesFromGlobalSettings();
+        CheckForOutputFolders();
 
         IssueFormats.CollectionChanged += IssueFormats_CollectionChanged;
         DocumentStatuses.CollectionChanged += DocumentStatuses_CollectionChanged;
@@ -624,9 +632,17 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         RecordTransmittals = true;
     }
 
+    partial void OnUseCDEChanged(bool oldValue, bool newValue)
+    {
+        if(newValue == false)
+        {
+            UseDrawingIssueStore2 = false;
+        }
+    }
+
     partial void OnDrawingIssueStoreChanged(string value)
     {
-        SampleFolderName = DrawingIssueStore.ParseFolderName("FORMAT");
+        SampleFolderName = DrawingIssueStore.ParseFolderName("FORMAT", "PACKAGE", "COLLECTION");
     }
 
     partial void OnDateFormatStringChanged(string value)
@@ -638,6 +654,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     {
         //TODO check for the database and create if it doesn't exist
         CheckForDatabaseFile();
+    }
+
+    partial void OnDrawingIssueStore2Changed(string value)
+   {
+
+        CheckForOutputFolders();
     }
 
     partial void OnDatabaseFileChanged(string value)
@@ -660,6 +682,27 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         DispatcherHelper.DoEvents();
       
+    }
+
+    public void CheckForOutputFolders()
+    {
+        DrawingIssueStore2NotFound = false;
+
+        if(DrawingIssueStore2 != null)
+        {
+            if (UseDrawingIssueStore2)
+            {
+                //first we need the folder path with up the the first <field> only.
+                var path = DrawingIssueStore2.ParseFolderName();
+
+                if (!System.IO.Directory.Exists(path))
+                {
+                    DrawingIssueStore2NotFound = true;
+                }
+            }
+        }
+
+
     }
 
     public void CheckForDatabaseFile()
