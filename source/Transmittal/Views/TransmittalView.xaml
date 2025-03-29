@@ -119,7 +119,7 @@
                             <syncfusion:GridTextColumn MappingName="DrgStatusDescription" HeaderText="Status Description" Width="120" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" Width="120" />
                             <!--<syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="75" />-->
-                            <syncfusion:GridTextColumn MappingName="SheetCollection" HeaderText="Sheet Collection" Width="120" IsHidden="True" />
+                            <syncfusion:GridTextColumn MappingName="DrgSheetCollection" HeaderText="Sheet Collection" Width="120" IsHidden="True" />
                             <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="75" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />

@@ -22,8 +22,8 @@ public partial class TransmittalView : Window
         _viewModel.ClosingRequest += (sender, e) => this.Close();
 
 #if REVIT2025_OR_GREATER
-        this.sfDataGridSheets.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "SheetCollection" });
-        this.sfDataGridSheets.Columns["SheetCollection"].GroupMode = DataReflectionMode.Display;
+        this.sfDataGridSheets.GroupColumnDescriptions.Add(new GroupColumnDescription() { ColumnName = "DrgSheetCollection" });
+        this.sfDataGridSheets.Columns["DrgSheetCollection"].GroupMode = DataReflectionMode.Display;
         this.sfDataGridSheets.AutoExpandGroups = true;
         this.sfDataGridSheets.AllowFrozenGroupHeaders = true;
 #endif

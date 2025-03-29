@@ -1,8 +1,10 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.Creation;
+using Autodesk.Revit.DB;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
+using Microsoft.SqlServer.Server;
 using Nice3point.Revit.Extensions;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
@@ -318,7 +320,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
 #endif
 
-        foreach (ViewSheet sheet in sheets)
+        foreach (var sheet in sheets.Cast<ViewSheet>())
         {
             // Create a new drawing sheet model to add to the list
             DrawingSheetModel drawingSheet = new()
@@ -362,7 +364,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 drawingSheet.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
 
 #if REVIT2025_OR_GREATER
-                drawingSheet.SheetCollection = GetSheetCollectionName(sheetDictionary, sheet.SheetCollectionId);
+                drawingSheet.DrgSheetCollection = GetSheetCollectionName(sheetDictionary, sheet.SheetCollectionId);
 #endif
 
                 drawingSheets.Add(drawingSheet);
@@ -396,7 +398,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
             //todo validate the selected sheets meet ISO19650 rules and all parameters have values
-            foreach (TransmittalItemModel item in SelectedDrawingSheets)
+            foreach (var item in SelectedDrawingSheets.Cast<TransmittalItemModel>())
             {
                 if ((string.IsNullOrEmpty(item.DrgVolume)) ||
                     (string.IsNullOrEmpty(item.DrgLevel)) ||
@@ -418,14 +420,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             .OfClass(typeof(ViewSheet));
 
         //loop though the selected items in the grid
-        foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
+        foreach (var sheetModel in SelectedDrawingSheets.Cast<DrawingSheetModel>())
         {
             //set the model values
             sheetModel.DrgStatus = model.Code;
             sheetModel.DrgStatusDescription = model.Description;
 
             //update the sheet status in revit
-            foreach (ViewSheet sheet in sheets)
+            foreach (var sheet in sheets.Cast<ViewSheet>())
             {
                 if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
                 {
@@ -513,9 +515,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             .OfClass(typeof(ViewSheet));
 
         //loop throught the selected items in the grid
-        foreach (DrawingSheetModel sheetModel in SelectedDrawingSheets)
+        foreach (var sheetModel in SelectedDrawingSheets.Cast<DrawingSheetModel>())
         {
-            foreach (ViewSheet sheet in sheets)
+            foreach (var sheet in sheets.Cast<ViewSheet>())
             {
                 if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
                 {
@@ -546,7 +548,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         var sheets = new FilteredElementCollector(App.RevitDocument)
             .OfClass(typeof(ViewSheet));
 
-        foreach (ViewSheet sheet in sheets)
+        foreach (var sheet in sheets.Cast<ViewSheet>())
         {
             if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
             {
@@ -607,7 +609,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             collector.Excluding(revisions);
         }
 
-        foreach (Revision revision in collector)
+        foreach (var revision in collector.Cast<Revision>())
         {
             if ((revision.SequenceNumber.ToString() ?? "") == (revSeq ?? ""))
             {
@@ -779,9 +781,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             var sheets = new FilteredElementCollector(App.RevitDocument);
             sheets.OfClass(typeof(ViewSheet));
 
-            foreach (DrawingSheetModel drawingSheet in SelectedDrawingSheets)
+            foreach (var drawingSheet in SelectedDrawingSheets.Cast<DrawingSheetModel>())
             {
-                foreach (ViewSheet sheet in sheets)
+                foreach (var sheet in sheets.Cast<ViewSheet>())
                 {
                     // abort if cancel was clicked
                     if (AbortFlag == true)
@@ -890,7 +892,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             if(GenerateCDECopies == true)
             {
                 CopyFilesForCDE();
-                GenerateCDEImportFile();
+
+                if (!_settingsService.GlobalSettings.UseDrawingIssueStore2)
+                {
+                    GenerateCDEImportFile();
+                }
             }
 
             OpenExplorerToExportedFilesLocations();
@@ -923,20 +929,28 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SheetTaskProgressLabel = "Exporting PDF...";
         SendProgressMessage();
 
+        var filePath = string.Empty;
+
+#if REVIT2025_OR_GREATER
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString(), drawingSheet.DrgPackage, drawingSheet.DrgSheetCollection);
+#else
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString(), drawingSheet.DrgPackage);
+#endif
+
 #if REVIT2021
         PdfExportOptions.RasterQuality = PdfRasterQuality;
         PdfExportOptions.ColorDepth = PdfColor;
 
-        var filePath = _exportPDFService.PrintPDF(fileName,
+        filePath = _exportPDFService.PrintPDF(fileName,
+            folderPath,
             App.RevitDocument,
             views,
             PdfExportOptions);
 #else
-        string filePath = string.Empty;
-
-        if(RevitPDFExporterSelected == true)
+        if (RevitPDFExporterSelected == true)
         {
             filePath = _exportPDFService.ExportPDF(fileName,
+                folderPath,
                 App.RevitDocument,
                 views,
                 PdfExportOptions);
@@ -944,6 +958,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         else
         {
             filePath = _exportPDFService.PrintPDF(fileName,
+                folderPath,
                 App.RevitDocument,
                 views,
                 PdfExportOptions);
@@ -969,7 +984,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
         DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
 
+#if REVIT2025_OR_GREATER
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString(), drawingSheet.DrgPackage, drawingSheet.DrgSheetCollection);
+#else
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString(), drawingSheet.DrgPackage);
+#endif
+
         var filePath = _exportDWGService.ExportDWG($"{fileName}.dwg",
+            folderPath,
             DwgExportOptions,
             views,
             App.RevitDocument);
@@ -991,7 +1013,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         var sheetsize = sheet.GetExportPaperFormat();
 
+#if REVIT2025_OR_GREATER
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString(), drawingSheet.DrgPackage, drawingSheet.DrgSheetCollection);
+#else
+        var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString(), drawingSheet.DrgPackage);
+#endif
+
         var filePath = _exportDWFService.ExportDWF($"{fileName}.dwf",
+            folderPath,
             sheetsize,
             PrintSetup,
             DwfExportOptions,
@@ -1034,6 +1063,35 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 document.DrgStatusDescription);
 
             document.FileName = $"{fileName}{fileInfo.Extension}";
+
+            if (_settingsService.GlobalSettings.UseDrawingIssueStore2)
+            {
+                var format = "PDF";
+
+                switch (fileInfo.Extension.ToLower()) 
+                {
+                    case ".dwg" :
+                        format = "DWG";
+                        break;
+
+                    case ".dwf":
+                        format = "DWF";
+                        break;
+                }
+
+                folderPath = _settingsService.GlobalSettings.DrawingIssueStore2;
+
+#if REVIT2025_OR_GREATER
+                folderPath = folderPath.ParseFolderName(format, document.DrgPackage, document.DrgSheetCollection);
+#else
+                folderPath = folderPath.ParseFolderName(format, document.DrgPackage);
+#endif
+
+                if (!System.IO.Directory.Exists(folderPath))
+                {
+                    System.IO.Directory.CreateDirectory(folderPath);
+                }
+            }            
 
             var fullPath = System.IO.Path.Combine(folderPath, fileName + fileInfo.Extension);
 
@@ -1090,8 +1148,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
         }
-
-
     }
 
     private string GetCDEFolderPath()
@@ -1153,7 +1209,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             if (revisions.Count > 0)
             {
-                foreach (Revision revision in collector)
+                foreach (var revision in collector.Cast<Revision>())
                 {
                     if (revision.Issued == false)
                     {
@@ -1215,7 +1271,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _newTransmittal.TransDate = DateTime.Now;
         _transmittalService.CreateTransmittal(_newTransmittal);
 
-        foreach (TransmittalItemModel item in SelectedDrawingSheets)
+        foreach (var item in SelectedDrawingSheets.Cast<TransmittalItemModel>())
         {
             item.TransID = _newTransmittal.ID;
 
@@ -1234,7 +1290,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             _transmittalService.CreateTransmittalItem(item);
         }
 
-        foreach (TransmittalDistributionModel dist in Distribution)
+        foreach (var dist in Distribution)
         {
             dist.TransID = _newTransmittal.ID;
             _transmittalService.CreateTransmittalDist(dist);
