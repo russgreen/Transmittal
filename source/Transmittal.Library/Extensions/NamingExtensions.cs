@@ -29,6 +29,15 @@ public static class NamingExtensions
 
         foreach (var replacement in replacements)
         {
+            if (string.IsNullOrEmpty(replacement.Value))
+            {
+                if (path.Contains(replacement.Key))
+                {
+                    path = RemoveTrailingSeparator(path, replacement.Key);
+                    path = path.Replace(replacement.Key, string.Empty);
+                }
+            }
+
             if (!string.IsNullOrEmpty(replacement.Value))
             {
                 path = path.Replace(replacement.Key, replacement.Value);
@@ -37,6 +46,26 @@ public static class NamingExtensions
 
         return path;
     }
+
+    /// <summary>
+    /// Parses out folder paths removing <> tags
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string ParseFolderName(this string path)
+    {
+        path = path.ParsePathWithEnvironmentVariables();
+
+        //only keep the text up to the first < character
+        int index = path.IndexOf('<');
+        if (index >= 0)
+        {
+            path = path.Substring(0, index);
+        }
+
+        return path;
+    }
+
 
     /// <summary>
     /// Parses out folder paths that contain optional environment variables tags, %UserProfile%, %OneDriveConsumer%, %OneDriveCommercial%
@@ -75,70 +104,75 @@ public static class NamingExtensions
         string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
      {
         string fileName = filenameFilter;
-        // <ProjNo>
-        // <ProjId>
-        // <Originator>
-        // <Volume>
-        // <Level>
-        // <Type>
-        // <Role>
-        // <ProjName>
-        // <SheetNo>
-        // <SheetName>
-        // <SheetName2>
-        // <Status>
-        // <StatusDescription>
-        // <Rev>
-        // <DateYY>
-        // <DateYYYY>
-        // <DateMM>
-        // <DateDD>
-
-        //if ((rev ?? "") == (string.Empty ?? ""))
-        //    rev = "P00";
-
         var now = DateTime.Now;
 
-        fileName = fileName.Replace("<Originator>", originator);
-        fileName = fileName.Replace("<Volume>", volume);
-        fileName = fileName.Replace("<Level>", level);
-        fileName = fileName.Replace("<Type>", type);
-        fileName = fileName.Replace("<Role>", role);
-        fileName = fileName.Replace("<Volume>", volume);
-        fileName = fileName.Replace("<ProjId>", projId);
-        fileName = fileName.Replace("<ProjNo>", projNo);
-        fileName = fileName.Replace("<ProjName>", projName);
-        fileName = fileName.Replace("<SheetNo>", sheetNo);
-        fileName = fileName.Replace("<SheetName>", sheetName.Dehumanize()); 
-        fileName = fileName.Replace("<SheetName2>", sheetName);
-        fileName = fileName.Replace("<Rev>", rev);
-        fileName = fileName.Replace("<Status>", status);
-        fileName = fileName.Replace("<StatusDescription>", statusDescription);
-        fileName = fileName.Replace("<DateDD>", now.ToStringDD());
-        fileName = fileName.Replace("<DateMM>", now.ToStringMM());
-        fileName = fileName.Replace("<DateYY>", now.ToStringYY());
-        fileName = fileName.Replace("<DateYYYY>", now.Year.ToString());
-        
+        var replacements = new Dictionary<string, string>
+        {
+            { "<Originator>", originator },
+            { "<Volume>", volume },
+            { "<Level>", level },
+            { "<Type>", type },
+            { "<Role>", role },
+            { "<ProjId>", projId },
+            { "<ProjNo>", projNo },
+            { "<ProjName>", projName },
+            { "<SheetNo>", sheetNo },
+            { "<SheetName>", sheetName.Dehumanize() },
+            { "<SheetName2>", sheetName },
+            { "<Rev>", rev },
+            { "<Status>", status },
+            { "<StatusDescription>", statusDescription },
+            { "<DateDD>", now.ToStringDD() },
+            { "<DateMM>", now.ToStringMM() },
+            { "<DateYY>", now.ToStringYY() },
+            { "<DateYYYY>", now.Year.ToString() }
+        };
+
+        foreach (var replacement in replacements)
+        {
+            if (string.IsNullOrEmpty(replacement.Value))
+            {
+                if (fileName.Contains(replacement.Key))
+                {
+
+                    fileName = RemoveTrailingSeparator(fileName, replacement.Key);
+                    fileName = fileName.Replace(replacement.Key, string.Empty);
+                }
+            }
+            else
+            {
+                fileName = fileName.Replace(replacement.Key, replacement.Value);
+            }
+        }
+
+
         return fileName.RemoveIllegalCharacters().RemoveTrailingSymbols();
     }
 
     public static string RemoveIllegalCharacters(this string illegalString)
     {
-        string retval = illegalString;
-        // this function will remove these characters \ / : * ? < > | 
-        // from string and replace them a space
-        retval = retval.Replace(@"\", " ");
-        retval = retval.Replace("/", " ");
-        retval = retval.Replace(":", "-");
-        retval = retval.Replace("*", " ");
-        retval = retval.Replace("?", " ");
-        retval = retval.Replace("\"", " ");
-        retval = retval.Replace("<", " ");
-        retval = retval.Replace(">", " ");
-        retval = retval.Replace("|", " ");
-        retval = retval.Replace("'", "");
+        // Define a dictionary of illegal characters and their replacements
+        var replacements = new Dictionary<string, string>
+        {
+            { @"\", " " },
+            { "/", " " },
+            { ":", "-" },
+            { "*", " " },
+            { "?", " " },
+            { "\"", " " },
+            { "<", " " },
+            { ">", " " },
+            { "|", " " },
+            { "'", "" }
+        };
 
-        return retval;
+        // Replace each illegal character in the string
+        foreach (var replacement in replacements)
+        {
+            illegalString = illegalString.Replace(replacement.Key, replacement.Value);
+        }
+
+        return illegalString;
     }
 
     public static string RemoveTrailingSymbols(this string inputString)
@@ -181,6 +215,19 @@ public static class NamingExtensions
         }
 
         return true;
+    }
+
+    private static string RemoveTrailingSeparator(string input, string tag) 
+    {
+        var separators = new[] { "-", "_", " ", @"\" };
+        foreach (var separator in separators)
+        {
+            //input = Regex.Replace(input, $@"\{separator}{tag}\{separator}", string.Empty);
+            //input = Regex.Replace(input, $@"\{separator}{tag}", string.Empty);
+            //input = Regex.Replace(input, $@"{tag}\{separator}", string.Empty);
+            input = Regex.Replace(input, $@"{Regex.Escape(tag)}{Regex.Escape(separator)}", string.Empty);
+        }
+        return input;
     }
 
     private static string DomainMapper(Match match)
