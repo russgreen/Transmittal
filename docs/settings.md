@@ -28,6 +28,15 @@ When this options is selected copies of the exported sheet files are made using 
 Rule:   P:\ProjectFolder\Output\<Format>\<DateYY><DateMM><DateDD>
 Folder: P:\ProjectFolder\Output\CDE\220702
 
+Rule:   P:\ProjectFolder\Output
+Folder: P:\ProjectFolder\Output\CDE
+
+Rule:   P:\ProjectFolder\Output\<Format>\<Package>\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\CDE\220702
+
+Rule:   P:\ProjectFolder\Output\<Format>\<SheetCollection>\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\CDE\220702
+
 Rule:   P:\ProjectFolder\Output\<DateYY><DateMM><DateDD>
 Folder: P:\ProjectFolder\Output\220702\CDE
 ```
