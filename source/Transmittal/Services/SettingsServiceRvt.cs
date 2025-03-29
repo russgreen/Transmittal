@@ -138,6 +138,19 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             }
         }
 
+        //check if the CDE output folder exists - the user might be pointing to desktop connector but not have the project selected.
+        if (_settingsService.GlobalSettings.UseDrawingIssueStore2 == true)
+        {
+            //first we need the folder path with up the the first <field> only.
+            var path = _settingsService.GlobalSettings.DrawingIssueStore2.ParseFolderName();
+
+            if (!System.IO.Directory.Exists(path))
+            {
+                return false;
+            }
+        }
+
+
         //we always want to load project information from the revit parameters
         //and then save back to the DB for use by the desktop app....revit is primary
         _settingsService.GlobalSettings.ProjectNumber = _projectInfo.Number;
