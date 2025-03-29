@@ -22,15 +22,27 @@ Sheet parameters with missing values shown on the sheets list with red warning f
 
 Selecting this option will prevent sheets with missing values from being issued.
 
-### Use cloud CDE (Revit addin only)
+### CDE filename filter/rule (Revit addin only)
 When this options is selected copies of the exported sheet files are made using a separate filename rule that can conform to project CDE requirements and making it easier to follow internal and external filename standards. If the output location rule includes the <Format> tag then the format is replaced with "CDE".  If the <Format> tag is not used then an CDE sub-folder is created in the output path. e.g.
 ```
 Rule:   P:\ProjectFolder\Output\<Format>\<DateYY><DateMM><DateDD>
 Folder: P:\ProjectFolder\Output\CDE\220702
 
+Rule:   P:\ProjectFolder\Output
+Folder: P:\ProjectFolder\Output\CDE
+
+Rule:   P:\ProjectFolder\Output\<Format>\<Package>\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\CDE\220702
+
+Rule:   P:\ProjectFolder\Output\<Format>\<SheetCollection>\<DateYY><DateMM><DateDD>
+Folder: P:\ProjectFolder\Output\CDE\220702
+
 Rule:   P:\ProjectFolder\Output\<DateYY><DateMM><DateDD>
 Folder: P:\ProjectFolder\Output\220702\CDE
 ```
+
+### CDE Output location (Revit addin only)
+When this option is select the CDE copies are saved to the specified location. 
 
 ### Issue Formats and Document Statuses
 Lists of transmittal types and status codes used in the transmittal process

@@ -12,12 +12,14 @@ namespace Transmittal.Services;
 internal class SettingsServiceRvt : ISettingsServiceRvt
 {
     private const string _dataStorageElementName = "TransmittalSettings";
-    private const string _schemaName = "TransmittalAppSettings";
-    private const string _schemaGuid = "302151AE-3986-46F5-A172-0E327D0D191E";
+    private const string _schemaNameV0 = "TransmittalAppSettings";
+    private const string _schemaGuidV0 = "302151AE-3986-46F5-A172-0E327D0D191E";
     private const string _schemaNameV1 = "TransmittalAppSettingsV1";
     private const string _schemaGuidV1 = "42DCEC84-45AB-4CA1-8C6B-8C4853A23BCF";
     private const string _schemaNameV2 = "TransmittalAppSettingsV2";
     private const string _schemaGuidV2 = "2896AAE5-B7E9-4854-8AC7-8D20FD59C51E";
+    private const string _schemaNameV3 = "TransmittalAppSettingsV3";
+    private const string _schemaGuidV3 = "8D2FD527-CF54-45DB-9248-C65F6729D18B";
     private const string _vendorID = "Transmittal";
 
     // project paramaters
@@ -38,8 +40,9 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private readonly IDataConnection _dataConnection;
     private readonly ILogger<SettingsServiceRvt> _logger;   
 
-    private Schema _oldSchema = null;
+    private Schema _oldSchemaV0 = null;
     private Schema _oldSchemaV1 = null;
+    private Schema _oldSchemaV2 = null;
     private Schema _schema = null;
 
     public SettingsServiceRvt(IDataConnection dataConnection, 
@@ -65,9 +68,9 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         SetParameters();
 
         //check for the schema and load data from it if it exists
-        if (SchemaExists(new Guid(_schemaGuid)))
+        if (SchemaExists(new Guid(_schemaGuidV0)))
         {
-            _oldSchema = GetSchema(new Guid(_schemaGuid));
+            _oldSchemaV0 = GetSchema(new Guid(_schemaGuidV0));
             _logger.LogDebug("Found old schema");
         }
         if (SchemaExists(new Guid(_schemaGuidV1)))
@@ -77,25 +80,28 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         }
         if (SchemaExists(new Guid(_schemaGuidV2)))
         {
-            _schema = GetSchema(new Guid(_schemaGuidV2));
+            _oldSchemaV2 = GetSchema(new Guid(_schemaGuidV2));
             _logger.LogDebug("Found schema V2");
+        }
+        if (SchemaExists(new Guid(_schemaGuidV3)))
+        {
+            _schema = GetSchema(new Guid(_schemaGuidV3));
+            _logger.LogDebug("Found schema V3");
         }
 
         if (_schema != null)
         {
             _logger.LogDebug("Schema exists. Getting settings from {schemeName}", _schema.SchemaName);
-            //get the settings from the schema
-            //GetSettingsFromSchemaV1();
-            GetSettingsFromSchemaV2();
+            GetSettingsFromSchemaV3();
         }
         else
         {
-            if(_oldSchema != null)
+            if(_oldSchemaV0 != null)
             {
                 //we still have the old schema so get settings from it then delete it
-                _logger.LogDebug("Getting settings from {schemeName}", _oldSchema.SchemaName);
+                _logger.LogDebug("Getting settings from {schemeName}", _oldSchemaV0.SchemaName);
                 GetSettingsFromSchema();
-                DeleteSchema(_oldSchema);
+                DeleteSchema(_oldSchemaV0);
             }
             if (_oldSchemaV1 != null)
             {
@@ -104,12 +110,19 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 GetSettingsFromSchemaV1();
                 DeleteSchema(_oldSchemaV1);
             }
+            if (_oldSchemaV2 != null)
+            {
+                //we still have the old schema so get settings from it then delete it
+                _logger.LogDebug("Getting settings from {schemeName}", _oldSchemaV2.SchemaName);
+                GetSettingsFromSchemaV2();
+                DeleteSchema(_oldSchemaV2);
+            }
 
             //create the schema and load the settings from it
             //CreateSchema();
             CreateAndSaveSchemaToRvt();
             SaveSettingsToSchema(); //saves the default settings only at this point
-            GetSettingsFromSchemaV2(); //don't really need this call but its here to help debugging
+            GetSettingsFromSchemaV3(); //don't really need this call but its here to help debugging
         }
 
         //if the value is not empty try and open the database and read the settings
@@ -124,6 +137,19 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 return false;
             }
         }
+
+        //check if the CDE output folder exists - the user might be pointing to desktop connector but not have the project selected.
+        if (_settingsService.GlobalSettings.UseDrawingIssueStore2 == true)
+        {
+            //first we need the folder path with up the the first <field> only.
+            var path = _settingsService.GlobalSettings.DrawingIssueStore2.ParseFolderName();
+
+            if (!System.IO.Directory.Exists(path))
+            {
+                return false;
+            }
+        }
+
 
         //we always want to load project information from the revit parameters
         //and then save back to the DB for use by the desktop app....revit is primary
@@ -185,9 +211,9 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         //build the issue formats list  
         var issueFormats = new List<IssueFormatModel>
         {
-            new IssueFormatModel() { Code = "E", Description = "Email" },
-            new IssueFormatModel() { Code = "C", Description = "Cloud" },
-            new IssueFormatModel() { Code = "P", Description = "Paper" }
+            new() { Code = "E", Description = "Email" },
+            new() { Code = "C", Description = "Cloud" },
+            new() { Code = "P", Description = "Paper" }
         };
 
         return issueFormats;
@@ -212,11 +238,11 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private Schema CreateSchema()
     {
         //build the schema
-        SchemaBuilder schemaBuilder = new SchemaBuilder(new Guid(_schemaGuidV2));
+        SchemaBuilder schemaBuilder = new SchemaBuilder(new Guid(_schemaGuidV3));
         schemaBuilder.SetReadAccessLevel(AccessLevel.Public); // allow anyone to read the object
         schemaBuilder.SetWriteAccessLevel(AccessLevel.Public); // TODO why does it not work when we restrict writing to this vendor only
         schemaBuilder.SetVendorId(_vendorID); // required because of restricted write-access
-        schemaBuilder.SetSchemaName(_schemaNameV2);
+        schemaBuilder.SetSchemaName(_schemaNameV3);
 
         FieldBuilder fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.FileNameFilter), typeof(string));
         fieldBuilder.SetDocumentation("The filename filter rule for transmittal exports");
@@ -227,11 +253,17 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DrawingIssueStore), typeof(string));
         fieldBuilder.SetDocumentation("The location to save the transmittal exports");
 
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DrawingIssueStore2), typeof(string));
+        fieldBuilder.SetDocumentation("The secondary location to save the transmittal exports");
+
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseISO19650), typeof(bool));
         fieldBuilder.SetDocumentation("Use the ISO19650 for transmittal exports");
 
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseExtranet), typeof(bool));
         fieldBuilder.SetDocumentation("Use the extranet for transmittal exports");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.UseDrawingIssueStore2), typeof(bool));
+        fieldBuilder.SetDocumentation("Use the secondary store for transmittal exports");
 
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.DateFormatString), typeof(string));
         fieldBuilder.SetDocumentation("The date format string for revisions exports");
@@ -334,7 +366,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         try
         {
-            _schema = GetSchema(new Guid(_schemaGuidV2));
+            _schema = GetSchema(new Guid(_schemaGuidV3));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, _schema);
 
             using (Transaction storeData = new Transaction(App.RevitDocument, "TransmittalSettings"))
@@ -346,9 +378,12 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)), _settingsService.GlobalSettings.FileNameFilter);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter2)), _settingsService.GlobalSettings.FileNameFilter2);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DrawingIssueStore)), _settingsService.GlobalSettings.DrawingIssueStore);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DrawingIssueStore2)), _settingsService.GlobalSettings.DrawingIssueStore2);
                 entity.Set<bool>(_schema.GetField(nameof(_settingsService.GlobalSettings.UseISO19650)), _settingsService.GlobalSettings.UseISO19650);
                 entity.Set<bool>(_schema.GetField(nameof(_settingsService.GlobalSettings.UseExtranet)), _settingsService.GlobalSettings.UseExtranet);
+                entity.Set<bool>(_schema.GetField(nameof(_settingsService.GlobalSettings.UseDrawingIssueStore2)), _settingsService.GlobalSettings.UseDrawingIssueStore2);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.DateFormatString)), _settingsService.GlobalSettings.DateFormatString);
+
 
                 entity.Set<IDictionary<string, string>>(_schema.GetField(nameof(_settingsService.GlobalSettings.IssueFormats)),
                     ListOfIssueFormatToDictionary(_settingsService.GlobalSettings.IssueFormats));
@@ -387,9 +422,9 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     
     private void GetSettingsFromSchema()
     {
-        Schema schema = GetSchema(new Guid(_schemaGuid));
+        Schema schema = GetSchema(new Guid(_schemaGuidV0));
         DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-        Entity entity = dataStorageElement.GetEntity(_oldSchema);
+        Entity entity = dataStorageElement.GetEntity(_oldSchemaV0);
 
         _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -571,6 +606,79 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         
     }
 
+    private void GetSettingsFromSchemaV3()
+    {
+        try
+        {
+            Schema schema = GetSchema(new Guid(_schemaGuidV3));
+            DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
+            Entity entity = dataStorageElement.GetEntity(_schema);
+
+            _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
+            _settingsService.GlobalSettings.FileNameFilter2 = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter2)));
+            _settingsService.GlobalSettings.DrawingIssueStore = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DrawingIssueStore)));
+            _settingsService.GlobalSettings.DrawingIssueStore2 = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DrawingIssueStore2)));
+
+            _settingsService.GlobalSettings.UseISO19650 = entity.Get<bool>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.UseISO19650)));
+            _settingsService.GlobalSettings.UseExtranet = entity.Get<bool>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.UseExtranet)));
+            _settingsService.GlobalSettings.UseDrawingIssueStore2 = entity.Get<bool>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.UseDrawingIssueStore2)));
+
+            _settingsService.GlobalSettings.DateFormatString = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DateFormatString)));
+
+            _settingsService.GlobalSettings.IssueFormats = DictionaryToListOfIssueFormat(
+                entity.Get<IDictionary<string, string>>(schema.GetField(nameof(_settingsService.GlobalSettings.IssueFormats))));
+            _settingsService.GlobalSettings.DocumentStatuses = DictionaryToListOfDocumentStatus(
+        entity.Get<IDictionary<string, string>>(schema.GetField(nameof(_settingsService.GlobalSettings.DocumentStatuses))));
+
+            _settingsService.GlobalSettings.RecordTransmittals = entity.Get<bool>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.RecordTransmittals)));
+            _settingsService.GlobalSettings.DatabaseFile = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DatabaseFile)));
+
+            _settingsService.GlobalSettings.IssueSheetStore = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.IssueSheetStore)));
+            _settingsService.GlobalSettings.DirectoryStore = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DirectoryStore)));
+            _settingsService.GlobalSettings.ReportStore = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.ReportStore)));
+
+            _settingsService.GlobalSettings.UseCustomSharedParameters = entity.Get<bool>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.UseCustomSharedParameters)));
+
+            _settingsService.GlobalSettings.ProjectIdentifierParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.ProjectIdentifierParamGuid)));
+            _settingsService.GlobalSettings.OriginatorParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.OriginatorParamGuid)));
+            _settingsService.GlobalSettings.RoleParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.RoleParamGuid)));
+            _settingsService.GlobalSettings.SheetVolumeParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.SheetVolumeParamGuid)));
+            _settingsService.GlobalSettings.SheetLevelParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.SheetLevelParamGuid)));
+            _settingsService.GlobalSettings.DocumentTypeParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.DocumentTypeParamGuid)));
+            _settingsService.GlobalSettings.SheetStatusParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusParamGuid)));
+            _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)));
+            _settingsService.GlobalSettings.SheetPackageParamGuid = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.SheetPackageParamGuid)));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting settings from schema V2");
+        }
+
+    }
+
     private Schema GetSchema(Guid schemaGUID)
     {
         Schema s = Schema.ListSchemas().FirstOrDefault(q => q.GUID == schemaGUID);
@@ -621,7 +729,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private List<ElementId> ElementsWithStorage(Document doc, Schema schema)
     {
-        List<ElementId> ids = new List<ElementId>();
+        var ids = new List<ElementId>();
         FilteredElementCollector collector = new FilteredElementCollector(doc);
         collector.WherePasses(new ExtensibleStorageFilter(schema.GUID));
         ids.AddRange(collector.ToElementIds());

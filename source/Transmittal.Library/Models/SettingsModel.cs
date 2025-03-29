@@ -39,6 +39,9 @@ public partial class SettingsModel : ObservableValidator
     private string _drawingIssueStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "DrawingIssues");
 
     [ObservableProperty]
+    private string _drawingIssueStore2 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "DrawingIssues");
+
+    [ObservableProperty]
     private string _issueSheetStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Transmittal", "IssueSheets");
 
     [ObservableProperty]
@@ -58,6 +61,9 @@ public partial class SettingsModel : ObservableValidator
     /// </summary>
     [ObservableProperty]
     private bool _useExtranet = false;
+
+    [ObservableProperty]
+    private bool _useDrawingIssueStore2 = false;
 
     [ObservableProperty]
     private bool _useISO19650 = false;

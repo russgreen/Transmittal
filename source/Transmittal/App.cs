@@ -46,7 +46,7 @@ public class App : ExternalApplication
         }
 
         // building the ribbon panel
-        _ribbonPanel = RibbonPanel(Application);
+        _ribbonPanel = RibbonPanel();
 
         AddAppDocEvents();
 
@@ -85,7 +85,7 @@ public class App : ExternalApplication
     #endregion
 
     #region Ribbon Panel
-    private RibbonPanel RibbonPanel(UIControlledApplication application)
+    private RibbonPanel RibbonPanel()
     {
         try
         {

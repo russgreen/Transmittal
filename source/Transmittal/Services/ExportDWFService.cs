@@ -23,7 +23,7 @@ internal class ExportDWFService : IExportDWFService
         _logger = logger;
     }    
     
-    public string ExportDWF(string exportFileName, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
+    public string ExportDWF(string exportFileName, string folderPath, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
     {
         var fullPath = string.Empty;
 
@@ -35,7 +35,6 @@ internal class ExportDWFService : IExportDWFService
             failOpt.SetFailuresPreprocessor(new WarningSwallower());
             trans.SetFailureHandlingOptions(failOpt);
 
-            var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString());
             fullPath = Path.Combine(folderPath, exportFileName);
 
             if (Directory.Exists(folderPath) == false)

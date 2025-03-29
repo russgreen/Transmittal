@@ -7,12 +7,14 @@
   "DatabaseFile": "[NONE]",
   "DatabaseTemplateFile": "C:\\Program Files\\Transmittal\\Data\\TemplateDatabase.tdb",
   "DrawingIssueStore": "%UserProfile%\\Documents\\Transmittal\\DrawingIssues",
+  "DrawingIssueStore2": "%UserProfile%\\Documents\\Transmittal\\DrawingIssues\\For CDE",
   "IssueSheetStore": "%UserProfile%\\Documents\\Transmittal\\IssueSheets",
   "DirectoryStore": "%UserProfile%\\Documents\\Transmittal\\Directory",
   "ReportStore": "",
   "FileNameFilter": "\u003CProjNo\u003E-\u003COriginator\u003E-\u003CVolume\u003E-\u003CLevel\u003E-\u003CType\u003E-\u003CRole\u003E-\u003CSheetNo\u003E-\u003CSheetName\u003E-\u003CStatus\u003E-\u003CRev\u003E",
   "FileNameFilter2": "\u003CProjNo\u003E-\u003COriginator\u003E-\u003CVolume\u003E-\u003CLevel\u003E-\u003CType\u003E-\u003CRole\u003E-\u003CSheetNo\u003E-\u003CSheetName\u003E",
   "UseExtranet": false,
+  "UseDrawingIssueStore2": false,
   "UseISO19650": false,
   "IssueFormats": [
     {
@@ -107,20 +109,12 @@
     }
   ],
   "UseCustomSharedParameters": false,
-  "ProjectIdentifierParamName": "ProjectIdentifier",
   "ProjectIdentifierParamGuid": "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a",
-  "OriginatorParamName": "Originator",
   "OriginatorParamGuid": "e45313b7-8419-4803-92f0-68558f9278b2",
-  "RoleParamName": "Role",
   "RoleParamGuid": "67fcb5e8-4ffb-43b8-8ec9-c664fd997267",
-  "SheetVolumeParamName": "SheetVolume",
   "SheetVolumeParamGuid": "9c16757c-175a-451a-a5d4-c4a6ff291acb",
-  "SheetLevelParamName": "SheetLevel",
   "SheetLevelParamGuid": "e51af162-9025-48a0-bd2c-bc833fab0db0",
-  "DocumentTypeParamName": "DocumentType",
   "DocumentTypeParamGuid": "eb57d296-7d9c-459f-ace1-0bdaf95c3b29",
-  "SheetStatusParamName": "SheetStatus",
   "SheetStatusParamGuid": "3304f169-ceb9-40b9-a69d-d8f3eb0a3fb9",
-  "SheetStatusDescriptionParamName": "SheetStatusDescription",
   "SheetStatusDescriptionParamGuid": "4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a"
 }

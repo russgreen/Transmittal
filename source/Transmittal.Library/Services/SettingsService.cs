@@ -41,6 +41,7 @@ public class SettingsService : ISettingsService
                 {
                     GlobalSettings.DateFormatString = dbSettings.DateFormatString;
                     GlobalSettings.DrawingIssueStore = dbSettings.DrawingIssueStore;
+                    GlobalSettings.DrawingIssueStore2 = dbSettings.DrawingIssueStore2;
                     GlobalSettings.IssueSheetStore = dbSettings.IssueSheetStore;
                     GlobalSettings.ReportStore = dbSettings.ReportStore;
                     GlobalSettings.DirectoryStore = dbSettings.DirectoryStore;
@@ -48,6 +49,7 @@ public class SettingsService : ISettingsService
                     GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2;
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
+                    GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2;
                     GlobalSettings.UseRevit = dbSettings.UseRevit;
                     GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
                     GlobalSettings.ProjectName = dbSettings.ProjectName;
@@ -94,6 +96,7 @@ public class SettingsService : ISettingsService
             string sql = "UPDATE Settings SET " +
                 "DateFormatString = @DateFormatString, " +
                 "DrawingIssueStore = @DrawingIssueStore, " +
+                "DrawingIssueStore2 = @DrawingIssueStore2, " +
                 "IssueSheetStore = @IssueSheetStore, " +
                 "ReportStore = @ReportStore, " +
                 "DirectoryStore = @DirectoryStore, " +
@@ -104,6 +107,7 @@ public class SettingsService : ISettingsService
                 "ProjectName = @ProjectName, " +
                 "ClientName = @ClientName, " +
                 "UseExtranet = @UseExtranet, " +
+                "UseDrawingIssueStore2 = @UseDrawingIssueStore2, " +
                 "UseISO19650 = @UseISO19650, " +
                 "UseRevit = @UseRevit, " +
                 "Originator = @Originator, " +
@@ -125,6 +129,7 @@ public class SettingsService : ISettingsService
                 {
                     DateFormatString = GlobalSettings.DateFormatString,
                     DrawingIssueStore = GlobalSettings.DrawingIssueStore,
+                    DrawingIssueStore2 = GlobalSettings.DrawingIssueStore2,
                     IssueSheetStore = GlobalSettings.IssueSheetStore,
                     ReportStore = GlobalSettings.ReportStore,
                     DirectoryStore = GlobalSettings.DirectoryStore,
@@ -136,6 +141,7 @@ public class SettingsService : ISettingsService
                     ClientName = GlobalSettings.ClientName,
                     UseExtranet = GlobalSettings.UseExtranet,
                     UseISO19650 = GlobalSettings.UseISO19650,
+                    UseDrawingIssueStore2 = GlobalSettings.UseDrawingIssueStore2,
                     UseRevit = GlobalSettings.UseRevit,
                     Originator = GlobalSettings.Originator,
                     Role = GlobalSettings.Role,

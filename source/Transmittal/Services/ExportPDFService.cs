@@ -21,7 +21,7 @@ internal class ExportPDFService : IExportPDFService
     }
 
 #if REVIT2022_OR_GREATER
-    public string ExportPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
+    public string ExportPDF(string exportFileName, string folderPath, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
         var fullPath = string.Empty;
 
@@ -35,7 +35,6 @@ internal class ExportPDFService : IExportPDFService
             trans.Start();
 
             // configure filename path for final PDF save location
-            var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString());
             fullPath = Path.Combine(folderPath, exportFileName);
 
             if (Directory.Exists(folderPath) == false)
@@ -83,16 +82,7 @@ internal class ExportPDFService : IExportPDFService
 
 #endif
 
-    /// <summary>
-    /// Print to the PDF24 printer
-    /// </summary>
-    /// <param name="exportFileName"></param>
-    /// <param name="exportDocument"></param>
-    /// <param name="views"></param>
-    /// <param name="pdfExportOptions"></param>
-    /// <param name="RecordError"></param>
-    /// <returns></returns>
-    public string PrintPDF(string exportFileName, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
+    public string PrintPDF(string exportFileName, string folderPath, Document exportDocument, ViewSet views, PDFExportOptions pdfExportOptions, bool RecordError = true)
     {
         var fullPath = string.Empty;
         string currentDefaultPrinterName;
@@ -122,8 +112,6 @@ internal class ExportPDFService : IExportPDFService
             trans.SetFailureHandlingOptions(failOpt);
             trans.Start();
 
-            // configure filename path for final PDF save location
-            var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString());
             fullPath = Path.Combine(folderPath, exportFileName);
 
             if (Directory.Exists(folderPath) == false)

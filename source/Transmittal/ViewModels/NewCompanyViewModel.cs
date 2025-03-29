@@ -5,34 +5,33 @@ using Transmittal.Library.Models;
 using Transmittal.Library.ViewModels;
 using Transmittal.Requesters;
 
-namespace Transmittal.ViewModels
+namespace Transmittal.ViewModels;
+
+public partial class NewCompanyViewModel : BaseViewModel
 {
-    public partial class NewCompanyViewModel : BaseViewModel
+    private readonly ICompanyRequester _callingViewModel;
+
+    [ObservableProperty]
+    private CompanyModel _company = new();
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "A company name is required")]
+    public string _companyName;
+
+    public NewCompanyViewModel(ICompanyRequester caller)
     {
-        private readonly ICompanyRequester _callingViewModel;
+        _callingViewModel = caller;
 
-        [ObservableProperty]
-        private CompanyModel _company = new();
-
-        [ObservableProperty]
-        [NotifyDataErrorInfo]
-        [Required(ErrorMessage = "A company name is required")]
-        public string _companyName;
-
-        public NewCompanyViewModel(ICompanyRequester caller)
-        {
-            _callingViewModel = caller;
-
-            this.ValidateAllProperties();
-        }
+        this.ValidateAllProperties();
+    }
 
 
-        [RelayCommand]
-        private void SendCompany()
-        {
-            Company.CompanyName = CompanyName;
-            _callingViewModel.CompanyComplete(Company);
-            this.OnClosingRequest();
-        }
+    [RelayCommand]
+    private void SendCompany()
+    {
+        Company.CompanyName = CompanyName;
+        _callingViewModel.CompanyComplete(Company);
+        this.OnClosingRequest();
     }
 }

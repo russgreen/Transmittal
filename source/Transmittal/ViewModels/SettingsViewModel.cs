@@ -35,8 +35,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private readonly ILogger<SettingsViewModel> _logger = Host.GetService<ILogger<SettingsViewModel>>();
     private readonly IDataConnection _dataConnection = Host.GetService<IDataConnection>();
 
-    public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
-    public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
+    public List<string> FolderNameParts => new() { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "<Package>", "<SheetCollection>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
+    public List<string> FileNameParts => ["<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>"];
     
     public string ProjectNumber;
     public string Originator;
@@ -60,6 +60,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private string _drawingIssueStore;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _drawingIssueStore2;
+
+    [ObservableProperty]
     private string _sampleFolderName;
 
     [ObservableProperty]
@@ -76,6 +82,15 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     [ObservableProperty]
     private bool _useCDE;
+
+    [ObservableProperty]
+    private bool _useDrawingIssueStore2;
+
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [MustBeFalse(ErrorMessage = "CDE output folder is not found")]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private bool _drawingIssueStore2NotFound;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -169,9 +184,11 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
+        SetPropertiesFromGlobalSettings();
+
         CheckForDatabaseFile();
 
-        SetPropertiesFromGlobalSettings();
+        CheckForOutputFolders();
 
         IssueFormats.CollectionChanged += IssueFormats_CollectionChanged;
         DocumentStatuses.CollectionChanged += DocumentStatuses_CollectionChanged;
@@ -351,6 +368,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         UseISO19650 = _settingsService.GlobalSettings.UseISO19650;
         UseCDE = _settingsService.GlobalSettings.UseExtranet;
         FileNameFilter2 = _settingsService.GlobalSettings.FileNameFilter2;
+        UseDrawingIssueStore2 = _settingsService.GlobalSettings.UseDrawingIssueStore2;
+        DrawingIssueStore2 = _settingsService.GlobalSettings.DrawingIssueStore2;
 
         IssueFormats = new ObservableCollection<IssueFormatModel>(_settingsService.GlobalSettings.IssueFormats);
         DocumentStatuses = new ObservableCollection<DocumentStatusModel>(_settingsService.GlobalSettings.DocumentStatuses);
@@ -393,6 +412,8 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         UseISO19650 = settings.UseISO19650;
         UseCDE = settings.UseExtranet;
         FileNameFilter2 = settings.FileNameFilter2;
+        UseDrawingIssueStore2 = settings.UseDrawingIssueStore2;
+        DrawingIssueStore2 = settings.DrawingIssueStore2;
 
         IssueFormats = new ObservableCollection<IssueFormatModel>(settings.IssueFormats);
         DocumentStatuses = new ObservableCollection<DocumentStatusModel>(settings.DocumentStatuses);
@@ -432,6 +453,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.UseISO19650 = UseISO19650;
         _settingsService.GlobalSettings.UseExtranet = UseCDE;
         _settingsService.GlobalSettings.FileNameFilter2 = FileNameFilter2?.Trim();
+
+        _settingsService.GlobalSettings.UseDrawingIssueStore2 = UseDrawingIssueStore2;
+        _settingsService.GlobalSettings.DrawingIssueStore2 = DrawingIssueStore2?.Trim();
 
         _settingsService.GlobalSettings.IssueFormats = IssueFormats.ToList();
         _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses.ToList();
@@ -491,7 +515,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     {   
         if (filter != null && !DrawingIssueStore.Contains(filter))
         {
-            if (DrawingIssueStore.StartsWith("%"))
+            if (filter.StartsWith("%") & DrawingIssueStore.StartsWith("%"))
             {
                 return;
             }
@@ -503,6 +527,26 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
             }
 
             DrawingIssueStore += $"{filter}";
+        }
+    }
+
+    [RelayCommand]
+    private void AppendToFolderPath2(string filter)
+    {   
+        if (filter != null && !DrawingIssueStore2.Contains(filter))
+        {
+            if (filter.StartsWith("%") & DrawingIssueStore2.StartsWith("%"))
+            {
+                return;
+            }
+
+            if(filter.StartsWith("%")) 
+            {
+                DrawingIssueStore2 = filter += DrawingIssueStore2;
+                return;
+            }
+
+            DrawingIssueStore2 += $"{filter}";
         }
     }
 
@@ -588,9 +632,17 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         RecordTransmittals = true;
     }
 
+    partial void OnUseCDEChanged(bool oldValue, bool newValue)
+    {
+        if(newValue == false)
+        {
+            UseDrawingIssueStore2 = false;
+        }
+    }
+
     partial void OnDrawingIssueStoreChanged(string value)
     {
-        SampleFolderName = DrawingIssueStore.ParseFolderName("FORMAT");
+        SampleFolderName = DrawingIssueStore.ParseFolderName("FORMAT", "PACKAGE", "COLLECTION");
     }
 
     partial void OnDateFormatStringChanged(string value)
@@ -602,6 +654,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     {
         //TODO check for the database and create if it doesn't exist
         CheckForDatabaseFile();
+    }
+
+    partial void OnDrawingIssueStore2Changed(string value)
+   {
+
+        CheckForOutputFolders();
     }
 
     partial void OnDatabaseFileChanged(string value)
@@ -624,6 +682,27 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         DispatcherHelper.DoEvents();
       
+    }
+
+    public void CheckForOutputFolders()
+    {
+        DrawingIssueStore2NotFound = false;
+
+        if(DrawingIssueStore2 != null)
+        {
+            if (UseDrawingIssueStore2)
+            {
+                //first we need the folder path with up the the first <field> only.
+                var path = DrawingIssueStore2.ParseFolderName();
+
+                if (!System.IO.Directory.Exists(path))
+                {
+                    DrawingIssueStore2NotFound = true;
+                }
+            }
+        }
+
+
     }
 
     public void CheckForDatabaseFile()
