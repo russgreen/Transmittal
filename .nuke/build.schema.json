@@ -1,11 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "properties": {
-    "Solution": {
-      "type": "string",
-      "description": "Path to a solution file that is automatically loaded"
-    }
-  },
   "definitions": {
     "Host": {
       "type": "string",
@@ -104,5 +98,17 @@
       }
     }
   },
-  "$ref": "#/definitions/NukeBuild"
+  "allOf": [
+    {
+      "properties": {
+        "Solution": {
+          "type": "string",
+          "description": "Path to a solution file that is automatically loaded"
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/NukeBuild"
+    }
+  ]
 }
