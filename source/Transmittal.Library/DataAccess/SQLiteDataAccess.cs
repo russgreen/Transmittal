@@ -141,6 +141,19 @@ public class SQLiteDataAccess : IDataConnection
             columnsToAdd.Add("Archive", "ALTER TABLE Person ADD COLUMN Archive INTEGER NOT NULL DEFAULT 0");
         }
 
+        //added at v3.0.0
+        if (!ColumnExists(dbFilePath, "DrawingIssueStore2", "Settings"))
+        {
+            _logger.LogDebug("Column DrawingIssueStore2 does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("DrawingIssueStore2", "ALTER TABLE Settings ADD COLUMN DrawingIssueStore2 TEXT");
+        }
+        if (!ColumnExists(dbFilePath, "UseDrawingIssueStore2", "Settings"))
+        {
+            _logger.LogDebug("Column UseDrawingIssueStore2 does not exist in Settings table. Adding to columns to add dictionary");
+            columnsToAdd.Add("UseDrawingIssueStore2", "ALTER TABLE Settings ADD COLUMN UseDrawingIssueStore2 INTEGER");
+        }
+
+
         if (columnsToAdd.Count == 0)
         {
             _logger.LogDebug("No columns to add to database");
