@@ -46,10 +46,10 @@ public class SettingsService : ISettingsService
                     GlobalSettings.ReportStore = dbSettings.ReportStore;
                     GlobalSettings.DirectoryStore = dbSettings.DirectoryStore;
                     GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;
-                    GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2;
+
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
-                    GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2;
+
                     GlobalSettings.UseRevit = dbSettings.UseRevit;
                     GlobalSettings.ProjectNumber = dbSettings.ProjectNumber;
                     GlobalSettings.ProjectName = dbSettings.ProjectName;
@@ -67,10 +67,12 @@ public class SettingsService : ISettingsService
                     GlobalSettings.DocumentTypeParamGuid = dbSettings.DocumentTypeParamGuid;
                     GlobalSettings.SheetStatusParamGuid = dbSettings.SheetStatusParamGuid;
                     GlobalSettings.SheetStatusDescriptionParamGuid = dbSettings.SheetStatusDescriptionParamGuid;
-
-                    //this is a new setting, so we need to check if it exists in the database
+                   
+                    //these are new settings, so we need to check if they exists in the database
                     GlobalSettings.SheetPackageParamGuid = dbSettings.SheetPackageParamGuid ?? GlobalSettings.SheetPackageParamGuid;
 
+                    GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2 ?? GlobalSettings.FileNameFilter2;
+                    GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2 ? dbSettings.UseDrawingIssueStore2 : GlobalSettings.UseDrawingIssueStore2;
                 }
 
                 //get status and issue formats from database
