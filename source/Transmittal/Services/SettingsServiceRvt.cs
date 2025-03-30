@@ -81,7 +81,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         if (SchemaExists(new Guid(_schemaGuidV2)))
         {
             _oldSchemaV2 = GetSchema(new Guid(_schemaGuidV2));
-            _logger.LogDebug("Found schema V2");
+            _logger.LogDebug("Found old schema V2");
         }
         if (SchemaExists(new Guid(_schemaGuidV3)))
         {
