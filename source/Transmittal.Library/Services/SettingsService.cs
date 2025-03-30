@@ -71,7 +71,7 @@ public class SettingsService : ISettingsService
                     //these are new settings, so we need to check if they exists in the database
                     GlobalSettings.SheetPackageParamGuid = dbSettings.SheetPackageParamGuid ?? GlobalSettings.SheetPackageParamGuid;
 
-                    GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2 ?? GlobalSettings.FileNameFilter2;
+                    GlobalSettings.DrawingIssueStore2 = dbSettings.DrawingIssueStore2 ?? GlobalSettings.DrawingIssueStore2;
                     GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2 ? dbSettings.UseDrawingIssueStore2 : GlobalSettings.UseDrawingIssueStore2;
                 }
 
