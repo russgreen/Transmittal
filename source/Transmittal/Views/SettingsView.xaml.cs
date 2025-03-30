@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Ookii.Dialogs.Wpf;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Transmittal.Library.Models;
@@ -294,6 +295,10 @@ public partial class SettingsView : Window
 
     private void buttonHelp_Click(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/settings/");
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://russgreen.github.io/Transmittal/settings/",
+            UseShellExecute = true
+        });
     }
 }

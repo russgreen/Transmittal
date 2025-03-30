@@ -1,6 +1,7 @@
 ﻿using Ookii.Dialogs.Wpf;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
+using System.Diagnostics;
 using System.Windows;
 using Transmittal.Models;
 
@@ -31,7 +32,11 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/transmittal/");
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://russgreen.github.io/Transmittal/transmittal/",
+            UseShellExecute = true
+        });
     }
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)

@@ -543,7 +543,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             Schema schema = GetSchema(new Guid(_schemaGuidV2));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-            Entity entity = dataStorageElement.GetEntity(_schema);
+            Entity entity = dataStorageElement.GetEntity(_oldSchemaV2);
 
             _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
