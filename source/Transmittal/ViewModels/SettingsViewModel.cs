@@ -655,10 +655,13 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         //TODO check for the database and create if it doesn't exist
         CheckForDatabaseFile();
     }
+    partial void OnUseDrawingIssueStore2Changed(bool oldValue, bool newValue)
+    {
+        CheckForOutputFolders();
+    }
 
     partial void OnDrawingIssueStore2Changed(string value)
-   {
-
+    {
         CheckForOutputFolders();
     }
 
