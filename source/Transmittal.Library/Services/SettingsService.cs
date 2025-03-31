@@ -41,11 +41,11 @@ public class SettingsService : ISettingsService
                 {
                     GlobalSettings.DateFormatString = dbSettings.DateFormatString;
                     GlobalSettings.DrawingIssueStore = dbSettings.DrawingIssueStore;
-                    GlobalSettings.DrawingIssueStore2 = dbSettings.DrawingIssueStore2;
                     GlobalSettings.IssueSheetStore = dbSettings.IssueSheetStore;
                     GlobalSettings.ReportStore = dbSettings.ReportStore;
                     GlobalSettings.DirectoryStore = dbSettings.DirectoryStore;
                     GlobalSettings.FileNameFilter = dbSettings.FileNameFilter;
+                    GlobalSettings.FileNameFilter2 = dbSettings.FileNameFilter2;
 
                     GlobalSettings.UseExtranet = dbSettings.UseExtranet;
                     GlobalSettings.UseISO19650 = dbSettings.UseISO19650;
@@ -142,8 +142,8 @@ public class SettingsService : ISettingsService
                     ProjectName = GlobalSettings.ProjectName,
                     ClientName = GlobalSettings.ClientName,
                     UseExtranet = GlobalSettings.UseExtranet,
-                    UseISO19650 = GlobalSettings.UseISO19650,
                     UseDrawingIssueStore2 = GlobalSettings.UseDrawingIssueStore2,
+                    UseISO19650 = GlobalSettings.UseISO19650,                    
                     UseRevit = GlobalSettings.UseRevit,
                     Originator = GlobalSettings.Originator,
                     Role = GlobalSettings.Role,
