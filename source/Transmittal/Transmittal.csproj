@@ -72,8 +72,8 @@
 
 	<PropertyGroup>
 		<!--<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2026'">true</IsRepackable>-->
-		<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
-		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Syncfusion*.dll</RepackBinariesExcludes>
+		<!--<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
+		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Syncfusion*.dll</RepackBinariesExcludes>-->
 	</PropertyGroup>
 	
 	<ItemGroup>
