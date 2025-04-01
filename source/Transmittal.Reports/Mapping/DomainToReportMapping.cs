@@ -36,6 +36,7 @@ internal static class DomainToReportMapping
             DrgStatus = model.DrgStatus,
             DrgStatusDescription = model.DrgStatusDescription,
             DrgPackage = model.DrgPackage,
+            DrgSheetCollection = model.DrgSheetCollection,
         };
      }
 
