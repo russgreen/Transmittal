@@ -191,13 +191,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
-        
+
         WireUpSheetsPage();
 
         WireUpExportFormatsPage();
 
         WireUpDistributionPage();
 
+        RegisterMessages();
+    }
+
+    private void RegisterMessages()
+    {
         WeakReferenceMessenger.Default.Register<CancelTransmittalMessage>(this, (r, m) =>
         {
             _abortFlag = true;
@@ -275,23 +280,33 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             RecordTransmittal = true;
 
-            ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory(false)
-                .OrderBy(x => x.Company.CompanyName)
-                .ThenBy(x => x.Person.FullNameReversed));
+            InitializeProjectDirectory();
 
-            ProjectDirectory.CollectionChanged += ProjectDirectory_CollectionChanged;
-
-            SelectedProjectDirectory = new();
-            SelectedProjectDirectory.CollectionChanged += SelectedProjectDirectory_CollectionChanged;
-
-            Distribution = new();
-            Distribution.CollectionChanged += Distribution_CollectionChanged;
-
-            SelectedDistribution = new();
-            SelectedDistribution.CollectionChanged += SelectedDistribution_CollectionChanged;
+            InitializeDistribution();
         }
 
         ValidateTransmittal();
+    }
+
+    private void InitializeProjectDirectory()
+    {
+        ProjectDirectory = new(_contactDirectoryService.GetProjectDirectory(false)
+            .OrderBy(x => x.Company.CompanyName)
+            .ThenBy(x => x.Person.FullNameReversed));
+
+        ProjectDirectory.CollectionChanged += ProjectDirectory_CollectionChanged;
+
+        SelectedProjectDirectory = new();
+        SelectedProjectDirectory.CollectionChanged += SelectedProjectDirectory_CollectionChanged;
+    }
+
+    private void InitializeDistribution()
+    {
+        Distribution = new();
+        Distribution.CollectionChanged += Distribution_CollectionChanged;
+
+        SelectedDistribution = new();
+        SelectedDistribution.CollectionChanged += SelectedDistribution_CollectionChanged;
     }
 
     #region Drawing Sheets
@@ -339,6 +354,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             drawingSheet.DrgStatusDescription = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid);
             drawingSheet.DrgPackage = Util.GetParameterValueString(sheet, _settingsService.GlobalSettings.SheetPackageParamGuid);
 
+#if REVIT2025_OR_GREATER
+            drawingSheet.DrgSheetCollection = GetSheetCollectionName(sheetDictionary, sheet.SheetCollectionId);
+#endif
+
             drawingSheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
             drawingSheet.DrgRole = _settingsService.GlobalSettings.Role;
                         
@@ -362,10 +381,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
                 drawingSheet.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();
                 drawingSheet.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
-
-#if REVIT2025_OR_GREATER
-                drawingSheet.DrgSheetCollection = GetSheetCollectionName(sheetDictionary, sheet.SheetCollectionId);
-#endif
 
                 drawingSheets.Add(drawingSheet);
             }

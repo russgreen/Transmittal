@@ -72,8 +72,8 @@
 
 	<PropertyGroup>
 		<!--<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2026'">true</IsRepackable>-->
-		<!--<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
-		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Syncfusion*.dll</RepackBinariesExcludes>-->
+		<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
+		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Microsoft.Data.Sqlite.dll;Syncfusion*.dll</RepackBinariesExcludes>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -93,14 +93,14 @@
 		
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		
-		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="24.2.7" />		
-		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
-		<PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
+		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="29.1.35" />		
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.1.35" />
+		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
 		
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*-*" />
-		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*-*" />	
-		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*-*" />
-		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*-*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
+		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />	
+		<PackageReference Include="Nice3point.Revit.Extensions" Version="$(RevitVersion).*" />
+		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
@@ -116,7 +116,11 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 
 		<!--Repacking-->
-		<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime"/>
+		<!--<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime" />-->
+		<PackageReference Include="ILRepack" Version="2.0.41">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 
