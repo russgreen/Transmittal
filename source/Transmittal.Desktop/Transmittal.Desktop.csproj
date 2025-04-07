@@ -73,8 +73,8 @@
 	  
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 	  
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="24.2.7" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="24.2.7" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.1.35" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
 
 	  <!--IOC-->
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />
