@@ -23,6 +23,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ClosedXML.Report" Version="0.2.11" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />		
 		<PackageReference Include="System.IO.Packaging" Version="8.*" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.*" />	
