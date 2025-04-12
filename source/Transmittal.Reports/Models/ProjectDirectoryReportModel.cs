@@ -1,4 +1,6 @@
-﻿namespace Transmittal.Reports.Models;
+﻿using ClosedXML.Report.Utils;
+
+namespace Transmittal.Reports.Models;
 
 public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDirectoryModel
 {
@@ -95,6 +97,47 @@ public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDir
         get
         {
             return Person.Position;
+        }
+    }
+
+
+    public string CompanyRoleAndName
+    {
+        get
+        {
+
+        }
+    }
+
+    public string CompanyContactDetails
+    {
+        get
+        {
+            string returnValue;
+
+            returnValue = $"{CompanyName}\n";
+
+            if(Role != null)
+            {
+                returnValue = $"{returnValue} ({Role})\n";
+            }
+
+            if(Tel != null)
+            {
+                returnValue = $"{returnValue}Tel:{Tel}\n";
+            }
+
+            if(Website != null)
+            {
+                returnValue = $"{returnValue}WWW:{Website}\n";
+            }
+
+            if(Address != null)
+            {
+                returnValue = $"{returnValue}{Address}\n";
+            }
+
+            return returnValue;
         }
     }
 }
