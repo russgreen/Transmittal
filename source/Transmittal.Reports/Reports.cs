@@ -91,6 +91,7 @@ namespace Transmittal.Reports
                 projectDirectoryReportModels.Add(newItem);
             }
 
+
             template.AddVariable("Date", DateTime.Now.ToShortDateString());
             template.AddVariable(project);
             template.AddVariable("ProjectDirectory", projectDirectoryReportModels
