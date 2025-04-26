@@ -11,7 +11,7 @@ using static Nuke.Common.Tools.SignTool.SignToolTasks;
 partial class Build
 {
     Target Sign => _ => _
-        .DependsOn(Compile)
+        .TriggeredBy(Compile)
         .Executes(() =>
         {
             var compiledAssemblies = new List<string>();

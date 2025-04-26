@@ -15,7 +15,7 @@ partial class Build : NukeBuild
     [Solution(GenerateProjects = true)]
     Solution Solution;
 
-    public static int Main () => Execute<Build>(x => x.Installer);
+    public static int Main () => Execute<Build>(x => x.Clean);
 
     //[Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     //readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
