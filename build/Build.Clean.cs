@@ -11,6 +11,8 @@ partial class Build
     Target Clean => _ => _
     .Executes(() =>
     {
+        CleanDirectory(ArtifactsDirectory);
+
         foreach (var project in Solution.AllProjects.Where(project => project != Solution._build))
         {
             CleanDirectory(project.Directory / "bin");
@@ -23,9 +25,6 @@ partial class Build
                 .SetConfiguration(configuration)
                 .SetVerbosity(DotNetVerbosity.quiet));
         }
-
-
-        CleanDirectory(ArtifactsDirectory);
     });
 
     static void CleanDirectory(AbsolutePath path)
