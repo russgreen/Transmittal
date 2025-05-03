@@ -6,26 +6,6 @@
     Set license key for Syncfusion controls at build time
     =====================================================
     -->
-	<Target Name="PreBuildAppCenter" BeforeTargets="PreBuildEvent">
-		<PropertyGroup>
-			<SourceFile>$(ProjectDir)Host.cs</SourceFile>
-			<KeyFile>$(SolutionDir)AppCenterSecret.txt</KeyFile>
-			<DummyKey>##AppCenterSecret##</DummyKey>
-		</PropertyGroup>
-
-		<!-- Read the license key from the key file -->
-		<ReadLinesFromFile File="$(KeyFile)">
-			<Output TaskParameter="Lines" PropertyName="LicenseKey" />
-		</ReadLinesFromFile>
-
-		<!-- Replace the dummy key with the actual license key -->
-		<ReplaceFileText
-		  InputFilename="$(SourceFile)"
-		  OutputFilename="$(SourceFile)"
-		  MatchExpression="$(DummyKey)"
-		  ReplacementText="$(LicenseKey)" />
-	</Target>
-
 	<Target Name="PreBuildSyncfusion" BeforeTargets="PreBuildEvent">
 		<PropertyGroup>
 			<SourceFile>$(ProjectDir)App.cs</SourceFile>
@@ -44,24 +24,6 @@
 		  OutputFilename="$(SourceFile)"
 		  MatchExpression="$(DummyKey)"
 		  ReplacementText="$(LicenseKey)" />
-	</Target>
-
-	<Target Name="PostBuildAppCenter" AfterTargets="PostBuildEvent">
-		<PropertyGroup>
-			<SourceFile>$(ProjectDir)Host.cs</SourceFile>
-			<KeyFile>$(SolutionDir)AppCenterSecret.txt</KeyFile>
-			<DummyKey>##AppCenterSecret##</DummyKey>
-		</PropertyGroup>
-		<!-- Read the license key from the key file -->
-		<ReadLinesFromFile File="$(KeyFile)">
-			<Output TaskParameter="Lines" PropertyName="LicenseKey" />
-		</ReadLinesFromFile>
-		<!-- Replace the dummy key with the actual license key -->
-		<ReplaceFileText
-		  InputFilename="$(SourceFile)"
-		  OutputFilename="$(SourceFile)"
-		  MatchExpression="$(LicenseKey)"
-		  ReplacementText="$(DummyKey)" />
 	</Target>
 
 	<Target Name="PostBuildSyncfusion" AfterTargets="PostBuildEvent">

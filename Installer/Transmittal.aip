@@ -71,9 +71,6 @@
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
     <ROW Component="Dapper.dll" ComponentId="{3C785166-CE81-4DA3-B8CD-E82E4AA925BC}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
-    <ROW Component="Microsoft.AppCenter.Analytics.dll" ComponentId="{CF62F04B-7A0B-4AA8-A43C-7024173208CB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.Analytics.dll"/>
-    <ROW Component="Microsoft.AppCenter.Crashes.dll" ComponentId="{5B52394F-F7A1-4CF3-A6DC-3D80A598EECC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.Crashes.dll"/>
-    <ROW Component="Microsoft.AppCenter.dll" ComponentId="{541D0A14-5C62-40E6-9BAC-77F59D7303AB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.VisualBasic.dll" ComponentId="{E97648E2-B936-4F9A-9044-3B40556A4634}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.VisualBasic.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{09A090EF-4261-458F-8C10-346707A073CA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
     <ROW Component="Microsoft.Data.Sqlite.dll" ComponentId="{BDCD58D7-A7CA-412F-AA0B-86BE79BF5FF5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll"/>
@@ -117,7 +114,6 @@
     <ROW Component="Microsoft.ReportViewer.WinForms.dll" ComponentId="{CF68DA1D-EAAB-4DA4-BCBE-D26BDB7DDCC3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.ReportViewer.WinForms.dll"/>
     <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{2C021B1F-3CD0-4987-8135-2F405BEC41C7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Component="NewValue" ComponentId="{26B3A65C-CED2-4733-9890-DAC343310E1C}" Directory_="APPDIR" Attributes="260" KeyPath="NewValue"/>
-    <ROW Component="Newtonsoft.Json.dll" ComponentId="{61C9C726-D55C-4B6C-925F-F7B1828C9D0A}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{F0031514-1F39-4BCF-9D8A-88050F5A8C82}" Directory_="APPDIR" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProjectDirectory.rdlc" ComponentId="{D1A78914-9F2F-4E1A-B46E-F00220C02B30}" Directory_="ReportTemplates_Dir" Attributes="0" KeyPath="ProjectDirectory.rdlc" Type="0"/>
@@ -144,7 +140,6 @@
     <ROW Component="SQLitePCLRaw.provider.e_sqlite3.dll_2" ComponentId="{27C900F9-1C04-4A56-8E5F-2E2CEEE4371A}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="SQLitePCLRaw.provider.e_sqlite3.dll_2"/>
     <ROW Component="Serilog.Extensions.Hosting.dll" ComponentId="{0FC36EE5-4076-4ECF-87E3-92AB6A5FE9E8}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Hosting.dll"/>
     <ROW Component="Serilog.Extensions.Logging.dll" ComponentId="{275AA67B-9274-46D2-B6EC-604E0ABC5823}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Logging.dll"/>
-    <ROW Component="Serilog.Sinks.AppCenter.dll" ComponentId="{D621D409-C7E1-424B-95BF-F12A4913313F}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.AppCenter.dll"/>
     <ROW Component="Serilog.Sinks.Debug.dll" ComponentId="{5E41B977-77B8-4A2A-ACCA-9AE188D1A3D6}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll"/>
     <ROW Component="Serilog.Sinks.File.dll" ComponentId="{A75A8398-9AF2-42FE-83B3-D78BDC416FF2}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
     <ROW Component="Serilog.dll" ComponentId="{9F739BA8-C0FA-46CD-BA80-9CC1D324AE51}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
@@ -198,7 +193,6 @@
     <ROW Component="Syncfusion.XlsIO.Base.dll_5" ComponentId="{6F1FF39D-356D-4B3C-9DF7-8225342740CE}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll_5"/>
     <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B97395F2-893B-4B6F-9ADE-DAFEB65B77E5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
     <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
-    <ROW Component="System.Management.dll" ComponentId="{D48DFEE0-1D6D-49AB-809D-728B64A9E9AA}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
     <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
     <ROW Component="System.Security.Cryptography.Xml.dll" ComponentId="{5F719FC0-DF06-4837-9067-EBA3DF5EFACF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Xml.dll"/>
     <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{00DA1B9C-2EAB-41CD-BEDF-05C9B5BD5F27}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
@@ -432,12 +426,6 @@
     <ROW File="Transmittal.deps.json_1" Component_="Transmittal.deps.json_1" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_5" Component_="Transmittal.dll_5" FileName="TRANSM~1.DLL|Transmittal.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.dll" SelfReg="false"/>
     <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Newtonsoft.Json.dll" SelfReg="false"/>
-    <ROW File="Serilog.Sinks.AppCenter.dll" Component_="Serilog.Sinks.AppCenter.dll" FileName="SERILO~5.DLL|Serilog.Sinks.AppCenter.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.AppCenter.dll" SelfReg="false"/>
-    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTE~10.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Management.dll" SelfReg="false"/>
-    <ROW File="Microsoft.AppCenter.Analytics.dll" Component_="Microsoft.AppCenter.Analytics.dll" FileName="MICRO~37.DLL|Microsoft.AppCenter.Analytics.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.AppCenter.Analytics.dll" SelfReg="false"/>
-    <ROW File="Microsoft.AppCenter.Crashes.dll" Component_="Microsoft.AppCenter.Crashes.dll" FileName="MICRO~38.DLL|Microsoft.AppCenter.Crashes.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.AppCenter.Crashes.dll" SelfReg="false"/>
-    <ROW File="Microsoft.AppCenter.dll" Component_="Microsoft.AppCenter.dll" FileName="MICRO~39.DLL|Microsoft.AppCenter.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.AppCenter.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -706,12 +694,6 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.deps.json_1"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.dll_5"/>
     <ROW Feature_="MainFeature" Component_="Transmittal_Isolated.addin"/>
-    <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
-    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.AppCenter.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Management.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.Analytics.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.Crashes.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
