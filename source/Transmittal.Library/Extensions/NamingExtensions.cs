@@ -48,7 +48,7 @@ public static class NamingExtensions
     }
 
     /// <summary>
-    /// Parses out folder paths removing <> tags
+    /// Parses out folder paths replacing <> tags and calls ParsePathWithEnvironmentVariables()
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
