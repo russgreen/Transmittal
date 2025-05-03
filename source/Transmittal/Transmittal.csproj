@@ -114,7 +114,7 @@
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-
+		
 		<!--Repacking-->
 		<!--<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime" />-->
 		<PackageReference Include="ILRepack" Version="2.0.41">

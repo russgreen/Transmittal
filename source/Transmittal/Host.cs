@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
-using Serilog;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 using Transmittal.Services;
