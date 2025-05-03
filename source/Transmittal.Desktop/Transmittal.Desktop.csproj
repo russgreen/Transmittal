@@ -83,6 +83,8 @@
 	  <PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
 	  <PackageReference Include="Serilog.Sinks.File" Version="6.*" />
 	  <PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" />
+
+	  <PackageReference Include="Serilog.Sinks.AppCenter" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -126,15 +128,5 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PreBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
-		<!--<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;AppCenterSecret.bat PreBuild $(ProjectDir)App.xaml.cs $(SolutionDir)AppCenterSecret.txt" />-->
-	</Target>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;SyncfusionLicenseRegister.bat PostBuild $(ProjectDir)App.xaml.cs $(SolutionDir)SyncfusionKey.txt" />
-		<!--<Exec Command="cd &quot;$(SolutionDir)&quot;&#xD;&#xA;AppCenterSecret.bat PostBuild $(ProjectDir)App.xaml.cs $(SolutionDir)AppCenterSecret.txt" />-->
-	</Target>
 
 </Project>

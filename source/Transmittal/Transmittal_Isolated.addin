@@ -7,8 +7,8 @@
 		<FullClassName>Transmittal.App</FullClassName>
 		<VendorId>Transmittal</VendorId>
 	</AddIn>
-	<!--<ManifestSettings>
+	<ManifestSettings>
 		<UseRevitContext>False</UseRevitContext>
 		<ContextName>Transmittal</ContextName>
-	</ManifestSettings>-->
+	</ManifestSettings>
 </RevitAddIns>
