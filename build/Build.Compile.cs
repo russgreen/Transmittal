@@ -17,9 +17,13 @@ partial class Build
 
             if (configuration.StartsWith("Release"))
             {
+                DotNetRestore(settings => settings
+                    .SetProjectFile(Solution));
+
                 DotNetBuild(settings => settings
+                    .SetProjectFile(Solution)
                     .SetConfiguration(configuration)
-                    .SetVerbosity(DotNetVerbosity.quiet));
+                    .SetVerbosity(DotNetVerbosity.minimal));
             }
         }
     });
