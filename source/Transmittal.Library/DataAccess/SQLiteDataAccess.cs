@@ -190,21 +190,22 @@ public class SQLiteDataAccess : IDataConnection
     /// <param name="dbFilePath"></param>
     private void WaitForLockFileToClear(string dbFilePath)
     {
-        bool loggedWaitingMessage = false;
-
         var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        bool messageSent = false;
+
+
         while (File.Exists(lockFilePath))
         {
-            if(!loggedWaitingMessage)
+            if (!messageSent && stopwatch.Elapsed.TotalSeconds >= 5)
             {
                 _logger.LogInformation("Waiting for lock file [{lockFilePath}] to clear", lockFilePath);
 
                 //send a message that a lock file exists
                 WeakReferenceMessenger.Default.Send(new LockFileMessage(lockFilePath));
 
-                loggedWaitingMessage = true;
+                messageSent = true;
             }
-            Thread.Sleep(100);
         }
 
         //lock file has been cleared
