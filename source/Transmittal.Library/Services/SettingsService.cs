@@ -9,16 +9,19 @@ namespace Transmittal.Library.Services;
 public class SettingsService : ISettingsService
 {
     private readonly IDataConnection _connection;
-    private readonly ILogger<SettingsService> _logger;  
+    private readonly ILogger<SettingsService> _logger;
+    private readonly IMessageBoxService _messageBox;
 
     public SettingsModel GlobalSettings { get; set; }
     
     public SettingsService(IDataConnection dataConnection,
-        ILogger<SettingsService> logger)
+        ILogger<SettingsService> logger,
+        IMessageBoxService messageBox)
     {
         _connection = dataConnection;   
         _logger = logger;
-        
+        _messageBox = messageBox;
+
         GlobalSettings = new();
     }
 
@@ -161,6 +164,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+            _messageBox.ShowOk("Error updating settings", ex.Message);
         }
        
 
@@ -217,6 +221,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error saving issue formats to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+            _messageBox.ShowOk("Error saving issue formats", ex.Message);
         }
 
     }
@@ -242,6 +247,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error saving document statuses to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
+            _messageBox.ShowOk("Error saving document statuses", ex.Message);
         }
 
     }

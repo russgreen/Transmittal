@@ -10,16 +10,19 @@ public class TransmittalService : ITransmittalService
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ILogger<TransmittalService> _logger;
+    private readonly IMessageBoxService _messageBox;
 
     public TransmittalService(IDataConnection dataConnection,
         ISettingsService settingsService,
         IContactDirectoryService contactDirectoryService,
-        ILogger<TransmittalService> logger)
+        ILogger<TransmittalService> logger,
+        IMessageBoxService messageBox)
     {
         _connection = dataConnection;
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
         _logger = logger;
+        _messageBox = messageBox;
     }
 
     public void CreateTransmittal(TransmittalModel model)
@@ -40,7 +43,8 @@ public class TransmittalService : ITransmittalService
         }
         catch(Exception ex)
         {
-              _logger.LogError(ex, "Failed to create transmittal {model}", model);
+            _logger.LogError(ex, "Failed to create transmittal {model}", model);
+            _messageBox.ShowOk("Failed to create transmittal", ex.Message);
         }
 
     }
@@ -68,6 +72,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal distribution {model}", model);
+            _messageBox.ShowOk("Failed to create transmittal distribution", ex.Message);
         }
 
     }
@@ -107,6 +112,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal item {model}", model);
+            _messageBox.ShowOk("Failed to create transmittal item", ex.Message);
         }
 
     }
@@ -125,6 +131,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal {model}", model);
+            _messageBox.ShowOk("Failed to delete transmittal", ex.Message);
         }
 
     }
@@ -143,6 +150,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal distribution {model}", model);
+            _messageBox.ShowOk("Failed to delete transmittal distribution", ex.Message);
         }
 
     }
@@ -161,6 +169,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal item {model}", model);
+            _messageBox.ShowOk("Failed to delete transmittal item", ex.Message);
         }
 
     }
@@ -349,6 +358,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal {model}", model);
+            _messageBox.ShowOk("Failed to update transmittal", ex.Message);
         }
 
     }
@@ -380,6 +390,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal distribution {model}", model);
+            _messageBox.ShowOk("Failed to update transmittal distribution", ex.Message);
         }
 
     }
@@ -435,6 +446,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal item {model}", model);
+            _messageBox.ShowOk("Failed to update transmittal item", ex.Message);
         }
  
     }

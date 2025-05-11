@@ -11,14 +11,17 @@ public class ContactDirectoryService : IContactDirectoryService
     private readonly IDataConnection _connection;
     private readonly ISettingsService _settingsService;
     private readonly ILogger<ContactDirectoryService> _logger;  
+    private readonly IMessageBoxService _messageBox;
 
     public ContactDirectoryService(IDataConnection dataConnection,
         ISettingsService settingsService,
-        ILogger<ContactDirectoryService> logger)
+        ILogger<ContactDirectoryService> logger,
+        IMessageBoxService messageBox)
     {
         _connection = dataConnection;
         _settingsService = settingsService;
         _logger = logger;
+        _messageBox = messageBox;
     }
 
     public void CreateCompany(CompanyModel model)
@@ -46,6 +49,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create company {model}", model);
+            _messageBox.ShowOk("Failed to create company", ex.Message);
         }
 
     }
@@ -79,6 +83,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create person {model}", model);
+            _messageBox.ShowOk("Failed to create person", ex.Message);
         }
 
     }
@@ -214,6 +219,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update company {model}", model);
+            _messageBox.ShowOk("Failed to update company", ex.Message);
         }
 
     }
@@ -232,6 +238,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete company {model}", model);
+            _messageBox.ShowOk("Failed to delete company", ex.Message);
         }
 
     }
@@ -275,6 +282,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update person {model}", model);
+            _messageBox.ShowOk("Failed to update person", ex.Message);
         }
 
     }
@@ -293,6 +301,7 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete person {model}", model);
+            _messageBox.ShowOk("Failed to delete person", ex.Message);
         }
 
     }

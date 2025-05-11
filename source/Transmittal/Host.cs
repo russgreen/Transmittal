@@ -38,6 +38,7 @@ internal static class Host
             .ConfigureServices((_, services) =>
             {
                 services.AddSingleton<ISettingsService, SettingsService>();
+                services.AddSingleton<IMessageBoxService, MessageBoxService>();
 
                 services.AddTransient<ISettingsServiceRvt, SettingsServiceRvt>();
                 services.AddTransient<IDataConnection, SQLiteDataAccess>();
