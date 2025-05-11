@@ -100,15 +100,6 @@ public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDir
         }
     }
 
-
-    public string CompanyRoleAndName
-    {
-        get
-        {
-
-        }
-    }
-
     public string CompanyContactDetails
     {
         get
