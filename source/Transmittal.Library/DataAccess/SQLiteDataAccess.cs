@@ -4,8 +4,10 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.IO;
+using System.Windows.Markup;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
+using Transmittal.Library.Services;
 
 namespace Transmittal.Library.DataAccess;
 
@@ -13,7 +15,7 @@ public class SQLiteDataAccess : IDataConnection
 {
     private readonly ILogger<SQLiteDataAccess> _logger;
 
-    public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger)
+    public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, IMessageBoxService messageBox)
     {
         _logger = logger;
     }
@@ -37,22 +39,54 @@ public class SQLiteDataAccess : IDataConnection
 
     public T CreateData<T, U>(string dbFilePath, string sqlStatement, T model, U parameters, string keyPropertyName)
     {
-        WaitForLockFileToClear(dbFilePath);
-        CreateLockFile(dbFilePath);
-        
-        using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+        int maxRetries = 3; // Maximum number of retries
+        int retryDelay = 1000; // Delay between retries in milliseconds
+        int attempt = 0;
+
+        while (attempt < maxRetries)
         {
-            dbConnection.Open();
-            //var recordId = dbConnection.ExecuteScalar<int>(sqlStatement, parameters);
-            var recordId = dbConnection.QuerySingle<int>(sqlStatement, parameters);
+            try
+            {
+                using (var dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
 
-            DeleteLockFile(dbFilePath);
+                    // Set busy timeout to wait for the database to become available
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
 
-            //establish Id parameter of T (will not be the same name in every model)
-            model.GetType().GetProperty(keyPropertyName).SetValue(model, recordId);
+                    var recordId = dbConnection.QuerySingle<int>(sqlStatement, parameters);
 
-            return model;
+                    // Set the key property of the model
+                    model.GetType().GetProperty(keyPropertyName).SetValue(model, recordId);
+
+                    return model; // Success, return the model
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                // Log the busy error and retry
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay); // Wait before retrying
+                }
+                else
+                {
+                    _logger.LogError(ex, "Database operation failed after {MaxRetries} attempts.", maxRetries);
+                    throw; // Re-throw the exception after max retries
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log and re-throw other exceptions
+                _logger.LogError(ex, "An error occurred during database operation.");
+                throw;
+            }
         }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without returning a result.");
     }
      
     public IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters)
@@ -67,16 +101,50 @@ public class SQLiteDataAccess : IDataConnection
 
     public void SaveData<T>(string dbFilePath, string sqlStatement, T data)
     {
-        WaitForLockFileToClear(dbFilePath);
-        CreateLockFile(dbFilePath);
-        
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
+        int maxRetries = 3; // Maximum number of retries
+        int retryDelay = 1000; // Delay between retries in milliseconds
+        int attempt = 0;
+
+        while (attempt < maxRetries)
         {
-            dbConnection.Open();
-            dbConnection.Execute(sqlStatement, data);
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()}"))
+                {
+                    dbConnection.Open();
+
+                    // Set busy timeout to wait for the database to become available
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
+
+                    dbConnection.Execute(sqlStatement, data);
+                    return; // Success, exit the method
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                // Log the busy error and retry
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay); // Wait before retrying
+                }
+                else
+                {
+                    _logger.LogError(ex, "Database operation failed after {MaxRetries} attempts.", maxRetries);
+                    throw; // Re-throw the exception after max retries
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log and re-throw other exceptions
+                _logger.LogError(ex, "An error occurred during database operation.");
+                throw;
+            }
         }
 
-        DeleteLockFile(dbFilePath);
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
     }
 
     public void UpgradeDatabase(string dbFilePath)
@@ -160,83 +228,68 @@ public class SQLiteDataAccess : IDataConnection
             return;
         }
 
-        WaitForLockFileToClear(dbFilePath);
-        CreateLockFile(dbFilePath);
+        int maxRetries = 3; // Maximum number of retries
+        int retryDelay = 1000; // Delay between retries in milliseconds
+        int attempt = 0;
 
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+        while (attempt < maxRetries)
         {
-            dbConnection.Open();
-
-            foreach (var column in columnsToAdd)
+            try
             {
-                try
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
                 {
-                    dbConnection.Execute(column.Value);
+                    dbConnection.Open();
+
+                    // Set busy timeout to wait for the database to become available
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
+
+                    foreach (var column in columnsToAdd)
+                    {
+                        try
+                        {
+                            dbConnection.Execute(column.Value);
+                            _logger.LogInformation("Successfully added column [{ColumnName}] to table.", column.Key);
+                        }
+                        catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+                        {
+                            _logger.LogWarning(ex, "Database is busy while adding column [{ColumnName}].", column.Key);
+                            throw; // Re-throw to trigger retry logic
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to add column [{ColumnName}].", column.Key);
+                            throw; // Re-throw to ensure the operation is not silently ignored
+                        }
+                    }
+
+                    return; // Success, exit the method
                 }
-                catch(Exception ex)
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                // Log the busy error and retry
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
                 {
-                   _logger.LogDebug(ex, "Failed to create column[{column}]. Most likely it already exists, which is fine.", column.Key);
+                    System.Threading.Thread.Sleep(retryDelay); // Wait before retrying
                 }
+                else
+                {
+                    _logger.LogError(ex, "Database upgrade failed after {MaxRetries} attempts.", maxRetries);
+                    throw; // Re-throw the exception after max retries
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log and re-throw other exceptions
+                _logger.LogError(ex, "An error occurred during database upgrade.");
+                throw;
             }
         }
 
-        DeleteLockFile(dbFilePath);
-    }
-
-
-    /// <summary>
-    /// To prevent concurrent write attempts on the database a lock file will be created
-    /// </summary>
-    /// <param name="dbFilePath"></param>
-    private void WaitForLockFileToClear(string dbFilePath)
-    {
-        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        bool messageSent = false;
-
-
-        while (File.Exists(lockFilePath))
-        {
-            if (!messageSent && stopwatch.Elapsed.TotalSeconds >= 5)
-            {
-                _logger.LogInformation("Waiting for lock file [{lockFilePath}] to clear", lockFilePath);
-
-                //send a message that a lock file exists
-                WeakReferenceMessenger.Default.Send(new LockFileMessage(lockFilePath));
-
-                messageSent = true;
-            }
-        }
-
-        //lock file has been cleared
-        WeakReferenceMessenger.Default.Send(new LockFileMessage(""));
-
-        _logger.LogInformation("[{lockFilePath}] cleared", lockFilePath);
-    }
-
-    private void CreateLockFile(string dbFilePath)
-    {
-        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
-
-        if (!File.Exists(lockFilePath))
-        {
-            using (FileStream fs = File.Create(lockFilePath))
-            {
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.WriteLine($"Database locked by {Environment.UserName} on {File.GetCreationTime(lockFilePath)}");
-                }
-            }
-        }
-
-        _logger.LogDebug("Created lock file [{lockFilePath}]", lockFilePath);
-    }
-
-    private void DeleteLockFile(string dbFilePath)
-    {
-        var lockFilePath = $"{dbFilePath.ParsePathWithEnvironmentVariables()}.lock";
-        File.Delete(lockFilePath);
-        _logger.LogDebug("Deleted lock file [{lockFilePath}]", lockFilePath);
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
     }
 
     private bool ColumnExists(string dbFilePath, string columnName, string tableName)
