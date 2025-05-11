@@ -7,6 +7,7 @@ using Serilog.Formatting.Json;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Versioning;
+using Transmittal.Desktop.Services;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 
@@ -56,6 +57,7 @@ internal static class Host
         {
             services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<ISoftwareUpdateService, SoftwareUpdateService>();
+            services.AddSingleton<IMessageBoxService, MessageBoxService>();
 
             services.AddTransient<IDataConnection, SQLiteDataAccess>();
             services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
