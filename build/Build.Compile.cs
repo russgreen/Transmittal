@@ -17,8 +17,8 @@ partial class Build
 
             if (configuration.StartsWith("Release"))
             {
-                DotNetRestore(settings => settings
-                    .SetProjectFile(Solution));
+                //DotNetRestore(settings => settings
+                //    .SetProjectFile(Solution));
 
                 DotNetBuild(settings => settings
                     .SetProjectFile(Solution)

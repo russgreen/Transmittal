@@ -22,6 +22,7 @@ partial class Build
         foreach (var configuration in GlobBuildConfigurations())
         {
             DotNetClean(settings => settings
+                .SetProject(Solution)
                 .SetConfiguration(configuration)
                 .SetVerbosity(DotNetVerbosity.quiet));
         }
