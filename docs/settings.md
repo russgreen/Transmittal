@@ -57,7 +57,7 @@ The template database defaults to the C:\Program Files\Transmittal\Data folder.-
 ### Project database (Revit addin only) 
 Location of the project database file. Each project should have its own database but where multiple Revit files are used on a project they should all be set to use the same database.  
 
-The database engine used by Transmittal is [SQLite](https://www.sqlite.org/index.html) which allows concurrent reads of the database but not concurrent writes.  To protect the database from this during write operations a lock file is generated in the same location as the database. The lock file should only exist momentarily.
+The database engine used by Transmittal is [SQLite](https://www.sqlite.org/index.html) which allows concurrent reads of the database but not concurrent writes.  
 
 if required the database can be opened and edited in [DB Browser for SQLite](https://sqlitebrowser.org/).
 
