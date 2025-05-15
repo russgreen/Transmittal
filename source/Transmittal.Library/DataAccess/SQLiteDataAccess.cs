@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Data.Common;
 using System.IO;
 using System.Windows.Markup;
 using Transmittal.Library.Extensions;
@@ -14,6 +15,9 @@ namespace Transmittal.Library.DataAccess;
 public class SQLiteDataAccess : IDataConnection
 {
     private readonly ILogger<SQLiteDataAccess> _logger;
+
+    private SqliteConnection _connection;
+    private SqliteTransaction _transaction;
 
     public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, IMessageBoxService messageBox)
     {
@@ -145,6 +149,51 @@ public class SQLiteDataAccess : IDataConnection
         }
 
         throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
+    }
+
+
+    public void BeginTransaction(string dbFilePath)
+    {
+        if (_connection == null)
+        {
+            _connection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};");
+            _connection.Open();
+        }
+
+        _transaction = _connection.BeginTransaction();
+    }
+
+    public void CommitTransaction()
+    {
+        _transaction?.Commit();
+        _transaction = null;
+    }
+
+    public void RollbackTransaction()
+    {
+        _transaction?.Rollback();
+        _transaction = null;
+    }
+
+    public void ExecuteInTransaction<T>(string sqlStatement, T parameters)
+    {
+        if (_connection == null || _transaction == null)
+        {
+            throw new InvalidOperationException("Transaction has not been started.");
+        }
+
+        using (var command = _connection.CreateCommand())
+        {
+            command.Transaction = _transaction;
+            command.CommandText = sqlStatement;
+
+            foreach (var property in typeof(T).GetProperties())
+            {
+                command.Parameters.AddWithValue($"@{property.Name}", property.GetValue(parameters) ?? DBNull.Value);
+            }
+
+            command.ExecuteNonQuery();
+        }
     }
 
     public void UpgradeDatabase(string dbFilePath)

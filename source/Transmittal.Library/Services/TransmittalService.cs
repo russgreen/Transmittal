@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
 using System.Data.Common;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
@@ -31,17 +32,17 @@ public class TransmittalService : ITransmittalService
 
         try
         {
-        string sql = "INSERT INTO Transmittal (TransDate) VALUES (@TransDate); " +
-            "SELECT last_insert_rowid();";
+            string sql = "INSERT INTO Transmittal (TransDate) VALUES (@TransDate); " +
+                "SELECT last_insert_rowid();";
 
-        model.ID = _connection.CreateData<TransmittalModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile,
-            sql, model, new
-            {
-                TransDate = model.TransDate,
-            }, nameof(model.ID)).ID;
+            model.ID = _connection.CreateData<TransmittalModel, dynamic>(
+                _settingsService.GlobalSettings.DatabaseFile,
+                sql, model, new
+                {
+                    TransDate = model.TransDate,
+                }, nameof(model.ID)).ID;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal {model}", model);
             _messageBox.ShowOk("Failed to create transmittal", ex.Message);
@@ -125,7 +126,7 @@ public class TransmittalService : ITransmittalService
         {
             string sql = "DELETE FROM Transmittal WHERE (ID = @ID);";
 
-            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
                 sql, new { ID = model.ID });
         }
         catch (Exception ex)
@@ -144,7 +145,7 @@ public class TransmittalService : ITransmittalService
         {
             string sql = "DELETE FROM TransmittalDistribution WHERE TransDistID = @TransDistID;";
 
-            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
                 sql, new { TransDistID = model.TransDistID });
         }
         catch (Exception ex)
@@ -163,7 +164,7 @@ public class TransmittalService : ITransmittalService
         {
             string sql = "DELETE FROM TransmittalItems WHERE TransItemID = @TransItemID;";
 
-            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
                 sql, new { TransItemID = model.TransItemID });
         }
         catch (Exception ex)
@@ -181,7 +182,7 @@ public class TransmittalService : ITransmittalService
         string sql = "SELECT * FROM Transmittal WHERE (ID = @ID);";
 
         var transmittal = _connection.LoadData<TransmittalModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile, 
+            _settingsService.GlobalSettings.DatabaseFile,
             sql, new { ID = transmittalID }).FirstOrDefault();
 
         transmittal.Items = GetTransmittalItems_ByTransmittal(transmittalID);
@@ -198,7 +199,7 @@ public class TransmittalService : ITransmittalService
             "WHERE (TransID = @TransID);";
 
         var transmittalDist = _connection.LoadData<TransmittalDistributionModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile, 
+            _settingsService.GlobalSettings.DatabaseFile,
             sql, new { TransID = transmittalID }).ToList();
 
         //TODO check if this is need at this point
@@ -218,7 +219,7 @@ public class TransmittalService : ITransmittalService
             "WHERE (TransID = @TransID);";
 
         return _connection.LoadData<TransmittalItemModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile, 
+            _settingsService.GlobalSettings.DatabaseFile,
             sql, new { TransID = transmittalID }).ToList();
     }
 
@@ -229,7 +230,7 @@ public class TransmittalService : ITransmittalService
         string sql = "SELECT * FROM Transmittal;";
 
         var transmittals = _connection.LoadData<TransmittalModel, dynamic>(
-            _settingsService.GlobalSettings.DatabaseFile, 
+            _settingsService.GlobalSettings.DatabaseFile,
             sql, null).ToList();
 
         foreach (TransmittalModel transmittal in transmittals)
@@ -331,7 +332,7 @@ public class TransmittalService : ITransmittalService
                 _settingsService.GlobalSettings.DatabaseFile,
                 sql, null).ToList();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading packages from database. Check database has been upgraded to v2");
         }
@@ -348,7 +349,7 @@ public class TransmittalService : ITransmittalService
         {
             string sql = "UPDATE Transmittal SET TransDate = @TransDate WHERE ((ID = @ID));";
 
-            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile, 
+            _connection.SaveData(_settingsService.GlobalSettings.DatabaseFile,
                 sql, new
                 {
                     TransDate = model.TransDate,
@@ -377,7 +378,7 @@ public class TransmittalService : ITransmittalService
                 "WHERE ((TransDistID = @TransDistID));";
 
             _connection.SaveData(
-                _settingsService.GlobalSettings.DatabaseFile, 
+                _settingsService.GlobalSettings.DatabaseFile,
                 sql, new
                 {
                     TransID = model.TransID,
@@ -401,27 +402,27 @@ public class TransmittalService : ITransmittalService
 
         try
         {
-           string sql = "UPDATE TransmittalItems SET " +
-               "TransID = @TransID, " +
-               "DrgNumber = @DrgNumber, " +
-               "DrgRev = @DrgRev, " +
-               "DrgName = @DrgName, " +
-               "DrgPaper = @DrgPaper, " +
-               "DrgScale = @DrgScale, " +
-               "DrgDrawn = @DrgDrawn, " +
-               "DrgChecked = @DrgChecked, " +
-               "DrgProj = @DrgProj, " +
-               "DrgOriginator = @DrgOriginator, " +
-               "DrgVolume = @DrgVolume, " +
-               "DrgLevel = @DrgLevel, " +
-               "DrgType = @DrgType, " +
-               "DrgRole = @DrgRole, " +
-               "DrgStatus = @DrgStatus, " +
-               "DrgPackage = @DrgPackage " +
-               "WHERE (TransItemID = @TransItemID);";
+            string sql = "UPDATE TransmittalItems SET " +
+                "TransID = @TransID, " +
+                "DrgNumber = @DrgNumber, " +
+                "DrgRev = @DrgRev, " +
+                "DrgName = @DrgName, " +
+                "DrgPaper = @DrgPaper, " +
+                "DrgScale = @DrgScale, " +
+                "DrgDrawn = @DrgDrawn, " +
+                "DrgChecked = @DrgChecked, " +
+                "DrgProj = @DrgProj, " +
+                "DrgOriginator = @DrgOriginator, " +
+                "DrgVolume = @DrgVolume, " +
+                "DrgLevel = @DrgLevel, " +
+                "DrgType = @DrgType, " +
+                "DrgRole = @DrgRole, " +
+                "DrgStatus = @DrgStatus, " +
+                "DrgPackage = @DrgPackage " +
+                "WHERE (TransItemID = @TransItemID);";
 
             _connection.SaveData(
-                _settingsService.GlobalSettings.DatabaseFile, 
+                _settingsService.GlobalSettings.DatabaseFile,
                 sql, new
                 {
                     TransID = model.TransID,
@@ -448,6 +449,82 @@ public class TransmittalService : ITransmittalService
             _logger.LogError(ex, "Failed to update transmittal item {model}", model);
             _messageBox.ShowOk("Failed to update transmittal item", ex.Message);
         }
- 
+
+    }
+
+    public void CreateTransmittalItems(List<TransmittalItemModel> models)
+    {
+        _logger.LogDebug("Creating multiple transmittal items");
+
+        try
+        {
+            _connection.BeginTransaction(_settingsService.GlobalSettings.DatabaseFile);
+
+            string sql = "INSERT INTO TransmittalItems ( TransID, DrgProj, DrgOriginator, DrgVolume, DrgLevel, DrgType, DrgRole, DrgNumber, DrgStatus, DrgRev, DrgName, DrgPaper, DrgScale, DrgDrawn, DrgChecked, DrgPackage ) " +
+                         "VALUES ( @TransID, @DrgProj, @DrgOriginator, @DrgVolume, @DrgLevel, @DrgType, @DrgRole, @DrgNo, @DrgStatus, @DrgRev, @DrgName, @DrgPaper, @DrgScale, @DrgDrawn, @DrgChecked, @DrgPackage );";
+
+            foreach (var model in models)
+            {
+                _connection.ExecuteInTransaction(sql, new
+                {
+                    TransID = model.TransID,
+                    DrgProj = model.DrgProj,
+                    DrgOriginator = model.DrgOriginator,
+                    DrgVolume = model.DrgVolume,
+                    DrgLevel = model.DrgLevel,
+                    DrgType = model.DrgType,
+                    DrgRole = model.DrgRole,
+                    DrgNo = model.DrgNumber,
+                    DrgStatus = model.DrgStatus,
+                    DrgRev = model.DrgRev,
+                    DrgName = model.DrgName,
+                    DrgPaper = model.DrgPaper,
+                    DrgScale = model.DrgScale,
+                    DrgDrawn = model.DrgDrawn,
+                    DrgChecked = model.DrgChecked,
+                    DrgPackage = model.DrgPackage
+                });
+            }
+
+            _connection.CommitTransaction();
+        }
+        catch (Exception ex)
+        {
+            _connection.RollbackTransaction();
+            _logger.LogError(ex, "Failed to create multiple transmittal items");
+            _messageBox.ShowOk("Failed to create transmittal items", ex.Message);
+        }
+    }
+
+    public void CreateTransmittalDistributions(List<TransmittalDistributionModel> models)
+    {
+        _logger.LogDebug("Creating multiple transmittal distributions");
+
+        try
+        {
+            _connection.BeginTransaction(_settingsService.GlobalSettings.DatabaseFile);
+
+            string sql = "INSERT INTO TransmittalDistribution (TransID, PersonID, TransFormat, TransCopies) " +
+                         "VALUES (@TransID, @PersonID, @TransFormat, @TransCopies);";
+
+            foreach (var model in models)
+            {
+                _connection.ExecuteInTransaction(sql, new
+                {
+                    TransID = model.TransID,
+                    PersonID = model.PersonID,
+                    TransFormat = model.TransFormat,
+                    TransCopies = model.TransCopies
+                });
+            }
+
+            _connection.CommitTransaction();
+        }
+        catch (Exception ex)
+        {
+            _connection.RollbackTransaction();
+            _logger.LogError(ex, "Failed to create multiple transmittal distributions");
+            _messageBox.ShowOk("Failed to create transmittal distributions", ex.Message);
+        }
     }
 }

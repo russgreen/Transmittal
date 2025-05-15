@@ -53,4 +53,7 @@ public interface ITransmittalService
     void CreateTransmittalDist(TransmittalDistributionModel model);
     void UpdateTransmittalDist(TransmittalDistributionModel model);
     void DeleteTransmittalDist(TransmittalDistributionModel model);
+
+    void CreateTransmittalItems(List<TransmittalItemModel> models);
+    void CreateTransmittalDistributions(List<TransmittalDistributionModel> models);
 }
