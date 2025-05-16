@@ -322,14 +322,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
 
             item.DrgOriginator = _settingsService.GlobalSettings.Originator;
             item.DrgRole = _settingsService.GlobalSettings.Role;
-            _transmittalService.CreateTransmittalItem(item);
+            //_transmittalService.CreateTransmittalItem(item);
         }
+
+        _transmittalService.CreateTransmittalItems(Documents.Cast<TransmittalItemModel>().ToList());
 
         foreach (TransmittalDistributionModel dist in Distribution)
         {
             dist.TransID = _newTransmittal.ID;
-            _transmittalService.CreateTransmittalDist(dist);
+            //_transmittalService.CreateTransmittalDist(dist);
         }
+
+        _transmittalService.CreateTransmittalDistributions(Distribution.ToList());
     }
 
     private void LaunchTransmittalReport()

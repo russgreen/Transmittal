@@ -1,0 +1,145 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Debug 2021" />
+    <BuildType Name="Debug 2022" />
+    <BuildType Name="Debug 2023" />
+    <BuildType Name="Debug 2024" />
+    <BuildType Name="Debug 2025" />
+    <BuildType Name="Debug 2026" />
+    <BuildType Name="Release" />
+    <BuildType Name="Release 2021" />
+    <BuildType Name="Release 2022" />
+    <BuildType Name="Release 2023" />
+    <BuildType Name="Release 2024" />
+    <BuildType Name="Release 2025" />
+    <BuildType Name="Release 2026" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/docs/">
+    <File Path="docs/404.html" />
+    <File Path="docs/archive.md" />
+    <File Path="docs/directory.md" />
+    <File Path="docs/index.md" />
+    <File Path="docs/logo.png" />
+    <File Path="docs/reports.md" />
+    <File Path="docs/reports_v2upgrade.md" />
+    <File Path="docs/settings.md" />
+    <File Path="docs/tags.md" />
+    <File Path="docs/transmittal-revit.md" />
+    <File Path="docs/transmittal.md" />
+    <File Path="docs/update_database.md" />
+    <File Path="docs/_config.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="BoldReportsKey.txt" />
+    <File Path="Directory.Build.props" />
+    <File Path="ImportTemplate.json" />
+    <File Path="README.md" />
+    <File Path="SyncfusionKey.txt" />
+  </Folder>
+  <Project Path="build/_build.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="source/Transmittal.Desktop/Transmittal.Desktop.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+    <Build Solution="Release 2021|*" Project="false" />
+    <Build Solution="Release 2022|*" Project="false" />
+    <Build Solution="Release 2023|*" Project="false" />
+    <Build Solution="Release 2024|*" Project="false" />
+    <Build Solution="Release 2025|*" Project="false" />
+    <Build Solution="Release 2026|*" Project="false" />
+  </Project>
+  <Project Path="source/Transmittal.Library.Tests/Transmittal.Library.Tests.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+    <Build Solution="Release 2021|*" Project="false" />
+    <Build Solution="Release 2022|*" Project="false" />
+    <Build Solution="Release 2023|*" Project="false" />
+    <Build Solution="Release 2024|*" Project="false" />
+    <Build Solution="Release 2025|*" Project="false" />
+    <Build Solution="Release 2026|*" Project="false" />
+    <Build Solution="Release|*" Project="false" />
+  </Project>
+  <Project Path="source/Transmittal.Library/Transmittal.Library.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+  </Project>
+  <Project Path="source/Transmittal.Reports/Transmittal.Reports.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="source/Transmittal/Transmittal.csproj">
+    <BuildType Solution="Debug 2021|*" Project="Debug R21" />
+    <BuildType Solution="Debug 2022|*" Project="Debug R22" />
+    <BuildType Solution="Debug 2023|*" Project="Debug R23" />
+    <BuildType Solution="Debug 2024|*" Project="Debug R24" />
+    <BuildType Solution="Debug 2025|*" Project="Debug R25" />
+    <BuildType Solution="Debug 2026|*" Project="Debug R26" />
+    <BuildType Solution="Debug|*" Project="Debug R22" />
+    <BuildType Solution="Release 2021|*" Project="Release R21" />
+    <BuildType Solution="Release 2022|*" Project="Release R22" />
+    <BuildType Solution="Release 2023|*" Project="Release R23" />
+    <BuildType Solution="Release 2024|*" Project="Release R24" />
+    <BuildType Solution="Release 2025|*" Project="Release R25" />
+    <BuildType Solution="Release 2026|*" Project="Release R26" />
+    <BuildType Solution="Release|*" Project="Release R22" />
+    <Build Solution="Debug|*" Project="false" />
+    <Build Solution="Release|*" Project="false" />
+  </Project>
+</Solution>

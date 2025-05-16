@@ -1,10 +1,8 @@
-﻿using Autodesk.Revit.Creation;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
-using Microsoft.SqlServer.Server;
 using Nice3point.Revit.Extensions;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
@@ -13,7 +11,6 @@ using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Threading;
 using Transmittal.Extensions;
@@ -1278,7 +1275,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void RecordTransmittalInDatabase()
     {
-        if(RecordTransmittal == false)
+        var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+
+        if (RecordTransmittal == false)
         {
             return;
         }
@@ -1302,14 +1301,21 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             item.DrgOriginator = _settingsService.GlobalSettings.Originator;
             item.DrgRole = _settingsService.GlobalSettings.Role;
-            _transmittalService.CreateTransmittalItem(item);
+            //_transmittalService.CreateTransmittalItem(item);
         }
+
+        _transmittalService.CreateTransmittalItems(SelectedDrawingSheets.Cast<TransmittalItemModel>().ToList());
 
         foreach (var dist in Distribution)
         {
             dist.TransID = _newTransmittal.ID;
-            _transmittalService.CreateTransmittalDist(dist);
+            //_transmittalService.CreateTransmittalDist(dist);
         }
+
+        _transmittalService.CreateTransmittalDistributions(Distribution.ToList());
+
+        stopWatch.Stop();
+        _logger.LogDebug("Record in database in {time}ms", stopWatch.ElapsedMilliseconds);
     }
 
     private void LaunchTransmittalReport()
