@@ -25,7 +25,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     private string _lastName;
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "At least provide an intial")]
+    [Required(ErrorMessage = "At least provide an initial")]
     [MinLength(1)]
     private string _firstName;
     [ObservableProperty]
@@ -53,6 +53,21 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     {
         _contactDirectoryService.CreateCompany(model);
         Companies.Add(model);
+    }
+
+    partial void OnCompanyIDChanged(int value)
+    {
+        this.ValidateAllProperties();
+    }
+
+    partial void OnLastNameChanged(string value)
+    {
+        this.ValidateAllProperties();
+    }
+
+    partial void OnFirstNameChanged(string value)
+    {
+        this.ValidateAllProperties();
     }
 
     [RelayCommand]

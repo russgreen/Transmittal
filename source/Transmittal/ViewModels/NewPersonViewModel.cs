@@ -24,7 +24,7 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     private string _lastName;
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "At least provide an intial")]
+    [Required(ErrorMessage = "At least provide an initial")]
     [MinLength(1)]
     private string _firstName;
     [ObservableProperty]
