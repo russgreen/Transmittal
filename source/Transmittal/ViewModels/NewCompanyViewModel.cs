@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel.DataAnnotations;
 using Transmittal.Library.Models;
+using Transmittal.Library.Services;
+using Transmittal.Library.Validation;
 using Transmittal.Library.ViewModels;
 using Transmittal.Requesters;
 
@@ -10,14 +12,17 @@ namespace Transmittal.ViewModels;
 public partial class NewCompanyViewModel : BaseViewModel
 {
     private readonly ICompanyRequester _callingViewModel;
+    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
 
     [ObservableProperty]
     private CompanyModel _company = new();
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "A company name is required")]
+    [CustomValidation(typeof(ValidationHelpers), nameof(ValidationHelpers.ValidateCompanyName))]
     public string _companyName;
+
+    public IContactDirectoryService ContactDirectoryService => _contactDirectoryService;
 
     public NewCompanyViewModel(ICompanyRequester caller)
     {
@@ -25,7 +30,6 @@ public partial class NewCompanyViewModel : BaseViewModel
 
         this.ValidateAllProperties();
     }
-
 
     [RelayCommand]
     private void SendCompany()
