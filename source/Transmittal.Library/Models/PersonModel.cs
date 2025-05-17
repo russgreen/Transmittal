@@ -16,7 +16,7 @@ public partial class PersonModel : ObservableValidator
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FullName), nameof(FullNameReversed))]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "At least provide an intial")]
+    [Required(ErrorMessage = "At least provide an initial")]
     [MinLength(1)]
     private string _firstName = String.Empty;
     /// <summary>
