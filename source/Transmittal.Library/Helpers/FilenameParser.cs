@@ -88,23 +88,57 @@ public static class FilenameParser
 
     private static string GetPatternFromExportRule(string exportRule)
     {
-        // Escape any regex special characters in the export rule
-        var escapedExportRule = Regex.Escape(exportRule);
+        // Find all tags in order
+        var tagRegex = new Regex(@"<(\w+)>");
+        var tagMatches = tagRegex.Matches(exportRule).Cast<Match>().ToList();
+        var tags = tagMatches.Select(m => m.Groups[1].Value).ToList();
 
-        // Replace curly tag placeholders with regex capture groups
-        var tagRegex = new Regex(@"<{1}(?<tag>\w+)>{1}", RegexOptions.ExplicitCapture);
-        var matchEvaluator = new MatchEvaluator(match =>
+        // We'll build the pattern step by step
+        string pattern = Regex.Escape(exportRule);
+
+        for (int i = 0; i < tags.Count; i++)
         {
-            var tag = match.Groups["tag"].Value;
-            return $"(?<{tag}>.*?)";
-        });
-        var pattern = tagRegex.Replace(escapedExportRule, matchEvaluator);
+            var tag = tags[i];
+            string replacement;
 
-        // Add optional whitespace and/or hyphen characters between tags
-        pattern = Regex.Replace(pattern, @"</\w+>\s{0,4}(?!\n)(?=\w)", "$0[- ]*");
-        // Add start and end anchors to the pattern
+            // Find the delimiter after this tag in the original exportRule
+            int tagEnd = tagMatches[i].Index + tagMatches[i].Length;
+            char? delimiter = null;
+            if (tagEnd < exportRule.Length)
+            {
+                char c = exportRule[tagEnd];
+                if (c == '-' || c == ' ' || c == '_')
+                    delimiter = c;
+            }
+
+            if (i == tags.Count - 1)
+            {
+                // Last tag: match to end
+                replacement = $@"(?<{tag}>.+)";
+            }
+            else if (tag == "SheetNo" && delimiter.HasValue)
+            {
+                // For SheetNo, match anything (including delimiters) up to the delimiter + next tag's value
+                // The next tag's value is not known, but we can look for the delimiter followed by a group that matches the next tag's pattern
+                // We'll use a lookahead for delimiter followed by a non-greedy match for the next tag
+                replacement = $@"(?<{tag}>.+?)(?={Regex.Escape(delimiter.ToString())}(?=[^" + Regex.Escape(delimiter.ToString()) + @"]+))";
+            }
+            else if (delimiter.HasValue)
+            {
+                // For other tags, match up to the next delimiter (non-greedy)
+                replacement = $@"(?<{tag}>[^{Regex.Escape(delimiter.ToString())}]+)";
+            }
+            else
+            {
+                // Fallback: match up to next non-delimiter
+                replacement = $@"(?<{tag}>.+?)";
+            }
+
+            pattern = new Regex(Regex.Escape("<" + tag + ">")).Replace(pattern, replacement, 1);
+        }
+
+        pattern = pattern.Replace(@"\<", "<").Replace(@"\>", ">");
         pattern = $"^{pattern}$";
-
         return pattern;
     }
 
