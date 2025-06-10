@@ -20,6 +20,9 @@ public class FilenameParserTests
     [InlineData("PROJ-ORI-XX-00-GA-A-0003-SheetName-ProjectName-S1-C02", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<ProjName>-<Status>-<Rev>", "PROJ", "ORI", "A", "XX", "00", "GA", "0003", "S1", "", "C02", "Sheet Name")]
     [InlineData("0001-ORI-XX-D01-GA-A-0003-SiteAnalysisPlan-S2-P01.pdf", "<ProjNo>-ORI-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<SheetName>-<Status>-<Rev>", "0001", "ORI", "A", "XX", "D01", "GA", "0003", "S2", "", "P01", "Site Analysis Plan")]
     [InlineData("P00 000-OR-ZZ-ZZ-DR-A-0601-P02_Planning Detail 01 - Edge of Slab, Brick Facade.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<Rev>_<SheetName2>", "P00 000", "OR", "A", "ZZ", "ZZ", "DR", "0601", "", "", "P02", "Planning Detail 01 - Edge of Slab, Brick Facade")]
+    [InlineData("P00 000-OR-ZZ-ZZ-DR-A-06-601-P02_Planning Detail 01 - Edge of Slab, Brick Facade.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<Rev>_<SheetName2>", "P00 000", "OR", "A", "ZZ", "ZZ", "DR", "06-601", "", "", "P02", "Planning Detail 01 - Edge of Slab, Brick Facade")]
+    [InlineData("P00 000-OR-ZZ-ZZ-DR-A-06-601 P02_Planning Detail 01 - Edge of Slab, Brick Facade.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName2>", "P00 000", "OR", "A", "ZZ", "ZZ", "DR", "06-601", "", "", "P02", "Planning Detail 01 - Edge of Slab, Brick Facade")]
+    [InlineData("PROJ-OR-ZZ-ZZ-DR-A-06-601 P02-S1_PlanningDetail01.pdf", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>-<Status>_<SheetName>", "PROJ", "OR", "A", "ZZ", "ZZ", "DR", "06-601", "S1", "", "P02", "Planning Detail 01")]
     public void DocumentModel_ShouldReturnExpectedResult(string filePath, 
         string exportRule, 
         string projectNumber,
