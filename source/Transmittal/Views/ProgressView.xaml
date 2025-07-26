@@ -9,7 +9,7 @@
         d:DataContext="{d:DesignInstance viewModels:ProgressViewModel, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterScreen" 
         Height="300" Width="600" 
-        WindowStyle="None" ResizeMode="NoResize">
+        WindowStyle="None" ResizeMode="NoResize" Topmost="True">
     
     <Window.DataContext>
         <viewModels:ProgressViewModel />
