@@ -47,6 +47,11 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
         this.ValidateAllProperties();
 
         Companies = new ObservableCollection<CompanyModel>(_contactDirectoryService.GetCompanies_All());
+
+        if (Companies.Any())
+        {
+            CompanyID = Companies.First().ID;
+        }
     }
 
     public void CompanyComplete(CompanyModel model)
