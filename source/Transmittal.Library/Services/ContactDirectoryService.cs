@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows.Media.Media3D;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 
@@ -13,19 +12,16 @@ public class ContactDirectoryService : IContactDirectoryService
     private readonly ISettingsService _settingsService;
     private readonly ILogger<ContactDirectoryService> _logger;  
     private readonly IMessageBoxService _messageBox;
-    private readonly IAnalyticsClient _analyticsClient;
 
     public ContactDirectoryService(IDataConnection dataConnection,
         ISettingsService settingsService,
         ILogger<ContactDirectoryService> logger,
-        IMessageBoxService messageBox,
-        IAnalyticsClient analyticsClient)
+        IMessageBoxService messageBox)
     {
         _connection = dataConnection;
         _settingsService = settingsService;
         _logger = logger;
         _messageBox = messageBox;
-        _analyticsClient = analyticsClient;
     }
 
     public void CreateCompany(CompanyModel model)
@@ -53,7 +49,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create company {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create company", ex.Message);
         }
 
@@ -88,7 +83,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create person {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create person", ex.Message);
         }
 
@@ -225,7 +219,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update company {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to update company", ex.Message);
         }
 
@@ -245,7 +238,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete company {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to delete company", ex.Message);
         }
 
@@ -290,7 +282,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update person {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to update person", ex.Message);
         }
 
@@ -310,7 +301,6 @@ public class ContactDirectoryService : IContactDirectoryService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete person {model}", model);
-            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to delete person", ex.Message);
         }
 

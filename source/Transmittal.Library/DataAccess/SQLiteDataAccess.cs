@@ -6,7 +6,6 @@ using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Windows.Markup;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
 using Transmittal.Library.Services;
@@ -16,17 +15,13 @@ namespace Transmittal.Library.DataAccess;
 public class SQLiteDataAccess : IDataConnection
 {
     private readonly ILogger<SQLiteDataAccess> _logger;
-    private readonly IAnalyticsClient _analyticsClient;
 
     private SqliteConnection _connection;
     private SqliteTransaction _transaction;
 
-    public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, 
-        IMessageBoxService messageBox,
-        IAnalyticsClient analyticsClient)
+    public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, IMessageBoxService messageBox)
     {
         _logger = logger;
-        _analyticsClient = analyticsClient;
     }
 
     public bool CheckConnection(string dbFilePath)
@@ -41,7 +36,6 @@ public class SQLiteDataAccess : IDataConnection
             catch (SqliteException ex)
             {
                 _logger.LogError(ex, "Failed to connect to database");
-                _analyticsClient.TrackExceptionAsync(ex);
                 return false;
             }
         }
@@ -92,7 +86,6 @@ public class SQLiteDataAccess : IDataConnection
             {
                 // Log and re-throw other exceptions
                 _logger.LogError(ex, "An error occurred during database operation.");
-                _analyticsClient.TrackExceptionAsync(ex);
                 throw;
             }
         }
@@ -151,7 +144,6 @@ public class SQLiteDataAccess : IDataConnection
             {
                 // Log and re-throw other exceptions
                 _logger.LogError(ex, "An error occurred during database operation.");
-                _analyticsClient.TrackExceptionAsync(ex);
                 throw;
             }
         }
@@ -342,7 +334,6 @@ public class SQLiteDataAccess : IDataConnection
             {
                 // Log and re-throw other exceptions
                 _logger.LogError(ex, "An error occurred during database upgrade.");
-                _analyticsClient.TrackExceptionAsync(ex);
                 throw;
             }
         }

@@ -3,7 +3,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Views
@@ -15,7 +14,6 @@ namespace Transmittal.Desktop.Views
     {
         private readonly ViewModels.MainViewModel _viewModel;
         private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-        private readonly IAnalyticsClient _analyticsClient = Host.GetService<IAnalyticsClient>();
 
         public MainView()
         {
@@ -34,24 +32,18 @@ namespace Transmittal.Desktop.Views
 
         private void Button_Transmittal_Click(object sender, RoutedEventArgs e)
         {
-            _analyticsClient.TrackFeatureUsageAsync("Desktop.Transmittal");
-
             TransmittalView view = new();
             view.ShowDialog();
         }
 
         private void Button_TransmittalArchive_Click(object sender, RoutedEventArgs e)
         {
-            _analyticsClient.TrackFeatureUsageAsync("Desktop.Archive");
-
             ArchiveView view = new();
             view.ShowDialog();
         }
 
         private void Button_Directory_Click(object sender, RoutedEventArgs e)
         {
-            _analyticsClient.TrackFeatureUsageAsync("Desktop.Directory");
-
             DirectoryView view = new();
             view.ShowDialog();
         }

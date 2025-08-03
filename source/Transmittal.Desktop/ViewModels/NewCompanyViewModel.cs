@@ -38,5 +38,21 @@ namespace Transmittal.Desktop.ViewModels
             _callingViewModel.CompanyComplete(Company);
             this.OnClosingRequest();
         }
+
+        //public static ValidationResult ValidateCompanyName(string value, ValidationContext context)
+        //{
+        //    if (string.IsNullOrWhiteSpace(value))
+        //        return new ValidationResult("A company name is required");
+
+        //    var instance = (NewCompanyViewModel)context.ObjectInstance;
+        //    var existingNames = instance._contactDirectoryService.GetCompanies_All()
+        //        .Select(c => c.CompanyName?.Trim().ToLowerInvariant())
+        //        .ToList();
+
+        //    if (existingNames.Contains(value.Trim().ToLowerInvariant()))
+        //        return new ValidationResult("This company name already exists.");
+
+        //    return ValidationResult.Success;
+        //}
     }
 }

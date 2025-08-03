@@ -7,7 +7,7 @@ partial class Build : NukeBuild
 {
     readonly AbsolutePath ArtifactsDirectory = RootDirectory / "output";
 
-    readonly string[] CompiledAssemblies = { "Transmittal.dll", "Transmittal.Desktop.exe", "Transmittal.Desktop.dll", "Transmittal.Library.dll", "Transmittal.Reports.dll", "Transmittal.Analytics.TrayApp.exe", "Transmittal.Analytics.Client.dll" };
+    readonly string[] CompiledAssemblies = { "Transmittal.dll", "Transmittal.Desktop.exe", "Transmittal.Desktop.dll", "Transmittal.Library.dll", "Transmittal.Reports.dll" };
 
     [GitRepository]
     readonly GitRepository GitRepository;

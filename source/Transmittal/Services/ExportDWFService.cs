@@ -9,22 +9,18 @@ using Transmittal.Extensions;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using Microsoft.Extensions.Logging;
-using Transmittal.Analytics.Client;
 
 namespace Transmittal.Services;
 internal class ExportDWFService : IExportDWFService
 {
     private readonly ISettingsService _settingsService;
     private readonly ILogger<ExportDWFService> _logger;
-    private readonly IAnalyticsClient _analyticsClient;
 
     public ExportDWFService(ISettingsService settingsService,
-        ILogger<ExportDWFService> logger,
-        IAnalyticsClient analyticsClient)
+        ILogger<ExportDWFService> logger)
     {
         _settingsService = settingsService;
         _logger = logger;
-        _analyticsClient = analyticsClient;
     }    
     
     public string ExportDWF(string exportFileName, string folderPath, ExportPaperFormat sheetsize, PrintSetup printSetup, DWFExportOptions dwfExportOptions, Document exportDocument, ViewSet views)
@@ -70,7 +66,6 @@ internal class ExportDWFService : IExportDWFService
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error exporting DWF");
-            _analyticsClient.TrackExceptionAsync(ex);
         }
         finally
         {

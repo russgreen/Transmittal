@@ -9,7 +9,6 @@ using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
-using Transmittal.Analytics.Client;
 using Transmittal.Desktop.Requesters;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
@@ -24,7 +23,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
     private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
-    private readonly IAnalyticsClient _analyticsClient = Host.GetService<IAnalyticsClient>();
+
     public string WindowTitle { get; private set; }
 
     private TransmittalModel _newTransmittal = new TransmittalModel();
@@ -248,7 +247,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error processing transmittal");
-            _analyticsClient.TrackExceptionAsync(ex);
             this.OnClosingRequest();
             return;
         }

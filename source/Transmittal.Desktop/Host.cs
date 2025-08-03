@@ -1,14 +1,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Versioning;
-using Transmittal.Analytics.Client;
 using Transmittal.Desktop.Services;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
@@ -45,6 +43,7 @@ internal static class Host
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyLocation = assembly.Location;
             var softwareVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
+
             var downloadFolder = Transmittal.Library.Helpers.GetDownloadsFolder.GetDownloadsPath();
 
             builder.AddInMemoryCollection(new KeyValuePair<string, string>[]
@@ -56,23 +55,9 @@ internal static class Host
         })
         .ConfigureServices((_, services) =>
         {
-            // Properly configure logging
-            services.AddLogging(builder =>
-            {
-                builder.ClearProviders();
-                builder.AddSerilog(Log.Logger);
-            });
-
             services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<ISoftwareUpdateService, SoftwareUpdateService>();
             services.AddSingleton<IMessageBoxService, MessageBoxService>();
-
-            // Add analytics client
-#if DEBUG
-            services.AddSingleton<IAnalyticsClient, NoOpAnalyticsClient>();
-#else
-            services.AddSingleton<IAnalyticsClient, NamedPipeAnalyticsClient>();
-#endif
 
             services.AddTransient<IDataConnection, SQLiteDataAccess>();
             services.AddTransient<IContactDirectoryService, ContactDirectoryService>();

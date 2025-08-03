@@ -35,9 +35,5 @@
 	<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Transmittal.Analytics.Client\Transmittal.Analytics.Client.csproj" />
-  </ItemGroup>
-
 </Project>
 
