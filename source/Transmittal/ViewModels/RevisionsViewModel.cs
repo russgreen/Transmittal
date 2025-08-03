@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Transmittal.Analytics.Client;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
 using Transmittal.Models;
@@ -14,6 +15,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 {
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IMessageBoxService _messageBox = Host.GetService<IMessageBoxService>();
+    private readonly IAnalyticsClient _analyticsClient = Host.GetService<IAnalyticsClient>();
     private readonly IRevisionRequester _callingViewModel;
     
     [ObservableProperty]
@@ -81,6 +83,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         catch (Exception ex)
         {
             _messageBox.ShowOk("Error creating revision", ex.Message);
+            _analyticsClient.TrackExceptionAsync(ex);
             trans.RollBack();
         }
 

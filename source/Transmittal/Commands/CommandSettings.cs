@@ -10,7 +10,6 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 internal class CommandSettings : ExternalCommand
 {
-
     public override void Execute()
     {
         App.CachedUiApp = Context.UiApplication;
