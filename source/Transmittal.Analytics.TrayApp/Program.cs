@@ -23,7 +23,7 @@ internal static class Program
             "Transmittal", "Analytics_TrayApp_Log.json");
 
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
+            .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
             .WriteTo.File(logPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
             .CreateLogger();
 
