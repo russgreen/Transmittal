@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
+using Transmittal.Analytics.Client;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Services;
@@ -12,12 +13,15 @@ internal class ExportPDFService : IExportPDFService
 {
     private readonly ISettingsService _settingsService;
     private readonly ILogger<ExportPDFService> _logger;
+    private readonly IAnalyticsClient _analyticsClient;
 
     public ExportPDFService(ISettingsService settingsService, 
-        ILogger<ExportPDFService> logger)
+        ILogger<ExportPDFService> logger,
+        IAnalyticsClient analyticsClient)
     {
         _settingsService = settingsService;
         _logger = logger;
+        _analyticsClient = analyticsClient;
     }
 
 #if REVIT2022_OR_GREATER
@@ -66,6 +70,7 @@ internal class ExportPDFService : IExportPDFService
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error exporting pdf file");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
         finally
         {
@@ -251,6 +256,7 @@ internal class ExportPDFService : IExportPDFService
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error creating pdf");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
         finally
         {
@@ -290,6 +296,7 @@ internal class ExportPDFService : IExportPDFService
         catch (Exception ex)
         {
             _logger.LogDebug(ex, "Error getting PDF24 settings from registry");
+            _analyticsClient.TrackExceptionAsync(ex);
 
             settings = new()
             {

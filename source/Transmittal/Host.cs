@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using Transmittal.Analytics.Client;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -37,8 +39,22 @@ internal static class Host
             .UseSerilog()
             .ConfigureServices((_, services) =>
             {
+                // Properly configure logging
+                services.AddLogging(builder =>
+                {
+                    builder.ClearProviders();
+                    builder.AddSerilog(Log.Logger);
+                });
+
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<IMessageBoxService, MessageBoxService>();
+
+                // Add analytics client
+#if DEBUG
+                services.AddSingleton<IAnalyticsClient, NoOpAnalyticsClient>();
+#else
+                services.AddSingleton<IAnalyticsClient, NamedPipeAnalyticsClient>();
+#endif
 
                 services.AddTransient<ISettingsServiceRvt, SettingsServiceRvt>();
                 services.AddTransient<IDataConnection, SQLiteDataAccess>();

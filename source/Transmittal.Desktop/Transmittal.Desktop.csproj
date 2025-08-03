@@ -86,6 +86,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Transmittal.Analytics.Client\Transmittal.Analytics.Client.csproj" />
     <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
     <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
   </ItemGroup>

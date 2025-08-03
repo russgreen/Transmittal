@@ -622,7 +622,10 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [RelayCommand]
     public void LoadSettingsFromDatabase()
     {
-        if(DatabaseNotFound) return;
+        if(DatabaseNotFound)
+        {
+            return;
+        }
 
         _settingsService.GetSettings();
 
@@ -726,7 +729,10 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     public void UpgradeDatabase()
     {
-        if (DatabaseNotFound) return;
+        if (DatabaseNotFound)
+        {
+            return;
+        }
 
         if (_settingsServiceRvt.CheckDatabaseFileExists(DatabaseFile.Trim(), true))
         {
