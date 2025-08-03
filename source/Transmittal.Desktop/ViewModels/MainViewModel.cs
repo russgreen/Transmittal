@@ -89,7 +89,9 @@ internal partial class MainViewModel : BaseViewModel
             .ToList();
 
         if (shortcutFiles.Count < 1)
+        {
             return recentFiles;
+        }
 
         dynamic script = CreateComInstance("Wscript.Shell");
 
@@ -108,7 +110,9 @@ internal partial class MainViewModel : BaseViewModel
     {
         Type type = Type.GetTypeFromProgID(progId);
         if (type == null)
+        {
             return null;
+        }
 
         return Activator.CreateInstance(type);
     }
