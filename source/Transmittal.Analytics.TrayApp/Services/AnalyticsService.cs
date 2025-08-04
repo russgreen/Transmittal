@@ -15,8 +15,8 @@ namespace Transmittal.Analytics.TrayApp.Services;
 public class AnalyticsService : BackgroundService
 {
     private readonly ILogger<AnalyticsService> _logger;
-    private const string PipeName = "TransmittalAnalyticsPipe";
-    private const string AppCenterSecret = "YOUR_APP_CENTER_SECRET"; // Replace with actual secret
+    private const string _pipeName = "TransmittalAnalyticsPipe";
+    private const string _appCenterSecret = "YOUR_APP_CENTER_SECRET"; // Replace with actual secret
 
     public AnalyticsService(ILogger<AnalyticsService> logger)
     {
@@ -25,8 +25,8 @@ public class AnalyticsService : BackgroundService
         // Initialize App Center
         if (!AppCenter.Configured)
         {
-            AppCenter.Start(AppCenterSecret, typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Crashes));
-            _logger.LogDebug("App Center initialized with secret: {Secret}", AppCenterSecret.Substring(0, 8) + "...");
+            AppCenter.Start(_appCenterSecret, typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Crashes));
+            _logger.LogDebug("App Center initialized with secret: {Secret}", _appCenterSecret.Substring(0, 8) + "...");
         }
     }
 
@@ -57,7 +57,7 @@ public class AnalyticsService : BackgroundService
 
     private async Task ListenForAnalyticsEvents(CancellationToken cancellationToken)
     {
-        using var server = new NamedPipeServerStream(PipeName, PipeDirection.In, 10, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+        using var server = new NamedPipeServerStream(_pipeName, PipeDirection.In, 10, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
         
         _logger.LogDebug("Waiting for analytics client connection...");
         await server.WaitForConnectionAsync(cancellationToken);
