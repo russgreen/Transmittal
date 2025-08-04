@@ -45,6 +45,12 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **File Parsing**: Automatic filename parsing for standardized naming conventions
 - **Drag & Drop**: Easy document addition via drag and drop interface
 
+### Analytics & Telemetry
+- **Usage Analytics**: Comprehensive analytics collection for understanding user workflows
+- **Performance Monitoring**: Track feature usage, performance metrics, and error reporting
+- **Privacy-First**: Optional analytics with user consent and transparent data collection
+- **Multi-Service Architecture**: Flexible analytics backend supporting both Windows Service and system tray implementations
+
 ### Key Capabilities
 - **Transmittal History**: Complete audit trail of document transmissions
 - **Distribution Management**: Track recipients and distribution methods
@@ -71,6 +77,12 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **Framework**: .NET 8
 - **Database**: SQLite (embedded)
 
+### For Analytics Service (Optional)
+- **Operating System**: Windows 10/11 or Windows Server 2016+ (64-bit)
+- **Framework**: .NET 8
+- **Privileges**: Administrator privileges for Windows Service installation
+- **Analytics Provider**: Microsoft App Center, until replacement released (optional)
+
 ## 🏗️ Solution Architecture
 
 The solution consists of multiple projects targeting different .NET frameworks and use cases:
@@ -78,15 +90,29 @@ The solution consists of multiple projects targeting different .NET frameworks a
 ```
 Transmittal/
 ├── source/
-│   ├── Transmittal/                    # Revit Add-in (.NET Framework 4.8 / .NET 8)
-│   ├── Transmittal.Desktop/            # Standalone WPF Application (.NET 8)
-│   ├── Transmittal.Library/            # Shared Core Library (Multi-target)
-│   ├── Transmittal.Reports/            # Report Generation (.NET 8)
-│   └── Transmittal.Library.Tests/      # Unit Tests (.NET 8)
-├── build/                              # NUKE Build System
-├── docs/                               # Documentation (GitHub Pages)
-├── Installer/                          # Advanced Installer Project
-└── Directory.Build.props               # Shared MSBuild Properties
+│   ├── Transmittal/                      # Revit Add-in (.NET Framework 4.8 / .NET 8)
+│   ├── Transmittal.Desktop/              # Standalone WPF Application (.NET 8)
+│   ├── Transmittal.Library/              # Shared Core Library (Multi-target)
+│   ├── Transmittal.Reports/              # Report Generation (.NET 8)
+│   ├── Transmittal.Analytics.Client/     # Analytics Client Library (Multi-target)
+│   ├── Transmittal.Analytics.Service/    # Analytics Windows Service (.NET 8)
+│   ├── Transmittal.Analytics.TrayApp/    # Analytics System Tray App (.NET 8)
+│   └── Transmittal.Library.Tests/        # Unit Tests (.NET 8)
+├── build/                                # NUKE Build System
+├── docs/                                 # Documentation (GitHub Pages)
+├── Installer/                            # Advanced Installer Project
+└── Directory.Build.props                 # Shared MSBuild Properties
+```
+
+### Analytics Architecture
+
+The analytics system uses a distributed architecture to handle Revit's singleton service limitations:
+
+```
+┌─────────────────┐    Named Pipe     ┌─────────────────────────┐    HTTPS    ┌─────────────────┐
+│  Transmittal    │ ◄──────────────►  │  Analytics Service      │ ◄─────────► │   App Center    │
+│  Applications   │                   │  (Service or Tray App)  │             │   Analytics     │
+└─────────────────┘                   └─────────────────────────┘             └─────────────────┘
 ```
 
 ### Project Dependencies
@@ -98,6 +124,7 @@ Transmittal/
 - **Logging**: Serilog
 - **IoC**: Microsoft.Extensions.Hosting
 - **Assembly Merging**: ILRepack
+- **Analytics**: Transmittal.Analytics.Client
 
 #### Transmittal.Desktop (Standalone)
 - **UI Framework**: WPF with Syncfusion controls
@@ -105,6 +132,7 @@ Transmittal/
 - **Dialogs**: Ookii.Dialogs.Wpf
 - **Logging**: Serilog
 - **IoC**: Microsoft.Extensions.Hosting
+- **Analytics**: Transmittal.Analytics.Client
 
 #### Transmittal.Library (Core)
 - **Database**: Microsoft.Data.Sqlite with Dapper ORM
@@ -112,6 +140,24 @@ Transmittal/
 - **JSON**: System.Text.Json
 - **Utilities**: Humanizer.Core
 - **IoC**: Microsoft.Extensions.Hosting
+
+#### Transmittal.Analytics.Client (Analytics Client)
+- **IPC**: Named Pipes for inter-process communication
+- **JSON**: System.Text.Json for event serialization
+- **Threading**: SemaphoreSlim for thread safety
+- **Multi-target**: .NET Framework 4.8 and .NET 8
+
+#### Transmittal.Analytics.Service (Windows Service)
+- **Service Framework**: Microsoft.Extensions.Hosting.WindowsServices
+- **Analytics Backend**: Microsoft.AppCenter.Analytics and Crashes
+- **Logging**: Serilog with multiple sinks (File, Console, Event Log)
+- **Configuration**: Microsoft.Extensions.Configuration with User Secrets support
+
+#### Transmittal.Analytics.TrayApp (System Tray Alternative)
+- **UI Framework**: Windows Forms system tray application
+- **Service Framework**: Microsoft.Extensions.Hosting
+- **Analytics Backend**: Microsoft.AppCenter.Analytics and Crashes
+- **Logging**: Serilog with file and debug output
 
 ## 🛠️ Development Setup
 
@@ -146,14 +192,7 @@ The solution uses [NUKE](https://nuke.build/) for automated builds:
 1. Download the latest release from [GitHub Releases](https://github.com/russgreen/Transmittal/releases)
 2. Run the MSI installer
 3. Restart Revit to load the add-in
-
-### Manual Installation
-1. Build the solution for your Revit version
-2. Copy the output to Revit's add-ins folder:
-   ```
-   %APPDATA%\Autodesk\Revit\Addins\[Version]\
-   ```
-3. Copy the `.addin` manifest file to the same location
+4. (Optional) Install the Analytics Service for enhanced telemetry
 
 ## 📖 Documentation
 
@@ -200,6 +239,7 @@ The solution includes the following open-source libraries:
 - **Microsoft.Extensions.Hosting** (MIT License)
 - **Serilog** (Apache 2.0 License)
 - **SQLite** (Public Domain)
+- **Microsoft.AppCenter** (MIT License)
 
 Commercial components:
 - **Syncfusion WPF Controls** (Commercial/Community License Required)
@@ -209,6 +249,7 @@ Commercial components:
 - **Autodesk** for the Revit API
 - **Nice3point** for the excellent Revit API packages
 - **Syncfusion** for the WPF UI controls
+- **Microsoft** for App Center analytics platform
 
 ## 📞 Support
 
