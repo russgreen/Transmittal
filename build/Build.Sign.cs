@@ -20,7 +20,9 @@ partial class Build
 
             //var project = Solution.Transmittal;
 
-            foreach (var project in Solution.AllProjects.Where(project => project == Solution.Transmittal || project == Solution.Transmittal_Desktop))
+            foreach (var project in Solution.AllProjects.Where(project => project == Solution.Transmittal || 
+            project == Solution.Transmittal_Desktop || 
+            project == Solution.Transmittal_Analytics_TrayApp))
             {
                 AbsolutePath projectDirectory = project.Directory;
                 Log.Information(projectDirectory);
