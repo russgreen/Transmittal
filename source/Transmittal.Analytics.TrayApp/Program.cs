@@ -9,55 +9,80 @@ namespace Transmittal.Analytics.TrayApp;
 
 internal static class Program
 {
+    private static Mutex? _mutex;
+    private const string _mutexName = "TransmittalAnalyticsTrayApp_SingleInstance";
+
     /// <summary>
     /// The main entry point for the application.
     /// </summary>
     [STAThread]
     static async Task Main(string[] args)
     {
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-
-        // Configure Serilog
-        var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), 
-            "Transmittal", "Analytics_TrayApp_Log.json");
-
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-            .WriteTo.File(logPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
-            .CreateLogger();
+        // Check for single instance using Mutex
+        _mutex = new Mutex(true, _mutexName, out bool createdNew);
+        
+        if (!createdNew)
+        {
+            // Another instance is already running
+            MessageBox.Show("Transmittal Analytics Tray App is already running.", 
+                "Application Already Running", 
+                MessageBoxButtons.OK, 
+                MessageBoxIcon.Information);
+            return;
+        }
 
         try
         {
-            Log.Information("Starting Transmittal Analytics Tray Application");
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-            // Create the host
-            var host = Host.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddSingleton<TrayApplicationContext>();
-                    services.AddHostedService<AnalyticsService>();
-                })
-                .Build();
+            // Configure Serilog
+            var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), 
+                "Transmittal", "Analytics_TrayApp_Log.json");
 
-            // Start the host
-            await host.StartAsync();
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File(logPath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+                .CreateLogger();
 
-            // Get the tray context and run the application
-            var trayContext = host.Services.GetRequiredService<TrayApplicationContext>();
-            Application.Run(trayContext);
+            try
+            {
+                Log.Information("Starting Transmittal Analytics Tray Application");
 
-            // Stop the host when the application exits
-            await host.StopAsync();
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Application terminated unexpectedly");
+                // Create the host
+                var host = Host.CreateDefaultBuilder(args)
+                    .UseSerilog()
+                    .ConfigureServices((context, services) =>
+                    {
+                        services.AddSingleton<TrayApplicationContext>();
+                        services.AddHostedService<AnalyticsService>();
+                    })
+                    .Build();
+
+                // Start the host
+                await host.StartAsync();
+
+                // Get the tray context and run the application
+                var trayContext = host.Services.GetRequiredService<TrayApplicationContext>();
+                Application.Run(trayContext);
+
+                // Stop the host when the application exits
+                await host.StopAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
         finally
         {
-            Log.CloseAndFlush();
+            // Release the mutex when the application exits
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
         }
     }
 }
