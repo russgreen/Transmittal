@@ -19,13 +19,14 @@ partial class Build
             CleanDirectory(project.Directory / "obj");
         }
 
-        foreach (var configuration in GlobBuildConfigurations())
-        {
-            DotNetClean(settings => settings
-                .SetProject(Solution)
-                .SetConfiguration(configuration)
-                .SetVerbosity(DotNetVerbosity.quiet));
-        }
+        //foreach (var configuration in GlobBuildConfigurations())
+        //{
+        //    DotNetClean(settings => settings
+        //        .SetProject(Solution)
+        //        .SetConfiguration(configuration)
+        //        .SetVerbosity(DotNetVerbosity.minimal)
+        //        .EnableNoLogo());
+        //}
     });
 
     static void CleanDirectory(AbsolutePath path)
