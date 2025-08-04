@@ -60,12 +60,12 @@ public class TrayApplicationContext : ApplicationContext
         return SystemIcons.Application;
     }
 
-    private void OnTrayIconDoubleClick(object? sender, EventArgs e)
+    private void OnTrayIconDoubleClick(object sender, EventArgs e)
     {
         ShowBalloonTip("Transmittal Analytics", "Analytics service is running", ToolTipIcon.Info);
     }
 
-    private void OnAbout(object? sender, EventArgs e)
+    private void OnAbout(object sender, EventArgs e)
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
         MessageBox.Show(
@@ -75,7 +75,7 @@ public class TrayApplicationContext : ApplicationContext
             MessageBoxIcon.Information);
     }
 
-    private void OnExit(object? sender, EventArgs e)
+    private void OnExit(object sender, EventArgs e)
     {
         _logger.LogInformation("Exit requested from tray menu");
         ExitThread();
