@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using Transmittal.Analytics.Client;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 
@@ -12,18 +13,21 @@ public class TransmittalService : ITransmittalService
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ILogger<TransmittalService> _logger;
     private readonly IMessageBoxService _messageBox;
+    private readonly IAnalyticsClient _analyticsClient;
 
     public TransmittalService(IDataConnection dataConnection,
         ISettingsService settingsService,
         IContactDirectoryService contactDirectoryService,
         ILogger<TransmittalService> logger,
-        IMessageBoxService messageBox)
+        IMessageBoxService messageBox,
+        IAnalyticsClient analyticsClient)
     {
         _connection = dataConnection;
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
         _logger = logger;
         _messageBox = messageBox;
+        _analyticsClient = analyticsClient;
     }
 
     public void CreateTransmittal(TransmittalModel model)
@@ -45,6 +49,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create transmittal", ex.Message);
         }
 
@@ -73,6 +78,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal distribution {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create transmittal distribution", ex.Message);
         }
 
@@ -113,6 +119,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create transmittal item {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create transmittal item", ex.Message);
         }
 
@@ -132,6 +139,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to delete transmittal", ex.Message);
         }
 
@@ -151,6 +159,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal distribution {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to delete transmittal distribution", ex.Message);
         }
 
@@ -170,6 +179,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to delete transmittal item {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to delete transmittal item", ex.Message);
         }
 
@@ -335,8 +345,8 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error loading packages from database. Check database has been upgraded to v2");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
-
 
         return packages;
     }
@@ -359,6 +369,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to update transmittal", ex.Message);
         }
 
@@ -391,6 +402,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal distribution {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to update transmittal distribution", ex.Message);
         }
 
@@ -447,6 +459,7 @@ public class TransmittalService : ITransmittalService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to update transmittal item {model}", model);
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to update transmittal item", ex.Message);
         }
 
@@ -492,6 +505,7 @@ public class TransmittalService : ITransmittalService
         {
             _connection.RollbackTransaction();
             _logger.LogError(ex, "Failed to create multiple transmittal items");
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create transmittal items", ex.Message);
         }
     }
@@ -524,6 +538,7 @@ public class TransmittalService : ITransmittalService
         {
             _connection.RollbackTransaction();
             _logger.LogError(ex, "Failed to create multiple transmittal distributions");
+            _analyticsClient.TrackExceptionAsync(ex);
             _messageBox.ShowOk("Failed to create transmittal distributions", ex.Message);
         }
     }

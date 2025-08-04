@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Threading;
+using Transmittal.Analytics.Client;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
@@ -37,6 +38,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
     private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
+    private readonly IAnalyticsClient _analyticsClient = Host.GetService<IAnalyticsClient>();
 
     public string WindowTitle { get; private set; }
 
@@ -924,6 +926,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing sheets");
+            _analyticsClient.TrackExceptionAsync(ex);
 
             Autodesk.Revit.UI.TaskDialog.Show("Error", 
                 $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", 

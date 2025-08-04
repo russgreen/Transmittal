@@ -8,7 +8,9 @@ public static class ValidationHelpers
     public static ValidationResult ValidateCompanyName(string value, ValidationContext context)
     {
         if (string.IsNullOrWhiteSpace(value))
+        {
             return new ValidationResult("A company name is required");
+        }
 
         // You may need to get the service from the context or pass it in
         var instance = context.ObjectInstance;

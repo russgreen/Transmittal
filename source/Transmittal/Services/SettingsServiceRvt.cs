@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Extensions;
+using Transmittal.Analytics.Client;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -38,7 +39,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     private readonly ISettingsService _settingsService;
     private readonly IDataConnection _dataConnection;
-    private readonly ILogger<SettingsServiceRvt> _logger;   
+    private readonly ILogger<SettingsServiceRvt> _logger;
+    private readonly IAnalyticsClient _analyticsClient;
 
     private Schema _oldSchemaV0 = null;
     private Schema _oldSchemaV1 = null;
@@ -47,11 +49,13 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     public SettingsServiceRvt(IDataConnection dataConnection, 
         ISettingsService settingsService,
-        ILogger<SettingsServiceRvt> logger)
+        ILogger<SettingsServiceRvt> logger,
+        IAnalyticsClient analyticsClient)
     {
         _settingsService = settingsService;
         _dataConnection = dataConnection;
         _logger = logger;
+        _analyticsClient = analyticsClient;
 
         _schema = null;
     }
@@ -359,6 +363,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creating schema");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
     }
         
@@ -417,6 +422,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error saving settings to schema");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
     }
     
@@ -533,6 +539,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting settings from schema V1");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
 
     }
@@ -602,6 +609,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting settings from schema V2");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
         
     }
@@ -675,6 +683,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting settings from schema V2");
+            _analyticsClient.TrackExceptionAsync(ex);
         }
 
     }

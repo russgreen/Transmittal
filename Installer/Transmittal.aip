@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <DOCUMENT Type="Advanced Installer" CreateVersion="19.1" version="22.7" Modules="simple" RootPath="." Language="en" Id="{52EA00FE-6324-4094-929A-7D0C5D54BB42}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_APP_FILE" Value="[#Transmittal.Analytics.TrayApp.exe]"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_DOTNET_VERSION;AI_DETECTED_DOTNET_CORE_VERSION"/>
     <ROW Property="AI_REQUIRED_DOTNET_CORE_DISPLAY" MultiBuildValue="DefaultBuild:8.0" ValueLocId="-"/>
@@ -12,11 +13,14 @@
     <ROW Property="ARPPRODUCTICON" Value="Transmittal.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/russgreen/Transmittal/blob/main/LICENSE" Type="4"/>
+    <ROW Property="AiSkipExitDlg" Value="1"/>
+    <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
     <ROW Property="ProductCode" Value="1033:{84E62DD5-E7D4-41AA-9B17-05DF90BEE272} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
     <ROW Property="ProductVersion" Value="3.2.3" Options="32"/>
+    <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -69,8 +73,13 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{E01C92EA-6614-48B0-8086-1ABBE9BD1B59}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
+    <ROW Component="CurrentVersion" ComponentId="{F6370944-48C2-4C57-BAD4-66B68154ACE6}" Directory_="APPDIR" Attributes="260" KeyPath="CurrentVersion"/>
     <ROW Component="Dapper.dll" ComponentId="{3C785166-CE81-4DA3-B8CD-E82E4AA925BC}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
+    <ROW Component="Microsoft" ComponentId="{90D2D416-9ADB-4757-A4EF-3230BF67C888}" Directory_="APPDIR" Attributes="260" KeyPath="Microsoft"/>
+    <ROW Component="Microsoft.AppCenter.Analytics.dll" ComponentId="{DDB7B83D-2016-472A-8374-A05ED0DE82C1}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.Analytics.dll"/>
+    <ROW Component="Microsoft.AppCenter.Crashes.dll" ComponentId="{60EBD1D2-17D5-4AD3-8DB4-98F4F07C24AA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.Crashes.dll"/>
+    <ROW Component="Microsoft.AppCenter.dll" ComponentId="{85C5AC0B-D23E-49A5-BD12-4DE28A605E13}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.AppCenter.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.VisualBasic.dll" ComponentId="{E97648E2-B936-4F9A-9044-3B40556A4634}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.VisualBasic.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{09A090EF-4261-458F-8C10-346707A073CA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
     <ROW Component="Microsoft.Data.Sqlite.dll" ComponentId="{BDCD58D7-A7CA-412F-AA0B-86BE79BF5FF5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll"/>
@@ -96,6 +105,7 @@
     <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{7926D276-7D6C-4BF4-BAEF-04960512CECE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
     <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{D990B8E7-7CC4-460A-AD69-30CD9EBB9BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
     <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{61E070A0-C892-4F84-8B1F-9214AB36282B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.WindowsServices.dll" ComponentId="{AD4CEA69-80BC-4BC2-96D5-F90392D8011D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.WindowsServices.dll"/>
     <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{3178B567-3189-4729-BCD1-B0E3C60DE632}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{94F2F8C3-0B22-4533-8889-1CED7E63EDCF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{39449A39-C92A-49D3-8EEE-289170D4B3DB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
@@ -114,6 +124,8 @@
     <ROW Component="Microsoft.ReportViewer.WinForms.dll" ComponentId="{CF68DA1D-EAAB-4DA4-BCBE-D26BDB7DDCC3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.ReportViewer.WinForms.dll"/>
     <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{2C021B1F-3CD0-4987-8135-2F405BEC41C7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Component="NewValue" ComponentId="{26B3A65C-CED2-4733-9890-DAC343310E1C}" Directory_="APPDIR" Attributes="260" KeyPath="NewValue"/>
+    <ROW Component="NewValue_1" ComponentId="{56F2ED7A-1E51-435A-8899-0E010CD0128F}" Directory_="APPDIR" Attributes="260" KeyPath="NewValue_1"/>
+    <ROW Component="Newtonsoft.Json.dll" ComponentId="{F4E4C5E6-E652-4019-BCFC-147AEFD355CC}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{F0031514-1F39-4BCF-9D8A-88050F5A8C82}" Directory_="APPDIR" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProjectDirectory.rdlc" ComponentId="{D1A78914-9F2F-4E1A-B46E-F00220C02B30}" Directory_="ReportTemplates_Dir" Attributes="0" KeyPath="ProjectDirectory.rdlc" Type="0"/>
@@ -193,6 +205,7 @@
     <ROW Component="Syncfusion.XlsIO.Base.dll_5" ComponentId="{6F1FF39D-356D-4B3C-9DF7-8225342740CE}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll_5"/>
     <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B97395F2-893B-4B6F-9ADE-DAFEB65B77E5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
     <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
+    <ROW Component="System.Management.dll" ComponentId="{F1B26C2F-E9D7-4729-B952-D414427A3FC6}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
     <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
     <ROW Component="System.Security.Cryptography.Xml.dll" ComponentId="{5F719FC0-DF06-4837-9067-EBA3DF5EFACF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Xml.dll"/>
     <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{00DA1B9C-2EAB-41CD-BEDF-05C9B5BD5F27}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
@@ -200,6 +213,7 @@
     <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{C7CB46A3-638A-4FF5-A246-40860C711945}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
     <ROW Component="System.ServiceModel.Security.dll" ComponentId="{D1F414CB-C244-42D9-A6F1-C227F7D618F0}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Security.dll"/>
     <ROW Component="System.ServiceModel.dll" ComponentId="{33F59649-E4BF-4B0F-9350-A5C879E38CF7}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.dll"/>
+    <ROW Component="System.ServiceProcess.ServiceController.dll" ComponentId="{5F11C77F-FA8D-4AFD-BC16-80231CD686F3}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceProcess.ServiceController.dll"/>
     <ROW Component="TemplateDatabase.tdb" ComponentId="{67545C2E-56FF-4D86-8626-0B6EC14D63BA}" Directory_="Data_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_1" ComponentId="{4A67569F-42FE-4FB7-85B8-EA1CAE4D4542}" Directory_="Data_1_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_1" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_2" ComponentId="{5E23C14F-7637-4C78-9A5D-1189397C7397}" Directory_="Data_2_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_2" Type="0"/>
@@ -207,6 +221,9 @@
     <ROW Component="TemplateDatabase.tdb_4" ComponentId="{D6CEBFEE-8A46-4A4E-A15E-5E5EE432BE32}" Directory_="Data_4_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_4" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_5" ComponentId="{3C9B71D8-D009-4495-ADBD-D2A086FCF6EB}" Directory_="Data_5_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_5" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_6" ComponentId="{99A2DBE5-E1AA-48FA-A383-3B167C70E2BF}" Directory_="Data_6_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_6" Type="0"/>
+    <ROW Component="Transmittal.Analytics.Client.dll" ComponentId="{C3A30C3B-CD4D-46F1-935E-E354466F5400}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Analytics.Client.dll"/>
+    <ROW Component="Transmittal.Analytics.TrayApp.dll" ComponentId="{391E8BF5-0F14-4FBE-AD94-BB0291CA52C0}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Analytics.TrayApp.dll"/>
+    <ROW Component="Transmittal.Analytics.TrayApp.exe" ComponentId="{ECE38898-948A-47B1-962B-D704469D5B54}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Analytics.TrayApp.exe"/>
     <ROW Component="Transmittal.Desktop.dll" ComponentId="{84A05E8C-1FCF-43E5-85A2-CB1A04F4BF70}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.dll"/>
     <ROW Component="Transmittal.Desktop.exe" ComponentId="{518C98AF-F70D-4888-A2E3-4D7E7B9CC798}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.exe"/>
     <ROW Component="Transmittal.Desktop.runtimeconfig.json" ComponentId="{5F2FF946-6630-42B1-925A-1CC1536A5B74}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Desktop.runtimeconfig.json" Type="0"/>
@@ -233,6 +250,7 @@
     <ROW Component="Transmittal_2021.addin" ComponentId="{F0EF6284-25D9-4001-B756-820DB9097E0A}" Directory_="__3_Dir" Attributes="0" KeyPath="Transmittal.addin" Type="0"/>
     <ROW Component="Transmittal_2024.addin" ComponentId="{ECFB1431-B31F-483D-AD17-DB66F93D6567}" Directory_="__2_Dir" Attributes="0" KeyPath="Transmittal.addin_2" Type="0"/>
     <ROW Component="Transmittal_Isolated.addin" ComponentId="{877E091F-1C19-4C82-A7B0-4C7407A21DCE}" Directory_="__5_Dir" Attributes="0" KeyPath="Transmittal_Isolated.addin" Type="0"/>
+    <ROW Component="Windows" ComponentId="{D2F73B95-111F-49E5-97A7-DDA1F6F27489}" Directory_="APPDIR" Attributes="260" KeyPath="Windows"/>
     <ROW Component="_" ComponentId="{01ACBF6A-1168-401F-8D69-F975A7028420}" Directory_="APPDIR" Attributes="260" KeyPath="_"/>
     <ROW Component="__1" ComponentId="{2FC92E21-0268-42F0-9D2C-F43D86EBCB23}" Directory_="APPDIR" Attributes="260" KeyPath="__1"/>
     <ROW Component="__2" ComponentId="{F6D2A36B-DD97-4968-92F6-5B366F7A49A7}" Directory_="APPDIR" Attributes="260" KeyPath="__2"/>
@@ -426,6 +444,20 @@
     <ROW File="Transmittal.deps.json_1" Component_="Transmittal.deps.json_1" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_5" Component_="Transmittal.dll_5" FileName="TRANSM~1.DLL|Transmittal.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.dll" SelfReg="false"/>
     <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
+    <ROW File="Microsoft.AppCenter.Analytics.dll" Component_="Microsoft.AppCenter.Analytics.dll" FileName="MICRO~37.DLL|Microsoft.AppCenter.Analytics.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Microsoft.AppCenter.Analytics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.AppCenter.Crashes.dll" Component_="Microsoft.AppCenter.Crashes.dll" FileName="MICRO~38.DLL|Microsoft.AppCenter.Crashes.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Microsoft.AppCenter.Crashes.dll" SelfReg="false"/>
+    <ROW File="Microsoft.AppCenter.dll" Component_="Microsoft.AppCenter.dll" FileName="MICRO~39.DLL|Microsoft.AppCenter.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Microsoft.AppCenter.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.WindowsServices.dll" Component_="Microsoft.Extensions.Hosting.WindowsServices.dll" FileName="MICRO~40.DLL|Microsoft.Extensions.Hosting.WindowsServices.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Microsoft.Extensions.Hosting.WindowsServices.dll" SelfReg="false"/>
+    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Newtonsoft.Json.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTE~10.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\System.Management.dll" SelfReg="false"/>
+    <ROW File="System.ServiceProcess.ServiceController.dll" Component_="System.ServiceProcess.ServiceController.dll" FileName="SYSTE~11.DLL|System.ServiceProcess.ServiceController.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\System.ServiceProcess.ServiceController.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.Client.dll" Component_="Transmittal.Analytics.Client.dll" FileName="TRANSM~4.DLL|Transmittal.Analytics.Client.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.Client.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.Client.pdb" Component_="Transmittal.Analytics.Client.dll" FileName="TRANSM~4.PDB|Transmittal.Analytics.Client.pdb" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.Client.pdb" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.TrayApp.deps.json" Component_="Transmittal.Desktop.runtimeconfig.json" FileName="TRANSM~3.JSO|Transmittal.Analytics.TrayApp.deps.json" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.TrayApp.deps.json" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.TrayApp.dll" Component_="Transmittal.Analytics.TrayApp.dll" FileName="TRANSM~5.DLL|Transmittal.Analytics.TrayApp.dll" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.TrayApp.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.TrayApp.exe" Component_="Transmittal.Analytics.TrayApp.exe" FileName="TRANSM~2.EXE|Transmittal.Analytics.TrayApp.exe" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.TrayApp.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="Transmittal.Analytics.TrayApp.pdb" Component_="Transmittal.Analytics.TrayApp.exe" FileName="TRANSM~5.PDB|Transmittal.Analytics.TrayApp.pdb" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.TrayApp.pdb" SelfReg="false"/>
+    <ROW File="Transmittal.Analytics.TrayApp.runtimeconfig.json" Component_="Transmittal.Desktop.runtimeconfig.json" FileName="TRANSM~4.JSO|Transmittal.Analytics.TrayApp.runtimeconfig.json" Attributes="0" SourcePath="..\source\Transmittal.Analytics.TrayApp\bin\Release\Transmittal.Analytics.TrayApp.runtimeconfig.json" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -504,7 +536,9 @@
     <ROW Action="AI_ExtractCadLzma" Type="51" Source="AI_ExtractLzma" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_ExtractLzma" Type="1025" Source="lzmaextractor.dll" Target="ExtractLZMAFiles"/>
     <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
+    <ROW Action="AI_FinishActions" Type="1" Source="aicustact.dll" Target="RunAllExitActions"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_LaunchApp" Type="1" Source="aicustact.dll" Target="LaunchApp"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
@@ -694,6 +728,20 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.deps.json_1"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.dll_5"/>
     <ROW Feature_="MainFeature" Component_="Transmittal_Isolated.addin"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.Analytics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.Crashes.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.AppCenter.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.WindowsServices.dll"/>
+    <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Management.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.ServiceProcess.ServiceController.dll"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal.Analytics.Client.dll"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal.Analytics.TrayApp.dll"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal.Analytics.TrayApp.exe"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft"/>
+    <ROW Feature_="MainFeature" Component_="Windows"/>
+    <ROW Feature_="MainFeature" Component_="CurrentVersion"/>
+    <ROW Feature_="MainFeature" Component_="NewValue_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
@@ -725,6 +773,7 @@
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="102"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_FinishActions" Condition="AI_INSTALL AND AiSkipExitDlg" Sequence="1301"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
@@ -736,15 +785,21 @@
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="CurrentVersion" Root="2" Key="Software\Microsoft\Windows\CurrentVersion" Name="+" Component_="CurrentVersion"/>
     <ROW Registry="DefaultIco" Root="0" Key="Transmittal.Database\DefaultIcon" Name="\"/>
     <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Microsoft" Root="2" Key="Software\Microsoft" Name="+" Component_="Microsoft"/>
     <ROW Registry="NewValue" Root="0" Key=".tdb" Value="Transmittal.Database" Component_="NewValue"/>
+    <ROW Registry="NewValue_1" Root="2" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="New Value" Value="[#Transmittal.Analytics.TrayApp.exe]" Component_="NewValue_1"/>
     <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
     <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Run" Root="2" Key="Software\Microsoft\Windows\CurrentVersion\Run" Name="\"/>
     <ROW Registry="Shell" Root="0" Key="Transmittal.Database\Shell" Name="+" Component_="Shell"/>
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Software_1" Root="2" Key="Software" Name="\"/>
     <ROW Registry="Transmittal.Database" Root="0" Key="Transmittal.Database" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+    <ROW Registry="Windows" Root="2" Key="Software\Microsoft\Windows" Name="+" Component_="Windows"/>
     <ROW Registry="_" Root="0" Key="Transmittal.Database" Value="Transmittal Database File" Component_="_"/>
     <ROW Registry="__1" Root="0" Key="Transmittal.Database\DefaultIcon" Value="[#Transmittal.Desktop.exe],0" Component_="__1"/>
     <ROW Registry="__2" Root="0" Key="Transmittal.Database\Shell\open\command" Value="[#Transmittal.Desktop.exe] &quot;--database=%1&quot;" Component_="__2"/>
