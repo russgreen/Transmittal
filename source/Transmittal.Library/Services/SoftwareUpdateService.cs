@@ -101,8 +101,15 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
             foreach (var asset in latestRelease.Assets)
             {
                 var match = _versionRegex.Match(asset.Name);
-                if (!match.Success) continue;
-                if (!match.Value.StartsWith(currentTag.Major.ToString())) continue;
+                if (!match.Success)
+                {
+                    continue;
+                }
+
+                if (!match.Value.StartsWith(currentTag.Major.ToString()))
+                {
+                    continue;
+                }
 
                 newVersionTag = new Version(match.Value);
                 _downloadUrl = asset.DownloadUrl;

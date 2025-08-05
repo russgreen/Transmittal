@@ -204,7 +204,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         WeakReferenceMessenger.Default.Register<CancelTransmittalMessage>(this, (r, m) =>
         {
-            _abortFlag = true;
+            AbortFlag = true;
         });
 
         WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
