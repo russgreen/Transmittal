@@ -1,6 +1,4 @@
-﻿using ClosedXML.Report.Utils;
-
-namespace Transmittal.Reports.Models;
+﻿namespace Transmittal.Reports.Models;
 
 public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDirectoryModel
 {
