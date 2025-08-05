@@ -10,6 +10,7 @@ namespace Transmittal.Analytics.TrayApp;
 internal static class Program
 {
     private static Mutex? _mutex;
+    private static bool _mutexOwned = false;
     private const string _mutexName = "TransmittalAnalyticsTrayApp_SingleInstance";
 
     /// <summary>
@@ -20,7 +21,8 @@ internal static class Program
     {
         // Check for single instance using Mutex
         _mutex = new Mutex(true, _mutexName, out bool createdNew);
-        
+        _mutexOwned = createdNew;
+
         if (!createdNew)
         {
             // Another instance is already running
@@ -80,8 +82,19 @@ internal static class Program
         }
         finally
         {
-            // Release the mutex when the application exits
-            _mutex?.ReleaseMutex();
+            // Only release mutex if we own it
+            if (_mutexOwned && _mutex != null)
+            {
+                try
+                {
+                    _mutex.ReleaseMutex();
+                }
+                catch (ApplicationException)
+                {
+                    // Mutex was already released or not owned by this thread
+                    // This can happen if the application was closed from the tray
+                }
+            }
             _mutex?.Dispose();
         }
     }

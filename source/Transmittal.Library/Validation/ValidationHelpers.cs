@@ -14,7 +14,7 @@ public static class ValidationHelpers
 
         // You may need to get the service from the context or pass it in
         var instance = context.ObjectInstance;
-        var service = (IContactDirectoryService?)context.GetService(typeof(IContactDirectoryService));
+        var service = (IContactDirectoryService)context.GetService(typeof(IContactDirectoryService));
 
         if (service == null && instance is IHasContactDirectoryService hasService)
         {

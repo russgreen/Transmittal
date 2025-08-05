@@ -105,11 +105,8 @@
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-
+				  
 		<!--Logging-->
-		<!--<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />-->
-		
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="7.*" Condition="'$(TargetFramework)' == 'net48'" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.*" Condition="'$(TargetFramework)' == 'net48'" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.*" Condition="'$(TargetFramework)' == 'net48'" />
@@ -119,7 +116,6 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
 		
 		<!--Repacking-->
-		<!--<PackageVersion Include="ILRepack" Version="2.0.39" ExcludeAssets="Runtime" />-->
 		<PackageReference Include="ILRepack" Version="2.0.41">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

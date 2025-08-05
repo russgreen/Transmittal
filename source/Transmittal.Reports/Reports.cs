@@ -1,4 +1,3 @@
-using ClosedXML.Report;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Reporting.WinForms;
 using System.Diagnostics;
@@ -32,82 +31,7 @@ namespace Transmittal.Reports
             _contactDirectoryService = contactDirectoryService;
             _transmittalService = transmittalService; 
         }
-
         public void ShowProjectDirectoryReport(List<ProjectDirectoryModel> projectDirectory) //, string projectIdentifier, string projectName) //, EmployeeModel projectLeader, ProjectModel project)
-        {
-            var folder = string.Empty;
-
-            if (_settingsService.GlobalSettings.ReportStore != null)
-            {
-                folder = _settingsService.GlobalSettings.ReportStore.ParsePathWithEnvironmentVariables();
-            }
-
-            string reportTemplate = Path.Combine(folder, "ProjectDirectory.xlsx");
-
-            if (File.Exists(reportTemplate))
-            {
-                ShowProjectDirectoryXLSX(projectDirectory, reportTemplate);
-                return;
-            }
-
-            ShowProjectDirectoryRDLC(projectDirectory);
-        }
-
-        private void ShowProjectDirectoryXLSX(List<ProjectDirectoryModel> projectDirectory, string reportTemplate)
-        {
-            var folderName = _settingsService.GlobalSettings.DirectoryStore.ParseFolderName();
-
-            var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
-                _settingsService.GlobalSettings.ProjectIdentifier,
-                _settingsService.GlobalSettings.ProjectName,
-                _settingsService.GlobalSettings.Originator,
-                "ZZ",
-                "XX",
-                "DY",
-                _settingsService.GlobalSettings.Role,
-                "0001",
-                "ProjectDirectory",
-                null, null, null);
-
-            var outputFile = Path.Combine(folderName, $"{fileName}.xlsx");
-
-            var template = new XLTemplate(reportTemplate);
-
-            var project = new Models.ProjectModel()
-            {
-                ProjectIdentifier = _settingsService.GlobalSettings.ProjectIdentifier,
-                ProjectNumber = _settingsService.GlobalSettings.ProjectNumber,
-                ProjectName = _settingsService.GlobalSettings.ProjectName,
-                ClientName = _settingsService.GlobalSettings.ClientName,
-            };
-
-            var projectDirectoryReportModels = new List<Models.ProjectDirectoryReportModel>();
-            var filteredProjectDirectory = projectDirectory.Where(x => x.Person.ShowInReport == true).ToList();
-
-            foreach (var item in filteredProjectDirectory)
-            {
-                var newItem = item.ToProjectDirectoryReportModel();
-
-                projectDirectoryReportModels.Add(newItem);
-            }
-
-
-            template.AddVariable("Date", DateTime.Now.ToShortDateString());
-            template.AddVariable(project);
-            template.AddVariable("ProjectDirectory", projectDirectoryReportModels
-                .OrderBy(x => x.Role)
-                .ThenBy(x => x.CompanyName)
-                .ThenBy(x => x.LastName)
-                .ThenBy(x => x.FirstName)
-                .ToList());
-            template.Generate();
-
-            template.SaveAs(outputFile);
-
-            Process.Start(new ProcessStartInfo(outputFile) { UseShellExecute = true });
-        }
-
-        private void ShowProjectDirectoryRDLC(List<ProjectDirectoryModel> projectDirectory)
         {
             var report = GetReport("ProjectDirectory.rdlc");
 
