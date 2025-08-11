@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.DTO;
 using Transmittal.Library.Enums;
 
@@ -17,7 +16,6 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<SoftwareUpdateService> _logger;
-    private readonly IAnalyticsClient _analyticsClient;
 
     private readonly Regex _versionRegex = new(@"(\d+\.)+\d+", RegexOptions.Compiled);
 
@@ -39,12 +37,10 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
 
 
     public SoftwareUpdateService(IConfiguration configuration, 
-        ILogger<SoftwareUpdateService> logger,
-        IAnalyticsClient analyticsClient) 
+        ILogger<SoftwareUpdateService> logger) 
     {
         _configuration = configuration;
         _logger = logger;
-        _analyticsClient = analyticsClient;
 
         CurrentVersion = _configuration["SoftwareVersion"];
         ReleaseNotesUrl = "https://github.com/russgreen/Transmittal/releases/";
@@ -146,14 +142,14 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "GitHub request limit exceeded");
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             // GitHub request limit exceeded
             State = SoftwareUpdateState.UpToDate;
         }
         catch(Exception ex)
         {
             _logger.LogError(ex, "An error occurred while checking for updates");
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             State = SoftwareUpdateState.ErrorChecking;
             ErrorMessage = "An error occurred while checking for updates";
         }
@@ -180,7 +176,7 @@ public sealed class SoftwareUpdateService : ISoftwareUpdateService
         catch(Exception ex)
         {
             _logger.LogError(ex, "An error occurred while downloading the update");
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             State = SoftwareUpdateState.ErrorDownloading;
             ErrorMessage = "An error occurred while downloading the update";
         }

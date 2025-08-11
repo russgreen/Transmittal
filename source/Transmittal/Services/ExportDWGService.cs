@@ -10,22 +10,18 @@ using Transmittal.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using Microsoft.Extensions.Logging;
-using Transmittal.Analytics.Client;
 
 namespace Transmittal.Services;
 internal class ExportDWGService : IExportDWGService
 {
     private readonly ISettingsService _settingsService;
     private readonly ILogger<ExportDWGService> _logger;
-    private readonly IAnalyticsClient _analyticsClient;
 
     public ExportDWGService(ISettingsService settingsService,
-        ILogger<ExportDWGService> logger,
-        IAnalyticsClient analyticsClient)
+        ILogger<ExportDWGService> logger)
     {
         _settingsService = settingsService;
         _logger = logger;
-        _analyticsClient = analyticsClient;
     }
     
     public string ExportDWG(string exportFileName, string folderPath, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument)
@@ -121,7 +117,7 @@ internal class ExportDWGService : IExportDWGService
         catch(Exception ex)
         {
             _logger.LogError(ex, "Error exporting DWG");
-            _analyticsClient.TrackExceptionAsync(ex);
+            
         }
         finally
         {
