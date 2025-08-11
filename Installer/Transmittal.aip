@@ -16,10 +16,10 @@
     <ROW Property="AiSkipExitDlg" Value="1"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{772B94F9-4F65-466C-9830-88A0A969086D} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{FF59D13A-E396-4C81-8C3F-9293BFBD570B} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="4.0.2" Options="32"/>
+    <ROW Property="ProductVersion" Value="3.3.0" Options="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
@@ -214,7 +214,6 @@
     <ROW Component="TemplateDatabase.tdb_4" ComponentId="{D6CEBFEE-8A46-4A4E-A15E-5E5EE432BE32}" Directory_="Data_4_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_4" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_5" ComponentId="{3C9B71D8-D009-4495-ADBD-D2A086FCF6EB}" Directory_="Data_5_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_5" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_6" ComponentId="{99A2DBE5-E1AA-48FA-A383-3B167C70E2BF}" Directory_="Data_6_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_6" Type="0"/>
-    <ROW Component="Transmittal.Analytics.Client.dll" ComponentId="{8F96A282-6106-4A3A-B6D5-BCEC6668964B}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Analytics.Client.dll"/>
     <ROW Component="Transmittal.Desktop.dll" ComponentId="{84A05E8C-1FCF-43E5-85A2-CB1A04F4BF70}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.dll"/>
     <ROW Component="Transmittal.Desktop.exe" ComponentId="{518C98AF-F70D-4888-A2E3-4D7E7B9CC798}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.exe"/>
     <ROW Component="Transmittal.Desktop.runtimeconfig.json" ComponentId="{5F2FF946-6630-42B1-925A-1CC1536A5B74}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Desktop.runtimeconfig.json" Type="0"/>
@@ -430,8 +429,6 @@
     <ROW File="Transmittal.deps.json_1" Component_="Transmittal.deps.json_1" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_5" Component_="Transmittal.dll_5" FileName="TRANSM~1.DLL|Transmittal.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.dll" SelfReg="false"/>
     <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
-    <ROW File="Transmittal.Analytics.Client.dll" Component_="Transmittal.Analytics.Client.dll" FileName="TRANSM~4.DLL|Transmittal.Analytics.Client.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Analytics.Client.dll" SelfReg="false"/>
-    <ROW File="Transmittal.Analytics.Client.pdb" Component_="Transmittal.Analytics.Client.dll" FileName="TRANSM~4.PDB|Transmittal.Analytics.Client.pdb" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Analytics.Client.pdb" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_7" Component_="e_sqlite3.dll_7" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\e_sqlite3.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Abstractions.dll" Component_="Microsoft.Extensions.Configuration_1_.Abstractions.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Binder.dll" Component_="Microsoft.Extensions.Configuration_1_.Binder.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
@@ -710,7 +707,6 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.Binder.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.CommandLine.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll_1"/>
-    <ROW Feature_="MainFeature" Component_="Transmittal.Analytics.Client.dll"/>
     <ROW Feature_="MainFeature" Component_="Run"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
