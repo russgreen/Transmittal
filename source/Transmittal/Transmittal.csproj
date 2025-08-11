@@ -151,7 +151,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
-	  <ProjectReference Include="..\Transmittal.Analytics.Client\Transmittal.Analytics.Client.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

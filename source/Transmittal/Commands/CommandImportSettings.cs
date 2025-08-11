@@ -7,7 +7,6 @@ using Nice3point.Revit.Toolkit.External;
 using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Text.Json;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.Models;
 using Transmittal.Messages;
 using Transmittal.Models;
@@ -17,16 +16,11 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 internal class CommandImportSettings : ExternalCommand
 {
-    private IAnalyticsClient _analyticsClient;
-
     public override void Execute()
     {
-        _analyticsClient = Host.GetService<IAnalyticsClient>();
 
         App.CachedUiApp = Context.UiApplication;
         App.RevitDocument = Context.ActiveDocument;
-
-        _analyticsClient.TrackFeatureUsageAsync(nameof(CommandImportSettings));
 
         string jsonFilePath;
 

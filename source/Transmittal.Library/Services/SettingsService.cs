@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.IO;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -12,19 +11,16 @@ public class SettingsService : ISettingsService
     private readonly IDataConnection _connection;
     private readonly ILogger<SettingsService> _logger;
     private readonly IMessageBoxService _messageBox;
-    private readonly IAnalyticsClient _analyticsClient;
 
     public SettingsModel GlobalSettings { get; set; }
     
     public SettingsService(IDataConnection dataConnection,
         ILogger<SettingsService> logger,
-        IMessageBoxService messageBox,
-        IAnalyticsClient analyticsClient)
+        IMessageBoxService messageBox)
     {
         _connection = dataConnection;   
         _logger = logger;
         _messageBox = messageBox;
-        _analyticsClient = analyticsClient;
 
         GlobalSettings = new();
     }
@@ -168,7 +164,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating settings in {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             _messageBox.ShowOk("Error updating settings", ex.Message);
         }
        
@@ -226,7 +222,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error saving issue formats to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             _messageBox.ShowOk("Error saving issue formats", ex.Message);
         }
 
@@ -253,7 +249,7 @@ public class SettingsService : ISettingsService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error saving document statuses to {GlobalSettings.DatabaseFile}", GlobalSettings.DatabaseFile);
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             _messageBox.ShowOk("Error saving document statuses", ex.Message);
         }
 

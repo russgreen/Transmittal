@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
 using System.Diagnostics;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 
@@ -17,22 +16,14 @@ public class CommandTransmittal : ExternalCommand
 {
     private ISettingsServiceRvt _settingsServiceRvt;
     private ILogger<CommandTransmittal> _logger;
-    private IAnalyticsClient _analyticsClient;
 
     public override void Execute()
     {       
         _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
         _logger = Host.GetService<ILogger<CommandTransmittal>>();
-        _analyticsClient = Host.GetService<IAnalyticsClient>();
 
         App.CachedUiApp = Context.UiApplication;
         App.RevitDocument = Context.ActiveDocument;
-
-        _analyticsClient.TrackFeatureUsageAsync(nameof(CommandTransmittal), new Dictionary<string, string>
-        {
-            ["RevitVersion"] = App.RevitDocument.Application.VersionNumber 
-        });
-
 
         try
         {
@@ -80,7 +71,7 @@ public class CommandTransmittal : ExternalCommand
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error");
-            _analyticsClient.TrackExceptionAsync(ex);
+            
             return;
         }
         finally

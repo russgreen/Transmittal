@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Transmittal.Analytics.Client;
 using Transmittal.Library.Enums;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -16,7 +15,6 @@ internal partial class AboutViewModel : BaseViewModel
 {
     private ISoftwareUpdateService _softwareUpdateService = Host.GetService<ISoftwareUpdateService>();
     private IConfiguration _configuration = Host.GetService<IConfiguration>();
-    private IAnalyticsClient _analyticsClient = Host.GetService<IAnalyticsClient>();
 
     public SoftwareUpdateState State => _softwareUpdateService.State;
     public string CurrentVersion => _softwareUpdateService.CurrentVersion;
@@ -103,11 +101,6 @@ internal partial class AboutViewModel : BaseViewModel
     [RelayCommand]
     private async Task CheckForUpdates()
     {
-        _analyticsClient.TrackFeatureUsageAsync("CheckForUpdates", new Dictionary<string, string>
-        {
-            ["AppVersion"] = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
-        });
-
         await _softwareUpdateService.CheckUpdates();
         IsUpdateChecked = true;
 
