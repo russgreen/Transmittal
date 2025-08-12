@@ -1,8 +1,10 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
+using Serilog.Context;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -12,13 +14,17 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 internal class CommandDirectory : ExternalCommand
 {
-    private ISettingsServiceRvt _settingsServiceRvt;
-    private ISettingsService _settingsService;
+    private readonly ILogger<CommandDirectory> _logger = Host.GetService<ILogger<CommandDirectory>>();
+    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     public override void Execute()
     {
-        _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-        _settingsService = Host.GetService<ISettingsService>();
+        using (LogContext.PushProperty("UsageTracking", true))
+        using (LogContext.PushProperty("RevitVersion", App.CtrApp.VersionNumber))
+        {
+            _logger.LogInformation("{command}", nameof(CommandDirectory));
+        }
 
         App.CachedUiApp = Context.UiApplication;
         App.RevitDocument = Context.ActiveDocument;

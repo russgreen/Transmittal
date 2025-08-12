@@ -1,4 +1,6 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using Microsoft.Extensions.Logging;
+using Ookii.Dialogs.Wpf;
+using Serilog.Context;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -14,6 +16,7 @@ namespace Transmittal.Desktop.Views
     {
         private readonly ViewModels.MainViewModel _viewModel;
         private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+        private readonly ILogger<MainView> _logger = Host.GetService<ILogger<MainView>>();
 
         public MainView()
         {
@@ -32,30 +35,55 @@ namespace Transmittal.Desktop.Views
 
         private void Button_Transmittal_Click(object sender, RoutedEventArgs e)
         {
+            using (LogContext.PushProperty("UsageTracking", true))
+            {
+                _logger.LogInformation("{command}", nameof(Button_Transmittal_Click));
+            }
+
             TransmittalView view = new();
             view.ShowDialog();
         }
 
         private void Button_TransmittalArchive_Click(object sender, RoutedEventArgs e)
         {
+            using (LogContext.PushProperty("UsageTracking", true))
+            {
+                _logger.LogInformation("{command}", nameof(Button_TransmittalArchive_Click));
+            }
+
             ArchiveView view = new();
             view.ShowDialog();
         }
 
         private void Button_Directory_Click(object sender, RoutedEventArgs e)
         {
+            using (LogContext.PushProperty("UsageTracking", true))
+            {
+                _logger.LogInformation("{command}", nameof(Button_Directory_Click));
+            }
+
             DirectoryView view = new();
             view.ShowDialog();
         }
 
         private void Button_About_Click(object sender, RoutedEventArgs e)
         {
+           using (LogContext.PushProperty("UsageTracking", true))
+           {
+                _logger.LogInformation("{command}", nameof(Button_About_Click));
+           }
+
             AboutView view = new AboutView();
             view.ShowDialog();
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
+           using (LogContext.PushProperty("UsageTracking", true))
+           {
+                _logger.LogInformation("{command}", nameof(Button_Settings_Click));
+           }
+
             SettingsView view = new();
             view.ShowDialog();
         }

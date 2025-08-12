@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
+using Serilog.Context;
 using System.Diagnostics;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -14,13 +15,16 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 public class CommandTransmittal : ExternalCommand
 {
-    private ISettingsServiceRvt _settingsServiceRvt;
-    private ILogger<CommandTransmittal> _logger;
+    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
+    private readonly ILogger<CommandTransmittal> _logger = Host.GetService<ILogger<CommandTransmittal>>();
 
     public override void Execute()
-    {       
-        _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-        _logger = Host.GetService<ILogger<CommandTransmittal>>();
+    {
+        using (LogContext.PushProperty("UsageTracking", true))
+        using (LogContext.PushProperty("RevitVersion", App.CtrApp.VersionNumber))
+        {
+            _logger.LogInformation("{command}", nameof(CommandTransmittal));
+        }
 
         App.CachedUiApp = Context.UiApplication;
         App.RevitDocument = Context.ActiveDocument;

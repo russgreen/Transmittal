@@ -2,9 +2,11 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
 using Ookii.Dialogs.Wpf;
+using Serilog.Context;
 using System.IO;
 using System.Text.Json;
 using Transmittal.Library.Models;
@@ -16,8 +18,15 @@ namespace Transmittal.Commands;
 [Transaction(TransactionMode.Manual)]
 internal class CommandImportSettings : ExternalCommand
 {
+    private readonly ILogger<CommandImportSettings> _logger = Host.GetService<ILogger<CommandImportSettings>>();
+
     public override void Execute()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        using (LogContext.PushProperty("RevitVersion", App.CtrApp.VersionNumber))
+        {
+            _logger.LogInformation("{command}", nameof(CommandImportSettings));
+        }
 
         App.CachedUiApp = Context.UiApplication;
         App.RevitDocument = Context.ActiveDocument;
