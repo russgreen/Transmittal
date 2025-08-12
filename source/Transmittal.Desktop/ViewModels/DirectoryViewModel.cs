@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -16,6 +18,7 @@ internal partial class DirectoryViewModel : BaseViewModel
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
     private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
     private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
+    private readonly ILogger<DirectoryViewModel> _logger = Host.GetService<ILogger<DirectoryViewModel>>();
 
     public string WindowTitle { get; private set; }
 
@@ -165,6 +168,11 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void RemovePerson()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(RemovePersonCommand));
+        }
+
         if (SelectedPerson != null)
         {
             if (_transmittalService.GetTransmittals_ByPerson(SelectedPerson.ID).Count == 0)
@@ -177,6 +185,11 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void RemoveCompany()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(RemoveCompanyCommand));
+        }
+
         if (SelectedCompany != null)
         {
             if (_contactDirectoryService.GetPeople_ByCompany(SelectedCompany.ID).Count == 0)
@@ -189,6 +202,11 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void ExportVCard()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ExportVCardCommand));
+        }
+
         ProjectDirectoryModel projectDirectoryModel = new()
         {
             Person = SelectedPerson,
@@ -201,6 +219,11 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void ShowDirectoryReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ShowDirectoryReportCommand));
+        }
+
         BuildProjectDirectory();
 
         Reports.Reports reports = new(_settingsService, 
@@ -213,6 +236,11 @@ internal partial class DirectoryViewModel : BaseViewModel
     [RelayCommand]
     private void ShowTransmittalHistoryReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ShowTransmittalHistoryReportCommand));
+        }
+
         Reports.Reports reports = new(_settingsService,
             _contactDirectoryService,
             _transmittalService);

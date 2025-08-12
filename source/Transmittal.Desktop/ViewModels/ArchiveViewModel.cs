@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -195,6 +196,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void MergeTransmittals()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(MergeTransmittalsCommand));
+        }
+
         List<TransmittalModel> transmittalsToMerge = SelectedTransmittals.Cast<TransmittalModel>().ToList();
         //remove the selected items from the list
         foreach (TransmittalModel item in transmittalsToMerge)
@@ -210,6 +216,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void DuplicateTransmittal()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(DuplicateTransmittalCommand));
+        }
+
         TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
         TransmittalModel newTransmittal = new();
 
@@ -246,6 +257,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void DeleteTransmittal()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(DeleteTransmittalCommand));
+        }
+
         TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
 
         if (transmittalModel.Items.Count == 0 &&
@@ -259,6 +275,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void ShowSummaryReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ShowSummaryReportCommand));
+        }
+
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalSummaryReport();
     }
@@ -266,6 +287,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void ShowSummaryRangeReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ShowSummaryRangeReportCommand));
+        }
+
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalSummaryReport(SelectedTransmittals.Cast<TransmittalModel>().ToList());
     }
@@ -273,6 +299,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void ShowTransmittalReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(ShowTransmittalReportCommand));
+        }
+
         TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowTransmittalReport(transmittalModel.ID);
@@ -281,6 +312,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void MasterDocumentsListReport()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(MasterDocumentsListReportCommand));
+        }
+
         Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
         reports.ShowMasterDocumentsListReport();
     }
@@ -288,6 +324,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void DeleteSelectedTransmittalItem()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(DeleteSelectedTransmittalItemCommand));
+        }
+
         foreach (var item in SelectedTransmittalItems)
         {
             _transmittalService.DeleteTransmittalItem((TransmittalItemModel)item);
@@ -300,6 +341,11 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
     [RelayCommand]
     private void DeleteSelectedDistribution()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("{command}", nameof(DeleteSelectedDistributionCommand));
+        }
+
         foreach (var item in SelectedTransmittalDistributions)
         {
             _transmittalService.DeleteTransmittalDist((TransmittalDistributionModel)item);
