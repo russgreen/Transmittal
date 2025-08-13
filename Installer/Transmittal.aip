@@ -16,7 +16,7 @@
     <ROW Property="AiSkipExitDlg" Value="1"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{C07DBC25-B429-467E-98B5-FAF1D5721FE8} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{A2E7C7CB-05E7-4915-AEC6-CBC025BCDC21} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
     <ROW Property="ProductVersion" Value="3.4.0" Options="32"/>
