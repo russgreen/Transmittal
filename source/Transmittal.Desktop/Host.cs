@@ -26,8 +26,13 @@ internal static class Host
 #if DEBUG
         logPath = "log.json";
 #endif
+        var userName = Environment.UserName.Replace("\\", "_").Replace("/", "_");
+        var machineName = Environment.MachineName.Replace("\\", "_").Replace("/", "_");
+
         var loggerConfigTransmittal = new LoggerConfiguration()
             .Enrich.FromLogContext()
+            .Enrich.WithProperty("UserDomain", userName)
+            .Enrich.WithProperty("MachineName", machineName)
             .Enrich.WithProperty("ApplicationVersion", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString())
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -48,8 +53,6 @@ internal static class Host
 
             if (Directory.Exists(usageLogPath))
             {
-                var userName = Environment.UserName.Replace("\\", "_").Replace("/", "_");
-                var machineName = Environment.MachineName.Replace("\\", "_").Replace("/", "_");
                 var usageLogFilePath = Path.Combine(usageLogPath, $"Transmittal_{userName}_{machineName}_.json");
 
                 loggerConfigTransmittal = loggerConfigTransmittal
