@@ -60,8 +60,8 @@ internal static class Host
                     .Filter.ByIncludingOnly(le => le.Properties.ContainsKey("UsageTracking"))
                     .WriteTo.Async(a => a.File(new JsonFormatter(), usageLogFilePath,
                         restrictedToMinimumLevel: LogEventLevel.Information,
-                        rollingInterval: RollingInterval.Month,
-                        retainedFileCountLimit: 2), 1000));
+                        rollingInterval: RollingInterval.Day,
+                        retainedFileTimeLimit: TimeSpan.FromDays(60)), 1000));
             }
         }
 
