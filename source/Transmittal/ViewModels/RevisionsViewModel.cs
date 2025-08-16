@@ -12,8 +12,8 @@ namespace Transmittal.ViewModels;
 
 internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly IMessageBoxService _messageBox = Host.GetService<IMessageBoxService>();
+    private readonly ISettingsService _settingsService;
+    private readonly IMessageBoxService _messageBoxService;
     private readonly IRevisionRequester _callingViewModel;
     
     [ObservableProperty]
@@ -25,10 +25,14 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 
     public bool IsRevisionSelected => SelectedRevision != null;
 
-    public RevisionsViewModel(IRevisionRequester callingViewModel)
+    public RevisionsViewModel(IRevisionRequester callingViewModel, 
+        ISettingsService settingsService,
+        IMessageBoxService messageBoxService)
     {
         _callingViewModel = callingViewModel;
-        
+        _settingsService = settingsService;
+        _messageBoxService = messageBoxService;
+
         Revisions = new();
         Revisions.CollectionChanged += Revisions_CollectionChanged;
 
@@ -80,7 +84,7 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         }
         catch (Exception ex)
         {
-            _messageBox.ShowOk("Error creating revision", ex.Message);
+            _messageBoxService.ShowOk("Error creating revision", ex.Message);
             
             trans.RollBack();
         }

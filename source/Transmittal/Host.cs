@@ -8,6 +8,7 @@ using System.IO;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 using Transmittal.Services;
+using Transmittal.ViewModels;
 
 namespace Transmittal;
 
@@ -81,6 +82,15 @@ internal static class Host
                 services.AddTransient<IExportDWFService, ExportDWFService>();
                 services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
                 services.AddTransient<ITransmittalService, TransmittalService>();
+
+                services.AddTransient<TransmittalViewModel>();
+                services.AddTransient<SettingsViewModel>();
+                services.AddTransient<RevisionsViewModel>();
+                services.AddTransient<NewRevisionViewModel>();
+                services.AddTransient<NewCompanyViewModel>();
+                services.AddTransient<NewPersonViewModel>();
+                services.AddTransient<StatusViewModel>();
+                services.AddTransient<ICallingViewModelFactory, CallingViewModelFactory>();
             })
             .Build();
 

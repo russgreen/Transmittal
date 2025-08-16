@@ -9,15 +9,10 @@
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:Converters="clr-namespace:Transmittal.Converters" 
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
         Width="800" Height="650" 
         MinWidth="800" MinHeight="650"
         WindowStartupLocation="CenterScreen" >
-
-    <Window.DataContext>
-        <viewModels:SettingsViewModel />
-    </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>

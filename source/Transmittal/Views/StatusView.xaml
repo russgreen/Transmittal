@@ -6,16 +6,11 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:local="clr-namespace:Transmittal.Views"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModels:StatusViewModel, IsDesignTimeCreatable=True}"
         Title="Sheet Status" Width="375" Height="120"
         WindowStyle="SingleBorderWindow" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner">
     
-    <!--<Window.DataContext>
-        <viewModels:StatusViewModel />
-    </Window.DataContext>-->
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

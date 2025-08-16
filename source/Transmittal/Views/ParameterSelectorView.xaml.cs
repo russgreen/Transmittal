@@ -1,18 +1,7 @@
 ﻿using Autodesk.Revit.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Transmittal.Requesters;
+using Transmittal.Services;
 
 namespace Transmittal.Views
 {
@@ -32,9 +21,8 @@ namespace Transmittal.Views
         {
             InitializeComponent();
 
-            _viewModel = new ViewModels.ParameterSelectorViewModel(caller, targetVariable);
-
-            //_viewModel = (ViewModels.ParameterSelectorViewModel)this.DataContext;
+            var factory = Host.GetService<ICallingViewModelFactory>();
+            _viewModel = factory.CreateParameterSelectorViewModel(caller, targetVariable);
             this.DataContext = _viewModel;
             _viewModel.PopulateParameterListCommand.Execute(category);
             _viewModel.ClosingRequest += (sender, e) => this.Close();

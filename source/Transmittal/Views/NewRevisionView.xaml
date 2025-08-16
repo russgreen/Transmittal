@@ -7,7 +7,6 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:r2021="R2021"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModels:NewRevisionViewModel, IsDesignTimeCreatable=True}"
         Title="New Revision" Height="300" Width="345" 
         WindowStyle="ToolWindow" ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner" Topmost="True">

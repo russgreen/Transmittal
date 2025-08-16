@@ -7,7 +7,6 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance viewModels:RevisionsViewModel, IsDesignTimeCreatable=True}"
         Title="Revisions" Height="450" Width="800" 
         WindowStyle="ToolWindow" 
         WindowStartupLocation="CenterOwner">

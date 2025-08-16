@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Transmittal.Requesters;
+using Transmittal.Services;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
@@ -13,8 +14,9 @@ public partial class NewCompanyView : Window
     public NewCompanyView(ICompanyRequester caller)
     {
         InitializeComponent();
-        
-        _viewModel = new NewCompanyViewModel(caller);
+
+        var factory = Host.GetService<ICallingViewModelFactory>();
+        _viewModel = factory.CreateNewCompanyViewModel(caller);
         this.DataContext = _viewModel;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }

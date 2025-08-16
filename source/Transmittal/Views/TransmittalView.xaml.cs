@@ -19,7 +19,9 @@ public partial class TransmittalView : Window
 
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
-        _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
+        _viewModel = Host.GetService<ViewModels.TransmittalViewModel>();
+        DataContext = _viewModel;
+
         _viewModel.ClosingRequest += (sender, e) => this.Close();
 
 #if REVIT2025_OR_GREATER
