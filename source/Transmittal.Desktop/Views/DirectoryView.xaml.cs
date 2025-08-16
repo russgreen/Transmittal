@@ -30,19 +30,6 @@ public partial class DirectoryView : Window
         _viewModel = Host.GetService<ViewModels.DirectoryViewModel>();
 
         DataContext = _viewModel;
-
-
-
-        //this.sfDataGridPeople.QueryRowHeight += sfDataGridPeople_QueryRowHeight;
-        //this.sfDataGridPeople.CurrentCellEndEdit += sfDataGridPeople_CurrentCellEndEdit;    
-        //this.sfDataGridPeople.RecordDeleting += sfDataGridPeople_RecordDeleting;        
-
-        //this.sfDataGridCompanies.QueryRowHeight += sfDataGridCompanies_QueryRowHeight;
-        //this.sfDataGridCompanies.CurrentCellEndEdit += sfDataGridCompanies_CurrentCellEndEdit;
-        //this.sfDataGridCompanies.RecordDeleting += sfDataGridPeople_RecordDeleting;
-
-        //this.sfDataGridPeople.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridPeople);
-        //this.sfDataGridCompanies.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridCompanies);
     }
 
     private void sfDataGridPeople_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs args)

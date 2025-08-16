@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
+using System.Diagnostics;
 using System.Windows;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -30,7 +31,11 @@ public partial class TransmittalView : Window
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/standalonetransmittal/");
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://russgreen.github.io/Transmittal/standalonetransmittal/",
+            UseShellExecute = true
+        });    
     }
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
