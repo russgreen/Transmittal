@@ -8,7 +8,6 @@
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:TransmittalViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}" 
         WindowStartupLocation="CenterScreen" 
         Height="620" Width="860" 
@@ -16,10 +15,6 @@
         WindowStyle="SingleBorderWindow"
         Style="{StaticResource WindowStyle}">
     
-    <Window.DataContext>
-        <viewModels:TransmittalViewModel />
-    </Window.DataContext>
-
     <Grid>
         <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
@@ -144,7 +139,7 @@
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDirectory" Grid.Row="1" Grid.Column="0" Grid.RowSpan="7" 
                                            ItemsSource="{Binding ProjectDirectory}"
-                                           SelectedItems="{Binding SelectedProjectDirectory}"
+                                           SelectedItems="{Binding SelectedProjectDirectory, Mode=TwoWay}"
                                            AutoGenerateColumns="False" 
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 
@@ -197,7 +192,7 @@
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"
-                                           SelectedItems="{Binding SelectedDistribution}"
+                                           SelectedItems="{Binding SelectedDistribution, Mode=TwoWay}"
                                            AutoGenerateColumns="False" 
                                            AllowGrouping="False" 
                                            AllowResizingColumns="True" 

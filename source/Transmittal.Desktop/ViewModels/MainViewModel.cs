@@ -10,8 +10,8 @@ using Transmittal.Library.ViewModels;
 namespace Transmittal.Desktop.ViewModels;
 internal partial class MainViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly ISoftwareUpdateService _softwareUpdateService = Host.GetService<ISoftwareUpdateService>();
+    private readonly ISettingsService _settingsService;
+    private readonly ISoftwareUpdateService _softwareUpdateService;
 
     public string WindowTitle { get; private set; }
 
@@ -35,6 +35,17 @@ internal partial class MainViewModel : BaseViewModel
 
     public MainViewModel()
     {
+        // design time constructor
+        _settingsService = null;
+        _softwareUpdateService = null;
+    }
+
+    public MainViewModel(ISettingsService settingsService,
+        ISoftwareUpdateService softwareUpdateService)
+    {
+        _settingsService = settingsService;
+        _softwareUpdateService = softwareUpdateService;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion}";
 

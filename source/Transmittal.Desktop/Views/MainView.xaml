@@ -6,17 +6,12 @@
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:MainViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
         Width="500" Height="290" 
         ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
         WindowStartupLocation="CenterScreen"
         FontSize="14" FontFamily="Segoe UI Light"  >
-
-    <Window.DataContext>
-        <viewModels:MainViewModel />
-    </Window.DataContext>
 
     <Window.Resources>
         

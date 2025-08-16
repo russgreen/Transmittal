@@ -12,7 +12,7 @@ namespace Transmittal.Desktop.ViewModels
     public partial class NewCompanyViewModel : BaseViewModel, IHasContactDirectoryService
     {
         private readonly ICompanyRequester _callingViewModel;
-        private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+        private readonly IContactDirectoryService _contactDirectoryService;
 
         [ObservableProperty]
         private CompanyModel _company = new();
@@ -24,9 +24,11 @@ namespace Transmittal.Desktop.ViewModels
 
         public IContactDirectoryService ContactDirectoryService => _contactDirectoryService;
 
-        public NewCompanyViewModel(ICompanyRequester caller)
+        public NewCompanyViewModel(ICompanyRequester caller, 
+            IContactDirectoryService contactDirectoryService)
         {
             _callingViewModel = caller;
+            _contactDirectoryService = contactDirectoryService;
 
             this.ValidateAllProperties();
         }

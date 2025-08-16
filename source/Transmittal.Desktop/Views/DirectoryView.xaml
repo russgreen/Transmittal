@@ -7,15 +7,10 @@
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:DirectoryViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="800" Height="450" 
         WindowStartupLocation="CenterScreen" 
         MinWidth="800" MinHeight="450"
         Style="{StaticResource WindowStyle}" >
-
-    <Window.DataContext>
-        <viewModels:DirectoryViewModel />
-    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>

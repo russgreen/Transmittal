@@ -8,9 +8,15 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class AboutView : Window
 {
+
+    private readonly ViewModels.AboutViewModel _viewModel;
+
     public AboutView()
     {
         InitializeComponent();
+
+        _viewModel = Host.GetService<ViewModels.AboutViewModel>();
+        DataContext = _viewModel;
     }
 
     private void OpenLink(object sender, RoutedEventArgs e)

@@ -16,10 +16,10 @@ namespace Transmittal.Desktop.ViewModels;
 
 internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly ILogger<ArchiveViewModel> _logger = Host.GetService<ILogger<ArchiveViewModel>>();
+    private readonly ISettingsService _settingsService;
+    private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly ITransmittalService _transmittalService;
+    private readonly ILogger<ArchiveViewModel> _logger;
 
     public string WindowTitle { get; private set; }
 
@@ -55,6 +55,23 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
 
     public ArchiveViewModel()
     {
+        // design time constructor
+        _settingsService = null;
+        _contactDirectoryService = null;
+        _transmittalService = null;
+        _logger = null;
+    }
+
+    public ArchiveViewModel(ISettingsService settingsService,
+        IContactDirectoryService contactDirectoryService,
+        ITransmittalService transmittalService,
+        ILogger<ArchiveViewModel> logger)
+    {
+        _settingsService = settingsService;
+        _contactDirectoryService = contactDirectoryService;
+        _transmittalService = transmittalService;
+        _logger = logger;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({_settingsService.GlobalSettings.DatabaseFile})";
 

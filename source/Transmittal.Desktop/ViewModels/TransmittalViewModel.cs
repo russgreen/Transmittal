@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -19,10 +20,10 @@ using Transmittal.Library.ViewModels;
 namespace Transmittal.Desktop.ViewModels;
 internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, IPackageRequester
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
+    private readonly ISettingsService _settingsService;
+    private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly ITransmittalService _transmittalService;
+    private readonly ILogger<TransmittalViewModel> _logger;
 
     public string WindowTitle { get; private set; }
 
@@ -69,6 +70,25 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
 
     public TransmittalViewModel()
     {
+        // design time constructor
+        _settingsService = null;
+        _contactDirectoryService = null;
+        _transmittalService = null;
+        _logger = null;
+
+    }
+
+    public TransmittalViewModel(ISettingsService settingsService,
+        IContactDirectoryService contactDirectoryService,
+        ITransmittalService transmittalService,
+        ILogger<TransmittalViewModel> logger)
+    {
+
+        _settingsService = settingsService;
+        _contactDirectoryService = contactDirectoryService;
+        _transmittalService = transmittalService;
+        _logger = logger;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({_settingsService.GlobalSettings.DatabaseFile})";
 

@@ -12,20 +12,26 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class DirectoryView : Window
 {
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+    private readonly ViewModels.DirectoryViewModel _viewModel;
+    private readonly ITransmittalService _transmittalService;
+    private readonly IContactDirectoryService _contactDirectoryService;
 
     GridRowSizingOptions _gridRowResizingOptions = new GridRowSizingOptions();
     //To get the calculated height from GetAutoRowHeight method.    
     private double _autoHeight = double.NaN;
 
-    private readonly ViewModels.DirectoryViewModel _viewModel;
 
     public DirectoryView()
     {
         InitializeComponent();
 
-        _viewModel = (ViewModels.DirectoryViewModel)this.DataContext;
+        _transmittalService = Host.GetService<ITransmittalService>();
+        _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+        _viewModel = Host.GetService<ViewModels.DirectoryViewModel>();
+
+        DataContext = _viewModel;
+
+
 
         //this.sfDataGridPeople.QueryRowHeight += sfDataGridPeople_QueryRowHeight;
         //this.sfDataGridPeople.CurrentCellEndEdit += sfDataGridPeople_CurrentCellEndEdit;    

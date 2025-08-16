@@ -8,16 +8,11 @@
         xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:SettingsViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  
         Width="800" Height="760" 
         MinWidth="800" MinHeight="620"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}">
-
-    <Window.DataContext>
-        <viewModels:SettingsViewModel />
-    </Window.DataContext>
 
     <Grid Margin="10" >
         <Grid.RowDefinitions>
