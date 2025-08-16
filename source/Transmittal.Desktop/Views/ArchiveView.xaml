@@ -8,7 +8,6 @@
         xmlns:converters="clr-namespace:Transmittal.Desktop.Converters" 
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:ArchiveViewModel}, IsDesignTimeCreatable=True}"
         Title="{Binding WindowTitle}"  Width="850" Height="450" 
         WindowStartupLocation="CenterScreen" 
         MinWidth="850" MinHeight="450"
@@ -20,10 +19,6 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <Window.DataContext>
-        <viewModels:ArchiveViewModel />
-    </Window.DataContext>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />

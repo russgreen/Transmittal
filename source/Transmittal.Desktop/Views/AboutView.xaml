@@ -7,16 +7,11 @@
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels" 
         xmlns:controls="clr-namespace:Transmittal.Desktop.Controls"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:AboutViewModel}, IsDesignTimeCreatable=True}"
         Title="About" Height="500" Width="600"
         ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}">
-    
-    <Window.DataContext>
-        <viewModels:AboutViewModel />
-    </Window.DataContext>
 
     <StackPanel Margin="10">
         <TextBlock FontSize="32" 

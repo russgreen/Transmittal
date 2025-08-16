@@ -15,10 +15,10 @@ namespace Transmittal.Desktop.ViewModels;
 
 internal partial class DirectoryViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly ILogger<DirectoryViewModel> _logger = Host.GetService<ILogger<DirectoryViewModel>>();
+    private readonly ISettingsService _settingsService;
+    private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly ITransmittalService _transmittalService;
+    private readonly ILogger<DirectoryViewModel> _logger;
 
     public string WindowTitle { get; private set; }
 
@@ -40,6 +40,23 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     public DirectoryViewModel()
     {
+        // design time constructor
+        _settingsService = null;
+        _contactDirectoryService = null;
+        _transmittalService = null;
+        _logger = null;
+    }
+
+    public DirectoryViewModel(ISettingsService settingsService,
+        IContactDirectoryService contactDirectoryService,
+        ITransmittalService transmittalService,
+        ILogger<DirectoryViewModel> logger)
+    {
+        _settingsService = settingsService;
+        _contactDirectoryService = contactDirectoryService;
+        _transmittalService = transmittalService;
+        _logger = logger;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({_settingsService.GlobalSettings.DatabaseFile})";
 

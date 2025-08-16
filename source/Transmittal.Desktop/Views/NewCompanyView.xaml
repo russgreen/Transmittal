@@ -6,16 +6,10 @@
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"  
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:NewCompanyViewModel}, IsDesignTimeCreatable=True}"
         Title="New Company" Height="250" Width="400"
         ResizeMode="NoResize" 
         Style="{StaticResource WindowStyle}">
     
-    <!--<Window.DataContext>
-        <viewModels:NewCompanyViewModel />
-    </Window.DataContext>-->
-
-
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="130" />

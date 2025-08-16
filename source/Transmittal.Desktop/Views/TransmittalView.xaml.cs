@@ -12,15 +12,18 @@ namespace Transmittal.Desktop.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ISettingsService _settingsService;
 
     public TransmittalView()
     {
         InitializeComponent();
 
+        _settingsService = Host.GetService<ISettingsService>();
+        _viewModel = Host.GetService<ViewModels.TransmittalViewModel>();
+        DataContext = _viewModel;
+
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
-        _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
 

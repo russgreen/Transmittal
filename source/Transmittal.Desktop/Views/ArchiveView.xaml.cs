@@ -11,7 +11,7 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class ArchiveView : Window
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ISettingsService _settingsService;
 
     private readonly ViewModels.ArchiveViewModel _viewModel;
 
@@ -19,7 +19,10 @@ public partial class ArchiveView : Window
     {
         InitializeComponent();
 
-        _viewModel = (ViewModels.ArchiveViewModel)this.DataContext;
+        _settingsService = Host.GetService<ISettingsService>();
+        _viewModel = Host.GetService<ViewModels.ArchiveViewModel>();
+
+        DataContext = _viewModel;
     }
 
     private void Button_MergeTransmittals_Click(object sender, RoutedEventArgs e)

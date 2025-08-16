@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"  
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:NewPackageViewModel}, IsDesignTimeCreatable=True}"
         Title="New Package Name" Height="140" Width="400"
         ResizeMode="NoResize" 
         Style="{StaticResource WindowStyle}">

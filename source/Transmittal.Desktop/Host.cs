@@ -1,15 +1,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Versioning;
 using Transmittal.Desktop.Services;
+using Transmittal.Desktop.ViewModels;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 
@@ -86,13 +85,6 @@ internal static class Host
         })
         .ConfigureServices((_, services) =>
         {
-            // Properly configure logging
-            //services.AddLogging(builder =>
-            //{
-            //    builder.ClearProviders();
-            //    builder.AddSerilog(Log.Logger);
-            //});
-
             services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<ISoftwareUpdateService, SoftwareUpdateService>();
             services.AddSingleton<IMessageBoxService, MessageBoxService>();
@@ -100,6 +92,15 @@ internal static class Host
             services.AddTransient<IDataConnection, SQLiteDataAccess>();
             services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
             services.AddTransient<ITransmittalService, TransmittalService>();
+
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<TransmittalViewModel>();
+            services.AddTransient<ArchiveViewModel>();
+            services.AddTransient<DirectoryViewModel>();
+            services.AddTransient<AboutViewModel>();
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<ICallingViewModelFactory, CallingViewModelFactory>();
+
         })
         .Build();
 
