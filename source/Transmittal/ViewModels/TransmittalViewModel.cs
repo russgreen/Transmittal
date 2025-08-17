@@ -1215,24 +1215,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void OpenExplorerToExportedFilesLocations()
     {
-        List<string> folderPaths = new();
-
-        if (ExportPDF == true)
-        {
-            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.PDF.ToString()));
-        }
-
-        if (ExportDWG == true)
-        {
-            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString()));
-        }
-
-        if (ExportDWF == true)
-        {
-            folderPaths.Add(_settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWF.ToString()));
-        }
-
-        var paths = folderPaths.Distinct();
+        var paths = GetUniqueExportedFolderPaths();
         foreach (var path in paths)
         {
             Process.Start("explorer.exe", $"/root, \"{path}\"");
@@ -1516,4 +1499,56 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return retval;
     }
 
+    /// <summary>
+    /// Returns a sorted, de-duplicated list of directories that contain the exported files.
+    /// Safely skips null / empty / invalid paths.
+    /// </summary>
+    private IReadOnlyList<string> GetUniqueExportedFolderPaths()
+    {
+        if (_exportedFiles == null || _exportedFiles.Count == 0)
+        {
+            return Array.Empty<string>();
+        }
+
+        var folders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var doc in _exportedFiles)
+        {
+            // Defensive: DocumentModel should have FilePath set after export
+            var filePath = doc?.FilePath;
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                continue;
+            }
+
+            string dir;
+            try
+            {
+                dir = Path.GetDirectoryName(filePath);
+            }
+            catch
+            {
+                continue; // skip invalid paths
+            }
+
+            if (string.IsNullOrWhiteSpace(dir))
+            {
+                continue;
+            }
+
+            // Normalize to full path to avoid duplicates caused by relative segments
+            try
+            {
+                dir = Path.GetFullPath(dir);
+            }
+            catch
+            {
+                // If GetFullPath fails, keep original
+            }
+
+            folders.Add(dir);
+        }
+
+        return folders.OrderBy(x => x).ToList();
+    }
 }
