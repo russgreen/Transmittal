@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Extensions;
 using Serilog.Context;
+using Serilog.Core;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -30,14 +31,14 @@ namespace Transmittal.ViewModels;
 
 internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, IRevisionRequester, IPersonRequester
 {
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly IExportPDFService _exportPDFService = Host.GetService<IExportPDFService>();
-    private readonly IExportDWGService _exportDWGService = Host.GetService<IExportDWGService>();
-    private readonly IExportDWFService _exportDWFService = Host.GetService<IExportDWFService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly ILogger<TransmittalViewModel> _logger = Host.GetService<ILogger<TransmittalViewModel>>();
+    private readonly ISettingsServiceRvt _settingsServiceRvt;
+    private readonly ISettingsService _settingsService;
+    private readonly IExportPDFService _exportPDFService;
+    private readonly IExportDWGService _exportDWGService;
+    private readonly IExportDWFService _exportDWFService;
+    private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly ITransmittalService _transmittalService;
+    private readonly ILogger<TransmittalViewModel> _logger;
 
     public string WindowTitle { get; private set; }
 
@@ -182,6 +183,35 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     public TransmittalViewModel()
     {
+        // design time constructor
+        _settingsServiceRvt = null;
+        _settingsService = null;
+        _exportPDFService = null;
+        _exportDWGService = null;
+        _exportDWFService = null;
+        _contactDirectoryService = null;
+        _transmittalService = null;
+        _logger = null;
+    }
+
+    public TransmittalViewModel(ISettingsServiceRvt settingsServiceRvt,
+        ISettingsService settingsService,
+        IExportPDFService exportPDFService,
+        IExportDWGService exportDWGService,
+        IExportDWFService exportDWFService,
+        IContactDirectoryService contactDirectoryService,
+        ITransmittalService transmittalService,
+        ILogger<TransmittalViewModel> logger)
+    {
+        _settingsServiceRvt = settingsServiceRvt;
+        _settingsService = settingsService;
+        _exportPDFService = exportPDFService;
+        _exportDWGService = exportDWGService;
+        _exportDWFService = exportDWFService;
+        _contactDirectoryService = contactDirectoryService;
+        _transmittalService = transmittalService;
+        _logger = logger;
+
         var informationVersion = Assembly.GetExecutingAssembly()
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
             .InformationalVersion;
