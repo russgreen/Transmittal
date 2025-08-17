@@ -569,7 +569,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         //load transmittal shared parameters file
         App.CachedUiApp.Application.SharedParametersFilename = $@"{System.IO.Path.GetDirectoryName(
-            App.DesktopAssemblyFolder)}\Resources\TransmittalParameters.txt";
+            System.Reflection.Assembly.GetExecutingAssembly().Location)}\Resources\TransmittalParameters.txt";
 
         var sharedParameterDefinitionFile = App.CachedUiApp.Application.OpenSharedParameterFile();
 
