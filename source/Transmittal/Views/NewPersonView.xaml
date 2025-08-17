@@ -6,13 +6,8 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance {x:Type viewModels:NewPersonViewModel}, IsDesignTimeCreatable=True}"
         Title="New Person" Height="450" Width="400">
     
-    <!--<Window.DataContext>
-        <viewModels:NewPersonViewModel />
-    </Window.DataContext>-->
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

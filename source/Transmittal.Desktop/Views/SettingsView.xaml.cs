@@ -1,4 +1,5 @@
 ﻿using Ookii.Dialogs.Wpf;
+using System.Diagnostics;
 using System.Windows;
 using Transmittal.Desktop.ViewModels;
 
@@ -16,7 +17,10 @@ public partial class SettingsView : Window
 
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
-        _viewModel = (ViewModels.SettingsViewModel)this.DataContext;
+        _viewModel = Host.GetService<ViewModels.SettingsViewModel>();
+
+        DataContext = _viewModel;
+
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
 
@@ -87,6 +91,10 @@ public partial class SettingsView : Window
 
     private void buttonHelp_Click(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/settings/");
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://russgreen.github.io/Transmittal/settings/",
+            UseShellExecute = true
+        });
     }
 }

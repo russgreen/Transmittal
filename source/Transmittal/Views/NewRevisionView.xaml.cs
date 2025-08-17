@@ -2,6 +2,7 @@
 using System.Windows.Markup;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
+using Transmittal.Services;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
@@ -9,13 +10,13 @@ namespace Transmittal.Views;
 public partial class NewRevisionView : Window
 {
     private readonly NewRevisionViewModel _viewModel;
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
     public NewRevisionView(IRevisionRequester caller)
     {
         InitializeComponent();
 
-        _viewModel = new NewRevisionViewModel(caller);
+        var factory = Host.GetService<ICallingViewModelFactory>();
+        _viewModel = factory.CreateNewRevisionViewModel(caller);
         this.DataContext = _viewModel;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }

@@ -12,31 +12,24 @@ namespace Transmittal.Desktop.Views;
 /// </summary>
 public partial class DirectoryView : Window
 {
-    private readonly ITransmittalService _transmittalService = Host.GetService<ITransmittalService>();
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+    private readonly ViewModels.DirectoryViewModel _viewModel;
+    private readonly ITransmittalService _transmittalService;
+    private readonly IContactDirectoryService _contactDirectoryService;
 
     GridRowSizingOptions _gridRowResizingOptions = new GridRowSizingOptions();
     //To get the calculated height from GetAutoRowHeight method.    
     private double _autoHeight = double.NaN;
 
-    private readonly ViewModels.DirectoryViewModel _viewModel;
 
     public DirectoryView()
     {
         InitializeComponent();
 
-        _viewModel = (ViewModels.DirectoryViewModel)this.DataContext;
+        _transmittalService = Host.GetService<ITransmittalService>();
+        _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+        _viewModel = Host.GetService<ViewModels.DirectoryViewModel>();
 
-        //this.sfDataGridPeople.QueryRowHeight += sfDataGridPeople_QueryRowHeight;
-        //this.sfDataGridPeople.CurrentCellEndEdit += sfDataGridPeople_CurrentCellEndEdit;    
-        //this.sfDataGridPeople.RecordDeleting += sfDataGridPeople_RecordDeleting;        
-
-        //this.sfDataGridCompanies.QueryRowHeight += sfDataGridCompanies_QueryRowHeight;
-        //this.sfDataGridCompanies.CurrentCellEndEdit += sfDataGridCompanies_CurrentCellEndEdit;
-        //this.sfDataGridCompanies.RecordDeleting += sfDataGridPeople_RecordDeleting;
-
-        //this.sfDataGridPeople.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridPeople);
-        //this.sfDataGridCompanies.SelectionController = new Controllers.GridCellSelectionControllerExt(this.sfDataGridCompanies);
+        DataContext = _viewModel;
     }
 
     private void sfDataGridPeople_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs args)

@@ -8,6 +8,7 @@ using System.IO;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 using Transmittal.Services;
+using Transmittal.ViewModels;
 
 namespace Transmittal;
 
@@ -59,8 +60,8 @@ internal static class Host
                     .Filter.ByIncludingOnly(le => le.Properties.ContainsKey("UsageTracking"))
                     .WriteTo.Async(a => a.File(new JsonFormatter(), usageLogFilePath,
                         restrictedToMinimumLevel: LogEventLevel.Information,
-                        rollingInterval: RollingInterval.Month,
-                        retainedFileCountLimit: 2), 1000));
+                        rollingInterval: RollingInterval.Day,
+                        retainedFileTimeLimit: TimeSpan.FromDays(60)), 1000));
             }
         }
 
@@ -81,6 +82,15 @@ internal static class Host
                 services.AddTransient<IExportDWFService, ExportDWFService>();
                 services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
                 services.AddTransient<ITransmittalService, TransmittalService>();
+
+                services.AddTransient<TransmittalViewModel>();
+                services.AddTransient<SettingsViewModel>();
+                services.AddTransient<RevisionsViewModel>();
+                services.AddTransient<NewRevisionViewModel>();
+                services.AddTransient<NewCompanyViewModel>();
+                services.AddTransient<NewPersonViewModel>();
+                services.AddTransient<StatusViewModel>();
+                services.AddTransient<ICallingViewModelFactory, CallingViewModelFactory>();
             })
             .Build();
 

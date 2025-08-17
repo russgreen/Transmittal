@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Transmittal.Requesters;
+using Transmittal.Services;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
@@ -26,8 +27,9 @@ public partial class StatusView : Window
     public StatusView(IStatusRequester caller)
     {
         InitializeComponent();
-        
-        _viewModel = new StatusViewModel(caller);
+
+        var factory = Host.GetService<ICallingViewModelFactory>();
+        _viewModel = factory.CreateStatusViewModel(caller);
         this.DataContext = _viewModel;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }

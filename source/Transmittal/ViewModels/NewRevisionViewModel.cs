@@ -10,8 +10,7 @@ namespace Transmittal.ViewModels;
 
 internal partial class NewRevisionViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-
+    private readonly ISettingsService _settingsService;
     private readonly IRevisionRequester _callingViewModel;
 
     [ObservableProperty]
@@ -37,9 +36,11 @@ internal partial class NewRevisionViewModel : BaseViewModel
 #else
     public List<object> RevisionSequences { get; private set; }
 #endif
-    public NewRevisionViewModel(IRevisionRequester callingViewModel)
+    public NewRevisionViewModel(IRevisionRequester callingViewModel, 
+        ISettingsService settingsService)
     {
         _callingViewModel = callingViewModel;
+        _settingsService = settingsService;
 
 #if REVIT2022_OR_GREATER
         RevisionSequences = RevisionNumberingSequence

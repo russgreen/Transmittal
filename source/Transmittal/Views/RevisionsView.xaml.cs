@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
+using Transmittal.Services;
 using Transmittal.ViewModels;
 
 namespace Transmittal.Views;
@@ -23,7 +24,8 @@ public partial class RevisionsView : Window
     {
         InitializeComponent();
 
-        _viewModel = new RevisionsViewModel(caller);
+        var factory = Host.GetService<ICallingViewModelFactory>();
+        _viewModel = factory.CreateRevisionsViewModel(caller);
         this.DataContext = _viewModel;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
 

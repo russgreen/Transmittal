@@ -23,7 +23,7 @@ internal partial class SettingsViewModel : BaseViewModel
 {
     public string WindowTitle { get; private set; }
 
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ISettingsService _settingsService;
 
     public List<string> FolderNameParts => new List<string> { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => new List<string> { "<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>" };
@@ -108,8 +108,10 @@ internal partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private string _directoryStorePath;
 
-    public SettingsViewModel()
+    public SettingsViewModel(ISettingsService settingsService)
     {
+        _settingsService = settingsService;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({_settingsService.GlobalSettings.DatabaseFile})";
 

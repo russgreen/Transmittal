@@ -10,7 +10,7 @@ namespace Transmittal.ViewModels;
 
 internal partial class StatusViewModel : BaseViewModel
 {
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ISettingsService _settingsService;
     private readonly IStatusRequester _callingViewModel;
 
     public List<DocumentStatusModel> DocumentStatuses { get; private set; }
@@ -24,10 +24,13 @@ internal partial class StatusViewModel : BaseViewModel
         DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
     }
 
-    public StatusViewModel(IStatusRequester caller)
+    public StatusViewModel(IStatusRequester caller, 
+        ISettingsService settingsService)
     {
-        DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
         _callingViewModel = caller;
+        _settingsService = settingsService;
+
+        DocumentStatuses = _settingsService.GlobalSettings.DocumentStatuses;
     }
     
     [RelayCommand]

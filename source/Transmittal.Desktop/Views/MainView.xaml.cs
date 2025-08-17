@@ -15,14 +15,19 @@ namespace Transmittal.Desktop.Views
     public partial class MainView : Window
     {
         private readonly ViewModels.MainViewModel _viewModel;
-        private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-        private readonly ILogger<MainView> _logger = Host.GetService<ILogger<MainView>>();
+        private readonly ISettingsService _settingsService;
+        private readonly ILogger<MainView> _logger;
 
         public MainView()
         {
             InitializeComponent();
 
-            _viewModel = (ViewModels.MainViewModel)this.DataContext;
+            _settingsService = Host.GetService<ISettingsService>();
+            _logger = Host.GetService<ILogger<MainView>>();
+
+            _viewModel = Host.GetService<ViewModels.MainViewModel>();
+
+            DataContext = _viewModel;
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

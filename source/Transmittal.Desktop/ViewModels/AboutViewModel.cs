@@ -13,8 +13,8 @@ using Transmittal.Library.ViewModels;
 namespace Transmittal.Desktop.ViewModels;
 internal partial class AboutViewModel : BaseViewModel
 {
-    private ISoftwareUpdateService _softwareUpdateService = Host.GetService<ISoftwareUpdateService>();
-    private IConfiguration _configuration = Host.GetService<IConfiguration>();
+    private ISoftwareUpdateService _softwareUpdateService;
+    //private IConfiguration _configuration;
 
     public SoftwareUpdateState State => _softwareUpdateService.State;
     public string CurrentVersion => _softwareUpdateService.CurrentVersion;
@@ -57,6 +57,13 @@ internal partial class AboutViewModel : BaseViewModel
 
     public AboutViewModel()
     {
+        _softwareUpdateService = null;
+    }
+
+    public AboutViewModel(ISoftwareUpdateService softwareUpdateService)
+    {
+        _softwareUpdateService = softwareUpdateService;
+
         //get the description from the assembly
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         

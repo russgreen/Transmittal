@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
+using System.Diagnostics;
 using System.Windows;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -12,22 +13,29 @@ namespace Transmittal.Desktop.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
+    private readonly ISettingsService _settingsService;
 
     public TransmittalView()
     {
         InitializeComponent();
 
+        _settingsService = Host.GetService<ISettingsService>();
+        _viewModel = Host.GetService<ViewModels.TransmittalViewModel>();
+        DataContext = _viewModel;
+
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
-        _viewModel = (ViewModels.TransmittalViewModel)this.DataContext;
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
 
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)
     {
-        System.Diagnostics.Process.Start("https://russgreen.github.io/Transmittal/standalonetransmittal/");
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://russgreen.github.io/Transmittal/standalonetransmittal/",
+            UseShellExecute = true
+        });    
     }
 
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)

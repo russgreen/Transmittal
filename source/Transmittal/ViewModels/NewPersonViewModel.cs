@@ -11,7 +11,7 @@ namespace Transmittal.ViewModels;
 
 internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
 {
-    private readonly IContactDirectoryService _contactDirectoryService = Host.GetService<IContactDirectoryService>();
+    private readonly IContactDirectoryService _contactDirectoryService;
     private readonly IPersonRequester _callingViewModel;
 
     [ObservableProperty]
@@ -39,9 +39,11 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
     [ObservableProperty]
     private ObservableCollection<CompanyModel> _companies;
 
-    public NewPersonViewModel(IPersonRequester caller)
+    public NewPersonViewModel(IPersonRequester caller, 
+        IContactDirectoryService contactDirectoryService)
     {  
         _callingViewModel = caller;
+        _contactDirectoryService = contactDirectoryService;
 
         this.ValidateAllProperties();
 

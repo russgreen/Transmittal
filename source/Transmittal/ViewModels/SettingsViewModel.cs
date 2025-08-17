@@ -30,10 +30,10 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 {
     public string WindowTitle { get; private set; }
 
-    private readonly ISettingsServiceRvt _settingsServiceRvt = Host.GetService<ISettingsServiceRvt>();
-    private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
-    private readonly ILogger<SettingsViewModel> _logger = Host.GetService<ILogger<SettingsViewModel>>();
-    private readonly IDataConnection _dataConnection = Host.GetService<IDataConnection>();
+    private readonly ISettingsServiceRvt _settingsServiceRvt;
+    private readonly ISettingsService _settingsService;
+    private readonly ILogger<SettingsViewModel> _logger;
+    private readonly IDataConnection _dataConnection;
 
     public List<string> FolderNameParts => new() { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "<Package>", "<SheetCollection>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
     public List<string> FileNameParts => ["<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>"];
@@ -177,8 +177,16 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [Required]
     private string _sheetPackageParamGuid;
 
-    public SettingsViewModel()
+    public SettingsViewModel(ISettingsServiceRvt settingsServiceRvt,
+        ISettingsService settingsService,
+        ILogger<SettingsViewModel> logger,
+        IDataConnection dataConnection)
     {
+        _settingsServiceRvt = settingsServiceRvt;
+        _settingsService = settingsService;
+        _logger = logger;
+        _dataConnection = dataConnection;
+
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({App.RevitDocument.Title})";
 
@@ -561,7 +569,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         //load transmittal shared parameters file
         App.CachedUiApp.Application.SharedParametersFilename = $@"{System.IO.Path.GetDirectoryName(
-            App.DesktopAssemblyFolder)}\Resources\TransmittalParameters.txt";
+            System.Reflection.Assembly.GetExecutingAssembly().Location)}\Resources\TransmittalParameters.txt";
 
         var sharedParameterDefinitionFile = App.CachedUiApp.Application.OpenSharedParameterFile();
 
