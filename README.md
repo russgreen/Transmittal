@@ -28,7 +28,7 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - [Acknowledgments](#-acknowledgments)
 - [Support](#-support)
 
-## 🚀 Features
+## Features
 
 ### Revit Add-in
 - **Sheet Management**: Set revisions and status of drawing sheets
@@ -45,7 +45,7 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **File Parsing**: Automatic filename parsing for standardized naming conventions
 - **Drag & Drop**: Easy document addition via drag and drop interface
 
-## 📋 Requirements
+## Requirements
 
 ### For Revit 2021-2024
 - **Operating System**: Windows 10/11 (64-bit)
@@ -64,7 +64,7 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **Framework**: .NET 8
 - **Database**: SQLite (embedded)
 
-## 🏗️ Solution Architecture
+## Solution Architecture
 
 The solution consists of multiple projects targeting different .NET frameworks and use cases:
 
@@ -109,7 +109,7 @@ Transmittal/
 - **Utilities**: Humanizer.Core
 - **IoC**: Microsoft.Extensions.Hosting
 
-## 🛠️ Development Setup
+## Development Setup
 
 ### Project Configurations
 
@@ -123,7 +123,7 @@ The solution uses multiple build configurations for different Revit versions:
 - **Debug/Release R25**: Revit 2025 (.NET 8)
 - **Debug/Release R26**: Revit 2026 (.NET 8)
 
-## 🔨 Building the Solution
+## Building the Solution
 
 ### Automated Build (NUKE)
 The solution uses [NUKE](https://nuke.build/) for automated builds:
@@ -136,7 +136,7 @@ The solution uses [NUKE](https://nuke.build/) for automated builds:
 - **Sign**: Code sign assemblies (requires certificates)
 - **Installer**: Create MSI installer using Advanced Installer
 
-## 📦 Installation
+## Installation
 
 ### End Users
 1. Download the latest release from [GitHub Releases](https://github.com/russgreen/Transmittal/releases)
@@ -144,7 +144,7 @@ The solution uses [NUKE](https://nuke.build/) for automated builds:
 3. Restart Revit to load the add-in
 4. (Optional) Install the Analytics Service for enhanced telemetry
 
-## 📖 Documentation
+## Documentation
 
 Comprehensive documentation is available at: https://russgreen.github.io/Transmittal/
 
@@ -156,7 +156,7 @@ Comprehensive documentation is available at: https://russgreen.github.io/Transmi
 - [Report Generation](https://russgreen.github.io/Transmittal/reports/)
 - [Database Management](https://russgreen.github.io/Transmittal/settings/databaseupdate/)
 
-## 🧪 Testing
+## Testing
 
 ### Test Projects
 - **Transmittal.Library.Tests**: Unit tests for core library functionality
@@ -165,7 +165,7 @@ Comprehensive documentation is available at: https://russgreen.github.io/Transmi
   - Model validation
   - Extension methods
 
-## 📄 Version Management
+## Version Management
 
 Version numbering follows semantic versioning (Major.Minor.Patch):
 
@@ -177,7 +177,7 @@ Versions are managed through `Directory.Build.props`:
 - `VersionPrefix`: Major.Minor.Patch (e.g., "3.2.3")
 - `VersionSuffix`: Pre-release identifier (e.g., "beta", "alpha")
 
-## 🏷️ Licensing
+## Licensing
 
 This project is licensed under the **GNU General Public License v3.0**.
 
@@ -193,13 +193,13 @@ The solution includes the following open-source libraries:
 Commercial components:
 - **Syncfusion WPF Controls** (Commercial/Community License Required)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Autodesk** for the Revit API
 - **Nice3point** for the excellent Revit API packages
 - **Syncfusion** for the WPF UI controls
 
-## 📞 Support
+## Support
 
 - **Documentation**: https://russgreen.github.io/Transmittal/
 - **Issues**: [GitHub Issues](https://github.com/russgreen/Transmittal/issues)
