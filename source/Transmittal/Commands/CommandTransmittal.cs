@@ -43,7 +43,7 @@ public class CommandTransmittal : ExternalCommand
             var taskDialogResult = td.Show();
             if (taskDialogResult == TaskDialogResult.CommandLink1)
             {
-                App.CachedUiApp.ActiveUIDocument.Document.Save();
+                App.RevitDocument.Save();
             }
             else if (taskDialogResult == TaskDialogResult.CommandLink2)
             {
