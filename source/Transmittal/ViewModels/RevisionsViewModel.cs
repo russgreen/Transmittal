@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Nice3point.Revit.Extensions;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Transmittal.Library.Services;
@@ -39,25 +40,6 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         LoadRevisions();
     }
 
-    private void LoadRevisions()
-    {
-        Revisions.Clear();
-        
-        var ids = Revision.GetAllRevisionIds(App.RevitDocument);
-        int n = ids.Count;
-        var revision_data = new List<RevisionDataModel>(n);
-        foreach (ElementId id in ids)
-        {
-            Revision r = (Revision)App.RevitDocument.GetElement(id);
-            Revisions.Add(new RevisionDataModel(r));
-        }
-    }
-
-    private void Revisions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        //throw new NotImplementedException();
-    }
-
     public void RevisionComplete(RevisionDataModel model)
     {
         //save the new revision into the model
@@ -92,6 +74,49 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         LoadRevisions();
 
         SelectedRevision = Revisions.LastOrDefault();
+    }
+
+    public bool CanEditRevisions()
+    {
+        if (!App.RevitDocument.IsWorkshared)
+        {
+            return true;
+        }
+
+        var revisionSettings = RevisionSettings.GetRevisionSettings(App.RevitDocument);
+        
+        var tooltipInfo = WorksharingUtils.GetWorksharingTooltipInfo(App.RevitDocument, revisionSettings.Id);
+        if(!string.IsNullOrEmpty(tooltipInfo.Owner) )
+        {
+            if (tooltipInfo.Owner == App.CachedUiApp.Application.Username)
+            {
+                return true;
+            }
+
+            _messageBoxService.ShowOk("Cannot create revisions", $"{tooltipInfo.Owner} is the current owner of the revisions settings for this model.");
+            return false;
+        }
+             
+        return true;
+    }
+
+    private void LoadRevisions()
+    {
+        Revisions.Clear();
+        
+        var ids = Revision.GetAllRevisionIds(App.RevitDocument);
+        int n = ids.Count;
+        var revision_data = new List<RevisionDataModel>(n);
+        foreach (ElementId id in ids)
+        {
+            Revision r = (Revision)App.RevitDocument.GetElement(id);
+            Revisions.Add(new RevisionDataModel(r));
+        }
+    }
+
+    private void Revisions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        //throw new NotImplementedException();
     }
 
     [RelayCommand]
