@@ -1,4 +1,4 @@
-﻿using Autodesk.Revit.UI;
+﻿using Ookii.Dialogs.Wpf;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Services;
@@ -6,9 +6,18 @@ internal class MessageBoxService : IMessageBoxService
 {
     public bool ShowCancel(string title, string message)
     {
-        var result = TaskDialog.Show(title, message, TaskDialogCommonButtons.Cancel);
+        var cancelButton = new TaskDialogButton(ButtonType.Cancel);
 
-        if (result == TaskDialogResult.Cancel)
+        var taskDialog = new TaskDialog()
+        {
+            WindowTitle = title,
+            MainInstruction = message,
+            ButtonStyle = TaskDialogButtonStyle.Standard,
+            Buttons = { cancelButton }
+        };
+
+        var button = taskDialog.ShowDialog();
+        if (button == cancelButton)
         {
             return true;
         }
@@ -18,9 +27,18 @@ internal class MessageBoxService : IMessageBoxService
 
     public bool ShowOk(string title, string message)
     {
-        var result = TaskDialog.Show(title, message, TaskDialogCommonButtons.Ok);
+        var okButton = new TaskDialogButton(ButtonType.Ok);
 
-        if (result == TaskDialogResult.Ok)
+        var taskDialog = new TaskDialog()
+        {
+            WindowTitle = title,
+            MainInstruction = message,
+            ButtonStyle = TaskDialogButtonStyle.Standard,
+            Buttons = { okButton }
+        };
+
+        var button = taskDialog.ShowDialog();
+        if (button == okButton)
         {
             return true;
         }
@@ -30,9 +48,19 @@ internal class MessageBoxService : IMessageBoxService
 
     public bool ShowOkCancel(string title, string message)
     {
-        var result = TaskDialog.Show(title, message, TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel);
+        var okButton = new TaskDialogButton(ButtonType.Ok);
+        var cancelButton = new TaskDialogButton(ButtonType.Cancel);
 
-        if (result == TaskDialogResult.Ok)
+        var taskDialog = new TaskDialog()
+        {
+            WindowTitle = title,
+            MainInstruction = message,
+            ButtonStyle = TaskDialogButtonStyle.Standard,
+            Buttons = { okButton, cancelButton }
+        };
+
+        var button = taskDialog.ShowDialog();
+        if (button == okButton)
         {
             return true;
         }
@@ -42,9 +70,19 @@ internal class MessageBoxService : IMessageBoxService
 
     public bool ShowYesNo(string title, string message)
     {
-        var result = TaskDialog.Show(title, message, TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No);
+        var yesButton = new TaskDialogButton(ButtonType.Yes);
+        var noButton = new TaskDialogButton(ButtonType.No);
 
-        if (result == TaskDialogResult.Yes)
+        var taskDialog = new TaskDialog()
+        {
+            WindowTitle = title,
+            MainInstruction = message,
+            ButtonStyle = TaskDialogButtonStyle.Standard,
+            Buttons = { yesButton, noButton }
+        };
+
+        var button = taskDialog.ShowDialog();
+        if (button == yesButton)
         {
             return true;
         }
@@ -52,3 +90,4 @@ internal class MessageBoxService : IMessageBoxService
         return false;
     }
 }
+
