@@ -52,6 +52,12 @@ public partial class RevisionsView : Window
 
     private void ButtonAddRevision_Click(object sender, RoutedEventArgs e)
     {
+        if(_viewModel.CanEditRevisions() == false)
+        {
+            return;
+        }
+
+
         Views.NewRevisionView dialog = new Views.NewRevisionView(_viewModel);
         dialog.Owner = this;
         dialog.ShowDialog();
