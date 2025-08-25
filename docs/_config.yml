@@ -2,6 +2,8 @@ title: Transmittal
   
 theme: minima
 
+google_analytics: G-ZY3JENQC9R 
+
 header_pages:
 - transmittal-revit.md
 - transmittal.md
