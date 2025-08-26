@@ -1,8 +1,14 @@
 title: Transmittal
-  
+Description: "Drawing issue management solution for Autodesk Revit with transmittal tracking and multi-format export capabilities"
+url: "https://russgreen.github.io"
+baseurl: "/Transmittal"
+
 theme: minima
 
 google_analytics: G-ZY3JENQC9R 
+
+plugins:
+  - jekyll-seo-tag
 
 header_pages:
 - transmittal-revit.md

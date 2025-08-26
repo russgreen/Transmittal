@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Archive
+title: "Archive Management - Transmittal Documentation"  
+description: "View, edit, and report on document transmittals in the archive screen with merge capabilities and sample reports"
 permalink: /archive/
 ---
 The archive screen is where all document transmittals that have been saved to the database can be viewed, edited, and reported.

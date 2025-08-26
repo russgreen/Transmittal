@@ -1,7 +1,8 @@
 ---
 layout: page
-title: Transmittal Addin
-permalink: /transmittal/
+title: "Transmittal Revit Add-in"
+description: "Transmittal Revit add-in for managing drawiing revisions and multi-format export"
+permalink: /revit-addin/
 ---
 Transmittal for Autodesk® Revit® provides a wizard style UI to export drawing sheets to PDF, DWG or DWF while optionally recording the transmittal in database for the purpose of reporting.
 ![image](https://user-images.githubusercontent.com/1886088/178137922-959b268e-ce69-4328-89b9-a65a4c03e2f7.png)

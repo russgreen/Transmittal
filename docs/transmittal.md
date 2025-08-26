@@ -1,7 +1,8 @@
 ---
 layout: page
-title: Transmittal
-permalink: /standalonetransmittal/
+title: "Standalone Application"
+description: "Desktop application for document transmittal management outside of Revit"
+permalink: /standalone/
 ---
 Double click on .tdb transmittal databases to open the transmittal desktop menu
 <img src="https://github.com/russgreen/Transmittal/assets/1886088/15125ada-2530-4fbf-9c48-6c10a59ec078" width="500" />
