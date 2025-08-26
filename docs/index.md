@@ -3,8 +3,6 @@ layout: home
 title: "Transmittal - Drawing Issue Management for Autodesk Revit"
 description: "Comprehensive drawing issue management solution for Autodesk Revit with wizard interface for setting revisions, managing drawing sheets, and publishing to PDF, DWF, DWG formats."
 ---
-# Transmittal - Drawing Issue Management for Autodesk Revit
-
 Transmittal adds a wizard interface to Autodesk® Revit® to assist with setting revisions and the status of drawings sheets and in publishing selected sheets to PDF, DWF, DWG formats.  Transmittal can also record the transmittal history for a project in a SQLite database and produce transmittal reports and historic document issue sheets.
 
 ## Key Features

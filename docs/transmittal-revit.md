@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Transmittal Revit Add-in"
+title: "Revit Add-in"
 description: "Transmittal Revit add-in for managing drawiing revisions and multi-format export"
 permalink: /revit-addin/
 ---

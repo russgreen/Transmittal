@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Settings Configuration - Transmittal Documentation"
+title: "Settings"
 description: "Configure Transmittal settings for file naming, ISO19650 compliance, database management, and custom parameters in Revit projects"
 permalink: /settings/
 ---

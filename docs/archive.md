@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Archive Management - Transmittal Documentation"  
+title: "Transmittal Archive"  
 description: "View, edit, and report on document transmittals in the archive screen with merge capabilities and sample reports"
 permalink: /archive/
 ---
