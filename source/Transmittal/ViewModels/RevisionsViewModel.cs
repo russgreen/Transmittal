@@ -85,16 +85,16 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
 
         var revisionSettings = RevisionSettings.GetRevisionSettings(App.RevitDocument);
         
-        var tooltipInfo = WorksharingUtils.GetWorksharingTooltipInfo(App.RevitDocument, revisionSettings.Id);
-        if(!string.IsNullOrEmpty(tooltipInfo.Owner) )
-        {
-            if (tooltipInfo.Owner == App.CachedUiApp.Application.Username)
-            {
-                return true;
-            }
+        var status = WorksharingUtils.GetCheckoutStatus(App.RevitDocument, revisionSettings.Id);
 
-            _messageBoxService.ShowOk("Cannot create revisions", $"{tooltipInfo.Owner} is the current owner of the revisions settings for this model.");
-            return false;
+        switch (status)
+        {
+            case CheckoutStatus.OwnedByOtherUser:
+                _messageBoxService.ShowOk("Cannot create revisions", "Revisions settings are checked out by another user.");
+                return false;
+
+                default:
+                break;
         }
              
         return true;
