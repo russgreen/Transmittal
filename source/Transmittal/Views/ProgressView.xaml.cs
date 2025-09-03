@@ -37,4 +37,9 @@ public partial class ProgressView : Window
             _viewModel.CancelTransmittal();
         }
     }
+
+    private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        this.DragMove();
+    }
 }
