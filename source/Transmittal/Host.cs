@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.GoogleAnalytics;
+using System.Globalization;
 using System.IO;
 using Transmittal.Library.DataAccess;
+using Transmittal.Library.Helpers;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 using Transmittal.ViewModels;
@@ -27,6 +30,9 @@ internal static class Host
 
         var userName = Environment.UserName.Replace("\\", "_").Replace("/", "_");
         var machineName = Environment.MachineName.Replace("\\", "_").Replace("/", "_");
+        var cultureInfo = Thread.CurrentThread.CurrentCulture;
+        var regionInfo = new RegionInfo(cultureInfo.LCID);
+        var clientId = ClientIdProvider.GetOrCreateClientId();
 
         var loggerConfigTransmittal = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -43,7 +49,23 @@ internal static class Host
                 .WriteTo.File(new JsonFormatter(), logPath,
                     restrictedToMinimumLevel: LogEventLevel.Warning,
                     rollingInterval: RollingInterval.Day,
-                    retainedFileCountLimit: 7));
+                    retainedFileCountLimit: 7))
+
+            //write to google analytics
+            .WriteTo.GoogleAnalytics(opts =>
+             {
+                 opts.MeasurementId = "##MEASUREMENTID##";
+                 opts.ApiSecret = "##APISECRET##";
+                 opts.ClientId = clientId;
+
+                 opts.FlushPeriod = TimeSpan.FromSeconds(1);
+                 opts.BatchSizeLimit = 1;
+                 opts.MaxEventsPerRequest = 1;
+                 opts.IncludePredicate = e => e.Properties.ContainsKey("UsageTracking");
+
+                 opts.GlobalParams["app_version"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+                 opts.GlobalParams["app_country"] = regionInfo.EnglishName;
+             });
 
         if (analyticsSettings.EnableAnalytics)
         {
