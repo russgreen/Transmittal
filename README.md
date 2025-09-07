@@ -142,7 +142,6 @@ The solution uses [NUKE](https://nuke.build/) for automated builds:
 1. Download the latest release from [GitHub Releases](https://github.com/russgreen/Transmittal/releases)
 2. Run the MSI installer
 3. Restart Revit to load the add-in
-4. (Optional) Install the Analytics Service for enhanced telemetry
 
 ## Documentation
 
