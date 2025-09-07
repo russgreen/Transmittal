@@ -148,6 +148,8 @@
     <ROW Component="Serilog.Sinks.Async.dll" ComponentId="{5861BE45-AB39-4258-A779-2E860403E6D7}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Async.dll"/>
     <ROW Component="Serilog.Sinks.Debug.dll" ComponentId="{5E41B977-77B8-4A2A-ACCA-9AE188D1A3D6}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll"/>
     <ROW Component="Serilog.Sinks.File.dll" ComponentId="{A75A8398-9AF2-42FE-83B3-D78BDC416FF2}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
+    <ROW Component="Serilog.Sinks.GoogleAnalytics.dll" ComponentId="{9E5AE4D0-44AE-42D9-9FC6-A0767ECC39C8}" Directory_="APPDIR" Attributes="256" KeyPath="Serilog.Sinks.GoogleAnalytics.dll"/>
+    <ROW Component="Serilog.Sinks.PeriodicBatching.dll" ComponentId="{FBD4AAE0-ABA1-47C8-A491-DC619494B421}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.PeriodicBatching.dll"/>
     <ROW Component="Serilog.dll" ComponentId="{9F739BA8-C0FA-46CD-BA80-9CC1D324AE51}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
     <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{DD883321-052E-4B65-AAC1-53EE59066416}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
@@ -434,6 +436,8 @@
     <ROW File="Microsoft.Extensions.Configuration_1_.CommandLine.dll" Component_="Microsoft.Extensions.Configuration_1_.CommandLine.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration.dll_1" Component_="Microsoft.Extensions.Configuration.dll_1" FileName="MICROS~7.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
     <ROW File="Serilog.Sinks.Async.dll" Component_="Serilog.Sinks.Async.dll" FileName="SERILO~5.DLL|Serilog.Sinks.Async.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.Async.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.GoogleAnalytics.dll" Component_="Serilog.Sinks.GoogleAnalytics.dll" FileName="SERILO~6.DLL|Serilog.Sinks.GoogleAnalytics.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.GoogleAnalytics.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.PeriodicBatching.dll" Component_="Serilog.Sinks.PeriodicBatching.dll" FileName="SERILO~7.DLL|Serilog.Sinks.PeriodicBatching.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.PeriodicBatching.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -709,6 +713,8 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll_1"/>
     <ROW Feature_="MainFeature" Component_="Run"/>
     <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Async.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.GoogleAnalytics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.PeriodicBatching.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
