@@ -117,6 +117,8 @@
 
 		<PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
 		
+		<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />		
+		
 		<!--Repacking-->
 		<PackageReference Include="ILRepack" Version="2.0.41">
 			<PrivateAssets>all</PrivateAssets>

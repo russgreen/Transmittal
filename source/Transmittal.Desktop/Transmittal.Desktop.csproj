@@ -84,6 +84,8 @@
 	  <PackageReference Include="Serilog.Sinks.File" Version="6.*" />
 	  <PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" />
 	  <PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
+
+	  <PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />
   </ItemGroup>
 
   <ItemGroup>

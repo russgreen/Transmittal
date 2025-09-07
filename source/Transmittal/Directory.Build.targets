@@ -32,16 +32,83 @@
 			<KeyFile>$(SolutionDir)SyncfusionKey.txt</KeyFile>
 			<DummyKey>##SyncfusionLicense##</DummyKey>
 		</PropertyGroup>
+		
 		<!-- Read the license key from the key file -->
 		<ReadLinesFromFile File="$(KeyFile)">
 			<Output TaskParameter="Lines" PropertyName="LicenseKey" />
 		</ReadLinesFromFile>
+		
 		<!-- Replace the dummy key with the actual license key -->
 		<ReplaceFileText
 		  InputFilename="$(SourceFile)"
 		  OutputFilename="$(SourceFile)"
 		  MatchExpression="$(LicenseKey)"
 		  ReplacementText="$(DummyKey)" />
+	</Target>
+
+	<!--
+    =============================================================== 
+                 Set Google secrets at at build time
+    ===============================================================
+    -->
+	<Target Name="PreBuildGoogle" BeforeTargets="PreBuildEvent">
+		<PropertyGroup>
+			<SourceFile>$(ProjectDir)Host.cs</SourceFile>
+			<MeasurementIdKeyFile>$(SolutionDir)MeasurementId.txt</MeasurementIdKeyFile>
+			<MeasurementIdFileDummyKey>##MEASUREMENTID##</MeasurementIdFileDummyKey>
+			<ApiSecretKeyFile>$(SolutionDir)ApiSecret.txt</ApiSecretKeyFile>
+			<ApiSecretDummyKey>##APISECRET##</ApiSecretDummyKey>
+		</PropertyGroup>
+
+		<ReadLinesFromFile File="$(MeasurementIdKeyFile)">
+			<Output TaskParameter="Lines" PropertyName="MeasurementIdKey" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(ApiSecretKeyFile)">
+			<Output TaskParameter="Lines" PropertyName="ApiSecretKey" />
+		</ReadLinesFromFile>
+
+		<ReplaceFileText
+		  InputFilename="$(SourceFile)"
+		  OutputFilename="$(SourceFile)"
+		  MatchExpression="$(MeasurementIdFileDummyKey)"
+		  ReplacementText="$(MeasurementIdKey)" />
+
+		<ReplaceFileText
+		  InputFilename="$(SourceFile)"
+		  OutputFilename="$(SourceFile)"
+		  MatchExpression="$(ApiSecretDummyKey)"
+		  ReplacementText="$(ApiSecretKey)" />
+	</Target>
+
+	<Target Name="PostBuildGoogle" BeforeTargets="PostBuildEvent">
+		<PropertyGroup>
+			<SourceFile>$(ProjectDir)Host.cs</SourceFile>
+			<MeasurementIdKeyFile>$(SolutionDir)MeasurementId.txt</MeasurementIdKeyFile>
+			<MeasurementIdFileDummyKey>##MEASUREMENTID##</MeasurementIdFileDummyKey>
+			<ApiSecretKeyFile>$(SolutionDir)ApiSecret.txt</ApiSecretKeyFile>
+			<ApiSecretDummyKey>##APISECRET##</ApiSecretDummyKey>
+		</PropertyGroup>
+
+		<ReadLinesFromFile File="$(MeasurementIdKeyFile)">
+			<Output TaskParameter="Lines" PropertyName="MeasurementIdKey" />
+		</ReadLinesFromFile>
+
+		<ReadLinesFromFile File="$(ApiSecretKeyFile)">
+			<Output TaskParameter="Lines" PropertyName="ApiSecretKey" />
+		</ReadLinesFromFile>
+
+		<ReplaceFileText
+		  InputFilename="$(SourceFile)"
+		  OutputFilename="$(SourceFile)"
+		  MatchExpression="$(MeasurementIdKey)"
+		  ReplacementText="$(MeasurementIdFileDummyKey)" />
+
+		<ReplaceFileText
+		  InputFilename="$(SourceFile)"
+		  OutputFilename="$(SourceFile)"
+		  MatchExpression="$(ApiSecretKey)"
+		  ReplacementText="$(ApiSecretDummyKey)" />
 	</Target>
 	
 	<!--
