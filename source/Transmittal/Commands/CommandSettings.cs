@@ -17,7 +17,6 @@ internal class CommandSettings : ExternalCommand
     public override void Execute()
     {
         using (LogContext.PushProperty("UsageTracking", true))
-        using (LogContext.PushProperty("RevitVersion", App.CtrApp.VersionNumber))
         {
             _logger.LogInformation("{command}", nameof(CommandSettings));
         }
