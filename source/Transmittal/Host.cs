@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Context;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.GoogleAnalytics;
@@ -39,6 +40,7 @@ internal static class Host
             .Enrich.WithProperty("UserDomain", userName)
             .Enrich.WithProperty("MachineName", machineName)
             .Enrich.WithProperty("ApplicationVersion", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString())
+            .Enrich.WithProperty("RevitVersion", App.CtrApp.VersionNumber)
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .WriteTo.Debug(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
@@ -65,6 +67,8 @@ internal static class Host
 
                  opts.GlobalParams["app_version"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
                  opts.GlobalParams["app_country"] = regionInfo.EnglishName;
+                 opts.GlobalParams["app_type"] = "Revit Addin";
+                 opts.GlobalParams["revit_version"] = App.CtrApp.VersionNumber;
              });
 
         if (analyticsSettings.EnableAnalytics)
