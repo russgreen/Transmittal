@@ -66,6 +66,8 @@ internal static class Host
                 opts.GlobalParams["app_version"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
                 opts.GlobalParams["app_country"] = regionInfo.EnglishName;
                 opts.GlobalParams["app_type"] = "Desktop";
+
+                opts.CountryId = regionInfo.TwoLetterISORegionName;
             });
 
         if (analyticsSettings.EnableAnalytics)
