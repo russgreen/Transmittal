@@ -69,6 +69,8 @@ internal static class Host
                  opts.GlobalParams["app_country"] = regionInfo.EnglishName;
                  opts.GlobalParams["app_type"] = "Revit Addin";
                  opts.GlobalParams["revit_version"] = App.CtrApp.VersionNumber;
+
+                 opts.CountryId = regionInfo.TwoLetterISORegionName;
              });
 
         if (analyticsSettings.EnableAnalytics)
