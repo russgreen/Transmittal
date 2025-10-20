@@ -1,20 +1,22 @@
-
 name: Delete Old Assets
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# Grant the workflow the permissions the job will need
+permissions:
+  contents: write
+
 jobs:
-  # This workflow contains a single job called "greet"
   cleanup:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Make the automatically-created token available in steps as GITHUB_TOKEN
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
-    # Runs a single command using the runners shell
-    - name: Delete Older Release Assets
-      uses: tinoji/delete-older-release-assets@v1.0.1
+      - name: Delete Older Release Assets
+        with:
+          keep_latest: 3
+        uses: tinoji/delete-older-release-assets@v1.0.1
