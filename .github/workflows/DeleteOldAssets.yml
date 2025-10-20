@@ -1,7 +1,8 @@
 name: Delete Old Assets
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 # Grant the workflow the permissions the job will need
 permissions:
