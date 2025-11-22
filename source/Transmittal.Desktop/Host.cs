@@ -49,9 +49,11 @@ internal static class Host
                 .WriteTo.File(new JsonFormatter(), logPath,
                     restrictedToMinimumLevel: LogEventLevel.Warning,
                     rollingInterval: RollingInterval.Day,
-                    retainedFileCountLimit: 7))
+                    retainedFileCountLimit: 7));
 
+#if !DEBUG
             //write to google analytics
+            loggerConfigTransmittal = loggerConfigTransmittal
             .WriteTo.GoogleAnalytics(opts =>
             {
                 opts.MeasurementId = "##MEASUREMENTID##";
@@ -69,6 +71,7 @@ internal static class Host
 
                 opts.CountryId = regionInfo.TwoLetterISORegionName;
             });
+#endif
 
         if (analyticsSettings.EnableAnalytics)
         {
