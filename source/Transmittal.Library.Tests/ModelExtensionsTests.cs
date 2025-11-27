@@ -4,8 +4,8 @@
 namespace Transmittal.Library.Tests;
 public class ModelExtensionsTests
 {
-    [Fact]
-    public void CopyPropertiesTo_ShouldCopyPropertiesFromOneObjectToAnother()
+    [Test]
+    public async Task CopyPropertiesTo_ShouldCopyPropertiesFromOneObjectToAnother()
     {
         // Arrange
         var fromObject = new { FirstName = "John", LastName = "Doe", Age = 30 };
@@ -15,9 +15,9 @@ public class ModelExtensionsTests
         fromObject.CopyPropertiesTo(toObject);
 
         // Assert
-        Assert.Equal(fromObject.FirstName, toObject.FirstName);
-        Assert.Equal(fromObject.LastName, toObject.LastName);
-        Assert.Equal(fromObject.Age, toObject.Age);
+        await Assert.That(toObject.FirstName).IsEqualTo(fromObject.FirstName);
+        await Assert.That(toObject.LastName).IsEqualTo(fromObject.LastName);
+        await Assert.That(toObject.Age).IsEqualTo(fromObject.Age);
     }
 
 

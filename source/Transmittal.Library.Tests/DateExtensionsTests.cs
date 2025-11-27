@@ -3,10 +3,10 @@
 namespace Transmittal.Library.Tests;
 public class DateExtensionsTests
 {
-    [Theory]
-    [InlineData("23.03.18", 2023, 3, 18)]
-    [InlineData("10.10.10", 2010, 10, 10)]
-    public void ToStringYYMMDDEx_ShouldReturnFormattedString(string expected, int year, int month, int day)
+    [Test]
+    [Arguments("23.03.18", 2023, 3, 18)]
+    [Arguments("10.10.10", 2010, 10, 10)]
+    public async Task ToStringYYMMDDEx_ShouldReturnFormattedString(string expected, int year, int month, int day)
     {
         // Arrange
         var date = new DateTime(year, month, day);
@@ -15,13 +15,13 @@ public class DateExtensionsTests
         var result = date.ToStringYYMMDDEx();
 
         // Assert
-        Assert.Equal(expected, result);
+        await Assert.That(result).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData("230318", 2023, 3, 18)]
-    [InlineData("101010", 2010, 10, 10)]
-    public void ToStringYYMMDD_ShouldReturnFormattedString(string expected, int year, int month, int day)
+    [Test]
+    [Arguments("230318", 2023, 3, 18)]
+    [Arguments("101010", 2010, 10, 10)]
+    public async Task ToStringYYMMDD_ShouldReturnFormattedString(string expected, int year, int month, int day)
     {
         // Arrange
         var date = new DateTime(year, month, day);
@@ -30,13 +30,13 @@ public class DateExtensionsTests
         var result = date.ToStringYYMMDD();
 
         // Assert
-        Assert.Equal(expected, result);
+        await Assert.That(result).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData("23", 2023, 3, 18)]
-    [InlineData("10", 2010, 10, 10)]
-    public void ToStringYY_ShouldReturnFormattedString(string expected, int year, int month, int day)
+    [Test]
+    [Arguments("23", 2023, 3, 18)]
+    [Arguments("10", 2010, 10, 10)]
+    public async Task ToStringYY_ShouldReturnFormattedString(string expected, int year, int month, int day)
     {
         // Arrange
         var date = new DateTime(year, month, day);
@@ -45,13 +45,13 @@ public class DateExtensionsTests
         var result = date.ToStringYY();
 
         // Assert
-        Assert.Equal(expected, result);
+        await Assert.That(result).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData("03", 2023, 3, 18)]
-    [InlineData("10", 2010, 10, 10)]
-    public void ToStringMM_ShouldReturnFormattedString(string expected, int year, int month, int day)
+    [Test]
+    [Arguments("03", 2023, 3, 18)]
+    [Arguments("10", 2010, 10, 10)]
+    public async Task ToStringMM_ShouldReturnFormattedString(string expected, int year, int month, int day)
     {
         // Arrange
         var date = new DateTime(year, month, day);
@@ -60,13 +60,13 @@ public class DateExtensionsTests
         var result = date.ToStringMM();
 
         // Assert
-        Assert.Equal(expected, result);
+        await Assert.That(result).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData("18", 2023, 3, 18)]
-    [InlineData("01", 2010, 10, 1)]
-    public void ToStringDD_ShouldReturnFormattedString(string expected, int year, int month, int day)
+    [Test]
+    [Arguments("18", 2023, 3, 18)]
+    [Arguments("01", 2010, 10, 1)]
+    public async Task ToStringDD_ShouldReturnFormattedString(string expected, int year, int month, int day)
     {
         // Arrange
         var date = new DateTime(year, month, day);
@@ -75,7 +75,7 @@ public class DateExtensionsTests
         var result = date.ToStringDD();
 
         // Assert
-        Assert.Equal(expected, result);
+        await Assert.That(result).IsEqualTo(expected);
     }
 
 }
