@@ -68,7 +68,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
     <PackageReference Include="System.IO.Compression" Version="4.3.0" />	 
 	  
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
@@ -77,12 +77,12 @@
     <PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
 
 	  <!--IOC-->
-	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 
 	  <!--Logging-->
 	  <PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
-	  <PackageReference Include="Serilog.Sinks.File" Version="6.*" />
-	  <PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" />
+	  <PackageReference Include="Serilog.Sinks.File" Version="7.*" />
+	  <PackageReference Include="Serilog.Extensions.Hosting" Version="9.*" />
 	  <PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
 
 	  <PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />
