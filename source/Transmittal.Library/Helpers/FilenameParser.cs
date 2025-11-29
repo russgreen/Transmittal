@@ -89,7 +89,9 @@ public static class FilenameParser
             {
                 char c = exportRule[tagEnd];
                 if (c == '-' || c == ' ' || c == '_')
+                {
                     delimiter = c;
+                }
             }
 
             if (i == tags.Count - 1)
@@ -109,7 +111,9 @@ public static class FilenameParser
                     {
                         char c2 = exportRule[nextTagEnd];
                         if (c2 == '-' || c2 == ' ' || c2 == '_')
+                        {
                             nextTagFollowingDelimiter = c2;
+                        }
                     }
                 }
 

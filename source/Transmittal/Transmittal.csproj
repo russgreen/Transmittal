@@ -106,7 +106,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 				  
 		<!--Logging-->
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="9.*" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="10.*" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*"  />
 		<PackageReference Include="Serilog.Sinks.File" Version="7.*" />
 
