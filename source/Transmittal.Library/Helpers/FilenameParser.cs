@@ -67,25 +67,6 @@ public static class FilenameParser
         return document;
     }
 
-    //private static string GetPatternFromExportRule(string exportRule)
-    //{
-    //    // Escape any regex special characters in the export rule
-    //    var escapedExportRule = Regex.Escape(exportRule);
-
-    //    // Replace tag placeholders with regex capture groups
-    //    var tagRegex = new Regex(@"(<\w+>)");
-    //    var matchEvaluator = new MatchEvaluator(match => $"(?<{match.Groups[1].Value.Trim('<', '>')}>.*)");
-    //    var pattern = tagRegex.Replace(escapedExportRule, matchEvaluator);
-
-    //    // Add optional whitespace and/or hyphen characters between tags
-    //    pattern = Regex.Replace(pattern, @"(</\w+>)\s*([^-<])", "$1[- ]*$2");
-
-    //    // Add start and end anchors to the pattern
-    //    pattern = $"^{pattern}$";
-
-    //    return pattern;
-    //}
-
     private static string GetPatternFromExportRule(string exportRule)
     {
         // Find all tags in order
@@ -118,10 +99,23 @@ public static class FilenameParser
             }
             else if (tag == "SheetNo" && delimiter.HasValue)
             {
-                // For SheetNo, match anything (including delimiters) up to the delimiter + next tag's value
-                // The next tag's value is not known, but we can look for the delimiter followed by a group that matches the next tag's pattern
-                // We'll use a lookahead for delimiter followed by a non-greedy match for the next tag
-                replacement = $@"(?<{tag}>.+?)(?={Regex.Escape(delimiter.ToString())}(?=[^" + Regex.Escape(delimiter.ToString()) + @"]+))";
+                // For SheetNo, allow internal delimiters within the value, but stop at the delimiter
+                // that precedes the next tag followed by its own delimiter (e.g., -<Rev>_)
+                char? nextTagFollowingDelimiter = null;
+                if (i + 1 < tags.Count)
+                {
+                    int nextTagEnd = tagMatches[i + 1].Index + tagMatches[i + 1].Length;
+                    if (nextTagEnd < exportRule.Length)
+                    {
+                        char c2 = exportRule[nextTagEnd];
+                        if (c2 == '-' || c2 == ' ' || c2 == '_')
+                            nextTagFollowingDelimiter = c2;
+                    }
+                }
+
+                replacement = nextTagFollowingDelimiter.HasValue
+                    ? $@"(?<{tag}>.+?)(?={Regex.Escape(delimiter.ToString())}(?=[^{Regex.Escape(delimiter.ToString())}]+{Regex.Escape(nextTagFollowingDelimiter.ToString())}))"
+                    : $@"(?<{tag}>[^{Regex.Escape(delimiter.ToString())}]+)";
             }
             else if (delimiter.HasValue)
             {

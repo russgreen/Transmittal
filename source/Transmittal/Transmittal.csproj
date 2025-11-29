@@ -87,9 +87,9 @@
 	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />		
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-		<PackageReference Include="System.Resources.Extensions" Version="8.*" />
-		<PackageReference Include="System.Text.Json" Version="8.*" />		
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
+		<PackageReference Include="System.Resources.Extensions" Version="10.*" />
+		<PackageReference Include="System.Text.Json" Version="10.*" />		
 		
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		
@@ -103,17 +103,12 @@
 		<PackageReference Include="Nice3point.Revit.Toolkit" Version="$(RevitVersion).*" />
 
 		<!--IOC-->
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net48'" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 				  
 		<!--Logging-->
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net48'" />
-		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net48'" />
-		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net48'" />
-		
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
-		<PackageReference Include="Serilog.Sinks.File" Version="6.*" Condition="'$(TargetFramework)' == 'net8.0-windows'" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="9.*" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*"  />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.*" />
 
 		<PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
 		
