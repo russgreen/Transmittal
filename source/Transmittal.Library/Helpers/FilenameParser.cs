@@ -113,14 +113,9 @@ public static class FilenameParser
                     }
                 }
 
-                if (nextTagFollowingDelimiter.HasValue)
-                {
-                    replacement = $@"(?<{tag}>.+?)(?={Regex.Escape(delimiter.ToString())}(?=[^{Regex.Escape(delimiter.ToString())}]+{Regex.Escape(nextTagFollowingDelimiter.ToString())}))";
-                }
-                else
-                {
-                    replacement = $@"(?<{tag}>[^{Regex.Escape(delimiter.ToString())}]+)";
-                }
+                replacement = nextTagFollowingDelimiter.HasValue
+                    ? $@"(?<{tag}>.+?)(?={Regex.Escape(delimiter.ToString())}(?=[^{Regex.Escape(delimiter.ToString())}]+{Regex.Escape(nextTagFollowingDelimiter.ToString())}))"
+                    : $@"(?<{tag}>[^{Regex.Escape(delimiter.ToString())}]+)";
             }
             else if (delimiter.HasValue)
             {
