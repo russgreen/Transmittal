@@ -10,7 +10,7 @@ public static class ClientIdProvider
     private const string _defaultFileName = "client_id.txt"; 
     private const string _deterministicSalt = "transmittal"; // product-specific salt
 
-    public static string GetOrCreateClientId(string? dirName = _defaultDirName, string? fileName = _defaultFileName)
+    public static string GetOrCreateClientId(string dirName = _defaultDirName, string fileName = _defaultFileName)
     {
         try
         {
@@ -23,7 +23,9 @@ public static class ClientIdProvider
             {
                 var existing = File.ReadAllText(path).Trim();
                 if (!string.IsNullOrWhiteSpace(existing))
+                {
                     return existing;
+                }
             }
 
             var newId = Guid.NewGuid().ToString("N"); // 32 hex chars
@@ -45,7 +47,7 @@ public static class ClientIdProvider
         return ToHexUpper(hash); // uppercase hex, GA accepts arbitrary strings
     }
 
-    private static string? GetWindowsMachineGuid()
+    private static string GetWindowsMachineGuid()
     {
         try
         {
