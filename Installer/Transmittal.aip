@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.1" version="23.0.1" Modules="simple" RootPath="." Language="en" Id="{52EA00FE-6324-4094-929A-7D0C5D54BB42}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.1" version="23.2" Modules="simple" RootPath="." Language="en" Id="{52EA00FE-6324-4094-929A-7D0C5D54BB42}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_APP_FILE" Value="[#Transmittal.Analytics.TrayApp.exe]"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
@@ -14,10 +14,10 @@
     <ROW Property="AiSkipExitDlg" Value="1"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{78359FF0-A841-4AC9-9BAF-2892A431E8BA} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{2DC1F758-37F1-44A5-8180-6CCAE603E7A7} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="3.5.2" Options="32"/>
+    <ROW Property="ProductVersion" Value="3.5.3" Options="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
@@ -75,6 +75,7 @@
     <ROW Component="Dapper.dll" ComponentId="{3C785166-CE81-4DA3-B8CD-E82E4AA925BC}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
     <ROW Component="Microsoft" ComponentId="{90D2D416-9ADB-4757-A4EF-3230BF67C888}" Directory_="APPDIR" Attributes="260" KeyPath="Microsoft"/>
+    <ROW Component="Microsoft.Bcl.Cryptography.dll" ComponentId="{517113D6-E093-434F-838A-A626BDA18F01}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.Cryptography.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.VisualBasic.dll" ComponentId="{E97648E2-B936-4F9A-9044-3B40556A4634}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.VisualBasic.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{09A090EF-4261-458F-8C10-346707A073CA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
     <ROW Component="Microsoft.Data.Sqlite.dll" ComponentId="{BDCD58D7-A7CA-412F-AA0B-86BE79BF5FF5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll"/>
@@ -199,8 +200,12 @@
     <ROW Component="Syncfusion.XlsIO.Base.dll_3" ComponentId="{80570F77-3FDD-4193-A4D8-735343888922}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll_3"/>
     <ROW Component="Syncfusion.XlsIO.Base.dll_4" ComponentId="{DC3A208E-7C69-4A10-8A5A-5E2E0D4CBAAF}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll_4"/>
     <ROW Component="Syncfusion.XlsIO.Base.dll_5" ComponentId="{6F1FF39D-356D-4B3C-9DF7-8225342740CE}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="Syncfusion.XlsIO.Base.dll_5"/>
+    <ROW Component="System.Diagnostics.DiagnosticSource.dll" ComponentId="{872CD6CA-9C54-4979-8761-2977623ED0EB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.DiagnosticSource.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.Messages.dll" ComponentId="{48140770-31B2-485B-A5A1-1D5B09066FDB}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.Messages.dll"/>
     <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{B97395F2-893B-4B6F-9ADE-DAFEB65B77E5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Formats.Asn1.dll" ComponentId="{94C59E6B-914D-4410-B365-E6715FD70A86}" Directory_="APPDIR" Attributes="0" KeyPath="System.Formats.Asn1.dll"/>
     <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
+    <ROW Component="System.IO.Pipelines.dll" ComponentId="{19F30D04-7183-4D06-9525-884BD5FA927D}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
     <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
     <ROW Component="System.Security.Cryptography.Xml.dll" ComponentId="{5F719FC0-DF06-4837-9067-EBA3DF5EFACF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Xml.dll"/>
     <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{00DA1B9C-2EAB-41CD-BEDF-05C9B5BD5F27}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
@@ -208,6 +213,8 @@
     <ROW Component="System.ServiceModel.Primitives.dll" ComponentId="{C7CB46A3-638A-4FF5-A246-40860C711945}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Primitives.dll"/>
     <ROW Component="System.ServiceModel.Security.dll" ComponentId="{D1F414CB-C244-42D9-A6F1-C227F7D618F0}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Security.dll"/>
     <ROW Component="System.ServiceModel.dll" ComponentId="{33F59649-E4BF-4B0F-9350-A5C879E38CF7}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{517B3B6F-30E4-4BFE-9A81-F60634352615}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{4576241F-8220-4DF6-93CC-26D15F7657F7}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
     <ROW Component="TemplateDatabase.tdb" ComponentId="{67545C2E-56FF-4D86-8626-0B6EC14D63BA}" Directory_="Data_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_1" ComponentId="{4A67569F-42FE-4FB7-85B8-EA1CAE4D4542}" Directory_="Data_1_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_1" Type="0"/>
     <ROW Component="TemplateDatabase.tdb_2" ComponentId="{5E23C14F-7637-4C78-9A5D-1189397C7397}" Directory_="Data_2_Dir" Attributes="0" KeyPath="TemplateDatabase.tdb_2" Type="0"/>
@@ -438,6 +445,13 @@
     <ROW File="Serilog.Sinks.Async.dll" Component_="Serilog.Sinks.Async.dll" FileName="SERILO~5.DLL|Serilog.Sinks.Async.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.Async.dll" SelfReg="false"/>
     <ROW File="Serilog.Sinks.GoogleAnalytics.dll" Component_="Serilog.Sinks.GoogleAnalytics.dll" FileName="SERILO~6.DLL|Serilog.Sinks.GoogleAnalytics.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.GoogleAnalytics.dll" SelfReg="false"/>
     <ROW File="Serilog.Sinks.PeriodicBatching.dll" Component_="Serilog.Sinks.PeriodicBatching.dll" FileName="SERILO~7.DLL|Serilog.Sinks.PeriodicBatching.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Serilog.Sinks.PeriodicBatching.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTE~10.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTE~11.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Bcl.Cryptography.dll" Component_="Microsoft.Bcl.Cryptography.dll" FileName="MICRO~37.DLL|Microsoft.Bcl.Cryptography.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Bcl.Cryptography.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.DiagnosticSource.dll" Component_="System.Diagnostics.DiagnosticSource.dll" FileName="SYSTE~12.DLL|System.Diagnostics.DiagnosticSource.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Diagnostics.DiagnosticSource.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.Messages.dll" Component_="System.Diagnostics.EventLog.Messages.dll" FileName="SYSTE~13.DLL|System.Diagnostics.EventLog.Messages.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Diagnostics.EventLog.Messages.dll" SelfReg="false"/>
+    <ROW File="System.Formats.Asn1.dll" Component_="System.Formats.Asn1.dll" FileName="SYSTE~14.DLL|System.Formats.Asn1.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Formats.Asn1.dll" SelfReg="false"/>
+    <ROW File="System.IO.Pipelines.dll" Component_="System.IO.Pipelines.dll" FileName="SYSTE~15.DLL|System.IO.Pipelines.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.IO.Pipelines.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -715,6 +729,13 @@
     <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Async.dll"/>
     <ROW Feature_="MainFeature" Component_="Serilog.Sinks.GoogleAnalytics.dll"/>
     <ROW Feature_="MainFeature" Component_="Serilog.Sinks.PeriodicBatching.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.Cryptography.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.DiagnosticSource.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Formats.Asn1.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.IO.Pipelines.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
