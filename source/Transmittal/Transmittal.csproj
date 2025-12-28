@@ -93,9 +93,9 @@
 		
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		
-		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="29.1.35" />		
-		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.1.35" />
-		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
+		<PackageReference Include="Syncfusion.XlsIO.Wpf" Version="29.*" />		
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.*" />
+		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.*" />
 		
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />	

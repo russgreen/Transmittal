@@ -71,8 +71,8 @@
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
 		<PackageReference Include="System.IO.Compression" Version="4.3.0" />
 
-		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.1.35" />
-		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.*" />
+		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.*" />
 
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
