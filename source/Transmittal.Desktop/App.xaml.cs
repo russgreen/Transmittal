@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;
 using Transmittal.Desktop.Views;
@@ -25,6 +24,9 @@ public partial class App : Application
 
         var settings = Host.GetService<ISettingsService>();
 
+        // enable visual styles for Windows Forms components used in WPF
+        System.Windows.Forms.Application.EnableVisualStyles();
+
         // If no command line arguments were provided, don't process them if (e.Args.Length == 0) return;  
         if (e.Args.Length > 0)
         {
@@ -43,18 +45,19 @@ public partial class App : Application
                     }
                     else
                     {
-                        TaskDialogButton okButton = new TaskDialogButton(ButtonType.Ok);
-
-                        TaskDialog dialog = new TaskDialog()
+                        System.Windows.Forms.TaskDialogPage page = new System.Windows.Forms.TaskDialogPage
                         {
-                            WindowTitle = "Transmittal Database",
-                            MainInstruction = @$"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
-                            MainIcon = TaskDialogIcon.Error,
-                            ButtonStyle = TaskDialogButtonStyle.Standard,
-                            Buttons = { okButton }
+                            Caption = "Transmittal Database",
+                            Heading = $"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
+                            Icon = System.Windows.Forms.TaskDialogIcon.Error,
+                            Buttons =
+                            {
+                                System.Windows.Forms.TaskDialogButton.OK
+                            }
                         };
 
-                        dialog.ShowDialog();
+                        // Show the TaskDialog. Since this is a WPF app, no owner window is required here.
+                        System.Windows.Forms.TaskDialog.ShowDialog(page);
                         Current.Shutdown();
                     }
                 }

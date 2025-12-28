@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
 using Transmittal.Library.Models;
@@ -27,19 +26,15 @@ public partial class ArchiveView : Window
 
     private void Button_MergeTransmittals_Click(object sender, RoutedEventArgs e)
     {
-        //Command="{Binding MergeTransmittalsCommand}"
-        TaskDialogButton mergeButton = new("Merge the selected transmittal records into a single transmittal record. This action cannot be undone.");
-        TaskDialogButton noMergeButton = new("Do not merge the selected transmittal records.");
-        TaskDialogButton cancelButton = new(ButtonType.Cancel);
+        var mergeButton = new System.Windows.Forms.TaskDialogCommandLinkButton("Merge the selected transmittal records into a single transmittal record. This action cannot be undone.");
 
-        TaskDialog taskDialog = new()
+        var page = new System.Windows.Forms.TaskDialogPage
         {
-            WindowTitle = "Merge Transmittals",
-            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
-            Buttons = { mergeButton, noMergeButton, cancelButton }
+            Caption = "Merge Transmittals",
+            Buttons = { mergeButton, System.Windows.Forms.TaskDialogButton.Cancel }
         };
 
-        TaskDialogButton button = taskDialog.ShowDialog(this);
+        var button = System.Windows.Forms.TaskDialog.ShowDialog(page);
         if (button == mergeButton)
         {
             _viewModel.MergeTransmittalsCommand.Execute(null);
@@ -91,17 +86,15 @@ public partial class ArchiveView : Window
 
     private void sfDataGridTransmittalItems_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Delete the selected transmittal item(s). This action cannot be undone.");
-        TaskDialogButton cancelButton = new(ButtonType.Cancel);
+        var deleteButton = new System.Windows.Forms.TaskDialogCommandLinkButton($"Delete the selected transmittal item(s). This action cannot be undone.");
 
-        TaskDialog taskDialog = new()
+        var page = new System.Windows.Forms.TaskDialogPage
         {
-            WindowTitle = "Delete item(s) from transmittal",
-            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
-            Buttons = { deleteButton, cancelButton }
+            Caption = "Delete item(s) from transmittal",
+            Buttons = { deleteButton, System.Windows.Forms.TaskDialogButton.Cancel }
         };
 
-        TaskDialogButton button = taskDialog.ShowDialog(this);
+        var button = System.Windows.Forms.TaskDialog.ShowDialog(page);
         if (button == deleteButton)
         {
             if(_viewModel.SelectedTransmittalItems.Count > 0)
@@ -116,17 +109,15 @@ public partial class ArchiveView : Window
 
     private void sfDataGridTransmittalDistribution_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Remove the selected contact(s) from the transmittal. This action cannot be undone.");
-        TaskDialogButton cancelButton = new(ButtonType.Cancel);
+        var deleteButton = new System.Windows.Forms.TaskDialogCommandLinkButton($"Remove the selected contact(s) from the transmittal. This action cannot be undone.");
 
-        TaskDialog taskDialog = new()
+        var page = new System.Windows.Forms.TaskDialogPage
         {
-            WindowTitle = "Delete contact(s) from transmittal",
-            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
-            Buttons = { deleteButton, cancelButton }
+            Caption = "Delete contact(s) from transmittal",
+            Buttons = { deleteButton, System.Windows.Forms.TaskDialogButton.Cancel }
         };
 
-        TaskDialogButton button = taskDialog.ShowDialog(this);
+        var button = System.Windows.Forms.TaskDialog.ShowDialog(page);
         if (button == deleteButton)
         {
             if(_viewModel.SelectedTransmittalDistributions.Count > 0)

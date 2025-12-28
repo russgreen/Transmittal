@@ -1,133 +1,131 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	  <TargetFramework>net8.0-windows</TargetFramework>
-	  <!--<TargetFramework>net48</TargetFramework>-->
-      <OutputType>WinExe</OutputType>
-	  <UseWPF>true</UseWPF>
-	  <LangVersion>latest</LangVersion>
-	  <PlatformTarget>x64</PlatformTarget>
-	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <NeutralLanguage>en</NeutralLanguage>
-	  <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-	  <ApplicationIcon>Transmittal.ico</ApplicationIcon>
-	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<!--<TargetFramework>net48</TargetFramework>-->
+		<OutputType>WinExe</OutputType>
+		<UseWPF>true</UseWPF>
+		<LangVersion>latest</LangVersion>
+		<PlatformTarget>x64</PlatformTarget>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<NeutralLanguage>en</NeutralLanguage>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<ApplicationIcon>Transmittal.ico</ApplicationIcon>
+		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\Add.png" />
-    <None Remove="Resources\Archive_Button.png" />
-    <None Remove="Resources\ContactDetails.png" />
-    <None Remove="Resources\DataEdit.png" />
-    <None Remove="Resources\DataMerge.png" />
-    <None Remove="Resources\Delete.png" />
-    <None Remove="Resources\Directory_Button.png" />
-    <None Remove="Resources\Duplicate.png" />
-    <None Remove="Resources\GreenCheck.png" />
-    <None Remove="Resources\Hyperlink.png" />
-    <None Remove="Resources\Information.png" />
-    <None Remove="Resources\Menu.png" />
-    <None Remove="Resources\New.png" />
-    <None Remove="Resources\Open.png" />
-    <None Remove="Resources\Package.png" />
-    <None Remove="Resources\Reload.png" />
-    <None Remove="Resources\Report.png" />
-    <None Remove="Resources\Settings.png" />
-    <None Remove="Resources\Transmittal_Button.png" />
-    <None Remove="Transmittal.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\Add.png" />
+		<None Remove="Resources\Archive_Button.png" />
+		<None Remove="Resources\ContactDetails.png" />
+		<None Remove="Resources\DataEdit.png" />
+		<None Remove="Resources\DataMerge.png" />
+		<None Remove="Resources\Delete.png" />
+		<None Remove="Resources\Directory_Button.png" />
+		<None Remove="Resources\Duplicate.png" />
+		<None Remove="Resources\GreenCheck.png" />
+		<None Remove="Resources\Hyperlink.png" />
+		<None Remove="Resources\Information.png" />
+		<None Remove="Resources\Menu.png" />
+		<None Remove="Resources\New.png" />
+		<None Remove="Resources\Open.png" />
+		<None Remove="Resources\Package.png" />
+		<None Remove="Resources\Reload.png" />
+		<None Remove="Resources\Report.png" />
+		<None Remove="Resources\Settings.png" />
+		<None Remove="Resources\Transmittal_Button.png" />
+		<None Remove="Transmittal.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Transmittal.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Transmittal.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Archive_Button.png" />
-    <Resource Include="Resources\Directory_Button.png" />
-	<Resource Include="Resources\Duplicate.png" />
-    <Resource Include="Resources\GreenCheck.png" />
-    <Resource Include="Resources\Hyperlink.png" />
-    <Resource Include="Resources\Information.png" />
-    <Resource Include="Resources\Menu.png" />
-    <Resource Include="Resources\New.png" />
-    <Resource Include="Resources\Open.png" />
-    <Resource Include="Resources\Package.png" />
-    <Resource Include="Resources\Settings.png" />
-    <Resource Include="Resources\Transmittal_Button.png" />
-    <Resource Include="Resources\Add.png" />
-    <Resource Include="Resources\ContactDetails.png" />
-    <Resource Include="Resources\DataEdit.png" />
-    <Resource Include="Resources\DataMerge.png" />
-    <Resource Include="Resources\Delete.png" />
-    <Resource Include="Resources\Reload.png" />
-	<Resource Include="Resources\Report.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Archive_Button.png" />
+		<Resource Include="Resources\Directory_Button.png" />
+		<Resource Include="Resources\Duplicate.png" />
+		<Resource Include="Resources\GreenCheck.png" />
+		<Resource Include="Resources\Hyperlink.png" />
+		<Resource Include="Resources\Information.png" />
+		<Resource Include="Resources\Menu.png" />
+		<Resource Include="Resources\New.png" />
+		<Resource Include="Resources\Open.png" />
+		<Resource Include="Resources\Package.png" />
+		<Resource Include="Resources\Settings.png" />
+		<Resource Include="Resources\Transmittal_Button.png" />
+		<Resource Include="Resources\Add.png" />
+		<Resource Include="Resources\ContactDetails.png" />
+		<Resource Include="Resources\DataEdit.png" />
+		<Resource Include="Resources\DataMerge.png" />
+		<Resource Include="Resources\Delete.png" />
+		<Resource Include="Resources\Reload.png" />
+		<Resource Include="Resources\Report.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />	 
-	  
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-	  
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.1.35" />
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="29.1.35" />
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.*" />
+		<PackageReference Include="System.IO.Compression" Version="4.3.0" />
 
-	  <!--IOC-->
-	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.*" />
+		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.*" />
 
-	  <!--Logging-->
-	  <PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
-	  <PackageReference Include="Serilog.Sinks.File" Version="7.*" />
-	  <PackageReference Include="Serilog.Extensions.Hosting" Version="10.*" />
-	  <PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
+		<!--IOC-->
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 
-	  <PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />
-  </ItemGroup>
+		<!--Logging-->
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.*" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="10.*" />
+		<PackageReference Include="Serilog.Sinks.Async" Version="2.*" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
-    <ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
-  </ItemGroup>
+		<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\ArchiveView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\DirectoryView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NewCompanyView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NewPersonView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
+		<ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Views\AppStyles.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
-    <Page Update="Views\ArchiveView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\DirectoryView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\NewCompanyView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\NewPersonView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Views\ArchiveView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\DirectoryView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\NewCompanyView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\NewPersonView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="Views\AppStyles.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+		<Page Update="Views\ArchiveView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\DirectoryView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\NewCompanyView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\NewPersonView.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
 
 </Project>

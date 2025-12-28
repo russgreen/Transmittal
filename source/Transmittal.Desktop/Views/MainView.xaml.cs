@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Ookii.Dialogs.Wpf;
 using Serilog.Context;
 using System.IO;
 using System.Runtime.InteropServices;
