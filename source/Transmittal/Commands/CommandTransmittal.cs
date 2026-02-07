@@ -25,8 +25,8 @@ public class CommandTransmittal : ExternalCommand
             _logger.LogInformation("{command}", nameof(CommandTransmittal));
         }
 
-        App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.ActiveDocument;
+        App.CachedUiApp = RevitContext.UiApplication;
+        App.RevitDocument = RevitContext.ActiveDocument;
 
         try
         {

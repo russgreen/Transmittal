@@ -7,6 +7,7 @@
     <BuildType Name="Debug 2024" />
     <BuildType Name="Debug 2025" />
     <BuildType Name="Debug 2026" />
+    <BuildType Name="Debug 2027" />
     <BuildType Name="Release" />
     <BuildType Name="Release 2021" />
     <BuildType Name="Release 2022" />
@@ -14,6 +15,7 @@
     <BuildType Name="Release 2024" />
     <BuildType Name="Release 2025" />
     <BuildType Name="Release 2026" />
+    <BuildType Name="Release 2027" />
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
@@ -47,12 +49,14 @@
     <BuildType Solution="Debug 2024|*" Project="Debug" />
     <BuildType Solution="Debug 2025|*" Project="Debug" />
     <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
     <BuildType Solution="Release 2021|*" Project="Release" />
     <BuildType Solution="Release 2022|*" Project="Release" />
     <BuildType Solution="Release 2023|*" Project="Release" />
     <BuildType Solution="Release 2024|*" Project="Release" />
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Project="false" />
   </Project>
   <Project Path="source/Transmittal.Desktop/Transmittal.Desktop.csproj">
@@ -62,24 +66,28 @@
     <BuildType Solution="Debug 2024|*" Project="Debug" />
     <BuildType Solution="Debug 2025|*" Project="Debug" />
     <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
     <BuildType Solution="Release 2021|*" Project="Release" />
     <BuildType Solution="Release 2022|*" Project="Release" />
     <BuildType Solution="Release 2023|*" Project="Release" />
     <BuildType Solution="Release 2024|*" Project="Release" />
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Solution="Debug 2021|Any CPU" Project="false" />
     <Build Solution="Debug 2022|Any CPU" Project="false" />
     <Build Solution="Debug 2023|Any CPU" Project="false" />
     <Build Solution="Debug 2024|Any CPU" Project="false" />
     <Build Solution="Debug 2025|Any CPU" Project="false" />
     <Build Solution="Debug 2026|Any CPU" Project="false" />
+    <Build Solution="Debug 2027|Any CPU" Project="false" />
     <Build Solution="Release 2021|*" Project="false" />
     <Build Solution="Release 2022|*" Project="false" />
     <Build Solution="Release 2023|*" Project="false" />
     <Build Solution="Release 2024|*" Project="false" />
     <Build Solution="Release 2025|*" Project="false" />
     <Build Solution="Release 2026|*" Project="false" />
+    <Build Solution="Release 2027|*" Project="false" />
   </Project>
   <Project Path="source/Transmittal.Library.Tests/Transmittal.Library.Tests.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug" />
@@ -88,18 +96,21 @@
     <BuildType Solution="Debug 2024|*" Project="Debug" />
     <BuildType Solution="Debug 2025|*" Project="Debug" />
     <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
     <BuildType Solution="Release 2021|*" Project="Release" />
     <BuildType Solution="Release 2022|*" Project="Release" />
     <BuildType Solution="Release 2023|*" Project="Release" />
     <BuildType Solution="Release 2024|*" Project="Release" />
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Solution="Release 2021|x64" Project="false" />
     <Build Solution="Release 2022|x64" Project="false" />
     <Build Solution="Release 2023|x64" Project="false" />
     <Build Solution="Release 2024|x64" Project="false" />
     <Build Solution="Release 2025|x64" Project="false" />
     <Build Solution="Release 2026|x64" Project="false" />
+    <Build Solution="Release 2027|x64" Project="false" />
     <Build Solution="Release|x64" Project="false" />
   </Project>
   <Project Path="source/Transmittal.Library/Transmittal.Library.csproj">
@@ -109,12 +120,14 @@
     <BuildType Solution="Debug 2024|*" Project="Debug" />
     <BuildType Solution="Debug 2025|*" Project="Debug" />
     <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
     <BuildType Solution="Release 2021|*" Project="Release" />
     <BuildType Solution="Release 2022|*" Project="Release" />
     <BuildType Solution="Release 2023|*" Project="Release" />
     <BuildType Solution="Release 2024|*" Project="Release" />
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
   </Project>
   <Project Path="source/Transmittal.Reports/Transmittal.Reports.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug" />
@@ -123,12 +136,14 @@
     <BuildType Solution="Debug 2024|*" Project="Debug" />
     <BuildType Solution="Debug 2025|*" Project="Debug" />
     <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
     <BuildType Solution="Release 2021|*" Project="Release" />
     <BuildType Solution="Release 2022|*" Project="Release" />
     <BuildType Solution="Release 2023|*" Project="Release" />
     <BuildType Solution="Release 2024|*" Project="Release" />
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
   </Project>
   <Project Path="source/Transmittal/Transmittal.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug R21" />
@@ -137,6 +152,8 @@
     <BuildType Solution="Debug 2024|*" Project="Debug R24" />
     <BuildType Solution="Debug 2025|*" Project="Debug R25" />
     <BuildType Solution="Debug 2026|*" Project="Debug R26" />
+    <BuildType Solution="Debug 2027|Any CPU" Project="Debug R27" />
+    <BuildType Solution="Debug 2027|x64" Project="Debug R26" />
     <BuildType Solution="Debug|Any CPU" Project="Debug R26" />
     <BuildType Solution="Debug|x64" Project="Debug R22" />
     <BuildType Solution="Release 2021|*" Project="Release R21" />
@@ -145,6 +162,8 @@
     <BuildType Solution="Release 2024|*" Project="Release R24" />
     <BuildType Solution="Release 2025|*" Project="Release R25" />
     <BuildType Solution="Release 2026|*" Project="Release R26" />
+    <BuildType Solution="Release 2027|Any CPU" Project="Release R27" />
+    <BuildType Solution="Release 2027|x64" Project="Release R26" />
     <BuildType Solution="Release|Any CPU" Project="Release R26" />
     <BuildType Solution="Release|x64" Project="Release R22" />
     <Build Solution="Debug|*" Project="false" />

@@ -25,8 +25,8 @@ internal class CommandTransmittalsArchive : ExternalCommand
             _logger.LogInformation("{command}", nameof(CommandTransmittalsArchive));
         }
 
-        App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.ActiveDocument;
+        App.CachedUiApp = RevitContext.UiApplication;
+        App.RevitDocument = RevitContext.ActiveDocument;
 
         _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
 
