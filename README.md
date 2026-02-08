@@ -1,7 +1,8 @@
 ﻿# Transmittal
 
 ![Revit Version](https://img.shields.io/badge/Revit%20Version-2021_--_2024-blue.svg) ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg) <br>
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2025_--_2026-blue.svg) ![.NET](https://img.shields.io/badge/.NET-8-blue.svg)
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2025_--_2026-blue.svg) ![.NET](https://img.shields.io/badge/.NET-8-blue.svg) <br>
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2027-blue.svg) ![.NET](https://img.shields.io/badge/.NET-10-blue.svg)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)
 
