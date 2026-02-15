@@ -27,6 +27,7 @@
                     <interactivity:InvokeCommandAction Command="{Binding ProcessDocumentsCommand}"  />
                 </interactivity:EventTrigger>
             </interactivity:Interaction.Triggers>
+
             <syncfusion:WizardPage x:Name="wizardPage1" 
                 Title="Documents" 
                 Description="Drag and drop files onto the grid below to record transmittals in the database." 
@@ -96,14 +97,14 @@
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="75" />
                             <syncfusion:GridComboBoxColumn MappingName="DrgPackage" HeaderText="Package" Width="150"
                                                             ColumnSizer="AutoLastColumnFill"
-                                                            ItemsSource="{Binding Packages}" >
-                            </syncfusion:GridComboBoxColumn>
+                                                            ItemsSource="{Binding Packages}" />
                             <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="50" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
                 </Grid>
             </syncfusion:WizardPage>
+
             <syncfusion:WizardPage x:Name="wizardPage2" 
                                    Title="Distribution" 
                                    Description="Select recipients of the document transmittal" 
@@ -119,8 +120,8 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -187,8 +188,19 @@
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
 
-                    <CheckBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="10" 
+                    <CheckBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="0,10,0,20" 
                               Content="Zip documents" IsChecked="{Binding ZipDocuments}" />
+
+                    <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top" >
+                        <CheckBox x:Name="SendToWeTransfer" HorizontalAlignment="Center"
+                                  IsChecked="{Binding SendToWeTransfer}" 
+                                  ToolTip="Ensure MS Edge is not running, else a temporary profile will be used."/>
+                        <TextBlock Text="PREVIEW FEATURE - Create draft WeTransfer upload in MS Edge"    
+                                   Width="150"
+                                   HorizontalAlignment="Center" 
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" VerticalAlignment="Top" />
+                    </StackPanel>
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
                                            ItemsSource="{Binding Distribution}"
@@ -202,7 +214,7 @@
                                            SelectionMode="Multiple" 
                                            RowSelectionBrush="#9993B8D9" 
                                            ColumnSizer="AutoLastColumnFill">
-                        
+
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
@@ -216,11 +228,10 @@
                                Grid.Column="0" 
                                Grid.ColumnSpan="3"
                                VerticalAlignment="Center"
-                               Text="{Binding DisplayMessage, Mode=OneWay}" Margin="10,0,0,0" Height="18" />        
+                               Text="{Binding DisplayMessage, Mode=OneWay}" Margin="10,0,0,0" Height="18" />
                 </Grid>
             </syncfusion:WizardPage>
-
-
+            
         </syncfusion:WizardControl>
 
     </Grid>

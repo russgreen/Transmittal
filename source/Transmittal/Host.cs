@@ -113,6 +113,7 @@ internal static class Host
                 services.AddTransient<IExportDWFService, ExportDWFService>();
                 services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
                 services.AddTransient<ITransmittalService, TransmittalService>();
+                services.AddTransient<IWeTransferService, WeTransferService>();
 
                 services.AddTransient<TransmittalViewModel>();
                 services.AddTransient<SettingsViewModel>();
