@@ -36,7 +36,7 @@
                                   FinishEnabled="{Binding IsFinishEnabled}"
                                   Help="WizardControl_Help" 
                                   Cancel="WizardControl_Cancel">
-            
+
             <interactivity:Interaction.Triggers>
                 <interactivity:EventTrigger EventName="Finish">
                     <interactivity:InvokeCommandAction Command="{Binding ProcessSheetsCommand}"  />
@@ -316,19 +316,19 @@
                 </Grid>
 
             </syncfusion:WizardPage>
-          
+
             <syncfusion:WizardPage x:Name="wizardPage3" 
-                                   Title="Distribution" 
-                                   Description="Select recipients of the drawing transmittal" 
-                                   NextVisible="False"
-                                   FinishVisible="True"
-                                   BannerBackground="White">
+                       Title="Distribution" 
+                       Description="Select recipients of the drawing transmittal" 
+                       NextVisible="False"
+                       FinishVisible="True"
+                       BannerBackground="White">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
@@ -341,70 +341,85 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top" 
-                            IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
-                            Click="Button_AddToDirectory_Click" >
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
+                Click="Button_AddToDirectory_Click" >
                         <Button.Background>
                             <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
                         </Button.Background>
                     </Button>
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDirectory" Grid.Row="1" Grid.Column="0" Grid.RowSpan="7" 
-                                           ItemsSource="{Binding ProjectDirectory}"
-                                           SelectedItems="{Binding SelectedProjectDirectory, Mode=TwoWay}"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           AutoGenerateColumns="False" 
-                                           AllowGrouping="False" 
-                                           AllowResizingColumns="True" 
-                                           AllowFiltering="True"
-                                           NavigationMode="Row" 
-                                           SelectionMode="Multiple" 
-                                           ColumnSizer="AutoLastColumnFill" >
+                               ItemsSource="{Binding ProjectDirectory}"
+                               SelectedItems="{Binding SelectedProjectDirectory, Mode=TwoWay}"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               AutoGenerateColumns="False" 
+                               AllowGrouping="False" 
+                               AllowResizingColumns="True" 
+                               AllowFiltering="True"
+                               NavigationMode="Row" 
+                               SelectionMode="Multiple" 
+                               ColumnSizer="AutoLastColumnFill" >
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
 
-                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" >
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20"  >
                         <CheckBox x:Name="RecordIssue" HorizontalAlignment="Center"
-                                  IsEnabled="{Binding CanRecordTransmittal}"
-                                  IsChecked="{Binding RecordTransmittal}" 
-                                  Unchecked="RecordIssue_Unchecked"/>
+                      IsEnabled="{Binding CanRecordTransmittal}"
+                      IsChecked="{Binding RecordTransmittal}" 
+                      Unchecked="RecordIssue_Unchecked"/>
                         <TextBlock Text="Record issue and generate issue sheet"    
-                                   Width="150"
-                                   HorizontalAlignment="Center" 
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" >
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
                         <CheckBox x:Name="GenerateCloudCopy" HorizontalAlignment="Center"
-                                  IsEnabled="{Binding CanGenerateCDECopies}"
-                                  IsChecked="{Binding GenerateCDECopies}" />
+                      IsEnabled="{Binding CanGenerateCDECopies}"
+                      IsChecked="{Binding GenerateCDECopies}" />
                         <TextBlock Text="Generate files for cloud"    
-                                   Width="150"
-                                   HorizontalAlignment="Center" 
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" >
-                        <TextBlock Text="Copies:" HorizontalAlignment="Center" />
-                        <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
-                                           MinValue="1"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           Value="{Binding Copies}"/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
+                        <CheckBox x:Name="SendToWeTransfer" HorizontalAlignment="Center"
+                      IsChecked="{Binding SendToWeTransfer}" />
+                        <TextBlock Text="PREVIEW FEATURE"    
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       VerticalAlignment="Center" />
+                        <TextBlock Text="Create draft WeTransfer upload in MS Edge"    
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" >
+                        <TextBlock Text="Copies:" HorizontalAlignment="Center" />
+                        <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
+                               MinValue="1"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               Value="{Binding Copies}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Vertical" >
                         <TextBlock Text="Issue format:" HorizontalAlignment="Center" />
                         <ComboBox Width="154"
-                                  IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                  ItemsSource="{Binding IssueFormats}"
-                                  SelectedItem="{Binding IssueFormat}"
-                                  SelectedIndex="0">
+                      IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                      ItemsSource="{Binding IssueFormats}"
+                      SelectedItem="{Binding IssueFormat}"
+                      SelectedIndex="0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Description}" HorizontalAlignment="Center" />
@@ -413,32 +428,32 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <Button Grid.Row="5" Grid.Column="1" Width="150" Margin="5"
-                            Content="Add to distribution"
-                            ToolTip="Add new contact to the project directory"
-                            IsEnabled="{Binding HasDirectoryEntriesSelected}"
-                            Command="{Binding AddToDistribitionCommand}"/>
+                    <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5"
+                Content="Add to distribution"
+                ToolTip="Add new contact to the project directory"
+                IsEnabled="{Binding HasDirectoryEntriesSelected}"
+                Command="{Binding AddToDistribitionCommand}"/>
 
-                    <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
-                            IsEnabled="{Binding HasDistributionEntriesSelected}"
-                            Command="{Binding RemoveFromDistributionCommand}">
+                    <Button Grid.Row="7" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
+                IsEnabled="{Binding HasDistributionEntriesSelected}"
+                Command="{Binding RemoveFromDistributionCommand}">
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
 
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
-                                           ItemsSource="{Binding Distribution}"
-                                           SelectedItems="{Binding SelectedDistribution, Mode=TwoWay}"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           AutoGenerateColumns="False" 
-                                           AllowGrouping="False" 
-                                           AllowResizingColumns="True" 
-                                           AllowFiltering="True"
-                                           AllowSorting="True"
-                                           NavigationMode="Row" 
-                                           SelectionMode="Multiple" 
-                                           ColumnSizer="AutoLastColumnFill">
-                                              
+                               ItemsSource="{Binding Distribution}"
+                               SelectedItems="{Binding SelectedDistribution, Mode=TwoWay}"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               AutoGenerateColumns="False" 
+                               AllowGrouping="False" 
+                               AllowResizingColumns="True" 
+                               AllowFiltering="True"
+                               AllowSorting="True"
+                               NavigationMode="Row" 
+                               SelectionMode="Multiple" 
+                               ColumnSizer="AutoLastColumnFill">
+
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />

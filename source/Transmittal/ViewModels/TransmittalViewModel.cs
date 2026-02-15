@@ -38,6 +38,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IExportDWFService _exportDWFService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
+    private readonly IWeTransferService _weTransferService;
+    private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<TransmittalViewModel> _logger;
 
     public string WindowTitle { get; private set; }
@@ -159,6 +161,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _generateCDECopies = false;
 
+    [ObservableProperty]
+    private bool _sendToWeTransfer = false;
 
     /// SUMMARY PROGRESS
     [ObservableProperty]
@@ -201,6 +205,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IExportDWFService exportDWFService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
+        IWeTransferService weTransferService,
+        IMessageBoxService messageBoxService,
         ILogger<TransmittalViewModel> logger)
     {
         _settingsServiceRvt = settingsServiceRvt;
@@ -210,6 +216,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _exportDWFService = exportDWFService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
+        _weTransferService = weTransferService;
+        _messageBoxService = messageBoxService;
         _logger = logger;
 
         var informationVersion = Assembly.GetExecutingAssembly()
@@ -920,6 +928,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             CurrentStepProgressLabel = "Recording transmittal...";
             SendProgressMessage();
 
+            if(SendToWeTransfer == true)
+            {
+                SendFilesToWeTransfer();
+            }
+
             if (RecordTransmittal == true)
             {
                 RecordTransmittalInDatabase();
@@ -1211,6 +1224,23 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
 
         return folderPath;
+    }
+
+    private void SendFilesToWeTransfer()
+    {
+        _logger.LogInformation("Adding {count} exported files to WeTransfer for upload", _exportedFiles.Count);
+
+        if (_exportedFiles.Count == 0)
+        {
+            return;
+        }
+
+        var filesForWeTransfer = _exportedFiles
+            .Where(x => x.FilePath != null)
+            .Select(x => x.FilePath)
+            .ToList();
+
+        _weTransferService.PrepareWeTransferUploadAsync(filesForWeTransfer);
     }
 
     private void OpenExplorerToExportedFilesLocations()
@@ -1550,5 +1580,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
 
         return folders.OrderBy(x => x).ToList();
+    }
+
+    partial void OnSendToWeTransferChanged(bool oldValue, bool newValue)
+    {
+        if (newValue == true)
+        {
+            if (!_messageBoxService.ShowYesNo(
+                "WeTransfer Preview Feature",
+                "Any running browsers will be closed when using this feature. Would you still like to continue using it?"))
+            {
+                SendToWeTransfer = oldValue;
+            }
+        }
     }
 }

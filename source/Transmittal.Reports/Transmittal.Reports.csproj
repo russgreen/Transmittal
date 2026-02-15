@@ -29,7 +29,7 @@
 		<PackageReference Include="System.Formats.Asn1" Version="10.*" />		
 		
 		<!--<PackageReference Include="Microsoft.ReportingServices.ReportViewerControl.Winforms" Version="150.1586.0" GeneratePathProperty="true" />-->
-		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.29" />
+		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.33" />
 	</ItemGroup>
 
 	<ItemGroup>
