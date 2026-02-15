@@ -20,6 +20,7 @@ public class WeTransferService : IWeTransferService
     private readonly string _browserPath = string.Empty;
     private const string _weTransferUrl = "https://wetransfer.com/";
     private const int _debugPort = 9222;
+    private const string _localAddress = "127.0.0.1";
 
     public WeTransferService(ILogger<WeTransferService> logger)
     {
@@ -36,9 +37,11 @@ public class WeTransferService : IWeTransferService
             return false;
         }
 
-        using var playwright = await Playwright.CreateAsync();
+        _logger.LogDebug("Browser is running at http://{LocalAddress}:{DebugPort}", _localAddress, _debugPort);
 
-        var browser = await playwright.Chromium.ConnectOverCDPAsync($"http://localhost:{_debugPort}");
+        using var playwright = await Playwright.CreateAsync();   
+
+        var browser = await playwright.Chromium.ConnectOverCDPAsync($"http://{_localAddress}:{_debugPort}");
         var context = browser.Contexts.First();
 
         var page = context.Pages.FirstOrDefault() ?? await context.NewPageAsync();
@@ -54,9 +57,6 @@ public class WeTransferService : IWeTransferService
         var fileInput = dropZone.Locator("input[type='file']");
         await fileInput.WaitForAsync(new() { State = WaitForSelectorState.Attached });
         await fileInput.SetInputFilesAsync(filePaths);
-
-        //pause for user interaction
-        //await page.PauseAsync();
 
         return true;
     }
@@ -202,7 +202,7 @@ public class WeTransferService : IWeTransferService
             using var http = new HttpClient();
             http.Timeout = TimeSpan.FromMilliseconds(500);
 
-            var response = await http.GetStringAsync($"http://localhost:{port}/json/version");
+            var response = await http.GetStringAsync($"http://{_localAddress}:{port}/json/version");
             return !string.IsNullOrWhiteSpace(response);
         }
         catch
@@ -273,7 +273,7 @@ public class WeTransferService : IWeTransferService
         try
         {
             using var client = new TcpClient();
-            var result = client.ConnectAsync("127.0.0.1", port).Wait(200);
+            var result = client.ConnectAsync(_localAddress, port).Wait(200);
             return result && client.Connected;
         }
         catch 
@@ -291,7 +291,7 @@ public class WeTransferService : IWeTransferService
         {
             try
             {
-                var response = await http.GetStringAsync($"http://localhost:{port}/json/version");
+                var response = await http.GetStringAsync($"http://{_localAddress}:{port}/json/version");
                 if (!string.IsNullOrWhiteSpace(response))
                 {
                     return true;
@@ -301,6 +301,11 @@ public class WeTransferService : IWeTransferService
             await Task.Delay(200);
         }
         return false;
+    }
+
+    public bool PrepareWeTransferUpload(List<string> filePaths)
+    {
+        throw new NotImplementedException();
     }
 
 

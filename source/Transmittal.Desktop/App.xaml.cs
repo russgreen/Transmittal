@@ -13,11 +13,11 @@ namespace Transmittal.Desktop;
 public partial class App : Application
 {
     public static int TransmittalID;
-        
-    void App_Startup(object sender, StartupEventArgs e)
+
+    async void App_Startup(object sender, StartupEventArgs e)
     {
         //build dependency injection system
-        Host.StartHost().Wait();
+        await Host.StartHost();
 
         //register the syncfusion license
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
@@ -35,7 +35,7 @@ public partial class App : Application
             {               
                 if (arg.StartsWith("--database"))
                 {
-                    string databaseFilePath = arg.Substring(arg.IndexOf("=") + 1);
+                    var databaseFilePath = arg.Substring(arg.IndexOf("=") + 1);
                     // set the database filepath string to the value after the --database argument
                     if (File.Exists(databaseFilePath.ParsePathWithEnvironmentVariables()))
                     {
@@ -113,6 +113,22 @@ public partial class App : Application
     Host.GetService<ITransmittalService>());
 
                     report.ShowTransmittalReport(TransmittalID);
+                    Current.Shutdown();
+                    return;
+                }
+
+                if (arg.StartsWith("--wetransfer"))
+                {
+                    var files = arg.Substring(arg.IndexOf("=") + 1);
+                    var weTransferService = Host.GetService<IWeTransferService>();
+                    var filesList = files.Split(';').ToList();
+
+                    if(filesList.Count > 0)
+                    {
+                        await weTransferService.PrepareWeTransferUploadAsync(filesList);
+ 
+                    }
+
                     Current.Shutdown();
                     return;
                 }
