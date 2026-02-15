@@ -38,7 +38,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IExportDWFService _exportDWFService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
-    private readonly IWeTransferService _weTransferService;
     private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<TransmittalViewModel> _logger;
 
@@ -205,7 +204,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IExportDWFService exportDWFService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
-        IWeTransferService weTransferService,
         IMessageBoxService messageBoxService,
         ILogger<TransmittalViewModel> logger)
     {
@@ -216,7 +214,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _exportDWFService = exportDWFService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
-        _weTransferService = weTransferService;
         _messageBoxService = messageBoxService;
         _logger = logger;
 
@@ -1240,7 +1237,25 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             .Select(x => x.FilePath)
             .ToList();
 
-        _weTransferService.PrepareWeTransferUploadAsync(filesForWeTransfer);
+        var filesForWeTransferString = string.Join(";", filesForWeTransfer);
+
+
+#if DEBUG
+        var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
+
+        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\Debug", "Transmittal.Desktop.exe");
+#else
+        var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
+#endif
+
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
+        {
+            FileName = pathToExe,
+            Arguments = $"\"--wetransfer={filesForWeTransferString}\""
+        };
+
+        Process.Start(processStartInfo);
     }
 
     private void OpenExplorerToExportedFilesLocations()

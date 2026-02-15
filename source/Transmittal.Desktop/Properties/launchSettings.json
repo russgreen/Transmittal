@@ -34,6 +34,10 @@
     "Transmittal.Desktop --about": {
       "commandName": "Project",
       "commandLineArgs": "--about"
+    },
+    "Transmittal.Desktop --wetransfer": {
+      "commandName": "Project",
+      "commandLineArgs": "--wetransfer=\"C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-B2-DR-A-00100-LevelB 2FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-00-DR-A-00102-Level00FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-01-DR-A-00103-Level01FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-02-DR-A-00104-Level02FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-03-DR-A-00105-Level03FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-04-DR-A-00106-Level04FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-05-DR-A-00107-Level05FeasibilityPlan-S0.pdf;C:\\Users\\russg\\OneDrive\\Documents\\Transmittal\\DrawingIssues\\PDF\\00 - FEASIBILITY\\W0601-WW-ZZ-B1-DR-A-00101-LevelB 1FeasibilityPlan-S0.pdf\""
     }
   }
 }
