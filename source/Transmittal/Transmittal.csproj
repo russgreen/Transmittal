@@ -17,6 +17,8 @@
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources> <!--added so nuke works-->
 		<!-- Copy dependancies to output folder on build -->
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+		<RevitVersion>0</RevitVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
