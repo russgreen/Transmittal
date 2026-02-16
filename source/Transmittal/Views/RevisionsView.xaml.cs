@@ -41,7 +41,7 @@ public partial class RevisionsView : Window
 #else
         this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "SequenceName", HeaderText = "Numbering", Width = 100 });
 #endif
-        this.sfDataGridRevisions.Columns.Add(new GridDateTimeColumn() { MappingName = "RevDate", HeaderText = "Date", Width = 80, Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern , CustomPattern = _settingsService.GlobalSettings.DateFormatString });
+        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "RevDate", HeaderText = "Date", Width = 80 }); //, Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern , CustomPattern = _settingsService.GlobalSettings.DateFormatString });
         this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Description", HeaderText = "Description",  MinimumWidth = 100 });
         this.sfDataGridRevisions.Columns.Add(new GridCheckBoxColumn() { MappingName = "Issued", HeaderText = "Issued", Width = 60 });
         this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedBy", HeaderText = "Issued By", Width = 80 });
