@@ -14,7 +14,7 @@
     <ROW Property="AiSkipExitDlg" Value="1"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{500EADD2-491C-4CA4-B907-2354D1E50805} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{6CE9D6CE-C7FA-4817-967A-8DBEAF70C47E} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
     <ROW Property="ProductVersion" Value="3.6.3" Options="32"/>
@@ -365,7 +365,7 @@
     <ROW Component="TransmittalParameters.txt_7" ComponentId="{CAEA0388-BDF5-4D82-93D1-EDB1A8ADBE4D}" Directory_="Resources_7_Dir" Attributes="0" KeyPath="TransmittalParameters.txt_6" Type="0"/>
     <ROW Component="Transmittal_2021.addin" ComponentId="{F0EF6284-25D9-4001-B756-820DB9097E0A}" Directory_="__3_Dir" Attributes="0" KeyPath="Transmittal.addin" Type="0"/>
     <ROW Component="Transmittal_2024.addin" ComponentId="{ECFB1431-B31F-483D-AD17-DB66F93D6567}" Directory_="__2_Dir" Attributes="0" KeyPath="Transmittal.addin_2" Type="0"/>
-    <ROW Component="Transmittal_Isolated.addin" ComponentId="{877E091F-1C19-4C82-A7B0-4C7407A21DCE}" Directory_="__5_Dir" Attributes="0" KeyPath="Transmittal_Isolated.addin" Type="0"/>
+    <ROW Component="Transmittal_Isolated.addin" ComponentId="{877E091F-1C19-4C82-A7B0-4C7407A21DCE}" Directory_="__5_Dir" Attributes="0" KeyPath="Transmittal_Isolated.addin_2" Type="0"/>
     <ROW Component="Transmittal_Isolated.addin_1" ComponentId="{AF5A944F-3992-41C4-90CC-12167DADE173}" Directory_="__6_Dir" Attributes="0" KeyPath="Transmittal_Isolated.addin_1" Type="0"/>
     <ROW Component="Windows" ComponentId="{D2F73B95-111F-49E5-97A7-DDA1F6F27489}" Directory_="APPDIR" Attributes="260" KeyPath="Windows"/>
     <ROW Component="_" ComponentId="{01ACBF6A-1168-401F-8D69-F975A7028420}" Directory_="APPDIR" Attributes="260" KeyPath="_"/>
@@ -594,7 +594,6 @@
     <ROW File="Syncfusion.XlsIO.Base.dll_5" Component_="Syncfusion.XlsIO.Base.dll_5" FileName="SYNCFU~7.DLL|Syncfusion.XlsIO.Base.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Syncfusion.XlsIO.Base.dll" SelfReg="false"/>
     <ROW File="Transmittal.deps.json_1" Component_="Transmittal.deps.json_1" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_5" Component_="Transmittal.dll_5" FileName="TRANSM~1.DLL|Transmittal.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.dll" SelfReg="false"/>
-    <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal.addin" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_7" Component_="e_sqlite3.dll_7" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\e_sqlite3.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Abstractions.dll" Component_="Microsoft.Extensions.Configuration_1_.Abstractions.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Binder.dll" Component_="Microsoft.Extensions.Configuration_1_.Binder.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
@@ -1047,6 +1046,7 @@
     <ROW File="Microsoft.Bcl.AsyncInterfaces.dll_1" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1" FileName="MICRO~30.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
     <ROW File="Microsoft.Playwright.dll_1" Component_="Microsoft.Playwright.dll_1" FileName="MICRO~31.DLL|Microsoft.Playwright.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Playwright.dll" SelfReg="false"/>
     <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~1.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\System.Management.dll" SelfReg="false"/>
+    <ROW File="Transmittal_Isolated.addin_2" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
