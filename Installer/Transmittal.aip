@@ -122,10 +122,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{E01C92EA-6614-48B0-8086-1ABBE9BD1B59}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="AnalyticsSettings.json" ComponentId="{9D5821A8-3563-4765-8DF5-2A798B4A09FF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="AnalyticsSettings.json" Type="0"/>
-    <ROW Component="AnalyticsSettings.json_1" ComponentId="{2157454F-B4F4-428C-9B8C-6E7EB7806CAA}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="AnalyticsSettings.json_2" Type="0"/>
-    <ROW Component="AnalyticsSettings.json_2" ComponentId="{E93630BF-8EC6-489F-ADB9-62DECC063122}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="AnalyticsSettings.json_3" Type="0"/>
-    <ROW Component="AnalyticsSettings.json_3" ComponentId="{568E2841-AF93-4DD0-8F12-0D7E62FDD0D7}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="AnalyticsSettings.json_5" Type="0"/>
+    <ROW Component="AnalyticsSettings.json" ComponentId="{9D5821A8-3563-4765-8DF5-2A798B4A09FF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Transmittal.deps.json_2" Type="0"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll_1" ComponentId="{7780AF0E-5610-453A-9265-578957696E32}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll_1"/>
     <ROW Component="CurrentVersion" ComponentId="{F6370944-48C2-4C57-BAD4-66B68154ACE6}" Directory_="APPDIR" Attributes="260" KeyPath="CurrentVersion"/>
@@ -415,7 +412,6 @@
     <ROW Component="node.exe" ComponentId="{1341F2D1-0227-453D-982C-FC788EE577A2}" Directory_="win32_x64_Dir" Attributes="256" KeyPath="node.exe"/>
     <ROW Component="open" ComponentId="{9171744F-BFB8-4FF6-A33B-2CEC275EE02B}" Directory_="APPDIR" Attributes="260" KeyPath="open"/>
     <ROW Component="pixelmatch.js" ComponentId="{9E2E1A07-AE27-46C9-B316-BB7807A98856}" Directory_="third_party_1_Dir" Attributes="0" KeyPath="pixelmatch.js" Type="0"/>
-    <ROW Component="playwright.ps1" ComponentId="{162E1322-D516-4C57-A916-D313F31FBE79}" Directory_="Transmittal_4_Dir" Attributes="0" KeyPath="playwright.ps1_3" Type="0"/>
     <ROW Component="playwrightConnection.js" ComponentId="{B664FCE3-9E94-4338-9EE3-BEF0276F4C53}" Directory_="remote_Dir" Attributes="0" KeyPath="playwrightConnection.js" Type="0"/>
     <ROW Component="protocol.d.js" ComponentId="{353185FA-49AF-4A7B-A3D4-14C707942E2D}" Directory_="webkit_Dir" Attributes="0" KeyPath="protocol.d.js_2" Type="0"/>
     <ROW Component="protocol.d.ts" ComponentId="{476C5E2C-7ACB-4C7B-AE29-E27BCC8EBE26}" Directory_="types_Dir" Attributes="0" KeyPath="protocol.d.ts" Type="0"/>
@@ -598,7 +594,7 @@
     <ROW File="Syncfusion.XlsIO.Base.dll_5" Component_="Syncfusion.XlsIO.Base.dll_5" FileName="SYNCFU~7.DLL|Syncfusion.XlsIO.Base.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Syncfusion.XlsIO.Base.dll" SelfReg="false"/>
     <ROW File="Transmittal.deps.json_1" Component_="Transmittal.deps.json_1" FileName="TRANSM~1.JSO|Transmittal.deps.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.deps.json" SelfReg="false"/>
     <ROW File="Transmittal.dll_5" Component_="Transmittal.dll_5" FileName="TRANSM~1.DLL|Transmittal.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\Transmittal.dll" SelfReg="false"/>
-    <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
+    <ROW File="Transmittal_Isolated.addin" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal.addin" SelfReg="false"/>
     <ROW File="e_sqlite3.dll_7" Component_="e_sqlite3.dll_7" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\e_sqlite3.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Abstractions.dll" Component_="Microsoft.Extensions.Configuration_1_.Abstractions.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration_1_.Binder.dll" Component_="Microsoft.Extensions.Configuration_1_.Binder.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
@@ -617,7 +613,6 @@
     <ROW File="Transmittal_Isolated.addin_1" Component_="Transmittal_Isolated.addin_1" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
     <ROW File="TemplateDatabase.tdb_7" Component_="TemplateDatabase.tdb_7" FileName="TEMPLA~1.TDB|TemplateDatabase.tdb" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Data\TemplateDatabase.tdb" SelfReg="false"/>
     <ROW File="TransmittalParameters.txt_6" Component_="TransmittalParameters.txt_7" FileName="TRANSM~1.TXT|TransmittalParameters.txt" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Resources\TransmittalParameters.txt" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json" Component_="AnalyticsSettings.json" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\AnalyticsSettings.json" SelfReg="false"/>
     <ROW File="CommunityToolkit.Mvvm.dll_1" Component_="CommunityToolkit.Mvvm.dll_1" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
     <ROW File="Dapper.dll_1" Component_="Dapper.dll_1" FileName="Dapper.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Dapper.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll" Component_="e_sqlite3.dll" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\e_sqlite3.dll" SelfReg="false"/>
@@ -1046,25 +1041,11 @@
     <ROW File="protocol.d.ts" Component_="protocol.d.ts" FileName="PROTOC~1.TS|protocol.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\protocol.d.ts" SelfReg="false"/>
     <ROW File="structs.d.ts" Component_="protocol.d.ts" FileName="STRUCT~1.TS|structs.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\structs.d.ts" SelfReg="false"/>
     <ROW File="types.d.ts" Component_="protocol.d.ts" FileName="TYPESD~1.TS|types.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\types.d.ts" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_1" Component_="Transmittal.Desktop.runtimeconfig.json" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\AnalyticsSettings.json" SelfReg="false"/>
     <ROW File="Microsoft.Bcl.AsyncInterfaces.dll" Component_="Microsoft.Bcl.AsyncInterfaces.dll" FileName="MICRO~39.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
     <ROW File="System.CodeDom.dll" Component_="System.CodeDom.dll" FileName="SYSTE~16.DLL|System.CodeDom.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.CodeDom.dll" SelfReg="false"/>
     <ROW File="System.Management.dll" Component_="System.Management.dll" FileName="SYSTE~17.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\System.Management.dll" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_2" Component_="AnalyticsSettings.json_1" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R21\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="playwright.ps1_1" Component_="AnalyticsSettings.json_1" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R21\playwright.ps1" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_3" Component_="AnalyticsSettings.json_2" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R22\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="playwright.ps1_2" Component_="AnalyticsSettings.json_2" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R22\playwright.ps1" SelfReg="false"/>
-    <ROW File="playwright.ps1_3" Component_="playwright.ps1" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R23\playwright.ps1" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_4" Component_="playwright.ps1" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R23\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_5" Component_="AnalyticsSettings.json_3" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R24\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="playwright.ps1_4" Component_="AnalyticsSettings.json_3" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R24\playwright.ps1" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_6" Component_="Transmittal.deps.json" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R25\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="playwright.ps1_5" Component_="Transmittal.deps.json" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R25\playwright.ps1" SelfReg="false"/>
-    <ROW File="AnalyticsSettings.json_7" Component_="Transmittal.deps.json_1" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\AnalyticsSettings.json" SelfReg="false"/>
-    <ROW File="playwright.ps1_6" Component_="Transmittal.deps.json_1" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R26\playwright.ps1" SelfReg="false"/>
     <ROW File="Microsoft.Bcl.AsyncInterfaces.dll_1" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1" FileName="MICRO~30.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
     <ROW File="Microsoft.Playwright.dll_1" Component_="Microsoft.Playwright.dll_1" FileName="MICRO~31.DLL|Microsoft.Playwright.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Playwright.dll" SelfReg="false"/>
-    <ROW File="playwright.ps1_7" Component_="AnalyticsSettings.json" FileName="PLAYWR~1.PS1|playwright.ps1" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\playwright.ps1" SelfReg="false"/>
     <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~1.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\System.Management.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
@@ -1454,10 +1435,6 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.AsyncInterfaces.dll"/>
     <ROW Feature_="MainFeature" Component_="System.CodeDom.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Management.dll"/>
-    <ROW Feature_="MainFeature" Component_="AnalyticsSettings.json_1"/>
-    <ROW Feature_="MainFeature" Component_="AnalyticsSettings.json_2"/>
-    <ROW Feature_="MainFeature" Component_="playwright.ps1"/>
-    <ROW Feature_="MainFeature" Component_="AnalyticsSettings.json_3"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Playwright.dll_1"/>
     <ROW Feature_="MainFeature" Component_="System.Management.dll_1"/>
