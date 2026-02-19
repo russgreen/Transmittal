@@ -2,7 +2,9 @@
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 using Transmittal.Models;
 
 namespace Transmittal.Views;
@@ -107,6 +109,33 @@ public partial class TransmittalView : Window
             if (sheet != null)
             {
                 _viewModel.UpdateSheet(sheet);
+            }
+        }
+    }
+
+    private void CopiesTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+
+        e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
+    }
+
+    private void CopiesTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Back && e.Key != Key.Delete)
+        {
+            e.Handled = true;
+        }
+
+        // Check for Ctrl+C, Ctrl+X, Ctrl+V  
+        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+        {
+            switch (e.Key)
+            {
+                case Key.C: // Ctrl+C (Copy)  
+                case Key.X: // Ctrl+X (Cut)  
+                case Key.V: // Ctrl+V (Paste)  
+                    e.Handled = true; // Block the shortcut  
+                    break;
             }
         }
     }
