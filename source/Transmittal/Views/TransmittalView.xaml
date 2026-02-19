@@ -411,9 +411,11 @@
                                MinValue="1"
                                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
                                Value="{Binding Copies}"/>-->
-                        <TextBox x:Name="CopiesTextBox" Text="{Binding Copies}" 
-                                 Width="74"
-                                 PreviewTextInput="CopiesTextBox_PreviewTextInput" />
+                        <TextBox x:Name="CopiesTextBox" Width="74"
+                                 Text="{Binding Copies}"                                  
+                                 IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                                 PreviewTextInput="CopiesTextBox_PreviewTextInput" 
+                                 DataObject.Pasting="CopiesTextBox_Pasting"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Vertical" >

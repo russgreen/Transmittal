@@ -4,6 +4,7 @@ using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Transmittal.Models;
 
@@ -14,7 +15,7 @@ namespace Transmittal.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-
+        
     public TransmittalView()
     {
         InitializeComponent();
@@ -115,28 +116,31 @@ public partial class TransmittalView : Window
 
     private void CopiesTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
-
-        e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
+        e.Handled = !IsPositiveInt((TextBox)sender, e.Text);
     }
 
-    private void CopiesTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    private void CopiesTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
     {
-        if (e.Key != Key.Back && e.Key != Key.Delete)
+        if (!e.SourceDataObject.GetDataPresent(DataFormats.Text, true))
         {
-            e.Handled = true;
+            e.CancelCommand();
+            return;
         }
 
-        // Check for Ctrl+C, Ctrl+X, Ctrl+V  
-        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+        var pasteText = e.SourceDataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+        if (!IsPositiveInt((TextBox)sender, pasteText))
         {
-            switch (e.Key)
-            {
-                case Key.C: // Ctrl+C (Copy)  
-                case Key.X: // Ctrl+X (Cut)  
-                case Key.V: // Ctrl+V (Paste)  
-                    e.Handled = true; // Block the shortcut  
-                    break;
-            }
+            e.CancelCommand();
         }
+    }
+
+    private bool IsPositiveInt(TextBox textBox, string newText)
+    {
+        var positiveIntRegex = new Regex(@"^[1-9]\d*$");
+
+        var proposed = textBox.Text.Remove(textBox.SelectionStart, textBox.SelectionLength)
+            .Insert(textBox.SelectionStart, newText);
+
+        return string.IsNullOrEmpty(proposed) || positiveIntRegex.IsMatch(proposed);
     }
 }
