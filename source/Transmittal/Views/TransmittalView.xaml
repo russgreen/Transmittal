@@ -407,10 +407,13 @@
 
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" >
                         <TextBlock Text="Copies:" HorizontalAlignment="Center" />
-                        <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
+                        <!--<syncfusion:UpDown Width="74" NumberDecimalDigits="0"
                                MinValue="1"
                                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                               Value="{Binding Copies}"/>
+                               Value="{Binding Copies}"/>-->
+                        <TextBox x:Name="CopiesTextBox" Text="{Binding Copies}" 
+                                 Width="74"
+                                 PreviewTextInput="CopiesTextBox_PreviewTextInput" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Vertical" >

@@ -736,6 +736,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
+    partial void OnCopiesChanging(int value)
+    {
+        if (value < 1)
+        {
+            Copies = 1;
+        }
+    }
+
     partial void OnRecordTransmittalChanged(bool value)
     {
         ValidateTransmittal();
