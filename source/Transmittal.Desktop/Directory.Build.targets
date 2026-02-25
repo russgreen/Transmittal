@@ -123,8 +123,11 @@
 			<Using Namespace="System.Text.RegularExpressions" />
 			<Code Type="Fragment" Language="cs">
 				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
+var input = File.ReadAllText(InputFilename);
+var pattern = Regex.Escape(MatchExpression);
+var output = Regex.Replace(input, pattern, _ => ReplacementText);
+File.WriteAllText(OutputFilename, output);
+]]>
 			</Code>
 		</Task>
 	</UsingTask>
@@ -142,8 +145,11 @@
 			<Using Namespace="System.Text.RegularExpressions" />
 			<Code Type="Fragment" Language="cs">
 				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
+var input = File.ReadAllText(InputFilename);
+var pattern = Regex.Escape(MatchExpression);
+var output = Regex.Replace(input, pattern, _ => ReplacementText);
+File.WriteAllText(OutputFilename, output);
+]]>
 			</Code>
 		</Task>
 	</UsingTask>
