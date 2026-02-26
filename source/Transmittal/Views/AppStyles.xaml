@@ -10,7 +10,20 @@
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>  
     <converters:BrushColorConverter x:Key="BrushColorConverter"/>
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
-    
+
+    <converters:BoolToObjectConverter x:Key="BoolToPDFIconConverter"
+                                      CanConvertToTargetType="false"
+                                      FalseValue=""
+                                      TrueValue="/Transmittal;component/Resources/pdfFile.png" />
+    <converters:BoolToObjectConverter x:Key="BoolToDWGIconConverter"
+                                      CanConvertToTargetType="false"
+                                      FalseValue=""
+                                      TrueValue="/Transmittal;component/Resources/dwgFile.png" />
+    <converters:BoolToObjectConverter x:Key="BoolToDWFIconConverter"
+                                      CanConvertToTargetType="false"
+                                      FalseValue=""
+                                      TrueValue="/Transmittal;component/Resources/dwfFile.png" />
+
     <BitmapImage x:Key="AddImage" UriSource="../Resources/Add.png" />
     <BitmapImage x:Key="DeleteImage" UriSource="../Resources/Delete.png" />
     <BitmapImage x:Key="MergeImage" UriSource="../Resources/DataMerge.png" />
@@ -18,6 +31,10 @@
     <BitmapImage x:Key="ReportImage" UriSource="../Resources/Report.png" />
     <BitmapImage x:Key="GreenCheckImage" UriSource="../Resources/GreenCheck.png" />
 
+    <BitmapImage x:Key="FilePDFImage" UriSource="../Resources/pdfFile.png" />
+    <BitmapImage x:Key="FileDWGImage" UriSource="../Resources/dwgFile.png" />
+    <BitmapImage x:Key="FileDWFImage" UriSource="../Resources/dwfFile.png" />
+    
     <ImageBrush x:Key="watermark" AlignmentX="Left" Stretch="None" >
         <ImageBrush.ImageSource>
             <BitmapImage UriSource="../Resources/SearchRevisionsWatermark.png"/>
