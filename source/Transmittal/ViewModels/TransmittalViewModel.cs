@@ -904,176 +904,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void ProcessSheets()
     {
-        ProcessSheetsInternal();
-    }
-
-    private void ProcessSelectedSheets()
-    {
-        IsBackEnabled = false;
-        IsFinishEnabled = false;
-
-        IsWindowVisible = System.Windows.Visibility.Hidden;
-
-        OpenProgressWindow();
-
-        DispatcherHelper.DoEvents();
-
-        try
-        {
-            var sheets = new FilteredElementCollector(App.RevitDocument);
-            sheets.OfClass(typeof(ViewSheet));
-
-            foreach (var drawingSheet in SelectedDrawingSheets.Cast<DrawingSheetModel>())
-            {
-                foreach (var sheet in sheets.Cast<ViewSheet>())
-                {
-                    // abort if cancel was clicked
-                    if (AbortFlag == true)
-                    {
-                        CloseProgress();
-                        this.OnClosingRequest();
-                        return;
-                    }
-
-                    if (drawingSheet.DrgNumber == sheet.SheetNumber)
-                    {
-                        //TODO - test if this check is required.....left in for now...
-                        if (sheet.CanBePrinted == true)
-                        {
-                            var views = new ViewSet();
-                            views.Insert(sheet);
-
-                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
-                                 _settingsService.GlobalSettings.ProjectNumber,
-                                 _settingsService.GlobalSettings.ProjectIdentifier,
-                                 _settingsService.GlobalSettings.ProjectName,
-                                 drawingSheet.DrgOriginator,
-                                 drawingSheet.DrgVolume,
-                                 drawingSheet.DrgLevel,
-                                 drawingSheet.DrgType,
-                                 drawingSheet.DrgRole,
-                                 sheet.SheetNumber,
-                                 drawingSheet.DrgName,
-                                 drawingSheet.DrgRev,
-                                 drawingSheet.DrgStatus,
-                                 drawingSheet.DrgStatusDescription);
-
-                            DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
-                            SheetTaskProcessed = 0;
-                            SheetTaskProgressLabel = string.Empty;
-                            SendProgressMessage();
-
-                            if (ExportPDF == true)
-                            {
-                                ExportSheetToPDF(drawingSheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (ExportDWG == true)
-                            {
-                                ExportSheetToDWG(drawingSheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (ExportDWF == true)
-                            {
-                                ExportSheetToDWF(drawingSheet, sheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (RecordTransmittal == true)
-                            {
-                                // Mark sheets issued date.
-                                // Currently disabled is not required for transmittal
-                                //SetIssueDate(sheet);
-
-                                // Mark revisions issued
-                                SetRevisionsIssued(sheet);
-                            }
-
-                            DrawingSheetsProcessed += 1;
-                            SendProgressMessage();
-                        }
-                    }
-                }
-            }
-
-            CurrentStepProgressLabel = "Recording transmittal...";
-            SendProgressMessage();
-
-            if (SendToWeTransfer == true)
-            {
-                SendFilesToWeTransfer();
-            }
-
-            if (RecordTransmittal == true)
-            {
-                RecordTransmittalInDatabase();
-
-                CurrentStepProgressLabel = "Displaying report...";
-                SendProgressMessage();
-
-                LaunchTransmittalReport();
-
-                CopyDistributionToClipboard();
-            }
-
-            if (GenerateCDECopies == true)
-            {
-                CopyFilesForCDE();
-
-                if (!_settingsService.GlobalSettings.UseDrawingIssueStore2)
-                {
-                    GenerateCDEImportFile();
-                }
-            }
-
-            OpenExplorerToExportedFilesLocations();
-
-            //just pause before closing the window
-            Thread.Sleep(5000);
-
-            CloseProgress();
-
-            this.OnClosingRequest();
-            return;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error processing sheets");
-
-
-            Autodesk.Revit.UI.TaskDialog.Show("Error",
-                $"There has been an error processing sheet exports. {Environment.NewLine} {ex}",
-                Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
-
-            CloseProgress();
-
-            this.OnClosingRequest();
-            return;
-        }
-    }
-
-    private void ProcessSheetsInternal()
-    {
         IsBackEnabled = false;
         IsFinishEnabled = false;
         IsWindowVisible = System.Windows.Visibility.Hidden;
@@ -1094,7 +924,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             foreach (var drawingSheet in targetSheets)
             {
-                if (AbortFlag) { CloseProgress(); OnClosingRequest(); return; }
+                if (AbortFlag) 
+                { 
+                    CloseProgress(); 
+                    OnClosingRequest(); 
+                    return; 
+                }
+
+                var totalSheets = targetSheets.Count;
 
                 var sheet = sheets.FirstOrDefault(x => x.SheetNumber == drawingSheet.DrgNumber);
                 if (sheet is null || !sheet.CanBePrinted) continue;
@@ -1120,7 +957,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
                 SheetTaskProcessed = 0;
                 SheetTaskProgressLabel = string.Empty;
-                SendProgressMessage();
+                SendProgressMessage(totalSheets);
 
                 bool exportPdf = EnablePerSheetExportFormats ? drawingSheet.ExportPDF == true : ExportPDF;
                 bool exportDwg = EnablePerSheetExportFormats ? drawingSheet.ExportDWG == true : ExportDWG;
@@ -1128,7 +965,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportPdf)
                 {
-                    ExportSheetToPDF(drawingSheet, views, fileName);
+                    ExportSheetToPDF(drawingSheet, views, fileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1140,7 +977,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportDwg)
                 {
-                    ExportSheetToDWG(drawingSheet, views, fileName);
+                    ExportSheetToDWG(drawingSheet, views, fileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1152,7 +989,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportDwf)
                 {
-                    ExportSheetToDWF(drawingSheet, sheet, views, fileName);
+                    ExportSheetToDWF(drawingSheet, sheet, views, fileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1168,19 +1005,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 }
 
                 DrawingSheetsProcessed += 1;
-                SendProgressMessage();
+                SendProgressMessage(targetSheets.Count);
             }
 
             CurrentStepProgressLabel = "Recording transmittal...";
-            SendProgressMessage();
+            SendProgressMessage(targetSheets.Count);
 
-            if (SendToWeTransfer) SendFilesToWeTransfer();
+            if (SendToWeTransfer)
+            {
+                SendFilesToWeTransfer();
+            }
 
             if (RecordTransmittal)
             {
-                RecordTransmittalInDatabase();
+                RecordTransmittalInDatabase(targetSheets);
                 CurrentStepProgressLabel = "Displaying report...";
-                SendProgressMessage();
+                SendProgressMessage(targetSheets.Count);
                 LaunchTransmittalReport();
                 CopyDistributionToClipboard();
             }
@@ -1212,10 +1052,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting PDF...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         var filePath = string.Empty;
 
@@ -1261,13 +1101,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting PDF...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
-    private void ExportSheetToDWG(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    private void ExportSheetToDWG(DrawingSheetModel drawingSheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting DWG...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
         DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
@@ -1288,16 +1128,21 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         dwg.FilePath = filePath;
         _exportedFiles.Add(dwg);
 
+        if (DwgExportOptions.SharedCoords || !DwgExportOptions.MergedViews)
+        {
+            //TODO: add all DWG's of views to the list of exported files
+        }
+
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWG...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
-    private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName)
+    private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting DWF...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         var sheetsize = sheet.GetExportPaperFormat();
 
@@ -1322,7 +1167,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWF...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
     private void CopyFilesForCDE()
@@ -1567,7 +1412,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    private void RecordTransmittalInDatabase()
+    private void RecordTransmittalInDatabase(List<DrawingSheetModel> sheets)
     {
         var stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -1579,26 +1424,26 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _newTransmittal.TransDate = DateTime.Now;
         _transmittalService.CreateTransmittal(_newTransmittal);
 
-        foreach (var item in SelectedDrawingSheets.Cast<TransmittalItemModel>())
+        foreach (var sheet in sheets)
         {
-            item.TransID = _newTransmittal.ID;
+            sheet.TransID = _newTransmittal.ID;
 
             //check if we're using the project identifier on this project
             if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
             {
-                item.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
+                sheet.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
             }
             else
             {
-                item.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
+                sheet.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
             }
 
-            item.DrgOriginator = _settingsService.GlobalSettings.Originator;
-            item.DrgRole = _settingsService.GlobalSettings.Role;
+            sheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
+            sheet.DrgRole = _settingsService.GlobalSettings.Role;
             //_transmittalService.CreateTransmittalItem(item);
         }
 
-        _transmittalService.CreateTransmittalItems(SelectedDrawingSheets.Cast<TransmittalItemModel>().ToList());
+        _transmittalService.CreateTransmittalItems(sheets.Cast<TransmittalItemModel>().ToList());
 
         foreach (var dist in Distribution)
         {
@@ -1719,14 +1564,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _progressWindowThread.Start();
     }
 
-    private void SendProgressMessage()
+    private void SendProgressMessage(int sheetsToProcess)
     {
         WeakReferenceMessenger.Default.Send(
             new ProgressUpdateMessage(
                 new ProgressMessageModel 
                 { 
                     CurrentStepProgressLabel = CurrentStepProgressLabel,
-                    DrawingSheetsToProcess = SelectedDrawingSheets.Count,
+                    DrawingSheetsToProcess = sheetsToProcess,
                     DrawingSheetsProcessed = DrawingSheetsProcessed,
                     DrawingSheetProgressLabel = DrawingSheetProgressLabel,
                     SheetTasksToProcess = ExportFormatCount,
