@@ -124,18 +124,23 @@
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
 		</ItemGroup>
-		<ReplaceFileText InputFilename="$(AssemblyName).addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+		<ReplaceFileText InputFilename="$(AssemblyName).addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" UseRegex="true" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" UseRegex="true" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" UseRegex="true" />
 	</Target>
 
 	<Target Name="CreateAddinManifestIsolated" AfterTargets="AfterBuild" Condition="$(DefineConstants.Contains('REVIT2026_OR_GREATER'))">
 		<ItemGroup>
 			<AddinManifest Include="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
 		</ItemGroup>
-		<ReplaceFileText InputFilename="$(AssemblyName)_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" />
-		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" />
+		<ReplaceFileText InputFilename="$(AssemblyName)_Isolated.addin" OutputFilename="@(AddinManifest)" MatchExpression="Assembly&gt;(.*?)&lt;" ReplacementText="Assembly&gt;$(TargetDir)$(AssemblyName).dll&lt;" UseRegex="true" />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;VendorId&gt;(.*?)&lt;" ReplacementText="&lt;VendorId&gt;$(PackageId)&lt;" UseRegex="true"  />
+		<ReplaceFileText InputFilename="@(AddinManifest)" OutputFilename="@(AddinManifest)" MatchExpression="&lt;FullClassName&gt;(.*?)&lt;" ReplacementText="&lt;FullClassName&gt;$(RootNamespace).App&lt;" UseRegex="true" />
+	</Target>
+
+	<!-- Clean up debug manifest -->
+	<Target Name="CleanupAddinManifest" AfterTargets="AfterClean">
+		<Delete Files="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\$(AssemblyName).addin" />
 	</Target>
 
 	<!-- Clean up debug manifest -->
@@ -149,6 +154,7 @@
 			<OutputFilename ParameterType="System.String" Required="true" />
 			<MatchExpression ParameterType="System.String" Required="true" />
 			<ReplacementText ParameterType="System.String" Required="true" />
+			<UseRegex ParameterType="System.Boolean" Required="false" />
 		</ParameterGroup>
 		<Task>
 			<Reference Include="System.Core" />
@@ -157,8 +163,11 @@
 			<Using Namespace="System.Text.RegularExpressions" />
 			<Code Type="Fragment" Language="cs">
 				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
+var input = File.ReadAllText(InputFilename);
+var pattern = UseRegex ? MatchExpression : Regex.Escape(MatchExpression);
+var output = Regex.Replace(input, pattern, _ => ReplacementText);
+File.WriteAllText(OutputFilename, output);
+]]>
 			</Code>
 		</Task>
 	</UsingTask>
@@ -169,6 +178,7 @@
 			<OutputFilename ParameterType="System.String" Required="true" />
 			<MatchExpression ParameterType="System.String" Required="true" />
 			<ReplacementText ParameterType="System.String" Required="true" />
+			<UseRegex ParameterType="System.Boolean" Required="false" />
 		</ParameterGroup>
 		<Task>
 			<Using Namespace="System" />
@@ -176,8 +186,11 @@
 			<Using Namespace="System.Text.RegularExpressions" />
 			<Code Type="Fragment" Language="cs">
 				<![CDATA[
-              File.WriteAllText(OutputFilename,Regex.Replace(File.ReadAllText(InputFilename),MatchExpression,ReplacementText));
-        ]]>
+var input = File.ReadAllText(InputFilename);
+var pattern = UseRegex ? MatchExpression : Regex.Escape(MatchExpression);
+var output = Regex.Replace(input, pattern, _ => ReplacementText);
+File.WriteAllText(OutputFilename, output);
+]]>
 			</Code>
 		</Task>
 	</UsingTask>

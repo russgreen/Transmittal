@@ -54,13 +54,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="ButtonRevise" 
@@ -77,10 +78,49 @@
                                 IsEnabled="{Binding IsSheetsSelected}" 
                                 Click="ButtonStatus_Click"/>
 
-                        <TextBlock Grid.Column="2" Margin="20,5,0,0"  >
-                            <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
-                            <Run Text=" sheets selected."/>
-                        </TextBlock>
+                        <Grid Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                                                                                   
+                            <TextBlock Grid.Column="0" Margin="20,5,0,0"  >
+                                <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
+                                <Run Text=" sheets selected."/>
+                            </TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Set per sheet export formats:" Margin="0,5,10,0"
+                                           Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding TogglePDFCommand}"
+                                        ToolTip="Set the selected sheets to export to PDF format" >
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FilePDFImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding ToggleDWGCommand}"
+                                        ToolTip="Set the selected sheets to export to DWG format">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FileDWGImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button Padding="10,1,10,1" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding ToggleDWFCommand}"
+                                        ToolTip="Set the selected sheets to export to DWF format">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FileDWFImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+
+
 
                     </Grid>
 
@@ -103,7 +143,35 @@
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
                         
                         <syncfusion:SfDataGrid.Columns>
-                            <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34" />
+                            <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34"
+                                                                   IsHidden="{Binding EnablePerSheetExportFormats}"/>
+
+                            <!--Columns to support per sheet export formats-->
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportPDF" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False"  
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportPDF, Converter={StaticResource BoolToPDFIconConverter}}" />
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportDWG" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False" 
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportDWG, Converter={StaticResource BoolToDWGIconConverter}}"/>
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportDWF" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False" 
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportDWF, Converter={StaticResource BoolToDWFIconConverter}}"/>
+                            
                             <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" AllowEditing="False"  />
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
@@ -121,8 +189,14 @@
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
                             <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" AllowEditing="False"/>
+                            
+                            
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
+
+                    <CheckBox Grid.Row="2" Margin="0,5,0,0"
+                              Content="Enable Per Sheet Export Formats"
+                              IsChecked="{Binding EnablePerSheetExportFormats}"  />
                 </Grid>
             </syncfusion:WizardPage>
             
@@ -143,6 +217,7 @@
                         <CheckBox x:Name="checkBoxExportDWF" Grid.Row="0" Grid.Column="0" 
                                       Content="Export Sheets to DWF" 
                                       IsChecked="{Binding ExportDWF}"
+                                      IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                                       Command="{Binding GetFormatCountCommand, Mode=OneWay}"/>
                         <GroupBox Header="DWF Export Options" 
                                       Margin="0,5,0,5" 
@@ -193,6 +268,7 @@
                         <CheckBox x:Name="checkBoxExportDWG" Grid.Row="1" Grid.Column="0" 
                                       Content="Export Sheets to DWG" 
                                       IsChecked="{Binding ExportDWG}"
+                                      IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                                       Command="{Binding GetFormatCountCommand, Mode=OneWay}"/>
                         <GroupBox Header="DWG Export Options" 
                                       Margin="0,5,0,0" 
@@ -242,17 +318,17 @@
                             <mc:Choice Requires="r2021">
                                 <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
                               Content="Print Sheets to PDF using PDF24" 
-                              IsEnabled="{Binding ExportPDFAvailable}"
+                              IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                               IsChecked="{Binding ExportPDF}" 
                               Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
 
-                                <TextBlock Margin="5" Text="PDF24 does not appear to be installed" 
+                             <TextBlock Margin="5" Text="PDF24 does not appear to be installed" 
                                Foreground="Red" Visibility="{Binding ExportPDFAvailable, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                             </mc:Choice>
                             <mc:Fallback>
                                 <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
                               Content="Export Sheets to PDF" 
-                              IsEnabled="{Binding ExportPDFAvailable}"
+                              IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                               IsChecked="{Binding ExportPDF}" 
                               Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
 
@@ -268,7 +344,7 @@
                         </mc:AlternateContent>
 
 
-                        <GroupBox Header="PDF Export Options" 
+                      <GroupBox Header="PDF Export Options" 
                       Margin="0,5,0,0" 
                       Padding="2"
                       IsEnabled="{Binding IsChecked, ElementName=checkBoxExportPDF}"
