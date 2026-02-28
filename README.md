@@ -2,7 +2,7 @@
 
 ![Revit Version](https://img.shields.io/badge/Revit%20Version-2021_--_2024-blue.svg) ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg) <br>
 ![Revit Version](https://img.shields.io/badge/Revit%20Version-2025_--_2026-blue.svg) ![.NET](https://img.shields.io/badge/.NET-8-blue.svg) <br>
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2027-blue.svg) ![.NET](https://img.shields.io/badge/.NET-10-blue.svg)
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2027-blue.svg) ![.NET](https://img.shields.io/badge/.NET-10-blue.svg) 
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)
 
@@ -59,6 +59,11 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **Operating System**: Windows 10/11 (64-bit)
 - **Framework**: .NET 8
 - **Revit**: Autodesk Revit 2025 or 2026
+
+### For Revit 2027
+- **Operating System**: Windows 10/11 (64-bit)
+- **Framework**: .NET 10
+- **Revit**: Autodesk Revit 2027
 
 ### For Desktop Application
 - **Operating System**: Windows 10/11 (64-bit)
