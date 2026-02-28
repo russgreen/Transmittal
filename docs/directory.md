@@ -11,7 +11,7 @@ A project directory report can be generated for export to PDF, Word or Excel.  T
 
 The history report will generate the Transmittal Summary report for the selected person.
 
-<img src="./assets/images/DirectoryViewPeople.png" width="850" >
+<img src="../assets/images/DirectoryViewPeople.png" width="850" >
 
 Clicking into a cell allows the values to be edited. Use the <kbd>Esc</kbd> key to cancel a change or simply <kbd>Tab</kbd> into another cell to finish editing. 
 
