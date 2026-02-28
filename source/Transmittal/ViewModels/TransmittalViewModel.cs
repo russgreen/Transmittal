@@ -190,6 +190,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _isBackEnabled = true;
 
     private List<DocumentModel> _exportedFiles = new();
+    private List<string> _additionalExportFiles = new();
 
     public TransmittalViewModel()
     {
@@ -1159,13 +1160,37 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         if (DwgExportOptions.SharedCoords || !DwgExportOptions.MergedViews)
         {
-            //TODO: add all DWG's of views to the list of exported files
+            var additionalDwgFiles = GetFilesWithPrefixExceptPrimary(folderPath, fileName, ".dwg");
+            foreach (var additionalFile in additionalDwgFiles)
+            {
+                _additionalExportFiles.Add(additionalFile);
+            }
         }
 
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWG...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);
+    }
+
+    private IReadOnlyList<string> GetFilesWithPrefixExceptPrimary(string folderPath, string fileNamePrefix, string primaryExtension = ".dwg")
+    {
+        if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(fileNamePrefix))
+        {
+            return Array.Empty<string>();
+        }
+
+        if (!Directory.Exists(folderPath))
+        {
+            return Array.Empty<string>();
+        }
+
+        var primaryFileName = $"{fileNamePrefix}{primaryExtension}";
+
+        return Directory.EnumerateFiles(folderPath, $"{fileNamePrefix}*", SearchOption.TopDirectoryOnly)
+            .Where(path => !Path.GetFileName(path).Equals(primaryFileName, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 
     private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName, int totalSheets)
@@ -1345,6 +1370,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             .Select(x => x.FilePath)
             .ToList();
 
+        if(_additionalExportFiles.Count > 0)
+        {
+            filesForWeTransfer.AddRange(_additionalExportFiles);
+        }
+        
         var filesForWeTransferString = string.Join(";", filesForWeTransfer);
 
 
