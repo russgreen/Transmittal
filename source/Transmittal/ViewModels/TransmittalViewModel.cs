@@ -14,6 +14,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
@@ -256,6 +257,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets();
+
+        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", false))
+        {
+            if (key != null)
+            {
+                EnablePerSheetExportFormats = Convert.ToBoolean(key.GetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats));
+            }
+        }
     }
 
     private void WireUpExportFormatsPage()
@@ -767,6 +776,17 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             ExportPDF = true;
         }
+
+        Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        if (key == null)
+        {
+            Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Transmittal", true);
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        }
+        
+        key.SetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats, Microsoft.Win32.RegistryValueKind.String);
+        
+        key.Close();
     }
 
     #endregion
