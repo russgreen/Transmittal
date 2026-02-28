@@ -76,6 +76,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _enablePerSheetExportFormats = false;
 
+    [ObservableProperty]
+    private int _sheetsToExport = 0;
+
     /// EXPORT FORMATS 
     [ObservableProperty]
     private bool _exportPDFAvailable = true;
@@ -453,13 +456,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IsSheetsSelected = false;
         IsSelectedSheetsValid = false;
 
+        if(SelectedDrawingSheets.Count == 0)
+        {
+            SheetsToExport = 0;
+            return;
+        }
+
+        IsSheetsSelected = true;
+
         if (EnablePerSheetExportFormats)
         {
             var sheetsWithExportFormatsSet = DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true);
 
+            SheetsToExport = sheetsWithExportFormatsSet.Count();
+
             if (sheetsWithExportFormatsSet.Count() > 0)
             {
-                IsSheetsSelected = true;
                 IsSelectedSheetsValid = true;
             }
 
@@ -482,12 +494,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             return;
         }
-
-       if (SelectedDrawingSheets.Count > 0)
-       {
-           IsSheetsSelected = true;
-           IsSelectedSheetsValid = true;
-       }
+        
+        IsSelectedSheetsValid = true;
+        SheetsToExport = SelectedDrawingSheets.Count;
 
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
