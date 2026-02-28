@@ -39,7 +39,7 @@ public partial class TransmittalView : Window
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = "https://russgreen.github.io/Transmittal/transmittal/",
+            FileName = "https://russgreen.github.io/Transmittal/revit-addin/",
             UseShellExecute = true
         });
     }

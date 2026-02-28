@@ -80,13 +80,15 @@
 
                         <Grid Grid.Column="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="250" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                                                                                    
-                            <TextBlock Grid.Column="0" Margin="20,5,0,0"  >
+                            <TextBlock Grid.Column="0" Margin="10,5,0,0"  >
                                 <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
-                                <Run Text=" sheets selected."/>
+                                <Run Text=" sheets selected : "/>
+                                <Run Text="{Binding SheetsToExport, Mode=OneWay, FallbackValue=0}"/>
+                                <Run Text=" will be exported"/>
                             </TextBlock>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">

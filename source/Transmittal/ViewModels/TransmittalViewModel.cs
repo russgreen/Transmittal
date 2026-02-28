@@ -14,6 +14,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
@@ -74,6 +75,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private bool _enablePerSheetExportFormats = false;
+
+    [ObservableProperty]
+    private int _sheetsToExport = 0;
 
     /// EXPORT FORMATS 
     [ObservableProperty]
@@ -186,6 +190,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _isBackEnabled = true;
 
     private List<DocumentModel> _exportedFiles = new();
+    private List<string> _additionalExportFiles = new();
 
     public TransmittalViewModel()
     {
@@ -256,6 +261,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets();
+
+        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", false))
+        {
+            if (key != null)
+            {
+                EnablePerSheetExportFormats = Convert.ToBoolean(key.GetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats));
+            }
+        }
     }
 
     private void WireUpExportFormatsPage()
@@ -444,13 +457,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IsSheetsSelected = false;
         IsSelectedSheetsValid = false;
 
+        if(SelectedDrawingSheets.Count == 0)
+        {
+            SheetsToExport = 0;
+            return;
+        }
+
+        IsSheetsSelected = true;
+
         if (EnablePerSheetExportFormats)
         {
             var sheetsWithExportFormatsSet = DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true);
 
+            SheetsToExport = sheetsWithExportFormatsSet.Count();
+
             if (sheetsWithExportFormatsSet.Count() > 0)
             {
-                IsSheetsSelected = true;
                 IsSelectedSheetsValid = true;
             }
 
@@ -473,12 +495,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             return;
         }
-
-       if (SelectedDrawingSheets.Count > 0)
-       {
-           IsSheetsSelected = true;
-           IsSelectedSheetsValid = true;
-       }
+        
+        IsSelectedSheetsValid = true;
+        SheetsToExport = SelectedDrawingSheets.Count;
 
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
@@ -767,6 +786,17 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             ExportPDF = true;
         }
+
+        Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        if (key == null)
+        {
+            Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Transmittal", true);
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        }
+        
+        key.SetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats, Microsoft.Win32.RegistryValueKind.String);
+        
+        key.Close();
     }
 
     #endregion
@@ -1130,13 +1160,37 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         if (DwgExportOptions.SharedCoords || !DwgExportOptions.MergedViews)
         {
-            //TODO: add all DWG's of views to the list of exported files
+            var additionalDwgFiles = GetFilesWithPrefixExceptPrimary(folderPath, fileName, ".dwg");
+            foreach (var additionalFile in additionalDwgFiles)
+            {
+                _additionalExportFiles.Add(additionalFile);
+            }
         }
 
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWG...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);
+    }
+
+    private IReadOnlyList<string> GetFilesWithPrefixExceptPrimary(string folderPath, string fileNamePrefix, string primaryExtension = ".dwg")
+    {
+        if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(fileNamePrefix))
+        {
+            return Array.Empty<string>();
+        }
+
+        if (!Directory.Exists(folderPath))
+        {
+            return Array.Empty<string>();
+        }
+
+        var primaryFileName = $"{fileNamePrefix}{primaryExtension}";
+
+        return Directory.EnumerateFiles(folderPath, $"{fileNamePrefix}*", SearchOption.TopDirectoryOnly)
+            .Where(path => !Path.GetFileName(path).Equals(primaryFileName, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 
     private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName, int totalSheets)
@@ -1316,6 +1370,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             .Select(x => x.FilePath)
             .ToList();
 
+        if(_additionalExportFiles.Count > 0)
+        {
+            filesForWeTransfer.AddRange(_additionalExportFiles);
+        }
+        
         var filesForWeTransferString = string.Join(";", filesForWeTransfer);
 
 

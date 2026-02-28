@@ -5,7 +5,7 @@ description: "Transmittal Revit add-in for managing drawiing revisions and multi
 permalink: /revit-addin/
 ---
 Transmittal for Autodesk® Revit® provides a wizard style UI to export drawing sheets to PDF, DWG or DWF while optionally recording the transmittal in database for the purpose of reporting.
-![image](https://user-images.githubusercontent.com/1886088/178137922-959b268e-ce69-4328-89b9-a65a4c03e2f7.png)
+<img src="assets/images/TransmittalAddinPage1.png" width="850" >
 
 Selected sheets can have revisions and status values set. 
 
@@ -22,7 +22,6 @@ Select the recipients from the available project directory membrs on the left si
 ![image](https://user-images.githubusercontent.com/1886088/176995621-01552177-3b57-43a0-8ea6-3c79c19dfa90.png)
 
 After clicking Finish the progress will be displayed.
-![image](https://user-images.githubusercontent.com/1886088/176995629-f0be91fb-b4f3-44af-9828-2aec9a948ac2.png)
 
 If the transmittal was recorded in the database the Transmittal Sheet report will be displayed.
 ![image](https://user-images.githubusercontent.com/1886088/176995644-b5646a98-d28b-421d-986b-6b92be854c6e.png)
