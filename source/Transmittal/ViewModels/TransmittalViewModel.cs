@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Transmittal.Commands;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
@@ -934,6 +935,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void ProcessSheets()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("Per sheet formats : {value}", EnablePerSheetExportFormats);
+        }
+
         IsBackEnabled = false;
         IsFinishEnabled = false;
         IsWindowVisible = System.Windows.Visibility.Hidden;
