@@ -198,7 +198,7 @@
 
                     <CheckBox Grid.Row="2" Margin="0,5,0,0"
                               Content="Enable Per Sheet Export Formats"
-                              IsChecked="{Binding EnablePerSheetExportFormats}"  />
+                              IsChecked="{Binding EnablePerSheetExportFormats, Mode=TwoWay}"  />
                 </Grid>
             </syncfusion:WizardPage>
             
