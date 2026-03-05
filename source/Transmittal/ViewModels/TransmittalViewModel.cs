@@ -969,8 +969,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 var totalSheets = targetSheets.Count;
 
-                var sheet = sheets.FirstOrDefault(x => x.SheetNumber == drawingSheet.DrgNumber);
-                if (sheet is null || !sheet.CanBePrinted) continue;
+                var sheet = sheets.FirstOrDefault(x => x.CanBePrinted && x.SheetNumber == drawingSheet.DrgNumber);
+                if (sheet is null)
+                {
+                    //the sheet must exist so shouldn't be required but just in case....
+                    continue;
+                }
 
                 var views = new ViewSet();
                 views.Insert(sheet);
