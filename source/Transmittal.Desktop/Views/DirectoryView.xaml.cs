@@ -1,9 +1,6 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using Ookii.Dialogs.Wpf;
-using Syncfusion.UI.Xaml.Grid;
+﻿using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using System.Windows;
-using System.Windows.Controls;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Views;
@@ -77,27 +74,32 @@ public partial class DirectoryView : Window
 
     private void sfDataGridPeople_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Remove the selected contact from the transmittal. This action cannot be undone.");
-        TaskDialogButton cancelButton = new(ButtonType.Cancel);
-
-        TaskDialog taskDialog = new()
+        // Only allow delete if a person is selected and not referenced by any transmittals.
+        if (_viewModel.SelectedPerson == null ||
+            _transmittalService.GetTransmittals_ByPerson(_viewModel.SelectedPerson.ID).Count != 0)
         {
-            WindowTitle = "Delete contact from transmittal",
-            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
-            Buttons = { deleteButton, cancelButton }
+            e.Cancel = true;
+            return;
+        }
+
+        // Build TaskDialog (System.Windows.Forms) page with command link style.
+        var deleteButton = new System.Windows.Forms.TaskDialogCommandLinkButton(
+            "Remove the selected contact from the transmittal. This action cannot be undone.");
+
+        var page = new System.Windows.Forms.TaskDialogPage
+        {
+            Caption = "Delete contact from transmittal",
+            Buttons = { deleteButton, System.Windows.Forms.TaskDialogButton.Cancel }
         };
 
-        if (_viewModel.SelectedPerson != null)
+        // Show with WPF owner via window handle.
+        var ownerHandle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+        var result = System.Windows.Forms.TaskDialog.ShowDialog(ownerHandle, page);
+
+        if (result == deleteButton)
         {
-            if (_transmittalService.GetTransmittals_ByPerson(_viewModel.SelectedPerson.ID).Count == 0)
-            {
-                TaskDialogButton button = taskDialog.ShowDialog(this);
-                if (button == deleteButton)
-                {
-                    _viewModel.RemovePersonCommand.Execute(null);
-                    return;
-                }
-            }
+            _viewModel.RemovePersonCommand.Execute(null);
+            return;
         }
 
         e.Cancel = true;
@@ -105,27 +107,30 @@ public partial class DirectoryView : Window
 
     private void sfDataGridCompanies_RecordDeleting(object sender, RecordDeletingEventArgs e)
     {
-        TaskDialogButton deleteButton = new($"Remove the selected company from the database. This action cannot be undone.");
-        TaskDialogButton cancelButton = new(ButtonType.Cancel);
-
-        TaskDialog taskDialog = new()
+        // Only allow delete if a company is selected and not referenced by any people.
+        if (_viewModel.SelectedCompany == null ||
+            _contactDirectoryService.GetPeople_ByCompany(_viewModel.SelectedCompany.ID).Count != 0)
         {
-            WindowTitle = "Delete company",
-            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
-            Buttons = { deleteButton, cancelButton }
+            e.Cancel = true;
+            return;
+        }
+
+        var deleteButton = new System.Windows.Forms.TaskDialogCommandLinkButton(
+            "Remove the selected company from the database. This action cannot be undone.");
+
+        var page = new System.Windows.Forms.TaskDialogPage
+        {
+            Caption = "Delete company",
+            Buttons = { deleteButton, System.Windows.Forms.TaskDialogButton.Cancel }
         };
 
-        if (_viewModel.SelectedCompany != null)
+        var ownerHandle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
+        var result = System.Windows.Forms.TaskDialog.ShowDialog(ownerHandle, page);
+
+        if (result == deleteButton)
         {
-            if (_contactDirectoryService.GetPeople_ByCompany(_viewModel.SelectedCompany.ID).Count == 0)
-            {
-                TaskDialogButton button = taskDialog.ShowDialog(this);
-                if (button == deleteButton)
-                {
-                    _viewModel.RemoveCompanyCommand.Execute(null);
-                    return;
-                }
-            }
+            _viewModel.RemoveCompanyCommand.Execute(null);
+            return;
         }
 
         e.Cancel = true;

@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using Ookii.Dialogs.Wpf;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
 using System.Windows;
@@ -41,19 +40,18 @@ public partial class TransmittalView : Window
     private void WizardControl_Cancel(object sender, RoutedEventArgs e)
     {
 
-        Ookii.Dialogs.Wpf.TaskDialogButton yesButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.Yes);
-        Ookii.Dialogs.Wpf.TaskDialogButton noButton = new Ookii.Dialogs.Wpf.TaskDialogButton(ButtonType.No);
+        var yesButton = new System.Windows.Forms.TaskDialogButton("OK");
+        var noButton = new System.Windows.Forms.TaskDialogButton("No");
 
-        Ookii.Dialogs.Wpf.TaskDialog dialog = new Ookii.Dialogs.Wpf.TaskDialog()
+        var page = new System.Windows.Forms.TaskDialogPage
         {
-            WindowTitle = "Cancel Transmittal",
-            MainInstruction = "Are you sure you want to cancel?",
-            MainIcon = Ookii.Dialogs.Wpf.TaskDialogIcon.Information,
-            ButtonStyle = Ookii.Dialogs.Wpf.TaskDialogButtonStyle.Standard,
+            Caption = "Cancel Transmittal",
+            Heading = "Are you sure you want to cancel?",
+            Icon = System.Windows.Forms.TaskDialogIcon.Information,
             Buttons = { yesButton, noButton }
         };
 
-        Ookii.Dialogs.Wpf.TaskDialogButton button = dialog.ShowDialog(this);
+        var button = System.Windows.Forms.TaskDialog.ShowDialog(page);
         if (button == yesButton)
         {
             //_viewModel.AbortFlag = true;

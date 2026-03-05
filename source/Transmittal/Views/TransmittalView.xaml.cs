@@ -2,7 +2,10 @@
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Transmittal.Models;
 
 namespace Transmittal.Views;
@@ -12,7 +15,7 @@ namespace Transmittal.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-
+        
     public TransmittalView()
     {
         InitializeComponent();
@@ -36,7 +39,7 @@ public partial class TransmittalView : Window
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = "https://russgreen.github.io/Transmittal/transmittal/",
+            FileName = "https://russgreen.github.io/Transmittal/revit-addin/",
             UseShellExecute = true
         });
     }
@@ -109,5 +112,35 @@ public partial class TransmittalView : Window
                 _viewModel.UpdateSheet(sheet);
             }
         }
+    }
+
+    private void CopiesTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+        e.Handled = !IsPositiveInt((TextBox)sender, e.Text);
+    }
+
+    private void CopiesTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+    {
+        if (!e.SourceDataObject.GetDataPresent(DataFormats.Text, true))
+        {
+            e.CancelCommand();
+            return;
+        }
+
+        var pasteText = e.SourceDataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+        if (!IsPositiveInt((TextBox)sender, pasteText))
+        {
+            e.CancelCommand();
+        }
+    }
+
+    private bool IsPositiveInt(TextBox textBox, string newText)
+    {
+        var positiveIntRegex = new Regex(@"^[1-9]\d*$");
+
+        var proposed = textBox.Text.Remove(textBox.SelectionStart, textBox.SelectionLength)
+            .Insert(textBox.SelectionStart, newText);
+
+        return string.IsNullOrEmpty(proposed) || positiveIntRegex.IsMatch(proposed);
     }
 }

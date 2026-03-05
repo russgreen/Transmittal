@@ -14,7 +14,9 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Media;
 using System.Windows.Threading;
+using Transmittal.Commands;
 using Transmittal.Extensions;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
@@ -38,6 +40,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IExportDWFService _exportDWFService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
+    private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<TransmittalViewModel> _logger;
 
     public string WindowTitle { get; private set; }
@@ -70,6 +73,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     [ObservableProperty]
     private bool _processingsheets = false;
+
+    [ObservableProperty]
+    private bool _enablePerSheetExportFormats = false;
+
+    [ObservableProperty]
+    private int _sheetsToExport = 0;
 
     /// EXPORT FORMATS 
     [ObservableProperty]
@@ -159,6 +168,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _generateCDECopies = false;
 
+    [ObservableProperty]
+    private bool _sendToWeTransfer = false;
 
     /// SUMMARY PROGRESS
     [ObservableProperty]
@@ -180,6 +191,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _isBackEnabled = true;
 
     private List<DocumentModel> _exportedFiles = new();
+    private List<string> _additionalExportFiles = new();
 
     public TransmittalViewModel()
     {
@@ -201,6 +213,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IExportDWFService exportDWFService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
+        IMessageBoxService messageBoxService,
         ILogger<TransmittalViewModel> logger)
     {
         _settingsServiceRvt = settingsServiceRvt;
@@ -210,6 +223,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _exportDWFService = exportDWFService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
+        _messageBoxService = messageBoxService;
         _logger = logger;
 
         var informationVersion = Assembly.GetExecutingAssembly()
@@ -248,6 +262,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets();
+
+        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", false))
+        {
+            if (key != null)
+            {
+                EnablePerSheetExportFormats = Convert.ToBoolean(key.GetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats));
+            }
+        }
     }
 
     private void WireUpExportFormatsPage()
@@ -407,7 +429,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 drawingSheet.IssueDate = sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).AsString();
                 drawingSheet.DrgDrawn = sheet.get_Parameter(BuiltInParameter.SHEET_DRAWN_BY).AsString();
                 drawingSheet.DrgChecked = sheet.get_Parameter(BuiltInParameter.SHEET_CHECKED_BY).AsString();
-                drawingSheet.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();
+                //drawingSheet.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();
+
+                var currentRevision  = App.RevitDocument.GetElement(sheet.GetCurrentRevision()) as Revision;
+                drawingSheet.RevDate = currentRevision?.RevisionDate;
+
                 drawingSheet.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
 
                 drawingSheets.Add(drawingSheet);
@@ -424,19 +450,55 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void SelectedDrawingSheets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        ValidateSelections();
+        ValidateSheets();
     }
 
-    private void ValidateSelections()
+    private void ValidateSheets()
     {
         IsSheetsSelected = false;
         IsSelectedSheetsValid = false;
-        
-        if (SelectedDrawingSheets.Count > 0)
+
+        if(SelectedDrawingSheets.Count == 0)
         {
-            IsSheetsSelected = true;
-            IsSelectedSheetsValid = true;
+            SheetsToExport = 0;
+            return;
         }
+
+        IsSheetsSelected = true;
+
+        if (EnablePerSheetExportFormats)
+        {
+            var sheetsWithExportFormatsSet = DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true);
+
+            SheetsToExport = sheetsWithExportFormatsSet.Count();
+
+            if (sheetsWithExportFormatsSet.Count() > 0)
+            {
+                IsSelectedSheetsValid = true;
+            }
+
+            if (_settingsService.GlobalSettings.UseISO19650 == true)
+            {
+                //todo validate the selected sheets meet ISO19650 rules and all parameters have values
+                foreach (var item in sheetsWithExportFormatsSet)
+                {
+                    if ((string.IsNullOrEmpty(item.DrgVolume)) ||
+                        (string.IsNullOrEmpty(item.DrgLevel)) ||
+                        (string.IsNullOrEmpty(item.DrgType)) ||
+                        (string.IsNullOrEmpty(item.DrgRev)) ||
+                        (string.IsNullOrEmpty(item.DrgStatus)))
+                    {
+                        IsSelectedSheetsValid = false;
+                        break;
+                    }
+                }
+            }
+
+            return;
+        }
+        
+        IsSelectedSheetsValid = true;
+        SheetsToExport = SelectedDrawingSheets.Count;
 
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
@@ -483,7 +545,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         }
 
-        ValidateSelections();
+        ValidateSheets();
     }
 
     private void SetSheetStatus(ViewSheet sheet, string status, string description)
@@ -575,7 +637,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
         }
 
-        ValidateSelections();
+        ValidateSheets();
     }
 
     public void UpdateSheet(DrawingSheetModel sheetModel)
@@ -683,6 +745,61 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     }
 #endif
 
+    private void ToggleSheetExport(
+        Func<DrawingSheetModel, bool?> getFlag,
+        Action<DrawingSheetModel, bool?> setFlag,
+        Action<bool> setAggregate)
+    {
+        if (SelectedDrawingSheets.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var item in SelectedDrawingSheets.Cast<DrawingSheetModel>())
+        {
+            // true -> false, false/null -> true
+            setFlag(item, getFlag(item) != true);
+        }
+
+        // Aggregate is true if any selected sheet explicitly has true
+        setAggregate(DrawingSheets.Any(x => getFlag(x) == true));
+
+        ValidateSheets();
+    }
+
+    [RelayCommand]
+    private void TogglePDF() =>
+        ToggleSheetExport(x => x.ExportPDF, (x, v) => x.ExportPDF = v, v => ExportPDF = v);
+
+    [RelayCommand]
+    private void ToggleDWG() =>
+        ToggleSheetExport(x => x.ExportDWG, (x, v) => x.ExportDWG = v, v => ExportDWG = v);
+
+    [RelayCommand]
+    private void ToggleDWF() =>
+        ToggleSheetExport(x => x.ExportDWF, (x, v) => x.ExportDWF = v, v => ExportDWF = v);
+
+    partial void OnEnablePerSheetExportFormatsChanged(bool value)
+    {
+        ValidateSheets();
+
+        if(value == false)
+        {
+            ExportPDF = true;
+        }
+
+        Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        if (key == null)
+        {
+            Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Transmittal", true);
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        }
+        
+        key.SetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats, Microsoft.Win32.RegistryValueKind.String);
+        
+        key.Close();
+    }
+
     #endregion
 
     #region Export Formats
@@ -724,6 +841,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         if (RecordTransmittal == true && (Distribution is null || Distribution.Count == 0))
         {
             IsFinishEnabled = false;
+        }
+    }
+
+    partial void OnCopiesChanging(int value)
+    {
+        if (value < 1)
+        {
+            Copies = 1;
         }
     }
 
@@ -810,132 +935,139 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [RelayCommand]
     private void ProcessSheets()
     {
+        using (LogContext.PushProperty("UsageTracking", true))
+        {
+            _logger.LogInformation("Per sheet formats : {value}", EnablePerSheetExportFormats);
+        }
+
         IsBackEnabled = false;
         IsFinishEnabled = false;
-
         IsWindowVisible = System.Windows.Visibility.Hidden;
 
         OpenProgressWindow();
-
         DispatcherHelper.DoEvents();
 
         try
         {
-            var sheets = new FilteredElementCollector(App.RevitDocument);
-            sheets.OfClass(typeof(ViewSheet));
+            var sheets = new FilteredElementCollector(App.RevitDocument)
+                .OfClass(typeof(ViewSheet))
+                .Cast<ViewSheet>()
+                .ToList();
 
-            foreach (var drawingSheet in SelectedDrawingSheets.Cast<DrawingSheetModel>())
+            var targetSheets = EnablePerSheetExportFormats
+                ? DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true).ToList()
+                : SelectedDrawingSheets.Cast<DrawingSheetModel>().ToList();
+
+            foreach (var drawingSheet in targetSheets)
             {
-                foreach (var sheet in sheets.Cast<ViewSheet>())
-                {
-                    // abort if cancel was clicked
-                    if (AbortFlag == true)
-                    {
-                        CloseProgress();
-                        this.OnClosingRequest();
-                        return;
-                    }
-
-                    if (drawingSheet.DrgNumber == sheet.SheetNumber)
-                    {
-                        //TODO - test if this check is required.....left in for now...
-                        if (sheet.CanBePrinted == true)
-                        {
-                            var views = new ViewSet();
-                            views.Insert(sheet);
-
-                            string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
-                                 _settingsService.GlobalSettings.ProjectNumber,
-                                 _settingsService.GlobalSettings.ProjectIdentifier,
-                                 _settingsService.GlobalSettings.ProjectName,
-                                 drawingSheet.DrgOriginator,
-                                 drawingSheet.DrgVolume,
-                                 drawingSheet.DrgLevel,
-                                 drawingSheet.DrgType,
-                                 drawingSheet.DrgRole,
-                                 sheet.SheetNumber,
-                                 drawingSheet.DrgName, 
-                                 drawingSheet.DrgRev,
-                                 drawingSheet.DrgStatus,
-                                 drawingSheet.DrgStatusDescription);
-
-                            DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
-                            SheetTaskProcessed = 0;
-                            SheetTaskProgressLabel = string.Empty;
-                            SendProgressMessage();
-
-                            if (ExportPDF == true)
-                            {
-                                ExportSheetToPDF(drawingSheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (ExportDWG == true)
-                            {
-                                ExportSheetToDWG(drawingSheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (ExportDWF == true)
-                            {
-                                ExportSheetToDWF(drawingSheet, sheet, views, fileName);
-                            }
-
-                            if (AbortFlag == true)
-                            {
-                                CloseProgress();
-                                this.OnClosingRequest();
-                                return;
-                            }
-
-                            if (RecordTransmittal == true)
-                            {
-                                // Mark sheets issued date.
-                                // Currently disabled is not required for transmittal
-                                //SetIssueDate(sheet);
-
-                                // Mark revisions issued
-                                SetRevisionsIssued(sheet);
-                            }
-
-                            DrawingSheetsProcessed += 1;
-                            SendProgressMessage();
-                        }
-                    }
+                if (AbortFlag) 
+                { 
+                    CloseProgress(); 
+                    OnClosingRequest(); 
+                    return; 
                 }
+
+                var totalSheets = targetSheets.Count;
+
+                var sheet = sheets.FirstOrDefault(x => x.CanBePrinted && x.SheetNumber == drawingSheet.DrgNumber);
+                if (sheet is null)
+                {
+                    //the sheet must exist as we already picked it to export. this check is defensive, but included just in case....
+                    continue;
+                }
+
+                var views = new ViewSet();
+                views.Insert(sheet);
+
+                string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                    _settingsService.GlobalSettings.ProjectNumber,
+                    _settingsService.GlobalSettings.ProjectIdentifier,
+                    _settingsService.GlobalSettings.ProjectName,
+                    drawingSheet.DrgOriginator,
+                    drawingSheet.DrgVolume,
+                    drawingSheet.DrgLevel,
+                    drawingSheet.DrgType,
+                    drawingSheet.DrgRole,
+                    sheet.SheetNumber,
+                    drawingSheet.DrgName,
+                    drawingSheet.DrgRev,
+                    drawingSheet.DrgStatus,
+                    drawingSheet.DrgStatusDescription);
+
+                DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                SheetTaskProcessed = 0;
+                SheetTaskProgressLabel = string.Empty;
+                SendProgressMessage(totalSheets);
+
+                bool exportPdf = EnablePerSheetExportFormats ? drawingSheet.ExportPDF == true : ExportPDF;
+                bool exportDwg = EnablePerSheetExportFormats ? drawingSheet.ExportDWG == true : ExportDWG;
+                bool exportDwf = EnablePerSheetExportFormats ? drawingSheet.ExportDWF == true : ExportDWF;
+
+                if (exportPdf)
+                {
+                    ExportSheetToPDF(drawingSheet, views, fileName, totalSheets);
+                }
+
+                if (AbortFlag) 
+                { 
+                    CloseProgress(); 
+                    OnClosingRequest(); 
+                    return; 
+                }
+
+                if (exportDwg)
+                {
+                    ExportSheetToDWG(drawingSheet, views, fileName, totalSheets);
+                }
+
+                if (AbortFlag) 
+                { 
+                    CloseProgress(); 
+                    OnClosingRequest(); 
+                    return; 
+                }
+
+                if (exportDwf)
+                {
+                    ExportSheetToDWF(drawingSheet, sheet, views, fileName, totalSheets);
+                }
+
+                if (AbortFlag) 
+                { 
+                    CloseProgress(); 
+                    OnClosingRequest(); 
+                    return; 
+                }
+
+                if (RecordTransmittal)
+                {
+                    SetRevisionsIssued(sheet);
+                }
+
+                DrawingSheetsProcessed += 1;
+                SendProgressMessage(targetSheets.Count);
             }
 
             CurrentStepProgressLabel = "Recording transmittal...";
-            SendProgressMessage();
+            SendProgressMessage(targetSheets.Count);
 
-            if (RecordTransmittal == true)
+            if (SendToWeTransfer)
             {
-                RecordTransmittalInDatabase();
+                SendFilesToWeTransfer();
+            }
 
+            if (RecordTransmittal)
+            {
+                RecordTransmittalInDatabase(targetSheets);
                 CurrentStepProgressLabel = "Displaying report...";
-                SendProgressMessage();
-
+                SendProgressMessage(targetSheets.Count);
                 LaunchTransmittalReport();
-
                 CopyDistributionToClipboard();
             }
 
-            if(GenerateCDECopies == true)
+            if (GenerateCDECopies)
             {
                 CopyFilesForCDE();
-
                 if (!_settingsService.GlobalSettings.UseDrawingIssueStore2)
                 {
                     GenerateCDEImportFile();
@@ -943,35 +1075,27 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
 
             OpenExplorerToExportedFilesLocations();
-             
-            //just pause before closing the window
             Thread.Sleep(5000);
-
             CloseProgress();
-
-            this.OnClosingRequest();
-            return;
+            OnClosingRequest();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing sheets");
-            
-
-            Autodesk.Revit.UI.TaskDialog.Show("Error", 
-                $"There has been an error processing sheet exports. {Environment.NewLine} {ex}", 
+            Autodesk.Revit.UI.TaskDialog.Show(
+                "Error",
+                $"There has been an error processing sheet exports. {Environment.NewLine} {ex}",
                 Autodesk.Revit.UI.TaskDialogCommonButtons.Ok);
 
             CloseProgress();
-
-            this.OnClosingRequest();
-            return;
+            OnClosingRequest();
         }
     }
 
-    private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting PDF...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         var filePath = string.Empty;
 
@@ -1017,13 +1141,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting PDF...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
-    private void ExportSheetToDWG(DrawingSheetModel drawingSheet, ViewSet views, string fileName)
+    private void ExportSheetToDWG(DrawingSheetModel drawingSheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting DWG...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
         DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
@@ -1044,16 +1168,45 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         dwg.FilePath = filePath;
         _exportedFiles.Add(dwg);
 
+        if (DwgExportOptions.SharedCoords || !DwgExportOptions.MergedViews)
+        {
+            var additionalDwgFiles = GetFilesWithPrefixExceptPrimary(folderPath, fileName, ".dwg");
+            foreach (var additionalFile in additionalDwgFiles)
+            {
+                _additionalExportFiles.Add(additionalFile);
+            }
+        }
+
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWG...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
-    private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName)
+    private IReadOnlyList<string> GetFilesWithPrefixExceptPrimary(string folderPath, string fileNamePrefix, string primaryExtension = ".dwg")
+    {
+        if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(fileNamePrefix))
+        {
+            return Array.Empty<string>();
+        }
+
+        if (!Directory.Exists(folderPath))
+        {
+            return Array.Empty<string>();
+        }
+
+        var primaryFileName = $"{fileNamePrefix}{primaryExtension}";
+
+        return Directory.EnumerateFiles(folderPath, $"{fileNamePrefix}*", SearchOption.TopDirectoryOnly)
+            .Where(path => !Path.GetFileName(path).Equals(primaryFileName, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting DWF...";
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
 
         var sheetsize = sheet.GetExportPaperFormat();
 
@@ -1078,7 +1231,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         //TODO - actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWF...DONE";
         SheetTaskProcessed += 1;
-        SendProgressMessage();
+        SendProgressMessage(totalSheets);
     }
 
     private void CopyFilesForCDE()
@@ -1213,6 +1366,46 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return folderPath;
     }
 
+    private void SendFilesToWeTransfer()
+    {
+        _logger.LogInformation("Adding {count} exported files to WeTransfer for upload", _exportedFiles.Count);
+
+        if (_exportedFiles.Count == 0)
+        {
+            return;
+        }
+
+        var filesForWeTransfer = _exportedFiles
+            .Where(x => x.FilePath != null)
+            .Select(x => x.FilePath)
+            .ToList();
+
+        if(_additionalExportFiles.Count > 0)
+        {
+            filesForWeTransfer.AddRange(_additionalExportFiles);
+        }
+        
+        var filesForWeTransferString = string.Join(";", filesForWeTransfer);
+
+
+#if DEBUG
+        var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
+
+        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\Debug", "Transmittal.Desktop.exe");
+#else
+        var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
+#endif
+
+        ProcessStartInfo processStartInfo = new ProcessStartInfo
+        {
+            FileName = pathToExe,
+            Arguments = $"\"--wetransfer={filesForWeTransferString}\""
+        };
+
+        Process.Start(processStartInfo);
+    }
+
     private void OpenExplorerToExportedFilesLocations()
     {
         var paths = GetUniqueExportedFolderPaths();
@@ -1288,7 +1481,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    private void RecordTransmittalInDatabase()
+    private void RecordTransmittalInDatabase(List<DrawingSheetModel> sheets)
     {
         var stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -1300,26 +1493,26 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _newTransmittal.TransDate = DateTime.Now;
         _transmittalService.CreateTransmittal(_newTransmittal);
 
-        foreach (var item in SelectedDrawingSheets.Cast<TransmittalItemModel>())
+        foreach (var sheet in sheets)
         {
-            item.TransID = _newTransmittal.ID;
+            sheet.TransID = _newTransmittal.ID;
 
             //check if we're using the project identifier on this project
             if (_settingsService.GlobalSettings.ProjectIdentifier is null || _settingsService.GlobalSettings.ProjectIdentifier == string.Empty)
             {
-                item.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
+                sheet.DrgProj = _settingsService.GlobalSettings.ProjectNumber;
             }
             else
             {
-                item.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
+                sheet.DrgProj = _settingsService.GlobalSettings.ProjectIdentifier;
             }
 
-            item.DrgOriginator = _settingsService.GlobalSettings.Originator;
-            item.DrgRole = _settingsService.GlobalSettings.Role;
+            sheet.DrgOriginator = _settingsService.GlobalSettings.Originator;
+            sheet.DrgRole = _settingsService.GlobalSettings.Role;
             //_transmittalService.CreateTransmittalItem(item);
         }
 
-        _transmittalService.CreateTransmittalItems(SelectedDrawingSheets.Cast<TransmittalItemModel>().ToList());
+        _transmittalService.CreateTransmittalItems(sheets.Cast<TransmittalItemModel>().ToList());
 
         foreach (var dist in Distribution)
         {
@@ -1440,14 +1633,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _progressWindowThread.Start();
     }
 
-    private void SendProgressMessage()
+    private void SendProgressMessage(int sheetsToProcess)
     {
         WeakReferenceMessenger.Default.Send(
             new ProgressUpdateMessage(
                 new ProgressMessageModel 
                 { 
                     CurrentStepProgressLabel = CurrentStepProgressLabel,
-                    DrawingSheetsToProcess = SelectedDrawingSheets.Count,
+                    DrawingSheetsToProcess = sheetsToProcess,
                     DrawingSheetsProcessed = DrawingSheetsProcessed,
                     DrawingSheetProgressLabel = DrawingSheetProgressLabel,
                     SheetTasksToProcess = ExportFormatCount,
@@ -1550,5 +1743,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
 
         return folders.OrderBy(x => x).ToList();
+    }
+
+    partial void OnSendToWeTransferChanged(bool oldValue, bool newValue)
+    {
+        if (newValue == true)
+        {
+            if (!_messageBoxService.ShowYesNo(
+                "WeTransfer Preview Feature",
+                "Any running browsers will be closed when using this feature. Would you still like to continue using it?"))
+            {
+                SendToWeTransfer = oldValue;
+            }
+        }
     }
 }

@@ -1,0 +1,23 @@
+name: Delete Old Assets
+
+on:
+  release:
+    types: [published]
+
+# Grant the workflow the permissions the job will need
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    # Make the automatically-created token available in steps as GITHUB_TOKEN
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Delete Older Release Assets
+        with:
+          keep_latest: 3
+        uses: tinoji/delete-older-release-assets@v1.0.1

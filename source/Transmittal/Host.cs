@@ -51,9 +51,11 @@ internal static class Host
                 .WriteTo.File(new JsonFormatter(), logPath,
                     restrictedToMinimumLevel: LogEventLevel.Warning,
                     rollingInterval: RollingInterval.Day,
-                    retainedFileCountLimit: 7))
+                    retainedFileCountLimit: 7));
 
-            //write to google analytics
+#if !DEBUG
+        //write to google analytics
+        loggerConfigTransmittal = loggerConfigTransmittal
             .WriteTo.GoogleAnalytics(opts =>
              {
                  opts.MeasurementId = "##MEASUREMENTID##";
@@ -72,6 +74,7 @@ internal static class Host
 
                  opts.CountryId = regionInfo.TwoLetterISORegionName;
              });
+#endif
 
         if (analyticsSettings.EnableAnalytics)
         {
@@ -110,6 +113,7 @@ internal static class Host
                 services.AddTransient<IExportDWFService, ExportDWFService>();
                 services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
                 services.AddTransient<ITransmittalService, TransmittalService>();
+                services.AddTransient<IWeTransferService, WeTransferService>();
 
                 services.AddTransient<TransmittalViewModel>();
                 services.AddTransient<SettingsViewModel>();

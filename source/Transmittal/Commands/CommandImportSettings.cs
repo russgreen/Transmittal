@@ -27,8 +27,8 @@ internal class CommandImportSettings : ExternalCommand
             _logger.LogInformation("{command}", nameof(CommandImportSettings));
         }
 
-        App.CachedUiApp = Context.UiApplication;
-        App.RevitDocument = Context.ActiveDocument;
+        App.CachedUiApp = RevitContext.UiApplication;
+        App.RevitDocument = RevitContext.ActiveDocument;
 
         string jsonFilePath;
 

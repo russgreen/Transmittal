@@ -1,4 +1,4 @@
-﻿using Ookii.Dialogs.Wpf;
+﻿using System.Windows.Forms; // For TaskDialog
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Services;
@@ -6,87 +6,52 @@ internal class MessageBoxService : IMessageBoxService
 {
     public bool ShowCancel(string title, string message)
     {
-        var cancelButton = new TaskDialogButton(ButtonType.Cancel);
-
-        var taskDialog = new TaskDialog()
+        var page = new TaskDialogPage
         {
-            WindowTitle = title,
-            MainInstruction = message,
-            ButtonStyle = TaskDialogButtonStyle.Standard,
-            Buttons = { cancelButton }
+            Caption = title,
+            Heading = message
         };
 
-        var button = taskDialog.ShowDialog();
-        if (button == cancelButton)
-        {
-            return true;
-        }
-
-        return false;
+        page.Buttons.Add(TaskDialogButton.Cancel);
+        var result = TaskDialog.ShowDialog(page);
+        return result == TaskDialogButton.Cancel;
     }
 
     public bool ShowOk(string title, string message)
     {
-        var okButton = new TaskDialogButton(ButtonType.Ok);
-
-        var taskDialog = new TaskDialog()
+        var page = new TaskDialogPage
         {
-            WindowTitle = title,
-            MainInstruction = message,
-            ButtonStyle = TaskDialogButtonStyle.Standard,
-            Buttons = { okButton }
+            Caption = title,
+            Heading = message
         };
-
-        var button = taskDialog.ShowDialog();
-        if (button == okButton)
-        {
-            return true;
-        }
-
-        return false;
+        page.Buttons.Add(TaskDialogButton.OK);
+        var result = TaskDialog.ShowDialog(page);
+        return result == TaskDialogButton.OK;
     }
 
     public bool ShowOkCancel(string title, string message)
     {
-        var okButton = new TaskDialogButton(ButtonType.Ok);
-        var cancelButton = new TaskDialogButton(ButtonType.Cancel);
-
-        var taskDialog = new TaskDialog()
+        var page = new TaskDialogPage
         {
-            WindowTitle = title,
-            MainInstruction = message,
-            ButtonStyle = TaskDialogButtonStyle.Standard,
-            Buttons = { okButton, cancelButton }
+            Caption = title,
+            Heading = message
         };
-
-        var button = taskDialog.ShowDialog();
-        if (button == okButton)
-        {
-            return true;
-        }
-
-        return false;
+        page.Buttons.Add(TaskDialogButton.OK);
+        page.Buttons.Add(TaskDialogButton.Cancel);
+        var result = TaskDialog.ShowDialog(page);
+        return result == TaskDialogButton.OK;
     }
 
     public bool ShowYesNo(string title, string message)
     {
-        var yesButton = new TaskDialogButton(ButtonType.Yes);
-        var noButton = new TaskDialogButton(ButtonType.No);
-
-        var taskDialog = new TaskDialog()
+        var page = new TaskDialogPage
         {
-            WindowTitle = title,
-            MainInstruction = message,
-            ButtonStyle = TaskDialogButtonStyle.Standard,
-            Buttons = { yesButton, noButton }
+            Caption = title,
+            Heading = message
         };
-
-        var button = taskDialog.ShowDialog();
-        if (button == yesButton)
-        {
-            return true;
-        }
-
-        return false;
+        page.Buttons.Add(TaskDialogButton.Yes);
+        page.Buttons.Add(TaskDialogButton.No);
+        var result = TaskDialog.ShowDialog(page);
+        return result == TaskDialogButton.Yes;
     }
 }

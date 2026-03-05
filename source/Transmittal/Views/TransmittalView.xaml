@@ -36,7 +36,7 @@
                                   FinishEnabled="{Binding IsFinishEnabled}"
                                   Help="WizardControl_Help" 
                                   Cancel="WizardControl_Cancel">
-            
+
             <interactivity:Interaction.Triggers>
                 <interactivity:EventTrigger EventName="Finish">
                     <interactivity:InvokeCommandAction Command="{Binding ProcessSheetsCommand}"  />
@@ -54,13 +54,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto" />
-                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Button x:Name="ButtonRevise" 
@@ -77,10 +78,51 @@
                                 IsEnabled="{Binding IsSheetsSelected}" 
                                 Click="ButtonStatus_Click"/>
 
-                        <TextBlock Grid.Column="2" Margin="20,5,0,0"  >
-                            <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
-                            <Run Text=" sheets selected."/>
-                        </TextBlock>
+                        <Grid Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                                                                                   
+                            <TextBlock Grid.Column="0" Margin="10,5,0,0"  >
+                                <Run Text="{Binding SelectedDrawingSheets.Count, Mode=OneWay, FallbackValue=0}"/>
+                                <Run Text=" sheets selected : "/>
+                                <Run Text="{Binding SheetsToExport, Mode=OneWay, FallbackValue=0}"/>
+                                <Run Text=" will be exported"/>
+                            </TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Set per sheet export formats:" Margin="0,5,10,0"
+                                           Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding TogglePDFCommand}"
+                                        ToolTip="Set the selected sheets to export to PDF format" >
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FilePDFImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding ToggleDWGCommand}"
+                                        ToolTip="Set the selected sheets to export to DWG format">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FileDWGImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button Padding="10,1,10,1" Width="30" BorderThickness="0"
+                                        Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding ToggleDWFCommand}"
+                                        ToolTip="Set the selected sheets to export to DWF format">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FileDWFImage}}"/>
+                                    </Button.Background>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+
+
 
                     </Grid>
 
@@ -103,7 +145,35 @@
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
                         
                         <syncfusion:SfDataGrid.Columns>
-                            <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34" />
+                            <syncfusion:GridCheckBoxSelectorColumn MappingName="SelectorColumn" HeaderText="" AllowCheckBoxOnHeader="False" Width="34"
+                                                                   IsHidden="{Binding EnablePerSheetExportFormats}"/>
+
+                            <!--Columns to support per sheet export formats-->
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportPDF" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False"  
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportPDF, Converter={StaticResource BoolToPDFIconConverter}}" />
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportDWG" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False" 
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportDWG, Converter={StaticResource BoolToDWGIconConverter}}"/>
+                            <syncfusion:GridImageColumn 
+                                MappingName="ExportDWF" 
+                                HeaderText="" 
+                                Width="24" 
+                                AllowEditing="False" 
+                                AllowFiltering="False"
+                                IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
+                                ValueBinding="{Binding ExportDWF, Converter={StaticResource BoolToDWFIconConverter}}"/>
+                            
                             <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" AllowEditing="False"  />
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
@@ -121,8 +191,14 @@
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
                             <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="RevNotes" HeaderText="Rev Notes" MinimumWidth="300" AllowEditing="False"/>
+                            
+                            
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
+
+                    <CheckBox Grid.Row="2" Margin="0,5,0,0"
+                              Content="Enable Per Sheet Export Formats"
+                              IsChecked="{Binding EnablePerSheetExportFormats, Mode=TwoWay}"  />
                 </Grid>
             </syncfusion:WizardPage>
             
@@ -143,6 +219,7 @@
                         <CheckBox x:Name="checkBoxExportDWF" Grid.Row="0" Grid.Column="0" 
                                       Content="Export Sheets to DWF" 
                                       IsChecked="{Binding ExportDWF}"
+                                      IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                                       Command="{Binding GetFormatCountCommand, Mode=OneWay}"/>
                         <GroupBox Header="DWF Export Options" 
                                       Margin="0,5,0,5" 
@@ -193,6 +270,7 @@
                         <CheckBox x:Name="checkBoxExportDWG" Grid.Row="1" Grid.Column="0" 
                                       Content="Export Sheets to DWG" 
                                       IsChecked="{Binding ExportDWG}"
+                                      IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                                       Command="{Binding GetFormatCountCommand, Mode=OneWay}"/>
                         <GroupBox Header="DWG Export Options" 
                                       Margin="0,5,0,0" 
@@ -242,17 +320,17 @@
                             <mc:Choice Requires="r2021">
                                 <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
                               Content="Print Sheets to PDF using PDF24" 
-                              IsEnabled="{Binding ExportPDFAvailable}"
+                              IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                               IsChecked="{Binding ExportPDF}" 
                               Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
 
-                                <TextBlock Margin="5" Text="PDF24 does not appear to be installed" 
+                             <TextBlock Margin="5" Text="PDF24 does not appear to be installed" 
                                Foreground="Red" Visibility="{Binding ExportPDFAvailable, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                             </mc:Choice>
                             <mc:Fallback>
                                 <CheckBox x:Name="checkBoxExportPDF" Grid.Row="0" Grid.Column="1" 
                               Content="Export Sheets to PDF" 
-                              IsEnabled="{Binding ExportPDFAvailable}"
+                              IsEnabled="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                               IsChecked="{Binding ExportPDF}" 
                               Command="{Binding GetFormatCountCommand, Mode=OneWay}" />
 
@@ -268,7 +346,7 @@
                         </mc:AlternateContent>
 
 
-                        <GroupBox Header="PDF Export Options" 
+                      <GroupBox Header="PDF Export Options" 
                       Margin="0,5,0,0" 
                       Padding="2"
                       IsEnabled="{Binding IsChecked, ElementName=checkBoxExportPDF}"
@@ -316,19 +394,19 @@
                 </Grid>
 
             </syncfusion:WizardPage>
-          
+
             <syncfusion:WizardPage x:Name="wizardPage3" 
-                                   Title="Distribution" 
-                                   Description="Select recipients of the drawing transmittal" 
-                                   NextVisible="False"
-                                   FinishVisible="True"
-                                   BannerBackground="White">
+                       Title="Distribution" 
+                       Description="Select recipients of the drawing transmittal" 
+                       NextVisible="False"
+                       FinishVisible="True"
+                       BannerBackground="White">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
@@ -341,70 +419,90 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top" 
-                            IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
-                            Click="Button_AddToDirectory_Click" >
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
+                Click="Button_AddToDirectory_Click" >
                         <Button.Background>
                             <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
                         </Button.Background>
                     </Button>
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDirectory" Grid.Row="1" Grid.Column="0" Grid.RowSpan="7" 
-                                           ItemsSource="{Binding ProjectDirectory}"
-                                           SelectedItems="{Binding SelectedProjectDirectory, Mode=TwoWay}"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           AutoGenerateColumns="False" 
-                                           AllowGrouping="False" 
-                                           AllowResizingColumns="True" 
-                                           AllowFiltering="True"
-                                           NavigationMode="Row" 
-                                           SelectionMode="Multiple" 
-                                           ColumnSizer="AutoLastColumnFill" >
+                               ItemsSource="{Binding ProjectDirectory}"
+                               SelectedItems="{Binding SelectedProjectDirectory, Mode=TwoWay}"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               AutoGenerateColumns="False" 
+                               AllowGrouping="False" 
+                               AllowResizingColumns="True" 
+                               AllowFiltering="True"
+                               NavigationMode="Row" 
+                               SelectionMode="Multiple" 
+                               ColumnSizer="AutoLastColumnFill" >
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
 
-                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" >
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20"  >
                         <CheckBox x:Name="RecordIssue" HorizontalAlignment="Center"
-                                  IsEnabled="{Binding CanRecordTransmittal}"
-                                  IsChecked="{Binding RecordTransmittal}" 
-                                  Unchecked="RecordIssue_Unchecked"/>
+                      IsEnabled="{Binding CanRecordTransmittal}"
+                      IsChecked="{Binding RecordTransmittal}" 
+                      Unchecked="RecordIssue_Unchecked"/>
                         <TextBlock Text="Record issue and generate issue sheet"    
-                                   Width="150"
-                                   HorizontalAlignment="Center" 
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" >
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
                         <CheckBox x:Name="GenerateCloudCopy" HorizontalAlignment="Center"
-                                  IsEnabled="{Binding CanGenerateCDECopies}"
-                                  IsChecked="{Binding GenerateCDECopies}" />
+                      IsEnabled="{Binding CanGenerateCDECopies}"
+                      IsChecked="{Binding GenerateCDECopies}" />
                         <TextBlock Text="Generate files for cloud"    
-                                   Width="150"
-                                   HorizontalAlignment="Center" 
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" >
-                        <TextBlock Text="Copies:" HorizontalAlignment="Center" />
-                        <syncfusion:UpDown Width="74" NumberDecimalDigits="0"
-                                           MinValue="1"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           Value="{Binding Copies}"/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
+                        <CheckBox x:Name="SendToWeTransfer" HorizontalAlignment="Center"
+                      IsChecked="{Binding SendToWeTransfer}" />
+                        <TextBlock Text="PREVIEW FEATURE"    
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       VerticalAlignment="Center" />
+                        <TextBlock Text="Create draft WeTransfer upload in MS Edge"    
+                       Width="150"
+                       HorizontalAlignment="Center" 
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" >
+                        <TextBlock Text="Copies:" HorizontalAlignment="Center" />
+                        <!--<syncfusion:UpDown Width="74" NumberDecimalDigits="0"
+                               MinValue="1"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               Value="{Binding Copies}"/>-->
+                        <TextBox x:Name="CopiesTextBox" Width="74"
+                                 Text="{Binding Copies}"                                  
+                                 IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                                 PreviewTextInput="CopiesTextBox_PreviewTextInput" 
+                                 DataObject.Pasting="CopiesTextBox_Pasting"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Vertical" >
                         <TextBlock Text="Issue format:" HorizontalAlignment="Center" />
                         <ComboBox Width="154"
-                                  IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                  ItemsSource="{Binding IssueFormats}"
-                                  SelectedItem="{Binding IssueFormat}"
-                                  SelectedIndex="0">
+                      IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                      ItemsSource="{Binding IssueFormats}"
+                      SelectedItem="{Binding IssueFormat}"
+                      SelectedIndex="0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Description}" HorizontalAlignment="Center" />
@@ -413,32 +511,32 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <Button Grid.Row="5" Grid.Column="1" Width="150" Margin="5"
-                            Content="Add to distribution"
-                            ToolTip="Add new contact to the project directory"
-                            IsEnabled="{Binding HasDirectoryEntriesSelected}"
-                            Command="{Binding AddToDistribitionCommand}"/>
+                    <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5"
+                Content="Add to distribution"
+                ToolTip="Add new contact to the project directory"
+                IsEnabled="{Binding HasDirectoryEntriesSelected}"
+                Command="{Binding AddToDistribitionCommand}"/>
 
-                    <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
-                            IsEnabled="{Binding HasDistributionEntriesSelected}"
-                            Command="{Binding RemoveFromDistributionCommand}">
+                    <Button Grid.Row="7" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
+                IsEnabled="{Binding HasDistributionEntriesSelected}"
+                Command="{Binding RemoveFromDistributionCommand}">
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
 
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
-                                           ItemsSource="{Binding Distribution}"
-                                           SelectedItems="{Binding SelectedDistribution, Mode=TwoWay}"
-                                           IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
-                                           AutoGenerateColumns="False" 
-                                           AllowGrouping="False" 
-                                           AllowResizingColumns="True" 
-                                           AllowFiltering="True"
-                                           AllowSorting="True"
-                                           NavigationMode="Row" 
-                                           SelectionMode="Multiple" 
-                                           ColumnSizer="AutoLastColumnFill">
-                                              
+                               ItemsSource="{Binding Distribution}"
+                               SelectedItems="{Binding SelectedDistribution, Mode=TwoWay}"
+                               IsEnabled="{Binding IsChecked, ElementName=RecordIssue}"
+                               AutoGenerateColumns="False" 
+                               AllowGrouping="False" 
+                               AllowResizingColumns="True" 
+                               AllowFiltering="True"
+                               AllowSorting="True"
+                               NavigationMode="Row" 
+                               SelectionMode="Multiple" 
+                               ColumnSizer="AutoLastColumnFill">
+
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn HeaderText="Company" MappingName="Company.CompanyName" />
                             <syncfusion:GridTextColumn HeaderText="Person" MappingName="Person.FullNameReversed" />

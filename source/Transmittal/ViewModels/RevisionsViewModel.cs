@@ -109,8 +109,8 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
         var revision_data = new List<RevisionDataModel>(n);
         foreach (ElementId id in ids)
         {
-            Revision r = (Revision)App.RevitDocument.GetElement(id);
-            Revisions.Add(new RevisionDataModel(r));
+            var revision = (Revision)App.RevitDocument.GetElement(id);
+            Revisions.Add(new RevisionDataModel(revision));
         }
     }
 

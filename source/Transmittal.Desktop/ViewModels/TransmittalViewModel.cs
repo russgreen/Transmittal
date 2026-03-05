@@ -23,8 +23,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
+    private readonly IWeTransferService _weTransferService;
+    private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<TransmittalViewModel> _logger;
-
+    
     public string WindowTitle { get; private set; }
 
     private TransmittalModel _newTransmittal = new TransmittalModel();
@@ -61,6 +63,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private bool _hasDistributionEntriesSelected = false;
     [ObservableProperty]
     private bool _zipDocuments = true;
+    [ObservableProperty]
+    private bool _sendToWeTransfer = false;
 
     [ObservableProperty]
     private bool _isBackEnabled = true;
@@ -81,13 +85,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     public TransmittalViewModel(ISettingsService settingsService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
+        IWeTransferService weTransferService,
+        IMessageBoxService messageBoxService,
         ILogger<TransmittalViewModel> logger)
     {
 
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
+        _weTransferService = weTransferService;
+        _messageBoxService = messageBoxService;
         _logger = logger;
+
 
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion} ({_settingsService.GlobalSettings.DatabaseFile})";
@@ -259,6 +268,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
                 ZipDocumentsPackages();
             }
             RecordTransmittalInDatabase();
+
+            if(SendToWeTransfer == true)
+            {
+                SendFilesToWeTransfer();
+            }
+
             LaunchTransmittalReport();
 
             this.OnClosingRequest();
@@ -289,6 +304,24 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
                 }
             }
         }
+    }
+
+
+    private void SendFilesToWeTransfer()
+    {
+        _logger.LogInformation("Adding {count} exported files to WeTransfer for upload", Documents.Count);
+
+        if (Documents.Count == 0)
+        {
+            return;
+        }
+
+        var filesForWeTransfer = Documents
+            .Where(x => x.FilePath != null)
+            .Select(x => x.FilePath)
+            .ToList();
+
+        _weTransferService.PrepareWeTransferUploadAsync(filesForWeTransfer);
     }
 
     internal void AddFileToDocumentsList(string file)
@@ -383,5 +416,18 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         DisplayMessage = $"Waiting for database .lock file to clear. Check if .lock needs to be manually deleted.";
 
         DispatcherHelper.DoEvents();
+    }
+
+    partial void OnSendToWeTransferChanged(bool oldValue, bool newValue)
+    {
+        if(newValue == true)
+        {
+            if(!_messageBoxService.ShowYesNo(
+                "WeTransfer Preview Feature", 
+                "Any running browsers will be closed when using this feature. Would you still like to continue using it?"))
+            {
+                SendToWeTransfer = oldValue;
+            }
+        }
     }
 }

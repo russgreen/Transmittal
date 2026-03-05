@@ -221,5 +221,13 @@ internal partial class AboutViewModel : BaseViewModel
             LicenseName = "Apache 2.0 License",
             LicenseUri = "https://github.com/gluck/il-repack?tab=Apache-2.0-1-ov-file#readme"
         });
+
+        OpenSourceSoftwareModels.Add(new OpenSourceSoftwareModel()
+        {
+            SoftwareName = "Playwright for .NET",
+            SoftwareUri = "https://github.com/microsoft/playwright-dotnet",
+            LicenseName = "MIT",
+            LicenseUri = "https://github.com/microsoft/playwright-dotnet/blob/main/LICENSE"
+        });
     }
 }

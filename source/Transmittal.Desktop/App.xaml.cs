@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Windows;
 using Transmittal.Desktop.Views;
@@ -14,16 +13,19 @@ namespace Transmittal.Desktop;
 public partial class App : Application
 {
     public static int TransmittalID;
-        
-    void App_Startup(object sender, StartupEventArgs e)
+
+    async void App_Startup(object sender, StartupEventArgs e)
     {
         //build dependency injection system
-        Host.StartHost().Wait();
+        await Host.StartHost();
 
         //register the syncfusion license
         Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("##SyncfusionLicense##");
 
         var settings = Host.GetService<ISettingsService>();
+
+        // enable visual styles for Windows Forms components used in WPF
+        System.Windows.Forms.Application.EnableVisualStyles();
 
         // If no command line arguments were provided, don't process them if (e.Args.Length == 0) return;  
         if (e.Args.Length > 0)
@@ -33,7 +35,7 @@ public partial class App : Application
             {               
                 if (arg.StartsWith("--database"))
                 {
-                    string databaseFilePath = arg.Substring(arg.IndexOf("=") + 1);
+                    var databaseFilePath = arg.Substring(arg.IndexOf("=") + 1);
                     // set the database filepath string to the value after the --database argument
                     if (File.Exists(databaseFilePath.ParsePathWithEnvironmentVariables()))
                     {
@@ -43,18 +45,19 @@ public partial class App : Application
                     }
                     else
                     {
-                        TaskDialogButton okButton = new TaskDialogButton(ButtonType.Ok);
-
-                        TaskDialog dialog = new TaskDialog()
+                        System.Windows.Forms.TaskDialogPage page = new System.Windows.Forms.TaskDialogPage
                         {
-                            WindowTitle = "Transmittal Database",
-                            MainInstruction = @$"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
-                            MainIcon = TaskDialogIcon.Error,
-                            ButtonStyle = TaskDialogButtonStyle.Standard,
-                            Buttons = { okButton }
+                            Caption = "Transmittal Database",
+                            Heading = $"{databaseFilePath.ParsePathWithEnvironmentVariables()} was not found",
+                            Icon = System.Windows.Forms.TaskDialogIcon.Error,
+                            Buttons =
+                            {
+                                System.Windows.Forms.TaskDialogButton.OK
+                            }
                         };
 
-                        dialog.ShowDialog();
+                        // Show the TaskDialog. Since this is a WPF app, no owner window is required here.
+                        System.Windows.Forms.TaskDialog.ShowDialog(page);
                         Current.Shutdown();
                     }
                 }
@@ -110,6 +113,22 @@ public partial class App : Application
     Host.GetService<ITransmittalService>());
 
                     report.ShowTransmittalReport(TransmittalID);
+                    Current.Shutdown();
+                    return;
+                }
+
+                if (arg.StartsWith("--wetransfer"))
+                {
+                    var files = arg.Substring(arg.IndexOf("=") + 1);
+                    var weTransferService = Host.GetService<IWeTransferService>();
+                    var filesList = files.Split(';').ToList();
+
+                    if(filesList.Count > 0)
+                    {
+                        await weTransferService.PrepareWeTransferUploadAsync(filesList);
+ 
+                    }
+
                     Current.Shutdown();
                     return;
                 }

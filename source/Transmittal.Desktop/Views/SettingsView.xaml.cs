@@ -1,5 +1,5 @@
-﻿using Ookii.Dialogs.Wpf;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using Transmittal.Desktop.ViewModels;
 
@@ -26,61 +26,57 @@ public partial class SettingsView : Window
 
     private void buttonFolderBrowse_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new VistaFolderBrowserDialog
+        var dialog = new Microsoft.Win32.OpenFolderDialog()
         {
-            Description = "Please select a folder to save the Transmittal files.",
-            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
-            RootFolder = Environment.SpecialFolder.MyComputer
+            Title = "Please select a folder to save the Transmittal files.",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
         if ((bool)dialog.ShowDialog(this))
         {
-            _viewModel.DrawingIssueStore = dialog.SelectedPath;
+            _viewModel.DrawingIssueStore = dialog.FolderName;
         }
     }
 
     private void buttonReportPathBrowse_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new VistaFolderBrowserDialog
+        var dialog = new Microsoft.Win32.OpenFolderDialog()
         {
-            Description = "Please select the folder where report templates are stored.",
-            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
-            RootFolder = Environment.SpecialFolder.MyComputer
+            Title = "Please select the folder where report templates are stored.",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
         if ((bool)dialog.ShowDialog(this))
         {
-            _viewModel.ReportTemplatePath = dialog.SelectedPath;
+            _viewModel.ReportTemplatePath = dialog.FolderName;
         }
     }
 
     private void buttonIssueSheetStorePathBrowse_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new VistaFolderBrowserDialog
+        var dialog = new Microsoft.Win32.OpenFolderDialog()
         {
-            Description = "Please select the folder where transmittal sheets are stored.",
-            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
-            RootFolder = Environment.SpecialFolder.MyComputer
+            Title = "Please select the folder where transmittal sheets are stored.",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
         if ((bool)dialog.ShowDialog(this))
         {
-            _viewModel.IssueSheetStorePath = dialog.SelectedPath;
+            _viewModel.IssueSheetStorePath = dialog.FolderName;
         }
     }
 
     private void buttonDirectoryStorePathBrowse_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new VistaFolderBrowserDialog
+        var dialog = new Microsoft.Win32.OpenFolderDialog()
         {
-            Description = "Please select the folder where directory reports are stored.",
-            UseDescriptionForTitle = true, // This applies to the Vista style dialog only, not the old dialog.
-            RootFolder = Environment.SpecialFolder.MyComputer
+            Title = "Please select the folder where directory reports are stored.",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
         if ((bool)dialog.ShowDialog(this))
         {
-            _viewModel.DirectoryStorePath = dialog.SelectedPath;
+            _viewModel.DirectoryStorePath = dialog.FolderName;
         }
     }
 
