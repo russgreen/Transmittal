@@ -972,7 +972,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 var sheet = sheets.FirstOrDefault(x => x.CanBePrinted && x.SheetNumber == drawingSheet.DrgNumber);
                 if (sheet is null)
                 {
-                    //the sheet must exist so shouldn't be required but just in case....
+                    //the sheet must exist as we already picked it to export. this check is defensive, but included just in case....
                     continue;
                 }
 
