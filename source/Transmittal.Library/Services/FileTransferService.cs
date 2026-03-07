@@ -14,22 +14,46 @@ using System.Threading.Tasks;
 
 namespace Transmittal.Library.Services;
 
-public class WeTransferService : IWeTransferService
+public class FileTransferService : IFileTransferService
 {
-    private readonly ILogger<WeTransferService> _logger;
+    private readonly ILogger<FileTransferService> _logger;
+    private readonly ISettingsService _settingsService;
+
+
     private readonly string _browserPath = string.Empty;
-    private const string _weTransferUrl = "https://wetransfer.com/";
     private const int _debugPort = 9222;
     private const string _localAddress = "127.0.0.1";
 
-    public WeTransferService(ILogger<WeTransferService> logger)
+    public FileTransferService(ILogger<FileTransferService> logger,
+        ISettingsService settingsService)
     {
         _logger = logger;
+        _settingsService = settingsService;
 
         _browserPath = GetBrowserPath();
     }
 
-    public async Task<bool> PrepareWeTransferUploadAsync(List<string> filePaths)
+    public async Task<bool> PrepareFileTransferUploadAsync(List<string> filePaths)
+    {
+        switch (_settingsService.GlobalSettings.FileTransferType)
+        {
+            case Enums.FileTransferType.WeTransfer:
+                return await WeTransfer(filePaths);
+
+            case Enums.FileTransferType.Smash:
+                return await Smash(filePaths);
+
+            default:
+                throw new NotSupportedException($"File transfer service {_settingsService.GlobalSettings.FileTransferType} is not supported.");
+        }
+    }
+
+    public Task<bool> PrepareFileTransferUploadAsync(List<string> filePaths, List<string> recipientsEmails)
+    {
+        throw new NotImplementedException();
+    }
+
+    private async Task<bool> WeTransfer(List<string> filePaths)
     {
         var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync();
         if (!browserRunning)
@@ -39,20 +63,20 @@ public class WeTransferService : IWeTransferService
 
         _logger.LogDebug("Browser is running at http://{LocalAddress}:{DebugPort}", _localAddress, _debugPort);
 
-        using var playwright = await Playwright.CreateAsync();   
+        using var playwright = await Playwright.CreateAsync();
 
         var browser = await playwright.Chromium.ConnectOverCDPAsync($"http://{_localAddress}:{_debugPort}");
         var context = browser.Contexts.First();
 
         var page = context.Pages.FirstOrDefault() ?? await context.NewPageAsync();
 
-        await page.GotoAsync(_weTransferUrl);
+        await page.GotoAsync("https://wetransfer.com/");
 
         await TryClickIfVisibleAsync(page.GetByTestId("Accept All-btn"), "Accept All");
         await TryClickIfVisibleAsync(page.GetByTestId("accept-terms"), "Accept Terms");
 
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
+               
         var dropZone = page.GetByTestId("drop-zone");
         var fileInput = dropZone.Locator("input[type='file']");
         await fileInput.WaitForAsync(new() { State = WaitForSelectorState.Attached });
@@ -61,10 +85,67 @@ public class WeTransferService : IWeTransferService
         return true;
     }
 
-    public Task<bool> PrepareWeTransferUploadAsync(List<string> filePaths, List<string> recipientsEmails)
+
+    private async Task<bool> Smash(List<string> filePaths)
     {
-        throw new NotImplementedException();
+        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync();
+        if (!browserRunning)
+        {
+            return false;
+        }
+
+        _logger.LogDebug("Browser is running at http://{LocalAddress}:{DebugPort}", _localAddress, _debugPort);
+
+        using var playwright = await Playwright.CreateAsync();
+
+        var browser = await playwright.Chromium.ConnectOverCDPAsync($"http://{_localAddress}:{_debugPort}");
+        var context = browser.Contexts.First();
+
+        var page = context.Pages.FirstOrDefault() ?? await context.NewPageAsync();
+
+        await page.GotoAsync("https://fromsmash.com/");
+
+        await TryClickIfVisibleAsync(page.GetByText("I loooove cookies!"), "Accept Cookies");
+        await TryClickIfVisibleAsync(page.GetByText("Continue to use for free"), "Continue");
+
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        var files = filePaths.Select(Path.GetFullPath).ToArray();
+
+        // Preferred path: set files directly on a real file input in the uploader area.
+        var uploadInputCandidates = new[]
+        {
+        "main input[type='file']",
+        "form input[type='file']",
+        "input[type='file']"
+    };
+
+        foreach (var selector in uploadInputCandidates)
+        {
+            var input = page.Locator(selector).First;
+            if (await input.CountAsync() > 0)
+            {
+                await input.SetInputFilesAsync(files);
+                _logger.LogDebug("Files assigned through selector: {Selector}", selector);
+                return true;
+            }
+        }
+
+        // Fallback: click the central CTA and handle file chooser.
+        var chooser = await page.RunAndWaitForFileChooserAsync(async () =>
+        {
+            await page.GetByRole(AriaRole.Button, new() { NameRegex = new System.Text.RegularExpressions.Regex("send|file|upload|select", System.Text.RegularExpressions.RegexOptions.IgnoreCase) })
+                      .First
+                      .ClickAsync();
+        });
+
+        await chooser.SetFilesAsync(files);
+        _logger.LogDebug("Files assigned through file chooser fallback.");
+
+        return true;
     }
+
+
 
     private string GetBrowserPath()
     {
