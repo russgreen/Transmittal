@@ -62,7 +62,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     [ObservableProperty]
     private bool _hasDistributionEntriesSelected = false;
     [ObservableProperty]
-    private bool _zipDocuments = true;
+    private bool _zipDocuments = false;
 
     [ObservableProperty]
     private Library.Enums.FileTransferType _fileTransferType = Library.Enums.FileTransferType.WeTransfer;

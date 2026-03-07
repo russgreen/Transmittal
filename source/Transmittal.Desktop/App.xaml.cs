@@ -119,13 +119,15 @@ public partial class App : Application
 
                 if (arg.StartsWith("--filetransfer"))
                 {
+                    settings.GetSettings();
+
                     var files = arg.Substring(arg.IndexOf("=") + 1);
-                    var weTransferService = Host.GetService<IFileTransferService>();
+                    var fileTransferService = Host.GetService<IFileTransferService>();
                     var filesList = files.Split(';').ToList();
 
                     if(filesList.Count > 0)
                     {
-                        await weTransferService.PrepareFileTransferUploadAsync(filesList);
+                        await fileTransferService.PrepareFileTransferUploadAsync(filesList);
  
                     }
 
