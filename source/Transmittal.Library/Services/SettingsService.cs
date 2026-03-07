@@ -90,6 +90,7 @@ public class SettingsService : ISettingsService
             }
         }
 
+        GlobalSettings.FileTransferType = GetTransferServiceToUse();
     }
 
     public void UpdateSettings()
@@ -168,7 +169,6 @@ public class SettingsService : ISettingsService
             _messageBox.ShowOk("Error updating settings", ex.Message);
         }
        
-
         SaveIssueFormats();
         SaveDocumentStatuses();
     }
@@ -253,6 +253,29 @@ public class SettingsService : ISettingsService
             _messageBox.ShowOk("Error saving document statuses", ex.Message);
         }
 
+    }
+
+    /// <summary>
+    /// Temporary settings pulled from Registry.  Settings eventually will be stored in the project database and Revit, but for now this is an easy way to toggle between file transfer services without having to update the Revit schema.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private Enums.FileTransferType GetTransferServiceToUse()
+    {
+        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Transmittal", false))
+        {
+            if (key != null)
+            {
+                var stringValue = key.GetValue("FileTransferService");
+
+                if (stringValue != null && Enum.TryParse(stringValue.ToString(), out Enums.FileTransferType service))
+                {
+                    return service;
+                }
+            }
+        }
+
+        return Enums.FileTransferType.WeTransfer;
     }
 }
     

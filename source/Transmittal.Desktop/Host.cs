@@ -120,7 +120,7 @@ internal static class Host
             services.AddTransient<IDataConnection, SQLiteDataAccess>();
             services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
             services.AddTransient<ITransmittalService, TransmittalService>();
-            services.AddTransient<IWeTransferService, WeTransferService>();
+            services.AddTransient<IFileTransferService, FileTransferService>();
 
             services.AddTransient<MainViewModel>();
             services.AddTransient<TransmittalViewModel>();

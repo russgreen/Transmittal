@@ -23,7 +23,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
-    private readonly IWeTransferService _weTransferService;
+    private readonly IFileTransferService _fileTransferService;
     private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<TransmittalViewModel> _logger;
     
@@ -63,8 +63,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private bool _hasDistributionEntriesSelected = false;
     [ObservableProperty]
     private bool _zipDocuments = true;
+
     [ObservableProperty]
-    private bool _sendToWeTransfer = false;
+    private Library.Enums.FileTransferType _fileTransferType = Library.Enums.FileTransferType.WeTransfer;
+
+    [ObservableProperty]
+    private bool _sendFileTransfer = false;
 
     [ObservableProperty]
     private bool _isBackEnabled = true;
@@ -85,7 +89,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     public TransmittalViewModel(ISettingsService settingsService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
-        IWeTransferService weTransferService,
+        IFileTransferService fileTransferService,
         IMessageBoxService messageBoxService,
         ILogger<TransmittalViewModel> logger)
     {
@@ -93,7 +97,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
-        _weTransferService = weTransferService;
+        _fileTransferService = fileTransferService;
         _messageBoxService = messageBoxService;
         _logger = logger;
 
@@ -131,6 +135,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     {
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         IssueFormat = IssueFormats.FirstOrDefault();
+
+        FileTransferType = _settingsService.GlobalSettings.FileTransferType;
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
@@ -269,9 +275,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
             }
             RecordTransmittalInDatabase();
 
-            if(SendToWeTransfer == true)
+            if(SendFileTransfer == true)
             {
-                SendFilesToWeTransfer();
+                SendFilesToTransfer();
             }
 
             LaunchTransmittalReport();
@@ -307,7 +313,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     }
 
 
-    private void SendFilesToWeTransfer()
+    private void SendFilesToTransfer()
     {
         _logger.LogInformation("Adding {count} exported files to WeTransfer for upload", Documents.Count);
 
@@ -316,12 +322,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
             return;
         }
 
-        var filesForWeTransfer = Documents
+        var filesForTransfer = Documents
             .Where(x => x.FilePath != null)
             .Select(x => x.FilePath)
             .ToList();
 
-        _weTransferService.PrepareWeTransferUploadAsync(filesForWeTransfer);
+        _fileTransferService.PrepareFileTransferUploadAsync(filesForTransfer);
     }
 
     internal void AddFileToDocumentsList(string file)
@@ -418,15 +424,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         DispatcherHelper.DoEvents();
     }
 
-    partial void OnSendToWeTransferChanged(bool oldValue, bool newValue)
+    partial void OnSendFileTransferChanged(bool oldValue, bool newValue)
     {
         if(newValue == true)
         {
             if(!_messageBoxService.ShowYesNo(
-                "WeTransfer Preview Feature", 
-                "Any running browsers will be closed when using this feature. Would you still like to continue using it?"))
+                "File Transfer Preview Feature", 
+                "Any running Edge browser windows may be closed and reopened when using this feature. Would you still like to continue using it?"))
             {
-                SendToWeTransfer = oldValue;
+                SendFileTransfer = oldValue;
             }
         }
     }

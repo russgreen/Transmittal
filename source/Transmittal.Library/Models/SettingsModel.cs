@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
+using Transmittal.Library.Enums;
 
 namespace Transmittal.Library.Models;
 
@@ -138,4 +139,7 @@ public partial class SettingsModel : ObservableValidator
 
     [ObservableProperty]
     private string _sheetPackageParamGuid;
+
+    [ObservableProperty]
+    private FileTransferType _fileTransferType;
 }

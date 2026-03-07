@@ -117,15 +117,15 @@ public partial class App : Application
                     return;
                 }
 
-                if (arg.StartsWith("--wetransfer"))
+                if (arg.StartsWith("--filetransfer"))
                 {
                     var files = arg.Substring(arg.IndexOf("=") + 1);
-                    var weTransferService = Host.GetService<IWeTransferService>();
+                    var weTransferService = Host.GetService<IFileTransferService>();
                     var filesList = files.Split(';').ToList();
 
                     if(filesList.Count > 0)
                     {
-                        await weTransferService.PrepareWeTransferUploadAsync(filesList);
+                        await weTransferService.PrepareFileTransferUploadAsync(filesList);
  
                     }
 
