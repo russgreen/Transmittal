@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Transmittal.Commands;
 using Transmittal.Extensions;
+using Transmittal.Library.Enums;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
 using Transmittal.Library.Models;
@@ -169,7 +170,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _generateCDECopies = false;
 
     [ObservableProperty]
-    private bool _sendToWeTransfer = false;
+    private Library.Enums.FileTransferType _fileTransferType = Library.Enums.FileTransferType.WeTransfer;
+
+    [ObservableProperty]
+    private bool _sendFileTransfer = false;
+
 
     /// SUMMARY PROGRESS
     [ObservableProperty]
@@ -325,6 +330,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         IssueFormats = _settingsService.GlobalSettings.IssueFormats;
         IssueFormat = IssueFormats.FirstOrDefault();
+
+        FileTransferType = _settingsService.GlobalSettings.FileTransferType;
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
@@ -1051,9 +1058,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             CurrentStepProgressLabel = "Recording transmittal...";
             SendProgressMessage(targetSheets.Count);
 
-            if (SendToWeTransfer)
+            if (SendFileTransfer)
             {
-                SendFilesToWeTransfer();
+                SendFilesToTransfer();
             }
 
             if (RecordTransmittal)
@@ -1366,26 +1373,26 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return folderPath;
     }
 
-    private void SendFilesToWeTransfer()
+    private void SendFilesToTransfer()
     {
-        _logger.LogInformation("Adding {count} exported files to WeTransfer for upload", _exportedFiles.Count);
+        _logger.LogInformation("Adding {count} exported files to file transfer service upload", _exportedFiles.Count);
 
         if (_exportedFiles.Count == 0)
         {
             return;
         }
 
-        var filesForWeTransfer = _exportedFiles
+        var filesForTransfer = _exportedFiles
             .Where(x => x.FilePath != null)
             .Select(x => x.FilePath)
             .ToList();
 
         if(_additionalExportFiles.Count > 0)
         {
-            filesForWeTransfer.AddRange(_additionalExportFiles);
+            filesForTransfer.AddRange(_additionalExportFiles);
         }
         
-        var filesForWeTransferString = string.Join(";", filesForWeTransfer);
+        var filesForTransferString = string.Join(";", filesForTransfer);
 
 
 #if DEBUG
@@ -1400,7 +1407,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = pathToExe,
-            Arguments = $"\"--wetransfer={filesForWeTransferString}\""
+            Arguments = $"\"--filetransfer={filesForTransferString}\""
         };
 
         Process.Start(processStartInfo);
@@ -1599,11 +1606,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 }
             }
         }
-
-
-
-
-
     }
 
     private void OpenProgressWindow()
@@ -1745,15 +1747,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return folders.OrderBy(x => x).ToList();
     }
 
-    partial void OnSendToWeTransferChanged(bool oldValue, bool newValue)
+    partial void OnSendFileTransferChanged(bool oldValue, bool newValue)
     {
         if (newValue == true)
         {
             if (!_messageBoxService.ShowYesNo(
-                "WeTransfer Preview Feature",
-                "Any running browsers will be closed when using this feature. Would you still like to continue using it?"))
+                "File Transfer Preview Feature",
+                "Any running Edge browser windows may be closed and reopened when using this feature. Would you still like to continue using it?"))
             {
-                SendToWeTransfer = oldValue;
+                SendFileTransfer = oldValue;
             }
         }
     }

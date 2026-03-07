@@ -469,18 +469,22 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
-                        <CheckBox x:Name="SendToWeTransfer" HorizontalAlignment="Center"
-                      IsChecked="{Binding SendToWeTransfer}" />
-                        <TextBlock Text="PREVIEW FEATURE"    
-                       Width="150"
-                       HorizontalAlignment="Center" 
-                       TextAlignment="Center"
-                       VerticalAlignment="Center" />
-                        <TextBlock Text="Create draft WeTransfer upload in MS Edge"    
-                       Width="150"
-                       HorizontalAlignment="Center" 
-                       TextAlignment="Center"
-                       TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <CheckBox x:Name="SendFileTransfer" HorizontalAlignment="Center"
+                                  IsChecked="{Binding SendFileTransfer}" />
+                        <TextBlock Text="PREVIEW FEATURE" 
+                                   Width="150"
+                                   HorizontalAlignment="Center" 
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Width="150"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   VerticalAlignment="Center" >
+                            <Run Text="Create a draft" />
+                            <Run Text="{Binding FileTransferType}"/>
+                            <Run Text="upload in Edge"/>
+                        </TextBlock>
                     </StackPanel>
 
                     <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical" >

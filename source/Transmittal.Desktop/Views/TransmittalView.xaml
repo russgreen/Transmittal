@@ -192,14 +192,22 @@
                               Content="Zip documents" IsChecked="{Binding ZipDocuments}" />
 
                     <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top" >
-                        <CheckBox x:Name="SendToWeTransfer" HorizontalAlignment="Center"
-                                  IsChecked="{Binding SendToWeTransfer}" 
-                                  ToolTip="Ensure MS Edge is not running, else a temporary profile will be used."/>
-                        <TextBlock Text="PREVIEW FEATURE - Create draft WeTransfer upload in MS Edge"    
+                        <CheckBox x:Name="SendFileTransfer" HorizontalAlignment="Center"
+                                  IsChecked="{Binding SendFileTransfer}" />
+                        <TextBlock Text="PREVIEW FEATURE"    
                                    Width="150"
                                    HorizontalAlignment="Center" 
                                    TextAlignment="Center"
-                                   TextWrapping="Wrap" VerticalAlignment="Top" />
+                                   VerticalAlignment="Center" />
+                        <TextBlock Width="150"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" 
+                                   VerticalAlignment="Center" >
+                            <Run Text="Create a draft" />
+                            <Run Text="{Binding FileTransferType}"/>
+                            <Run Text="upload in Edge"/>
+                        </TextBlock>
                     </StackPanel>
 
                     <syncfusion:SfDataGrid x:Name="sfDataGridDistribution" Grid.Row="0" Grid.Column="2" Grid.RowSpan="8"
