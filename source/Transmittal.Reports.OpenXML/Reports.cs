@@ -156,7 +156,7 @@ public class Reports
         var worksheet = GetOrCreateWorksheet(workbook, "Summary");
 
         var commonContext = BuildCommonTokenContext("Transmittal Summary", null);
-        ApplyTemplateTokens(workbook, commonContext);
+        ApplyTemplateTokens(workbook, commonContext, new[] { "DateYear", "DateMonth", "DateDay" });
         ApplyCommonHeaderHeuristics(worksheet, "Transmittal Summary", null);
 
         var sheetListAnchor = TryGetNamedRange(workbook, "SheetListData");
@@ -323,8 +323,15 @@ public class Reports
         return new XLWorkbook(templatePath);
     }
 
-    private void ApplyTemplateTokens(XLWorkbook workbook, Dictionary<string, string> context)
+    private void ApplyTemplateTokens(
+        XLWorkbook workbook,
+        Dictionary<string, string> context,
+        IEnumerable<string> excludedTokens = null)
     {
+        var excluded = excludedTokens == null
+            ? null
+            : new HashSet<string>(excludedTokens, StringComparer.OrdinalIgnoreCase);
+
         foreach (var worksheet in workbook.Worksheets)
         {
             var used = worksheet.RangeUsed();
@@ -346,7 +353,7 @@ public class Reports
                     continue;
                 }
 
-                cell.Value = ReplaceTokens(text, context);
+                cell.Value = ReplaceTokens(text, context, excluded);
             }
         }
     }
@@ -435,7 +442,7 @@ public class Reports
             ["DrgType"] = item.DrgType ?? string.Empty,
             ["DrgRole"] = item.DrgRole ?? string.Empty,
             ["DrgStatus"] = item.DrgStatus ?? string.Empty,
-            ["DrgPackage"] = item.DrgPackage ?? string.Empty,
+            ["DrgPackage" ]= item.DrgPackage ?? string.Empty,
         };
     }
 
@@ -663,7 +670,7 @@ public class Reports
         }
     }
 
-    private static string ReplaceTokens(string input, Dictionary<string, string> context)
+    private static string ReplaceTokens(string input, Dictionary<string, string> context, HashSet<string> excludedTokens = null)
     {
         if (string.IsNullOrWhiteSpace(input) || !input.Contains("{{", StringComparison.Ordinal))
         {
@@ -673,6 +680,12 @@ public class Reports
         return TokenRegex.Replace(input, match =>
         {
             var tokenName = match.Groups["name"].Value.Trim();
+
+            if (excludedTokens?.Contains(tokenName) == true)
+            {
+                return match.Value;
+            }
+
             if (context.TryGetValue(tokenName, out var value))
             {
                 return value ?? string.Empty;
@@ -1205,6 +1218,12 @@ public class Reports
 
     private DateRows FindNearestDateRows(IXLWorksheet worksheet, int anchorRow)
     {
+        var tokenRows = FindDateRowsByTokens(worksheet);
+        if (tokenRows.DayRow > 0)
+        {
+            return tokenRows;
+        }
+
         for (var row = anchorRow; row >= Math.Max(1, anchorRow - 40); row--)
         {
             var text = worksheet.Cell(row, 1).GetFormattedString().Trim();
@@ -1223,6 +1242,79 @@ public class Reports
         }
 
         return new DateRows();
+    }
+
+    private static DateRows FindDateRowsByTokens(IXLWorksheet worksheet)
+    {
+        var used = worksheet.RangeUsed();
+        if (used == null)
+        {
+            return new DateRows();
+        }
+
+        var yearRow = 0;
+        var monthRow = 0;
+        var dayRow = 0;
+
+        foreach (var cell in used.Cells())
+        {
+            if (cell.DataType != XLDataType.Text)
+            {
+                continue;
+            }
+
+            var text = cell.GetString();
+            if (string.IsNullOrWhiteSpace(text) || !text.Contains("{{", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (yearRow == 0 && ContainsToken(text, "DateYear"))
+            {
+                yearRow = cell.Address.RowNumber;
+            }
+
+            if (monthRow == 0 && ContainsToken(text, "DateMonth"))
+            {
+                monthRow = cell.Address.RowNumber;
+            }
+
+            if (dayRow == 0 && ContainsToken(text, "DateDay"))
+            {
+                dayRow = cell.Address.RowNumber;
+            }
+
+            if (yearRow > 0 && monthRow > 0 && dayRow > 0)
+            {
+                return new DateRows
+                {
+                    YearRow = yearRow,
+                    MonthRow = monthRow,
+                    DayRow = dayRow
+                };
+            }
+        }
+
+        return new DateRows();
+    }
+
+    private static bool ContainsToken(string input, string tokenName)
+    {
+        if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(tokenName))
+        {
+            return false;
+        }
+
+        foreach (Match match in TokenRegex.Matches(input))
+        {
+            var name = match.Groups["name"].Value.Trim();
+            if (name.Equals(tokenName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static List<int> EnsureSummaryColumns(IXLWorksheet worksheet, IXLRange summaryColumnAnchor, int requiredColumnCount)
