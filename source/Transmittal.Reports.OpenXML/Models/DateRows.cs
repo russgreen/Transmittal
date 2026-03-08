@@ -1,4 +1,4 @@
-namespace Transmittal.Reports.OpenXML;
+namespace Transmittal.Reports.OpenXML.Models;
 
 internal sealed class DateRows
 {

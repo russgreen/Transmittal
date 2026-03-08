@@ -1,6 +1,6 @@
 using Transmittal.Library.Models;
 
-namespace Transmittal.Reports.OpenXML;
+namespace Transmittal.Reports.OpenXML.Models;
 
 internal sealed class MasterDocumentTemplateRow
 {

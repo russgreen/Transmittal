@@ -1,11 +1,9 @@
 using Transmittal.Library.Models;
 
-namespace Transmittal.Reports.OpenXML;
+namespace Transmittal.Reports.OpenXML.Models;
 
 internal sealed class SummaryDistributionRow
 {
-    public string Name { get; set; } = string.Empty;
-    public string Company { get; set; } = string.Empty;
     public Dictionary<int, DistCell> FormatByTransmittal { get; set; } = new Dictionary<int, DistCell>();
     public TransmittalDistributionModel TemplateDistribution { get; set; }
     public TransmittalModel TemplateTransmittal { get; set; }

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
+using Transmittal.Reports.OpenXML.Models;
 
 namespace Transmittal.Reports.OpenXML;
 
@@ -990,11 +991,6 @@ public class Reports
             .OrderBy(g => g.Key)
             .Select(g => new SummaryItemRow
             {
-                DrawingNumber = g.Key,
-                DrawingName = g.First().Item.DrgName,
-                Paper = g.First().Item.DrgPaper,
-                LatestRevision = g.Select(x => x.Item.DrgRev).LastOrDefault() ?? string.Empty,
-                Package = g.Select(x => x.Item.DrgPackage).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x)) ?? string.Empty,
                 RevisionsByTransmittal = g
                     .GroupBy(x => x.ID)
                     .ToDictionary(
@@ -1051,8 +1047,6 @@ public class Reports
 
                 return new SummaryDistributionRow
                 {
-                    Name = person.FullName,
-                    Company = company?.CompanyName ?? string.Empty,
                     FormatByTransmittal = g.GroupBy(x => x.ID)
                         .ToDictionary(
                             x => x.Key,

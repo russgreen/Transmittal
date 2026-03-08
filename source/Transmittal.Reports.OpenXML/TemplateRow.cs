@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using Transmittal.Reports.OpenXML.Models;
 
 namespace Transmittal.Reports.OpenXML;
 
