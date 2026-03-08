@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Reports\" />
+  </ItemGroup>
+
 </Project>
