@@ -858,6 +858,9 @@ public class Reports
         section.PaperColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Paper" }) ?? (section.NameColumn + 1);
         section.LatestRevColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Rev" }) ?? (section.NameColumn + 1);
 
+        var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? section.LatestRevColumn;
+        section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
+
         return section;
     }
 
@@ -879,6 +882,8 @@ public class Reports
             section.EndRow = FindSectionEndRow(worksheet, section.StartRow, recipientRow, new[] { "Year", "END" });
             section.FormatRow = recipientRow;
             section.CompanyColumn = 0;
+            var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? 20;
+            section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
             return section;
         }
 
@@ -893,6 +898,8 @@ public class Reports
             section.CompanyColumn = FindHeaderColumn(worksheet, companyPersonHeader, new[] { "Company" }) ?? 1;
             section.EndRow = FindSectionEndRow(worksheet, section.StartRow, companyPersonHeader, new[] { "DOCUMENTATION", "Document", "Drawing" });
             section.FormatRow = FindHeaderRow(worksheet, new[] { "METHOD OF ISSUE", "E=mail", "Format" }, 1, companyPersonHeader);
+            var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? 20;
+            section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
             return section;
         }
 
@@ -904,6 +911,7 @@ public class Reports
         section.NameColumn = 1;
         section.CompanyColumn = 2;
         section.FormatRow = section.HeaderRow;
+        section.TemplateRow = sheetSection.TemplateRow;
         return section;
     }
 
@@ -1122,19 +1130,6 @@ public class Reports
                 RenderTemplateRow(worksheet, row, section.TemplateRow, item.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
             }
 
-            worksheet.Cell(row, section.NumberColumn).Value = item.DrawingNumber;
-            worksheet.Cell(row, section.NameColumn).Value = item.DrawingName;
-
-            if (section.PaperColumn > 0)
-            {
-                worksheet.Cell(row, section.PaperColumn).Value = item.Paper ?? string.Empty;
-            }
-
-            if (section.LatestRevColumn > 0 && section.LatestRevColumn < section.FirstDataColumn)
-            {
-                worksheet.Cell(row, section.LatestRevColumn).Value = item.LatestRevision;
-            }
-
             for (var c = 0; c < columnCount; c++)
             {
                 if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
@@ -1179,13 +1174,6 @@ public class Reports
             {
                 worksheet.Row(rowNumber).Style = distributionDataRowStyle;
             }
-
-            if (section.CompanyColumn > 0)
-            {
-                worksheet.Cell(rowNumber, section.CompanyColumn).Value = row.Company;
-            }
-
-            worksheet.Cell(rowNumber, section.NameColumn).Value = row.Name;
 
             for (var c = 0; c < columnCount; c++)
             {
