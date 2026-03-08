@@ -11,6 +11,8 @@ namespace Transmittal.Reports.OpenXML;
 
 public class Reports
 {
+    private static readonly Regex TokenRegex = new("{{\\s*(?<name>[^{}]+?)\\s*}}", RegexOptions.Compiled);
+
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
@@ -49,10 +51,11 @@ public class Reports
         var workbook = TryLoadTemplate("ProjectDirectory.xlsx") ?? new XLWorkbook();
         var worksheet = GetOrCreateWorksheet(workbook, "Project Directory");
 
-        ApplyTemplateTokens(workbook, "Project Directory", null);
+        var commonContext = BuildCommonTokenContext("Project Directory", null);
+        ApplyTemplateTokens(workbook, commonContext);
         ApplyCommonHeaderHeuristics(worksheet, "Project Directory", null);
 
-        var templateRange = TryGetNamedRange(workbook, "ProjectDirectory") ?? TryGetNamedRange(workbook, "ProjectDirectoryRange");
+        var templateRange = TryGetNamedRange(workbook, "ProjectDirectoryData", "ProjectDirectory", "ProjectDirectoryRange");
 
         var filtered = projectDirectory
             .Where(x => x.Person?.ShowInReport == true)
@@ -62,64 +65,14 @@ public class Reports
 
         if (templateRange != null)
         {
-            var startRow = templateRange.RangeAddress.FirstAddress.RowNumber;
-            var endRow = templateRange.RangeAddress.LastAddress.RowNumber;
-            var firstCol = templateRange.RangeAddress.FirstAddress.ColumnNumber;
-            var rowCount = endRow - startRow + 1;
-
-            if (filtered.Count > rowCount)
-            {
-                worksheet.Row(endRow + 1).InsertRowsAbove(filtered.Count - rowCount);
-                endRow += filtered.Count - rowCount;
-            }
-
-            worksheet.Range(startRow, firstCol, endRow, firstCol + 6).Clear(XLClearOptions.Contents);
-
-            for (var i = 0; i < filtered.Count; i++)
-            {
-                var row = startRow + i;
-                var entry = filtered[i];
-                worksheet.Cell(row, firstCol + 0).Value = entry.Person.FullName;
-                worksheet.Cell(row, firstCol + 1).Value = entry.Company?.CompanyName ?? string.Empty;
-                worksheet.Cell(row, firstCol + 2).Value = entry.Person.Position ?? entry.Company?.Role ?? string.Empty;
-                worksheet.Cell(row, firstCol + 3).Value = entry.Person.Email ?? string.Empty;
-                worksheet.Cell(row, firstCol + 4).Value = entry.Person.Mobile ?? string.Empty;
-                worksheet.Cell(row, firstCol + 5).Value = entry.Person.Tel ?? string.Empty;
-                worksheet.Cell(row, firstCol + 6).Value = entry.Company?.Address ?? string.Empty;
-            }
-        }
-        else
-        {
-            var headerRow = FindHeaderRow(worksheet, new[] { "Name", "Company" }, 1, 60);
-            if (headerRow == 0)
-            {
-                headerRow = 5;
-                worksheet.Cell(headerRow, 1).Value = "Name";
-                worksheet.Cell(headerRow, 2).Value = "Company";
-                worksheet.Cell(headerRow, 3).Value = "Email";
-                worksheet.Cell(headerRow, 4).Value = "Telephone";
-                worksheet.Cell(headerRow, 5).Value = "Role";
-                worksheet.Range(headerRow, 1, headerRow, 5).Style.Font.Bold = true;
-            }
-
-            var columns = ResolveDirectoryColumns(worksheet, headerRow);
-            var startRow = headerRow + 1;
-            var endRow = Math.Max(startRow + filtered.Count + 50, worksheet.LastRowUsed()?.RowNumber() ?? startRow);
-            worksheet.Range(startRow, 1, endRow, Math.Max(columns.Max(), 8)).Clear(XLClearOptions.Contents);
-
-            for (var i = 0; i < filtered.Count; i++)
-            {
-                var row = startRow + i;
-                var entry = filtered[i];
-                worksheet.Cell(row, columns[0]).Value = entry.Person.FullName;
-                worksheet.Cell(row, columns[1]).Value = entry.Company?.CompanyName ?? string.Empty;
-                worksheet.Cell(row, columns[2]).Value = entry.Person.Email ?? string.Empty;
-                worksheet.Cell(row, columns[3]).Value = entry.Person.Tel ?? string.Empty;
-                worksheet.Cell(row, columns[4]).Value = entry.Person.Position ?? entry.Company?.Role ?? string.Empty;
-            }
+            PopulateRowsFromNamedRange(worksheet,
+                templateRange,
+                filtered,
+                model => MergeContexts(commonContext, BuildProjectDirectoryContext(model)));
         }
 
-        worksheet.Columns().AdjustToContents();
+
+        //worksheet.Columns().AdjustToContents();
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
@@ -142,78 +95,39 @@ public class Reports
         var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
         var workbook = TryLoadTemplate("TransmittalSheet.xlsx") ?? new XLWorkbook();
         var worksheet = GetOrCreateWorksheet(workbook, "Transmittal");
-        ApplyTemplateTokens(workbook, "Transmittal Record", transmittal.TransDate);
+
+        var commonContext = BuildCommonTokenContext("Transmittal Record", transmittal.TransDate);
+        ApplyTemplateTokens(workbook, commonContext);
         ApplyCommonHeaderHeuristics(worksheet, "Transmittal Record", transmittal.TransDate);
 
-        var itemsHeaderRow = FindHeaderRow(worksheet, new[] { "Drawing", "Document", "Rev" }, 1, 80);
-        if (itemsHeaderRow == 0)
+        var sheetsRange = TryGetNamedRange(workbook, "SheetListData");
+        var distributionRange = TryGetNamedRange(workbook, "DistributionListData");
+
+        if (sheetsRange != null && distributionRange != null)
         {
-            itemsHeaderRow = 10;
-            worksheet.Cell(itemsHeaderRow, 1).Value = "Document Number";
-            worksheet.Cell(itemsHeaderRow, 2).Value = "Name";
-            worksheet.Cell(itemsHeaderRow, 3).Value = "Rev";
-            worksheet.Cell(itemsHeaderRow, 4).Value = "Status";
-            worksheet.Cell(itemsHeaderRow, 5).Value = "Package";
-            worksheet.Range(itemsHeaderRow, 1, itemsHeaderRow, 5).Style.Font.Bold = true;
-        }
+            var templateOrderedItems = transmittal.Items.OrderBy(x => x.DrgNumber).ToList();
+            PopulateRowsFromNamedRange(worksheet,
+                sheetsRange,
+                templateOrderedItems,
+                item => MergeContexts(commonContext, BuildTransmittalItemContext(item, transmittal)));
 
-        var itemCols = ResolveItemColumns(worksheet, itemsHeaderRow);
-        var distHeaderRow = FindDistributionHeaderRow(worksheet, itemsHeaderRow + 1);
-        if (distHeaderRow == 0)
-        {
-            distHeaderRow = itemsHeaderRow + Math.Max(transmittal.Items.Count, 10) + 2;
-            worksheet.Cell(distHeaderRow, 1).Value = "Name";
-            worksheet.Cell(distHeaderRow, 2).Value = "Company";
-            worksheet.Cell(distHeaderRow, 3).Value = "Format";
-            worksheet.Cell(distHeaderRow, 4).Value = "Copies";
-            worksheet.Range(distHeaderRow, 1, distHeaderRow, 4).Style.Font.Bold = true;
-        }
+            var distributionRows = transmittal.Distribution
+                .Select(dist =>
+                {
+                    var person = _contactDirectoryService.GetPerson(dist.PersonID);
+                    var company = person == null ? null : _contactDirectoryService.GetCompany(person.CompanyID);
+                    return new DistributionTemplateRow { Distribution = dist, Person = person, Company = company };
+                })
+                .ToList();
 
-        var orderedItems = transmittal.Items.OrderBy(x => x.DrgNumber).ToList();
-        var itemsStartRow = itemsHeaderRow + 1;
-        var itemsCapacity = Math.Max(0, distHeaderRow - itemsStartRow);
-        if (orderedItems.Count > itemsCapacity)
-        {
-            var extraRows = orderedItems.Count - itemsCapacity;
-            worksheet.Row(distHeaderRow).InsertRowsAbove(extraRows);
-            distHeaderRow += extraRows;
-        }
+            PopulateRowsFromNamedRange(worksheet,
+                distributionRange,
+                distributionRows,
+                row => MergeContexts(commonContext, BuildDistributionContext(row.Distribution, row.Person, row.Company, transmittal.ID)));
+     }
 
-        var itemsEndRow = distHeaderRow - 1;
-        worksheet.Range(itemsStartRow, 1, itemsEndRow, Math.Max(itemCols.Max(), 8)).Clear(XLClearOptions.Contents);
 
-        for (var i = 0; i < orderedItems.Count; i++)
-        {
-            var row = itemsStartRow + i;
-            var item = orderedItems[i];
-            worksheet.Cell(row, itemCols[0]).Value = item.DrgNumber;
-            worksheet.Cell(row, itemCols[1]).Value = item.DrgName;
-            worksheet.Cell(row, itemCols[2]).Value = item.DrgRev;
-            worksheet.Cell(row, itemCols[3]).Value = item.DrgStatus;
-            worksheet.Cell(row, itemCols[4]).Value = item.DrgPackage ?? string.Empty;
-        }
-
-        var distCols = ResolveDistributionColumns(worksheet, distHeaderRow);
-        var distStartRow = distHeaderRow + 1;
-        var distributionDataRowStyle = worksheet.Row(distStartRow).Style;
-        var distEndRow = Math.Max(distStartRow + transmittal.Distribution.Count + 10, worksheet.LastRowUsed()?.RowNumber() ?? distStartRow);
-        worksheet.Range(distStartRow, 1, distEndRow, Math.Max(distCols.Max(), 8)).Clear(XLClearOptions.Contents);
-
-        foreach (var pair in transmittal.Distribution.Select((d, idx) => new { Dist = d, Index = idx }))
-        {
-            var row = distStartRow + pair.Index;
-            var person = _contactDirectoryService.GetPerson(pair.Dist.PersonID);
-            var company = _contactDirectoryService.GetCompany(person.CompanyID);
-
-            worksheet.Row(row).Style = distributionDataRowStyle;
-
-            worksheet.Cell(row, distCols[0]).Value = person.FullName;
-            worksheet.Cell(row, distCols[1]).Value = company?.CompanyName ?? string.Empty;
-            worksheet.Cell(row, distCols[2]).Value = pair.Dist.TransFormat;
-            worksheet.Cell(row, distCols[3]).Value = pair.Dist.TransCopies;
-        }
-
-        worksheet.Columns().AdjustToContents();
+        //worksheet.Columns().AdjustToContents();
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
@@ -239,14 +153,64 @@ public class Reports
         var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
         var workbook = TryLoadTemplate("TransmittalSummary.xlsx") ?? new XLWorkbook();
         var worksheet = GetOrCreateWorksheet(workbook, "Summary");
-        ApplyTemplateTokens(workbook, "Transmittal Summary", null);
+
+        var commonContext = BuildCommonTokenContext("Transmittal Summary", null);
+        ApplyTemplateTokens(workbook, commonContext);
         ApplyCommonHeaderHeuristics(worksheet, "Transmittal Summary", null);
 
-        var sheetSection = FindSummarySheetSection(worksheet);
-        var distributionSection = FindSummaryDistributionSection(worksheet, sheetSection);
-        if (distributionSection.HeaderRow > 0 && sheetSection.StartRow > 0 && distributionSection.HeaderRow > sheetSection.StartRow)
+        var sheetListAnchor = TryGetNamedRange(workbook, "SheetListData");
+        var distributionListAnchor = TryGetNamedRange(workbook, "DistributionListData");
+        var summaryColumnAnchor = TryGetNamedRange(workbook, "SummaryColumnData");
+        var transmittalFormatAnchor = TryGetNamedRange(workbook, "TransmittalFormatData");
+
+        var sheetRange = FindSummarySheetSection(worksheet);
+        var distributionRange = FindSummaryDistributionSection(worksheet, sheetRange);
+
+        if (sheetListAnchor != null)
         {
-            sheetSection.EndRow = Math.Min(sheetSection.EndRow, distributionSection.HeaderRow - 1);
+            sheetRange.StartRow = sheetListAnchor.RangeAddress.FirstAddress.RowNumber;
+            sheetRange.TemplateRow = CaptureTemplateRow(worksheet, sheetListAnchor);
+            if (sheetRange.HeaderRow >= sheetRange.StartRow)
+            {
+                sheetRange.HeaderRow = Math.Max(1, sheetRange.StartRow - 1);
+            }
+
+            if (sheetRange.EndRow < sheetRange.StartRow)
+            {
+                sheetRange.EndRow = sheetRange.StartRow + 30;
+            }
+        }
+
+        if (distributionListAnchor != null)
+        {
+            distributionRange.StartRow = distributionListAnchor.RangeAddress.FirstAddress.RowNumber;
+            distributionRange.TemplateRow = CaptureTemplateRow(worksheet, distributionListAnchor);
+            if (distributionRange.HeaderRow >= distributionRange.StartRow)
+            {
+                distributionRange.HeaderRow = Math.Max(1, distributionRange.StartRow - 1);
+            }
+
+            if (distributionRange.EndRow < distributionRange.StartRow)
+            {
+                distributionRange.EndRow = distributionRange.StartRow + 30;
+            }
+        }
+
+        if (summaryColumnAnchor != null)
+        {
+            var firstColumn = summaryColumnAnchor.RangeAddress.FirstAddress.ColumnNumber;
+            sheetRange.FirstDataColumn = firstColumn;
+            distributionRange.FirstDataColumn = firstColumn;
+        }
+
+        if (transmittalFormatAnchor != null)
+        {
+            distributionRange.FormatRow = transmittalFormatAnchor.RangeAddress.FirstAddress.RowNumber;
+        }
+
+        if (distributionRange.HeaderRow > 0 && sheetRange.StartRow > 0 && distributionRange.HeaderRow > sheetRange.StartRow)
+        {
+            sheetRange.EndRow = Math.Min(sheetRange.EndRow, distributionRange.HeaderRow - 1);
         }
 
         var orderedColumns = orderedTransmittals
@@ -258,25 +222,25 @@ public class Reports
             })
             .ToList();
 
-        var summaryColumnNumbers = GetDateColumns(worksheet, sheetSection.DateRows, sheetSection.FirstDataColumn)
+        var summaryColumnNumbers = GetDateColumns(worksheet, sheetRange.DateRows, sheetRange.FirstDataColumn)
             .Take(orderedColumns.Count)
             .ToList();
 
-        ApplySummaryDateRows(worksheet, sheetSection, orderedColumns, summaryColumnNumbers);
-        ApplySummaryDateRows(worksheet, distributionSection, orderedColumns, summaryColumnNumbers);
-        ApplySummaryFormatRow(worksheet, distributionSection, orderedTransmittals, summaryColumnNumbers);
+        ApplySummaryDateRows(worksheet, sheetRange, orderedColumns, summaryColumnNumbers);
+        ApplySummaryDateRows(worksheet, distributionRange, orderedColumns, summaryColumnNumbers);
+        ApplySummaryFormatRow(worksheet, distributionRange, orderedTransmittals, summaryColumnNumbers, transmittalFormatAnchor != null);
 
-        var docRows = BuildSummaryItemRows(orderedTransmittals);
-        var shiftedRows = WriteSummaryDocumentMatrix(worksheet, sheetSection, orderedColumns, docRows, summaryColumnNumbers);
+        var docRows = BuildSummaryItemRows(orderedTransmittals, commonContext);
+        var shiftedRows = WriteSummaryDocumentMatrix(worksheet, sheetRange, orderedColumns, docRows, summaryColumnNumbers);
         if (shiftedRows > 0)
         {
-            distributionSection.ShiftRows(shiftedRows);
+            distributionRange.ShiftRows(shiftedRows);
         }
 
-        var recipientRows = BuildSummaryDistributionRows(orderedTransmittals);
-        WriteSummaryDistributionMatrix(worksheet, distributionSection, orderedColumns, recipientRows, summaryColumnNumbers);
+        var recipientRows = BuildSummaryDistributionRows(orderedTransmittals, commonContext);
+        WriteSummaryDistributionMatrix(worksheet, distributionRange, orderedColumns, recipientRows, summaryColumnNumbers);
 
-        worksheet.Columns().AdjustToContents();
+        //worksheet.Columns().AdjustToContents();
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
@@ -299,22 +263,13 @@ public class Reports
         var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
         var workbook = TryLoadTemplate("MasterDocumentsList.xlsx") ?? new XLWorkbook();
         var worksheet = GetOrCreateWorksheet(workbook, "Master Documents");
-        ApplyTemplateTokens(workbook, "Master Documents List", null);
+
+        var commonContext = BuildCommonTokenContext("Master Documents List", null);
+        ApplyTemplateTokens(workbook, commonContext);
         ApplyCommonHeaderHeuristics(worksheet, "Master Documents List", null);
 
-        var row = FindHeaderRow(worksheet, new[] { "Document ID", "Status", "Rev" }, 1, 60);
-        if (row == 0)
-        {
-            row = 4;
-            worksheet.Cell(row, 1).Value = "Document ID";
-            worksheet.Cell(row, 2).Value = "Name";
-            worksheet.Cell(row, 3).Value = "Rev";
-            worksheet.Cell(row, 4).Value = "Status";
-            worksheet.Range(row, 1, row, 4).Style.Font.Bold = true;
-        }
-
         var latestByDocument = transmittals
-            .SelectMany(t => t.Items.Select(i => new { Transmittal = t, Item = i }))
+            .SelectMany(t => t.Items.Select(i => new MasterDocumentTemplateRow { Transmittal = t, Item = i }))
             .Where(x => !string.IsNullOrWhiteSpace(x.Item.DrgNumber))
             .GroupBy(x => x.Item.DrgNumber.Trim(), StringComparer.OrdinalIgnoreCase)
             .Select(group => group
@@ -325,20 +280,17 @@ public class Reports
             .ThenBy(x => x.Item.DrgName, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        var startRow = row + 1;
-        var endRow = Math.Max(startRow + latestByDocument.Count + 100, worksheet.LastRowUsed()?.RowNumber() ?? startRow);
-        worksheet.Range(startRow, 1, endRow, 4).Clear(XLClearOptions.Contents);
-
-        foreach (var pair in latestByDocument)
+        var dataRange = TryGetNamedRange(workbook, "MasterDocumentListData");
+        if (dataRange != null)
         {
-            row++;
-            worksheet.Cell(row, 1).Value = pair.Item.DrgNumber;
-            worksheet.Cell(row, 2).Value = pair.Item.DrgName;
-            worksheet.Cell(row, 3).Value = pair.Item.DrgRev;
-            worksheet.Cell(row, 4).Value = pair.Item.DrgStatus;
+            PopulateRowsFromNamedRange(worksheet,
+                dataRange,
+                latestByDocument,
+                row => MergeContexts(commonContext, BuildMasterDocumentContext(row.Item, row.Transmittal)));
+
         }
 
-        worksheet.Columns().AdjustToContents();
+        //worksheet.Columns().AdjustToContents();
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
@@ -362,22 +314,8 @@ public class Reports
         return new XLWorkbook(templatePath);
     }
 
-    private void ApplyTemplateTokens(XLWorkbook workbook, string reportTitle, DateTime? transmittalDate)
+    private void ApplyTemplateTokens(XLWorkbook workbook, Dictionary<string, string> context)
     {
-        var projectDisplay = BuildProjectDisplay();
-        var replacements = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["{{Project}}"] = projectDisplay,
-            ["{{ProjectDisplay}}"] = projectDisplay,
-            ["{{ProjectName}}"] = _settingsService.GlobalSettings.ProjectName ?? string.Empty,
-            ["{{ProjectNumber}}"] = _settingsService.GlobalSettings.ProjectNumber ?? string.Empty,
-            ["{{ProjectIdentifier}}"] = _settingsService.GlobalSettings.ProjectIdentifier ?? string.Empty,
-            ["{{ClientName}}"] = _settingsService.GlobalSettings.ClientName ?? string.Empty,
-            ["{{ReportTitle}}"] = reportTitle,
-            ["{{ReportDate}}"] = DateTime.Now.ToString("D"),
-            ["{{TransmittalDate}}"] = transmittalDate?.ToString("D") ?? string.Empty,
-        };
-
         foreach (var worksheet in workbook.Worksheets)
         {
             var used = worksheet.RangeUsed();
@@ -399,14 +337,340 @@ public class Reports
                     continue;
                 }
 
-                foreach (var replacement in replacements)
-                {
-                    text = text.Replace(replacement.Key, replacement.Value, StringComparison.OrdinalIgnoreCase);
-                }
-
-                cell.Value = text;
+                cell.Value = ReplaceTokens(text, context);
             }
         }
+    }
+
+    private Dictionary<string, string> BuildCommonTokenContext(string reportTitle, DateTime? transmittalDate)
+    {
+        var projectDisplay = BuildProjectDisplay();
+        var now = DateTime.Now;
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["Project"] = projectDisplay,
+            ["ProjectDisplay"] = projectDisplay,
+            ["ProjectName"] = _settingsService.GlobalSettings.ProjectName ?? string.Empty,
+            ["ProjectNumber"] = _settingsService.GlobalSettings.ProjectNumber ?? string.Empty,
+            ["ProjectIdentifier"] = _settingsService.GlobalSettings.ProjectIdentifier ?? string.Empty,
+            ["ProjectID"] = _settingsService.GlobalSettings.ProjectIdentifier ?? string.Empty,
+            ["ClientName"] = _settingsService.GlobalSettings.ClientName ?? string.Empty,
+            ["ReportTitle"] = reportTitle,
+            ["ReportDate"] = now.ToString("D"),
+            ["TransmittalDate"] = transmittalDate?.ToString("D") ?? string.Empty,
+            ["DateYear"] = (transmittalDate ?? now).Year.ToString(),
+            ["DateMonth"] = (transmittalDate ?? now).Month.ToString(),
+            ["DateDay"] = (transmittalDate ?? now).Day.ToString(),
+        };
+    }
+
+    private static Dictionary<string, string> MergeContexts(
+        Dictionary<string, string> commonContext,
+        Dictionary<string, string> rowContext)
+    {
+        var merged = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
+        foreach (var pair in rowContext)
+        {
+            merged[pair.Key] = pair.Value;
+        }
+
+        return merged;
+    }
+
+    private Dictionary<string, string> BuildProjectDirectoryContext(ProjectDirectoryModel model)
+    {
+        var person = model.Person;
+        var company = model.Company;
+
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["CompanyName"] = company?.CompanyName ?? string.Empty,
+            ["Role"] = person?.Position ?? company?.Role ?? string.Empty,
+            ["Address"] = company?.Address ?? string.Empty,
+            ["LastName"] = person?.LastName ?? string.Empty,
+            ["FirstName"] = person?.FirstName ?? string.Empty,
+            ["Tel"] = person?.Tel ?? company?.Tel ?? string.Empty,
+            ["Fax"] = company?.Fax ?? string.Empty,
+            ["Website"] = company?.Website ?? string.Empty,
+            ["DDI"] = person?.Tel ?? string.Empty,
+            ["Mobile"] = person?.Mobile ?? string.Empty,
+            ["Email"] = person?.Email ?? string.Empty,
+            ["Position"] = person?.Position ?? string.Empty,
+            ["ContactName"] = person?.FullName ?? string.Empty,
+            ["PersonName"] = person?.FullName ?? string.Empty,
+        };
+    }
+
+    private Dictionary<string, string> BuildTransmittalItemContext(TransmittalItemModel item, TransmittalModel transmittal)
+    {
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["TransItemID"] = item.TransItemID.ToString(),
+            ["DrgNumber"] = item.DrgNumber ?? string.Empty,
+            ["DrgRev"] = item.DrgRev ?? string.Empty,
+            ["DrgName"] = item.DrgName ?? string.Empty,
+            ["DrgPaper"] = item.DrgPaper ?? string.Empty,
+            ["DrgScale"] = item.DrgScale ?? string.Empty,
+            ["DrgDrawn"] = item.DrgDrawn ?? string.Empty,
+            ["DrgChecked"] = item.DrgChecked ?? string.Empty,
+            ["TransID"] = transmittal.ID.ToString(),
+            ["ProjectID"] = _settingsService.GlobalSettings.ProjectIdentifier ?? string.Empty,
+            ["TransDate"] = transmittal.TransDate.ToShortDateString(),
+            ["DateYear"] = transmittal.TransDate.Year.ToString(),
+            ["DateMonth"] = transmittal.TransDate.Month.ToString(),
+            ["DateDay"] = transmittal.TransDate.Day.ToString(),
+            ["DrgProj"] = item.DrgProj ?? string.Empty,
+            ["DrgOriginator"] = item.DrgOriginator ?? string.Empty,
+            ["DrgVolume"] = item.DrgVolume ?? string.Empty,
+            ["DrgLevel"] = item.DrgLevel ?? string.Empty,
+            ["DrgType"] = item.DrgType ?? string.Empty,
+            ["DrgRole"] = item.DrgRole ?? string.Empty,
+            ["DrgStatus"] = item.DrgStatus ?? string.Empty,
+            ["DrgPackage"] = item.DrgPackage ?? string.Empty,
+        };
+    }
+
+    private Dictionary<string, string> BuildDistributionContext(
+        TransmittalDistributionModel distribution,
+        PersonModel person,
+        CompanyModel company,
+        int transmittalId)
+    {
+        return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["ApprovedListContactID"] = distribution.PersonID.ToString(),
+            ["ContactName"] = person?.FullName ?? string.Empty,
+            ["TransFormat"] = distribution.TransFormat ?? string.Empty,
+            ["TransCopies"] = distribution.TransCopies.ToString(),
+            ["TransID"] = transmittalId.ToString(),
+            ["CompanyName"] = company?.CompanyName ?? string.Empty,
+            ["PersonName"] = person?.FullName ?? string.Empty,
+            ["FirstName"] = person?.FirstName ?? string.Empty,
+            ["LastName"] = person?.LastName ?? string.Empty,
+            ["Email"] = person?.Email ?? string.Empty,
+            ["Tel"] = person?.Tel ?? string.Empty,
+            ["Mobile"] = person?.Mobile ?? string.Empty,
+            ["Role"] = person?.Position ?? company?.Role ?? string.Empty,
+        };
+    }
+
+    private Dictionary<string, string> BuildMasterDocumentContext(TransmittalItemModel item, TransmittalModel transmittal)
+    {
+        return BuildTransmittalItemContext(item, transmittal);
+    }
+
+    private void PopulateRowsFromNamedRange<T>(
+        IXLWorksheet worksheet,
+        IXLRange templateRange,
+        IReadOnlyList<T> rows,
+        Func<T, Dictionary<string, string>> contextFactory)
+    {
+        var template = CaptureTemplateRow(worksheet, templateRange);
+
+        if (rows.Count == 0)
+        {
+            ResetTemplateRow(worksheet, template.RowNumber, template);
+            ClearTokenCells(worksheet, template.RowNumber, template);
+            return;
+        }
+
+        var targetRow = template.RowNumber;
+
+        for (var i = 0; i < rows.Count; i++)
+        {
+            if (i > 0)
+            {
+                worksheet.Row(targetRow + 1).InsertRowsAbove(1);
+                targetRow++;
+                ResetTemplateRow(worksheet, targetRow, template);
+            }
+
+            RenderTemplateRow(worksheet, targetRow, template, contextFactory(rows[i]));
+        }
+    }
+
+    private static TemplateRow CaptureTemplateRow(IXLWorksheet worksheet, IXLRange templateRange)
+    {
+        var startRow = templateRange.RangeAddress.FirstAddress.RowNumber;
+        var endRow = templateRange.RangeAddress.LastAddress.RowNumber;
+        var rowNumber = startRow;
+        var firstColumn = templateRange.RangeAddress.FirstAddress.ColumnNumber;
+        var lastColumn = templateRange.RangeAddress.LastAddress.ColumnNumber;
+
+        if (endRow > startRow)
+        {
+            var bestRow = startRow;
+            var bestScore = -1;
+            var worksheetLastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? lastColumn;
+
+            for (var row = startRow; row <= endRow; row++)
+            {
+                var tokenCount = 0;
+                var scanStartColumn = firstColumn;
+                var scanEndColumn = lastColumn;
+
+                if (firstColumn == lastColumn)
+                {
+                    scanStartColumn = 1;
+                    scanEndColumn = worksheetLastColumn;
+                }
+
+                for (var col = scanStartColumn; col <= scanEndColumn; col++)
+                {
+                    var cellText = worksheet.Cell(row, col).GetString();
+                    if (!string.IsNullOrWhiteSpace(cellText) && cellText.Contains("{{", StringComparison.Ordinal))
+                    {
+                        tokenCount++;
+                    }
+                }
+
+                if (tokenCount > bestScore)
+                {
+                    bestScore = tokenCount;
+                    bestRow = row;
+                }
+            }
+
+            rowNumber = bestRow;
+        }
+
+        if (firstColumn == lastColumn)
+        {
+            var worksheetLastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? lastColumn;
+            var tokenColumns = new List<int>();
+
+            for (var col = 1; col <= worksheetLastColumn; col++)
+            {
+                var cellText = worksheet.Cell(rowNumber, col).GetString();
+                if (!string.IsNullOrWhiteSpace(cellText) && cellText.Contains("{{", StringComparison.Ordinal))
+                {
+                    tokenColumns.Add(col);
+                }
+            }
+
+            if (tokenColumns.Count > 0)
+            {
+                firstColumn = tokenColumns.Min();
+                lastColumn = tokenColumns.Max();
+            }
+            else
+            {
+                var rowCells = worksheet.Row(rowNumber)
+                    .CellsUsed(XLCellsUsedOptions.All)
+                    .ToList();
+
+                if (rowCells.Count > 0)
+                {
+                    firstColumn = rowCells.Min(c => c.Address.ColumnNumber);
+                    lastColumn = rowCells.Max(c => c.Address.ColumnNumber);
+                }
+            }
+        }
+
+        var cells = new List<TemplateCell>();
+        for (var col = firstColumn; col <= lastColumn; col++)
+        {
+            var cell = worksheet.Cell(rowNumber, col);
+            cells.Add(new TemplateCell
+            {
+                Column = col,
+                Style = cell.Style,
+                HasFormula = !string.IsNullOrWhiteSpace(cell.FormulaA1),
+                FormulaA1 = cell.FormulaA1,
+                TextValue = cell.GetString(),
+                Value = cell.Value,
+                DataType = cell.DataType,
+            });
+        }
+
+        return new TemplateRow
+        {
+            RowNumber = rowNumber,
+            FirstColumn = firstColumn,
+            LastColumn = lastColumn,
+            RowStyle = worksheet.Row(rowNumber).Style,
+            Cells = cells,
+        };
+    }
+
+    private static void ResetTemplateRow(IXLWorksheet worksheet, int rowNumber, TemplateRow template)
+    {
+        worksheet.Row(rowNumber).Style = template.RowStyle;
+
+        foreach (var templateCell in template.Cells)
+        {
+            var targetCell = worksheet.Cell(rowNumber, templateCell.Column);
+            targetCell.Style = templateCell.Style;
+
+            if (templateCell.HasFormula)
+            {
+                targetCell.FormulaA1 = templateCell.FormulaA1;
+                continue;
+            }
+
+            targetCell.Value = templateCell.Value;
+        }
+    }
+
+    private static void RenderTemplateRow(IXLWorksheet worksheet, int rowNumber, TemplateRow template, Dictionary<string, string> context)
+    {
+        foreach (var templateCell in template.Cells)
+        {
+            var targetCell = worksheet.Cell(rowNumber, templateCell.Column);
+
+            if (templateCell.HasFormula)
+            {
+                targetCell.FormulaA1 = templateCell.FormulaA1;
+                continue;
+            }
+
+            if (templateCell.DataType == XLDataType.Text &&
+                !string.IsNullOrWhiteSpace(templateCell.TextValue) &&
+                templateCell.TextValue.Contains("{{", StringComparison.Ordinal))
+            {
+                targetCell.Value = ReplaceTokens(templateCell.TextValue, context);
+                continue;
+            }
+
+            targetCell.Value = templateCell.Value;
+        }
+    }
+
+    private static void ClearTokenCells(IXLWorksheet worksheet, int rowNumber, TemplateRow template)
+    {
+        foreach (var templateCell in template.Cells)
+        {
+            if (templateCell.HasFormula)
+            {
+                continue;
+            }
+
+            if (templateCell.DataType == XLDataType.Text &&
+                !string.IsNullOrWhiteSpace(templateCell.TextValue) &&
+                templateCell.TextValue.Contains("{{", StringComparison.Ordinal))
+            {
+                worksheet.Cell(rowNumber, templateCell.Column).Value = string.Empty;
+            }
+        }
+    }
+
+    private static string ReplaceTokens(string input, Dictionary<string, string> context)
+    {
+        if (string.IsNullOrWhiteSpace(input) || !input.Contains("{{", StringComparison.Ordinal))
+        {
+            return input;
+        }
+
+        return TokenRegex.Replace(input, match =>
+        {
+            var tokenName = match.Groups["name"].Value.Trim();
+            if (context.TryGetValue(tokenName, out var value))
+            {
+                return value ?? string.Empty;
+            }
+
+            return match.Value;
+        });
     }
 
     private void ApplyCommonHeaderHeuristics(IXLWorksheet worksheet, string reportTitle, DateTime? transmittalDate)
@@ -661,7 +925,12 @@ public class Reports
         }
     }
 
-    private void ApplySummaryFormatRow(IXLWorksheet worksheet, SummarySection section, List<TransmittalModel> transmittals, List<int> dateColumns)
+    private void ApplySummaryFormatRow(
+        IXLWorksheet worksheet,
+        SummarySection section,
+        List<TransmittalModel> transmittals,
+        List<int> dateColumns,
+        bool forceWriteAllColumns)
     {
         if (section.FormatRow <= 0 || section.DateRows.DayRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
         {
@@ -684,16 +953,23 @@ public class Reports
                 continue;
             }
 
-            if (worksheet.Cell(section.FormatRow, dateColumns[i]).DataType == XLDataType.Text || section.FormatRow != section.HeaderRow)
+            if (forceWriteAllColumns || worksheet.Cell(section.FormatRow, dateColumns[i]).DataType == XLDataType.Text || section.FormatRow != section.HeaderRow)
             {
                 worksheet.Cell(section.FormatRow, dateColumns[i]).Value = format;
             }
         }
     }
 
-    private List<SummaryItemRow> BuildSummaryItemRows(List<TransmittalModel> transmittals)
+    private List<SummaryItemRow> BuildSummaryItemRows(List<TransmittalModel> transmittals, Dictionary<string, string> commonContext)
     {
-        var dedupedItems = transmittals
+        var orderedTransmittals = transmittals
+            .OrderBy(t => t.TransDate)
+            .ThenBy(t => t.ID)
+            .ToList();
+
+        var transmittalById = orderedTransmittals.ToDictionary(t => t.ID);
+
+        var dedupedItems = orderedTransmittals
             .OrderBy(t => t.TransDate)
             .ThenBy(t => t.ID)
             .SelectMany(t => t.Items.Select(item => new { t.ID, Item = item }))
@@ -715,15 +991,45 @@ public class Reports
                     .GroupBy(x => x.ID)
                     .ToDictionary(
                         tg => tg.Key,
-                        tg => tg.Select(v => v.Item.DrgRev).LastOrDefault() ?? string.Empty)
+                        tg => tg.Select(v => v.Item.DrgRev).LastOrDefault() ?? string.Empty),
+                TemplateItem = g
+                    .OrderByDescending(x => transmittalById[x.ID].TransDate)
+                    .ThenByDescending(x => x.ID)
+                    .Select(x => x.Item)
+                    .FirstOrDefault(),
+                TemplateTransmittal = g
+                    .OrderByDescending(x => transmittalById[x.ID].TransDate)
+                    .ThenByDescending(x => x.ID)
+                    .Select(x => transmittalById[x.ID])
+                    .FirstOrDefault(),
+                RowContext = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             })
             .ToList();
+
+        foreach (var row in rows)
+        {
+            if (row.TemplateItem != null && row.TemplateTransmittal != null)
+            {
+                row.RowContext = MergeContexts(commonContext, BuildTransmittalItemContext(row.TemplateItem, row.TemplateTransmittal));
+            }
+            else
+            {
+                row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
+            }
+        }
 
         return rows;
     }
 
-    private List<SummaryDistributionRow> BuildSummaryDistributionRows(List<TransmittalModel> transmittals)
+    private List<SummaryDistributionRow> BuildSummaryDistributionRows(List<TransmittalModel> transmittals, Dictionary<string, string> commonContext)
     {
+        var orderedTransmittals = transmittals
+            .OrderBy(t => t.TransDate)
+            .ThenBy(t => t.ID)
+            .ToList();
+
+        var transmittalById = orderedTransmittals.ToDictionary(t => t.ID);
+
         var rows = transmittals
             .OrderBy(t => t.TransDate)
             .ThenBy(t => t.ID)
@@ -746,10 +1052,41 @@ public class Reports
                             {
                                 Format = x.Select(v => v.Dist.TransFormat).FirstOrDefault() ?? string.Empty,
                                 Copies = x.Sum(v => v.Dist.TransCopies)
-                            })
+                            }),
+                    TemplateDistribution = g
+                        .OrderByDescending(x => transmittalById[x.ID].TransDate)
+                        .ThenByDescending(x => x.ID)
+                        .Select(x => x.Dist)
+                        .FirstOrDefault(),
+                    TemplateTransmittal = g
+                        .OrderByDescending(x => transmittalById[x.ID].TransDate)
+                        .ThenByDescending(x => x.ID)
+                        .Select(x => transmittalById[x.ID])
+                        .FirstOrDefault(),
+                    Person = person,
+                    CompanyModel = company,
+                    RowContext = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 };
             })
             .ToList();
+
+        foreach (var row in rows)
+        {
+            if (row.TemplateDistribution != null)
+            {
+                row.RowContext = MergeContexts(
+                    commonContext,
+                    BuildDistributionContext(
+                        row.TemplateDistribution,
+                        row.Person,
+                        row.CompanyModel,
+                        row.TemplateTransmittal?.ID ?? 0));
+            }
+            else
+            {
+                row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
+            }
+        }
 
         return rows;
     }
@@ -778,6 +1115,12 @@ public class Reports
         {
             var row = section.StartRow + i;
             var item = rows[i];
+
+            if (section.TemplateRow != null)
+            {
+                ResetTemplateRow(worksheet, row, section.TemplateRow);
+                RenderTemplateRow(worksheet, row, section.TemplateRow, item.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            }
 
             worksheet.Cell(row, section.NumberColumn).Value = item.DrawingNumber;
             worksheet.Cell(row, section.NameColumn).Value = item.DrawingName;
@@ -827,7 +1170,15 @@ public class Reports
             var rowNumber = section.StartRow + i;
             var row = rows[i];
 
-            worksheet.Row(rowNumber).Style = distributionDataRowStyle;
+            if (section.TemplateRow != null)
+            {
+                ResetTemplateRow(worksheet, rowNumber, section.TemplateRow);
+                RenderTemplateRow(worksheet, rowNumber, section.TemplateRow, row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            }
+            else
+            {
+                worksheet.Row(rowNumber).Style = distributionDataRowStyle;
+            }
 
             if (section.CompanyColumn > 0)
             {
@@ -970,6 +1321,25 @@ public class Reports
         return null;
     }
 
+    private IXLRange TryGetNamedRange(XLWorkbook workbook, params string[] names)
+    {
+        if (names == null || names.Length == 0)
+        {
+            return null;
+        }
+
+        foreach (var name in names)
+        {
+            var range = TryGetNamedRange(workbook, name);
+            if (range != null)
+            {
+                return range;
+            }
+        }
+
+        return null;
+    }
+
     private IXLRange TryGetNamedRange(XLWorkbook workbook, string name)
     {
         foreach (var definedName in workbook.DefinedNames)
@@ -1045,6 +1415,7 @@ public class Reports
         public int CompanyColumn { get; set; }
         public int FormatRow { get; set; }
         public DateRows DateRows { get; set; } = new DateRows();
+        public TemplateRow TemplateRow { get; set; }
 
         public void ShiftRows(int delta)
         {
@@ -1081,6 +1452,11 @@ public class Reports
             {
                 DateRows.DayRow += delta;
             }
+
+            if (TemplateRow != null)
+            {
+                TemplateRow.RowNumber += delta;
+            }
         }
     }
 
@@ -1092,6 +1468,9 @@ public class Reports
         public string LatestRevision { get; set; } = string.Empty;
         public string Package { get; set; } = string.Empty;
         public Dictionary<int, string> RevisionsByTransmittal { get; set; } = new Dictionary<int, string>();
+        public TransmittalItemModel TemplateItem { get; set; }
+        public TransmittalModel TemplateTransmittal { get; set; }
+        public Dictionary<string, string> RowContext { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
 
     private sealed class SummaryDistributionRow
@@ -1099,6 +1478,44 @@ public class Reports
         public string Name { get; set; } = string.Empty;
         public string Company { get; set; } = string.Empty;
         public Dictionary<int, DistCell> FormatByTransmittal { get; set; } = new Dictionary<int, DistCell>();
+        public TransmittalDistributionModel TemplateDistribution { get; set; }
+        public TransmittalModel TemplateTransmittal { get; set; }
+        public PersonModel Person { get; set; }
+        public CompanyModel CompanyModel { get; set; }
+        public Dictionary<string, string> RowContext { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private sealed class DistributionTemplateRow
+    {
+        public TransmittalDistributionModel Distribution { get; set; }
+        public PersonModel Person { get; set; }
+        public CompanyModel Company { get; set; }
+    }
+
+    private sealed class MasterDocumentTemplateRow
+    {
+        public TransmittalModel Transmittal { get; set; }
+        public TransmittalItemModel Item { get; set; }
+    }
+
+    private sealed class TemplateRow
+    {
+        public int RowNumber { get; set; }
+        public int FirstColumn { get; set; }
+        public int LastColumn { get; set; }
+        public IXLStyle RowStyle { get; set; }
+        public List<TemplateCell> Cells { get; set; } = new List<TemplateCell>();
+    }
+
+    private sealed class TemplateCell
+    {
+        public int Column { get; set; }
+        public IXLStyle Style { get; set; }
+        public bool HasFormula { get; set; }
+        public string FormulaA1 { get; set; }
+        public string TextValue { get; set; }
+        public XLCellValue Value { get; set; }
+        public XLDataType DataType { get; set; }
     }
 
     private sealed class DistCell
