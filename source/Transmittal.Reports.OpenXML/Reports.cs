@@ -227,7 +227,7 @@ public class Reports
             .ToList();
 
         var summaryColumnNumbers = summaryColumnAnchor != null
-            ? Enumerable.Range(sheetRange.FirstDataColumn, orderedColumns.Count).ToList()
+            ? EnsureSummaryColumns(worksheet, summaryColumnAnchor, orderedColumns.Count)
             : GetDateColumns(worksheet, sheetRange.DateRows, sheetRange.FirstDataColumn)
                 .Take(orderedColumns.Count)
                 .ToList();
@@ -1217,6 +1217,50 @@ public class Reports
         }
 
         return new DateRows();
+    }
+
+    private static List<int> EnsureSummaryColumns(IXLWorksheet worksheet, IXLRange summaryColumnAnchor, int requiredColumnCount)
+    {
+        if (requiredColumnCount <= 0)
+        {
+            return new List<int>();
+        }
+
+        var firstColumn = summaryColumnAnchor.RangeAddress.FirstAddress.ColumnNumber;
+        var anchorColumnCount = Math.Max(1, summaryColumnAnchor.ColumnCount());
+
+        if (requiredColumnCount > anchorColumnCount)
+        {
+            for (var offset = anchorColumnCount; offset < requiredColumnCount; offset++)
+            {
+                var insertAfterColumn = firstColumn + offset - 1;
+                worksheet.Column(insertAfterColumn).InsertColumnsAfter(1);
+                ApplySummaryColumnFormatting(worksheet, summaryColumnAnchor, firstColumn, insertAfterColumn + 1);
+            }
+        }
+
+        return Enumerable.Range(firstColumn, requiredColumnCount).ToList();
+    }
+
+    private static void ApplySummaryColumnFormatting(
+        IXLWorksheet worksheet,
+        IXLRange summaryColumnAnchor,
+        int sourceColumn,
+        int targetColumn)
+    {
+        var sourceTemplateColumn = worksheet.Column(sourceColumn);
+        var targetTemplateColumn = worksheet.Column(targetColumn);
+
+        targetTemplateColumn.Width = sourceTemplateColumn.Width;
+        targetTemplateColumn.Style = sourceTemplateColumn.Style;
+
+        var firstRow = summaryColumnAnchor.RangeAddress.FirstAddress.RowNumber;
+        var lastRow = summaryColumnAnchor.RangeAddress.LastAddress.RowNumber;
+
+        for (var row = firstRow; row <= lastRow; row++)
+        {
+            worksheet.Cell(row, targetColumn).Style = worksheet.Cell(row, sourceColumn).Style;
+        }
     }
 
     private List<int> GetDateColumns(IXLWorksheet worksheet, DateRows rows, int fallbackStart)
