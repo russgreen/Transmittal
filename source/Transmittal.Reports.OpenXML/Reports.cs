@@ -1125,6 +1125,7 @@ public class Reports
         {
             var row = section.StartRow + i;
             var item = rows[i];
+            var summaryDataStyle = worksheet.Cell(row, dateColumns[0]).Style;
 
             if (section.TemplateRow != null)
             {
@@ -1134,9 +1135,11 @@ public class Reports
 
             for (var c = 0; c < columnCount; c++)
             {
+                var targetCell = worksheet.Cell(row, dateColumns[c]);
+                targetCell.Style = summaryDataStyle;
                 if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
                 {
-                    worksheet.Cell(row, dateColumns[c]).Value = rev;
+                    targetCell.Value = rev;
                 }
             }
         }
@@ -1166,6 +1169,7 @@ public class Reports
         {
             var rowNumber = section.StartRow + i;
             var row = rows[i];
+            var summaryDataStyle = worksheet.Cell(rowNumber, dateColumns[0]).Style;
 
             if (section.TemplateRow != null)
             {
@@ -1179,12 +1183,14 @@ public class Reports
 
             for (var c = 0; c < columnCount; c++)
             {
+                var targetCell = worksheet.Cell(rowNumber, dateColumns[c]);
+                targetCell.Style = summaryDataStyle;
+
                 if (!row.FormatByTransmittal.TryGetValue(columns[c].TransmittalId, out var cell))
                 {
                     continue;
                 }
 
-                var targetCell = worksheet.Cell(rowNumber, dateColumns[c]);
                 if (targetCell.DataType == XLDataType.Number || targetCell.Style.NumberFormat.Format == "0" || targetCell.Style.NumberFormat.NumberFormatId > 0)
                 {
                     targetCell.Value = cell.Copies;
@@ -1254,8 +1260,9 @@ public class Reports
         targetTemplateColumn.Width = sourceTemplateColumn.Width;
         targetTemplateColumn.Style = sourceTemplateColumn.Style;
 
-        var firstRow = summaryColumnAnchor.RangeAddress.FirstAddress.RowNumber;
-        var lastRow = summaryColumnAnchor.RangeAddress.LastAddress.RowNumber;
+        var firstRow = 1;
+        var lastRow = worksheet.LastRowUsed(XLCellsUsedOptions.All)?.RowNumber()
+            ?? summaryColumnAnchor.RangeAddress.LastAddress.RowNumber;
 
         for (var row = firstRow; row <= lastRow; row++)
         {
