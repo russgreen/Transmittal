@@ -132,6 +132,7 @@
                                 <CheckBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
                                           Content="Enforce ISO19650 parameter values"
                                           IsChecked="{Binding UseISO19650}" />
+
                             </Grid>
 
                             <Grid>

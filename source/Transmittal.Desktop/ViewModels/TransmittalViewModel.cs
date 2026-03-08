@@ -11,6 +11,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using Transmittal.Desktop.Requesters;
+using Transmittal.Desktop.Services;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
 using Transmittal.Library.Models;
@@ -398,9 +399,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
 
     private void LaunchTransmittalReport()
     {
-        Reports.Reports report = new(Host.GetService<ISettingsService>(),
-     Host.GetService<IContactDirectoryService>(),
-     Host.GetService<ITransmittalService>());
+          ReportsFacade report = new(Host.GetService<ISettingsService>(),
+      Host.GetService<IContactDirectoryService>(),
+      Host.GetService<ITransmittalService>());
 
         report.ShowTransmittalReport(_newTransmittal.ID);
     }

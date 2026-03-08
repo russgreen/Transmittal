@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
 using Transmittal.Desktop.Requesters;
+using Transmittal.Desktop.Services;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -297,7 +298,7 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
             _logger.LogInformation("{command}", nameof(ShowSummaryReportCommand));
         }
 
-        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        var reports = new ReportsFacade(_settingsService, _contactDirectoryService, _transmittalService, _logger);
         reports.ShowTransmittalSummaryReport();
     }
 
@@ -309,7 +310,7 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
             _logger.LogInformation("{command}", nameof(ShowSummaryRangeReportCommand));
         }
 
-        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        var reports = new ReportsFacade(_settingsService, _contactDirectoryService, _transmittalService, _logger);
         reports.ShowTransmittalSummaryReport(SelectedTransmittals.Cast<TransmittalModel>().ToList());
     }
 
@@ -322,7 +323,7 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
         }
 
         TransmittalModel transmittalModel = SelectedTransmittals.First() as TransmittalModel;
-        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        var reports = new ReportsFacade(_settingsService, _contactDirectoryService, _transmittalService, _logger);
         reports.ShowTransmittalReport(transmittalModel.ID);
     }
 
@@ -334,7 +335,7 @@ internal partial class ArchiveViewModel : BaseViewModel, IPackageRequester
             _logger.LogInformation("{command}", nameof(MasterDocumentsListReportCommand));
         }
 
-        Reports.Reports reports = new(_settingsService, _contactDirectoryService, _transmittalService);
+        var reports = new ReportsFacade(_settingsService, _contactDirectoryService, _transmittalService, _logger);
         reports.ShowMasterDocumentsListReport();
     }
 
