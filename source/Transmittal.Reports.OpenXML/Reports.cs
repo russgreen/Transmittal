@@ -178,7 +178,7 @@ public class Reports
 
             if (sheetRange.EndRow < sheetRange.StartRow)
             {
-                sheetRange.EndRow = sheetRange.StartRow + 30;
+                sheetRange.EndRow = sheetRange.StartRow;
             }
         }
 
@@ -193,7 +193,7 @@ public class Reports
 
             if (distributionRange.EndRow < distributionRange.StartRow)
             {
-                distributionRange.EndRow = distributionRange.StartRow + 30;
+                distributionRange.EndRow = distributionRange.StartRow;
             }
         }
 
@@ -214,6 +214,9 @@ public class Reports
             sheetRange.EndRow = Math.Min(sheetRange.EndRow, distributionRange.HeaderRow - 1);
         }
 
+        sheetRange.EndRow = TrimTrailingBlankRows(worksheet, sheetRange.StartRow, sheetRange.EndRow);
+        distributionRange.EndRow = TrimTrailingBlankRows(worksheet, distributionRange.StartRow, distributionRange.EndRow);
+
         var orderedColumns = orderedTransmittals
             .Select((t, idx) => new SummaryColumn
             {
@@ -223,17 +226,22 @@ public class Reports
             })
             .ToList();
 
-        var summaryColumnNumbers = GetDateColumns(worksheet, sheetRange.DateRows, sheetRange.FirstDataColumn)
-            .Take(orderedColumns.Count)
-            .ToList();
+        var summaryColumnNumbers = summaryColumnAnchor != null
+            ? Enumerable.Range(sheetRange.FirstDataColumn, orderedColumns.Count).ToList()
+            : GetDateColumns(worksheet, sheetRange.DateRows, sheetRange.FirstDataColumn)
+                .Take(orderedColumns.Count)
+                .ToList();
 
         ApplySummaryDateRows(worksheet, sheetRange, orderedColumns, summaryColumnNumbers);
         ApplySummaryDateRows(worksheet, distributionRange, orderedColumns, summaryColumnNumbers);
         ApplySummaryFormatRow(worksheet, distributionRange, orderedTransmittals, summaryColumnNumbers, transmittalFormatAnchor != null);
 
+        var distributionSectionIsBelowSheetSection = distributionRange.StartRow > sheetRange.EndRow;
+
         var docRows = BuildSummaryItemRows(orderedTransmittals, commonContext);
         var shiftedRows = WriteSummaryDocumentMatrix(worksheet, sheetRange, orderedColumns, docRows, summaryColumnNumbers);
-        if (shiftedRows > 0)
+
+        if (shiftedRows > 0 && distributionSectionIsBelowSheetSection)
         {
             distributionRange.ShiftRows(shiftedRows);
         }
@@ -1016,10 +1024,10 @@ public class Reports
             {
                 row.RowContext = MergeContexts(commonContext, BuildTransmittalItemContext(row.TemplateItem, row.TemplateTransmittal));
             }
-            else
-            {
-                row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
-            }
+            //else
+            //{
+            //    row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
+            //}
         }
 
         return rows;
@@ -1084,10 +1092,10 @@ public class Reports
                         row.CompanyModel,
                         row.TemplateTransmittal?.ID ?? 0));
             }
-            else
-            {
-                row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
-            }
+            //else
+            //{
+            //    row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
+            //}
         }
 
         return rows;
@@ -1368,5 +1376,21 @@ public class Reports
             FileName = outputPath,
             UseShellExecute = true
         });
+    }
+
+    private static int TrimTrailingBlankRows(IXLWorksheet worksheet, int startRow, int endRow)
+    {
+        if (startRow <= 0 || endRow < startRow)
+        {
+            return endRow;
+        }
+
+        var trimmedEnd = endRow;
+        while (trimmedEnd > startRow && !worksheet.Row(trimmedEnd).CellsUsed(XLCellsUsedOptions.Contents).Any())
+        {
+            trimmedEnd--;
+        }
+
+        return trimmedEnd;
     }
 }
