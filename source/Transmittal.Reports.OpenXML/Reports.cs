@@ -204,6 +204,8 @@ public class Reports
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
+
+
     private void ApplyTransmittalFormatRow(IXLWorksheet worksheet, IXLRange formatRange, List<TransmittalModel> transmittals, List<int> dateColumns)
     {
         if (formatRange == null || dateColumns.Count == 0)
