@@ -123,11 +123,16 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="APPDIR" ComponentId="{E01C92EA-6614-48B0-8086-1ABBE9BD1B59}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="AnalyticsSettings.json" ComponentId="{9D5821A8-3563-4765-8DF5-2A798B4A09FF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Transmittal.deps.json_2" Type="0"/>
+    <ROW Component="ClosedXML.Parser.dll" ComponentId="{AB7C95FF-92AD-4539-9348-CA60A42613C0}" Directory_="APPDIR" Attributes="0" KeyPath="ClosedXML.Parser.dll"/>
+    <ROW Component="ClosedXML.dll" ComponentId="{5496A006-B2B9-4AA6-B106-E25FD03ED9D5}" Directory_="APPDIR" Attributes="0" KeyPath="ClosedXML.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll_1" ComponentId="{7780AF0E-5610-453A-9265-578957696E32}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll_1"/>
     <ROW Component="CurrentVersion" ComponentId="{F6370944-48C2-4C57-BAD4-66B68154ACE6}" Directory_="APPDIR" Attributes="260" KeyPath="CurrentVersion"/>
     <ROW Component="Dapper.dll" ComponentId="{3C785166-CE81-4DA3-B8CD-E82E4AA925BC}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
     <ROW Component="Dapper.dll_1" ComponentId="{1E6E83BF-2AE4-4626-BAC0-646E6BF140C3}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Dapper.dll_1"/>
+    <ROW Component="DocumentFormat.OpenXml.Framework.dll" ComponentId="{7617F6D4-AF43-4CEC-84AC-24093B7D7F98}" Directory_="APPDIR" Attributes="0" KeyPath="DocumentFormat.OpenXml.Framework.dll"/>
+    <ROW Component="DocumentFormat.OpenXml.dll" ComponentId="{514EA4C7-884C-4732-8C32-44B80419989D}" Directory_="APPDIR" Attributes="0" KeyPath="DocumentFormat.OpenXml.dll"/>
+    <ROW Component="ExcelNumberFormat.dll" ComponentId="{47FFD11F-B0E8-4C20-8382-D5B37E993779}" Directory_="APPDIR" Attributes="0" KeyPath="ExcelNumberFormat.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
     <ROW Component="Humanizer.dll_1" ComponentId="{F775CE70-0C04-43C4-BCEA-41E4BE8986CC}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Humanizer.dll_1"/>
     <ROW Component="JetBrains.Annotations.dll" ComponentId="{9D7A1217-A3C6-43DA-868F-A2EE96C9B799}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll"/>
@@ -215,6 +220,7 @@
     <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{5DF03D9A-78EA-43BE-BA7F-67F061605D7D}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProjectDirectory.rdlc" ComponentId="{D1A78914-9F2F-4E1A-B46E-F00220C02B30}" Directory_="ReportTemplates_Dir" Attributes="0" KeyPath="ProjectDirectory.rdlc" Type="0"/>
+    <ROW Component="RBush.dll" ComponentId="{BCFE60CA-2554-4C33-A052-D2A9316A3AE3}" Directory_="APPDIR" Attributes="0" KeyPath="RBush.dll"/>
     <ROW Component="Run" ComponentId="{1BB8BC5E-B1C8-4D17-ABAF-7FDE9790DC97}" Directory_="APPDIR" Attributes="260" KeyPath="Run"/>
     <ROW Component="SQLitePCLRaw.batteries_v2.dll" ComponentId="{944FC045-3490-4558-9738-8E2812F37BD3}" Directory_="APPDIR" Attributes="0" KeyPath="SQLitePCLRaw.batteries_v2.dll"/>
     <ROW Component="SQLitePCLRaw.batteries_v2.dll_1" ComponentId="{A7AD0A7E-B9E9-4822-9B3E-EC89B2E2157B}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="SQLitePCLRaw.batteries_v2.dll_1"/>
@@ -257,6 +263,7 @@
     <ROW Component="Serilog.dll" ComponentId="{9F739BA8-C0FA-46CD-BA80-9CC1D324AE51}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
     <ROW Component="Serilog.dll_1" ComponentId="{BC452276-3F27-4F84-8256-AD83BE1610EE}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.dll_1"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
+    <ROW Component="SixLabors.Fonts.dll" ComponentId="{2DD3BA3B-7117-4194-A067-53FF51F70C75}" Directory_="APPDIR" Attributes="0" KeyPath="SixLabors.Fonts.dll"/>
     <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{DD883321-052E-4B65-AAC1-53EE59066416}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
     <ROW Component="Syncfusion.Compression.Base.dll_1" ComponentId="{365A7A8B-D8EE-43DD-94DB-2F85E8D333C1}" Directory_="Transmittal_1_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll_1"/>
     <ROW Component="Syncfusion.Compression.Base.dll_2" ComponentId="{45804ECF-D75F-41E1-918E-ED8F15CF8A88}" Directory_="Transmittal_3_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll_2"/>
@@ -342,6 +349,7 @@
     <ROW Component="Transmittal.Desktop.runtimeconfig.json" ComponentId="{5F2FF946-6630-42B1-925A-1CC1536A5B74}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Desktop.runtimeconfig.json" Type="0"/>
     <ROW Component="Transmittal.Library.dll" ComponentId="{66BCDFC2-8228-4212-B1EC-82447F046839}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Library.dll"/>
     <ROW Component="Transmittal.Library.dll_1" ComponentId="{75709818-667A-4E26-B14E-350611D8BB6D}" Directory_="Transmittal_6_Dir" Attributes="256" KeyPath="Transmittal.Library.dll_1"/>
+    <ROW Component="Transmittal.Reports.OpenXML.dll" ComponentId="{3170A961-6862-47F0-9406-7D850EEAF496}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Reports.OpenXML.dll"/>
     <ROW Component="Transmittal.Reports.dll" ComponentId="{0194DCD9-3ABA-4A69-BE12-E191C824BAC7}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Reports.dll"/>
     <ROW Component="Transmittal.addin" ComponentId="{E1F058D6-29AC-4555-97E3-9E2AD43AA6CD}" Directory_="__Dir" Attributes="0" KeyPath="Transmittal.addin_1" Type="0"/>
     <ROW Component="Transmittal.addin_1" ComponentId="{F2F631F4-B32B-41AA-A64A-5ACD69324B87}" Directory_="__1_Dir" Attributes="0" KeyPath="Transmittal.addin_3" Type="0"/>
@@ -1047,6 +1055,20 @@
     <ROW File="Microsoft.Playwright.dll_1" Component_="Microsoft.Playwright.dll_1" FileName="MICRO~31.DLL|Microsoft.Playwright.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Playwright.dll" SelfReg="false"/>
     <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~1.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\System.Management.dll" SelfReg="false"/>
     <ROW File="Transmittal_Isolated.addin_2" Component_="Transmittal_Isolated.addin" FileName="TRANSM~2.ADD|Transmittal.addin" Attributes="0" SourcePath="..\source\Transmittal\Transmittal_Isolated.addin" SelfReg="false"/>
+    <ROW File="MasterDocumentsList.xlsx" Component_="ProjectDirectory.rdlc" FileName="MASTER~1.XLS|MasterDocumentsList.xlsx" Attributes="0" SourcePath="..\source\Transmittal.Reports.OpenXML\Reports\MasterDocumentsList.xlsx" SelfReg="false"/>
+    <ROW File="ProjectDirectory.xlsx" Component_="ProjectDirectory.rdlc" FileName="PROJEC~1.XLS|ProjectDirectory.xlsx" Attributes="0" SourcePath="..\source\Transmittal.Reports.OpenXML\Reports\ProjectDirectory.xlsx" SelfReg="false"/>
+    <ROW File="TransmittalSheet.xlsx" Component_="ProjectDirectory.rdlc" FileName="TRANSM~1.XLS|TransmittalSheet.xlsx" Attributes="0" SourcePath="..\source\Transmittal.Reports.OpenXML\Reports\TransmittalSheet.xlsx" SelfReg="false"/>
+    <ROW File="TransmittalSummary.xlsx" Component_="ProjectDirectory.rdlc" FileName="TRANSM~2.XLS|TransmittalSummary.xlsx" Attributes="0" SourcePath="..\source\Transmittal.Reports.OpenXML\Reports\TransmittalSummary.xlsx" SelfReg="false"/>
+    <ROW File="AnalyticsSettings.json" Component_="Transmittal.Desktop.runtimeconfig.json" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\AnalyticsSettings.json" SelfReg="false"/>
+    <ROW File="ClosedXML.dll" Component_="ClosedXML.dll" FileName="CLOSED~1.DLL|ClosedXML.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\ClosedXML.dll" SelfReg="false"/>
+    <ROW File="ClosedXML.Parser.dll" Component_="ClosedXML.Parser.dll" FileName="CLOSED~2.DLL|ClosedXML.Parser.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\ClosedXML.Parser.dll" SelfReg="false"/>
+    <ROW File="DocumentFormat.OpenXml.dll" Component_="DocumentFormat.OpenXml.dll" FileName="DOCUME~1.DLL|DocumentFormat.OpenXml.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\DocumentFormat.OpenXml.dll" SelfReg="false"/>
+    <ROW File="DocumentFormat.OpenXml.Framework.dll" Component_="DocumentFormat.OpenXml.Framework.dll" FileName="DOCUME~2.DLL|DocumentFormat.OpenXml.Framework.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\DocumentFormat.OpenXml.Framework.dll" SelfReg="false"/>
+    <ROW File="ExcelNumberFormat.dll" Component_="ExcelNumberFormat.dll" FileName="EXCELN~1.DLL|ExcelNumberFormat.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\ExcelNumberFormat.dll" SelfReg="false"/>
+    <ROW File="RBush.dll" Component_="RBush.dll" FileName="RBush.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\RBush.dll" SelfReg="false"/>
+    <ROW File="SixLabors.Fonts.dll" Component_="SixLabors.Fonts.dll" FileName="SIXLAB~1.DLL|SixLabors.Fonts.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\SixLabors.Fonts.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Reports.OpenXML.dll" Component_="Transmittal.Reports.OpenXML.dll" FileName="TRANSM~4.DLL|Transmittal.Reports.OpenXML.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Reports.OpenXML.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Reports.OpenXML.pdb" Component_="Transmittal.Reports.OpenXML.dll" FileName="TRANSM~4.PDB|Transmittal.Reports.OpenXML.pdb" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Reports.OpenXML.pdb" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1438,6 +1460,14 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Playwright.dll_1"/>
     <ROW Feature_="MainFeature" Component_="System.Management.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="ClosedXML.dll"/>
+    <ROW Feature_="MainFeature" Component_="ClosedXML.Parser.dll"/>
+    <ROW Feature_="MainFeature" Component_="DocumentFormat.OpenXml.dll"/>
+    <ROW Feature_="MainFeature" Component_="DocumentFormat.OpenXml.Framework.dll"/>
+    <ROW Feature_="MainFeature" Component_="ExcelNumberFormat.dll"/>
+    <ROW Feature_="MainFeature" Component_="RBush.dll"/>
+    <ROW Feature_="MainFeature" Component_="SixLabors.Fonts.dll"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal.Reports.OpenXML.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
