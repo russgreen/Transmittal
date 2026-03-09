@@ -25,9 +25,9 @@ XLSX report names __must__ be:
 - TransmittalSummary.xlsx
 - MasterDocumentsList.xlsx
 
-If a template is missing from the configured report folder, Transmittal falls back to the embedded/default report layout for that engine.
+If a template is missing from the configured report folder, Transmittal falls back to the embedded/default report layout using the RDLC engine.
 
-Report files can be edited in either [Syncfusion Standalone Report Designer](https://www.boldreports.com/standalone-report-designer) or [Microsoft Report Builder](https://www.microsoft.com/en-us/download/details.aspx?id=53613). Both tools are free.
+RDLC report template files can be edited in either [Syncfusion Standalone Report Designer](https://www.boldreports.com/standalone-report-designer) or [Microsoft Report Builder](https://www.microsoft.com/en-us/download/details.aspx?id=53613). Both tools are free.
 
 Microsoft Report builder only appears to support RDL files.  However, if you right click on an RDLC file and choose Open with > Choose another app, the Report Builder can be chosen and the RDLC files can be opened, edited and saved.
 
@@ -39,7 +39,7 @@ The OpenXML report engine is designed to let you customise layout and branding i
 
 It works by combining:
 - **global text token replacement** (`{{...}}` placeholders), and
-- **table/section detection** (finding key headers/anchors and writing rows underneath).
+- **table/section detection** (finding template rows using named ranges).
 
 This means templates can be visually redesigned (logo, fonts, spacing, extra notes, page setup) as long as required anchors and headers remain present.
 

@@ -59,8 +59,9 @@ public class Reports
         var templateRange = TryGetNamedRange(workbook, "ProjectDirectoryData", "ProjectDirectory", "ProjectDirectoryRange");
 
         var filtered = projectDirectory
-            .Where(x => x.Person?.ShowInReport == true)
-            .OrderBy(x => x.Person.LastName)
+            .Where(x => x.Person.ShowInReport == true)
+            .OrderBy(x => x.Company.CompanyName)
+            .ThenBy(x => x.Person.LastName)
             .ThenBy(x => x.Person.FirstName)
             .ToList();
 
@@ -951,6 +952,8 @@ public class Reports
                     RowContext = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 };
             })
+            .OrderBy(r => r.CompanyModel?.CompanyName ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
+            .ThenBy(r => r.Person?.FullName ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
             .ToList();
 
         foreach (var row in rows)
