@@ -337,6 +337,7 @@ public class Reports
             {
                 var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
                 targetCell.Style = worksheet.Cell(template.RowNumber, dateColumns[c]).Style;
+                targetCell.Clear(XLClearOptions.Contents);
 
                 if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
                 {
@@ -375,6 +376,7 @@ public class Reports
             {
                 var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
                 targetCell.Style = worksheet.Cell(template.RowNumber, dateColumns[c]).Style;
+                targetCell.Clear(XLClearOptions.Contents);
 
                 if (!row.FormatByTransmittal.TryGetValue(columns[c].TransmittalId, out var cell))
                 {
