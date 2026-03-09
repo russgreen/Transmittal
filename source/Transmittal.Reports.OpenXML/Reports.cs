@@ -204,8 +204,6 @@ public class Reports
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
-
-
     public void ShowMasterDocumentsListReport()
     {
         var transmittals = _transmittalService.GetTransmittals();
