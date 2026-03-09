@@ -1,7 +1,6 @@
 using ClosedXML.Excel;
-using Transmittal.Reports.OpenXML.Models;
 
-namespace Transmittal.Reports.OpenXML;
+namespace Transmittal.Reports.OpenXML.Models;
 
 internal sealed class TemplateRow
 {
