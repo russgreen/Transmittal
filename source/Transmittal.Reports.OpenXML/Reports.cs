@@ -164,58 +164,18 @@ public class Reports
         var summaryColumnAnchor = TryGetNamedRange(workbook, "SummaryColumnData");
         var transmittalFormatAnchor = TryGetNamedRange(workbook, "TransmittalFormatData");
 
-        var sheetRange = FindSummarySheetSection(worksheet);
-        var distributionRange = FindSummaryDistributionSection(worksheet, sheetRange);
-
-        if (sheetListAnchor != null)
+        if (sheetListAnchor == null || distributionListAnchor == null || summaryColumnAnchor == null)
         {
-            sheetRange.StartRow = sheetListAnchor.RangeAddress.FirstAddress.RowNumber;
-            sheetRange.TemplateRow = CaptureTemplateRow(worksheet, sheetListAnchor);
-            if (sheetRange.HeaderRow >= sheetRange.StartRow)
-            {
-                sheetRange.HeaderRow = Math.Max(1, sheetRange.StartRow - 1);
-            }
-
-            if (sheetRange.EndRow < sheetRange.StartRow)
-            {
-                sheetRange.EndRow = sheetRange.StartRow;
-            }
+            SaveAndOpen(workbook, folderPath, fileName);
+            return;
         }
 
-        if (distributionListAnchor != null)
+        var dateRows = FindDateRowsByTokens(worksheet);
+        if (dateRows.DayRow == 0)
         {
-            distributionRange.StartRow = distributionListAnchor.RangeAddress.FirstAddress.RowNumber;
-            distributionRange.TemplateRow = CaptureTemplateRow(worksheet, distributionListAnchor);
-            if (distributionRange.HeaderRow >= distributionRange.StartRow)
-            {
-                distributionRange.HeaderRow = Math.Max(1, distributionRange.StartRow - 1);
-            }
-
-            if (distributionRange.EndRow < distributionRange.StartRow)
-            {
-                distributionRange.EndRow = distributionRange.StartRow;
-            }
+            SaveAndOpen(workbook, folderPath, fileName);
+            return;
         }
-
-        if (summaryColumnAnchor != null)
-        {
-            var firstColumn = summaryColumnAnchor.RangeAddress.FirstAddress.ColumnNumber;
-            sheetRange.FirstDataColumn = firstColumn;
-            distributionRange.FirstDataColumn = firstColumn;
-        }
-
-        if (transmittalFormatAnchor != null)
-        {
-            distributionRange.FormatRow = transmittalFormatAnchor.RangeAddress.FirstAddress.RowNumber;
-        }
-
-        if (distributionRange.HeaderRow > 0 && sheetRange.StartRow > 0 && distributionRange.HeaderRow > sheetRange.StartRow)
-        {
-            sheetRange.EndRow = Math.Min(sheetRange.EndRow, distributionRange.HeaderRow - 1);
-        }
-
-        sheetRange.EndRow = TrimTrailingBlankRows(worksheet, sheetRange.StartRow, sheetRange.EndRow);
-        distributionRange.EndRow = TrimTrailingBlankRows(worksheet, distributionRange.StartRow, distributionRange.EndRow);
 
         var orderedColumns = orderedTransmittals
             .Select((t, idx) => new SummaryColumn
@@ -226,81 +186,146 @@ public class Reports
             })
             .ToList();
 
-        var summaryColumnNumbers = summaryColumnAnchor != null
-            ? EnsureSummaryColumns(worksheet, summaryColumnAnchor, orderedColumns.Count)
-            : GetDateColumns(worksheet, sheetRange.DateRows, sheetRange.FirstDataColumn)
-                .Take(orderedColumns.Count)
-                .ToList();
+        var summaryColumnNumbers = EnsureSummaryColumns(worksheet, summaryColumnAnchor, orderedColumns.Count);
 
-        ApplySummaryDateRows(worksheet, sheetRange, orderedColumns, summaryColumnNumbers);
-        ApplySummaryDateRows(worksheet, distributionRange, orderedColumns, summaryColumnNumbers);
-        ApplySummaryFormatRow(worksheet, distributionRange, orderedTransmittals, summaryColumnNumbers, transmittalFormatAnchor != null);
+        ApplySummaryDateRows(worksheet, dateRows, orderedColumns, summaryColumnNumbers);
 
-        var distributionSectionIsBelowSheetSection = distributionRange.StartRow > sheetRange.EndRow;
-
-        var docRows = BuildSummaryItemRows(orderedTransmittals, commonContext);
-        var shiftedRows = WriteSummaryDocumentMatrix(worksheet, sheetRange, orderedColumns, docRows, summaryColumnNumbers);
-
-        if (shiftedRows > 0 && distributionSectionIsBelowSheetSection)
+        if (transmittalFormatAnchor != null)
         {
-            distributionRange.ShiftRows(shiftedRows);
+            ApplyTransmittalFormatRow(worksheet, transmittalFormatAnchor, orderedTransmittals, summaryColumnNumbers);
         }
 
-        var recipientRows = BuildSummaryDistributionRows(orderedTransmittals, commonContext);
-        WriteSummaryDistributionMatrix(worksheet, distributionRange, orderedColumns, recipientRows, summaryColumnNumbers);
+        var docRows = BuildSummaryItemRows(orderedTransmittals, commonContext);
+        WriteSummaryDocumentMatrix(worksheet, sheetListAnchor, docRows, orderedColumns, summaryColumnNumbers);
 
-        //worksheet.Columns().AdjustToContents();
+        var recipientRows = BuildSummaryDistributionRows(orderedTransmittals, commonContext);
+        WriteSummaryDistributionMatrix(worksheet, distributionListAnchor, recipientRows, orderedColumns, summaryColumnNumbers);
+
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
-    public void ShowMasterDocumentsListReport()
+    private void ApplyTransmittalFormatRow(IXLWorksheet worksheet, IXLRange formatRange, List<TransmittalModel> transmittals, List<int> dateColumns)
     {
-        var transmittals = _transmittalService.GetTransmittals();
-
-        var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
-            _settingsService.GlobalSettings.ProjectIdentifier,
-            _settingsService.GlobalSettings.ProjectName,
-            _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "MX",
-            _settingsService.GlobalSettings.Role,
-            "0002",
-            "MasterDocumentsList",
-            null, null, null);
-
-        var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
-        var workbook = TryLoadTemplate("MasterDocumentsList.xlsx") ?? new XLWorkbook();
-        var worksheet = GetOrCreateWorksheet(workbook, "Master Documents");
-
-        var commonContext = BuildCommonTokenContext("Master Documents List", null);
-        ApplyTemplateTokens(workbook, commonContext);
-        ApplyCommonHeaderHeuristics(worksheet, "Master Documents List", null);
-
-        var latestByDocument = transmittals
-            .SelectMany(t => t.Items.Select(i => new MasterDocumentTemplateRow { Transmittal = t, Item = i }))
-            .Where(x => !string.IsNullOrWhiteSpace(x.Item.DrgNumber))
-            .GroupBy(x => x.Item.DrgNumber.Trim(), StringComparer.OrdinalIgnoreCase)
-            .Select(group => group
-                .OrderByDescending(x => x.Transmittal.TransDate)
-                .ThenByDescending(x => x.Transmittal.ID)
-                .First())
-            .OrderBy(x => x.Item.DrgNumber, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(x => x.Item.DrgName, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        var dataRange = TryGetNamedRange(workbook, "MasterDocumentListData");
-        if (dataRange != null)
+        if (formatRange == null || dateColumns.Count == 0)
         {
-            PopulateRowsFromNamedRange(worksheet,
-                dataRange,
-                latestByDocument,
-                row => MergeContexts(commonContext, BuildMasterDocumentContext(row.Item, row.Transmittal)));
-
+            return;
         }
 
-        //worksheet.Columns().AdjustToContents();
-        SaveAndOpen(workbook, folderPath, fileName);
+        var formatRow = formatRange.RangeAddress.FirstAddress.RowNumber;
+        var ordered = transmittals.OrderBy(t => t.TransDate).ThenBy(t => t.ID).ToList();
+        var count = Math.Min(dateColumns.Count, ordered.Count);
+
+        for (var i = 0; i < count; i++)
+        {
+            var format = ordered[i].Distribution
+                .GroupBy(d => d.TransFormat)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault() ?? string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(format))
+            {
+                worksheet.Cell(formatRow, dateColumns[i]).Value = format;
+            }
+        }
+    }
+
+    private void ApplySummaryDateRows(IXLWorksheet worksheet, DateRows dateRows, List<SummaryColumn> columns, List<int> dateColumns)
+    {
+        if (dateRows.DayRow == 0 || dateColumns.Count == 0)
+        {
+            return;
+        }
+
+        var count = Math.Min(dateColumns.Count, columns.Count);
+
+        for (var i = 0; i < count; i++)
+        {
+            var date = columns[i].Date;
+            worksheet.Cell(dateRows.YearRow, dateColumns[i]).Value = date.Year % 100;
+            worksheet.Cell(dateRows.MonthRow, dateColumns[i]).Value = date.Month;
+            worksheet.Cell(dateRows.DayRow, dateColumns[i]).Value = date.Day;
+        }
+    }
+
+    private int WriteSummaryDocumentMatrix(IXLWorksheet worksheet, IXLRange dataRange, List<SummaryItemRow> rows, List<SummaryColumn> columns, List<int> dateColumns)
+    {
+        if (dataRange == null || dateColumns.Count == 0 || rows.Count == 0)
+        {
+            return 0;
+        }
+
+        var template = CaptureTemplateRow(worksheet, dataRange);
+        var targetRow = template.RowNumber;
+        var insertedRows = 0;
+
+        for (var i = 0; i < rows.Count; i++)
+        {
+            if (i > 0)
+            {
+                worksheet.Row(targetRow + 1).InsertRowsAbove(1);
+                targetRow++;
+                insertedRows++;
+                ResetTemplateRow(worksheet, targetRow, template);
+            }
+
+            var item = rows[i];
+            RenderTemplateRow(worksheet, targetRow, template, item.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+            var columnCount = Math.Min(dateColumns.Count, columns.Count);
+            for (var c = 0; c < columnCount; c++)
+            {
+                if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
+                {
+                    worksheet.Cell(targetRow, dateColumns[c]).Value = rev;
+                }
+            }
+        }
+
+        return insertedRows;
+    }
+
+    private void WriteSummaryDistributionMatrix(IXLWorksheet worksheet, IXLRange dataRange, List<SummaryDistributionRow> rows, List<SummaryColumn> columns, List<int> dateColumns)
+    {
+        if (dataRange == null || dateColumns.Count == 0 || rows.Count == 0)
+        {
+            return;
+        }
+
+        var template = CaptureTemplateRow(worksheet, dataRange);
+        var targetRow = template.RowNumber;
+
+        for (var i = 0; i < rows.Count; i++)
+        {
+            if (i > 0)
+            {
+                worksheet.Row(targetRow + 1).InsertRowsAbove(1);
+                targetRow++;
+                ResetTemplateRow(worksheet, targetRow, template);
+            }
+
+            var row = rows[i];
+            RenderTemplateRow(worksheet, targetRow, template, row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+
+            var columnCount = Math.Min(dateColumns.Count, columns.Count);
+            for (var c = 0; c < columnCount; c++)
+            {
+                if (!row.FormatByTransmittal.TryGetValue(columns[c].TransmittalId, out var cell))
+                {
+                    continue;
+                }
+
+                var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
+                if (targetCell.DataType == XLDataType.Number || targetCell.Style.NumberFormat.Format == "0" || targetCell.Style.NumberFormat.NumberFormatId > 0)
+                {
+                    targetCell.Value = cell.Copies;
+                }
+                else
+                {
+                    targetCell.Value = cell.Copies > 0 ? $"{cell.Copies}" : string.Empty;
+                }
+            }
+        }
     }
 
     private XLWorkbook TryLoadTemplate(string templateName)
@@ -937,59 +962,6 @@ public class Reports
         return section;
     }
 
-    private void ApplySummaryDateRows(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<int> dateColumns)
-    {
-        if (section.DateRows.DayRow == 0 || section.FirstDataColumn == 0 || dateColumns.Count == 0)
-        {
-            return;
-        }
-
-        var count = Math.Min(dateColumns.Count, columns.Count);
-
-        for (var i = 0; i < count; i++)
-        {
-            var date = columns[i].Date;
-            worksheet.Cell(section.DateRows.YearRow, dateColumns[i]).Value = date.Year % 100;
-            worksheet.Cell(section.DateRows.MonthRow, dateColumns[i]).Value = date.Month;
-            worksheet.Cell(section.DateRows.DayRow, dateColumns[i]).Value = date.Day;
-        }
-    }
-
-    private void ApplySummaryFormatRow(
-        IXLWorksheet worksheet,
-        SummarySection section,
-        List<TransmittalModel> transmittals,
-        List<int> dateColumns,
-        bool forceWriteAllColumns)
-    {
-        if (section.FormatRow <= 0 || section.DateRows.DayRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
-        {
-            return;
-        }
-
-        var ordered = transmittals.OrderBy(t => t.TransDate).ThenBy(t => t.ID).ToList();
-        var count = Math.Min(dateColumns.Count, ordered.Count);
-
-        for (var i = 0; i < count; i++)
-        {
-            var format = ordered[i].Distribution
-                .GroupBy(d => d.TransFormat)
-                .OrderByDescending(g => g.Count())
-                .Select(g => g.Key)
-                .FirstOrDefault() ?? "";
-
-            if (string.IsNullOrWhiteSpace(format))
-            {
-                continue;
-            }
-
-            if (forceWriteAllColumns || worksheet.Cell(section.FormatRow, dateColumns[i]).DataType == XLDataType.Text || section.FormatRow != section.HeaderRow)
-            {
-                worksheet.Cell(section.FormatRow, dateColumns[i]).Value = format;
-            }
-        }
-    }
-
     private List<SummaryItemRow> BuildSummaryItemRows(List<TransmittalModel> transmittals, Dictionary<string, string> commonContext)
     {
         var orderedTransmittals = transmittals
@@ -1112,6 +1084,59 @@ public class Reports
         }
 
         return rows;
+    }
+
+    private void ApplySummaryDateRows(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<int> dateColumns)
+    {
+        if (section.DateRows.DayRow == 0 || section.FirstDataColumn == 0 || dateColumns.Count == 0)
+        {
+            return;
+        }
+
+        var count = Math.Min(dateColumns.Count, columns.Count);
+
+        for (var i = 0; i < count; i++)
+        {
+            var date = columns[i].Date;
+            worksheet.Cell(section.DateRows.YearRow, dateColumns[i]).Value = date.Year % 100;
+            worksheet.Cell(section.DateRows.MonthRow, dateColumns[i]).Value = date.Month;
+            worksheet.Cell(section.DateRows.DayRow, dateColumns[i]).Value = date.Day;
+        }
+    }
+
+    private void ApplySummaryFormatRow(
+        IXLWorksheet worksheet,
+        SummarySection section,
+        List<TransmittalModel> transmittals,
+        List<int> dateColumns,
+        bool forceWriteAllColumns)
+    {
+        if (section.FormatRow <= 0 || section.DateRows.DayRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
+        {
+            return;
+        }
+
+        var ordered = transmittals.OrderBy(t => t.TransDate).ThenBy(t => t.ID).ToList();
+        var count = Math.Min(dateColumns.Count, ordered.Count);
+
+        for (var i = 0; i < count; i++)
+        {
+            var format = ordered[i].Distribution
+                .GroupBy(d => d.TransFormat)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault() ?? "";
+
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                continue;
+            }
+
+            if (forceWriteAllColumns || worksheet.Cell(section.FormatRow, dateColumns[i]).DataType == XLDataType.Text || section.FormatRow != section.HeaderRow)
+            {
+                worksheet.Cell(section.FormatRow, dateColumns[i]).Value = format;
+            }
+        }
     }
 
     private int WriteSummaryDocumentMatrix(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<SummaryItemRow> rows, List<int> dateColumns)
