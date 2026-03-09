@@ -206,6 +206,66 @@ public class Reports
 
 
 
+    public void ShowMasterDocumentsListReport()
+    {
+        var transmittals = _transmittalService.GetTransmittals();
+
+        // Group all items by DrgVolume and DrgNumber to capture every unique document
+        var allItems = transmittals
+            .SelectMany(t => t.Items.Select(item => new { Transmittal = t, Item = item }))
+            .GroupBy(x => new { x.Item.DrgVolume, x.Item.DrgNumber })
+            .Select(g => new
+            {
+                Item = g.OrderByDescending(x => x.Transmittal.TransDate)
+                         .ThenByDescending(x => x.Transmittal.ID)
+                         .First().Item,
+                Transmittal = g.OrderByDescending(x => x.Transmittal.TransDate)
+                               .ThenByDescending(x => x.Transmittal.ID)
+                               .First().Transmittal,
+                LatestRevision = g.OrderByDescending(x => x.Transmittal.TransDate)
+                                  .ThenByDescending(x => x.Transmittal.ID)
+                                  .First().Item.DrgRev
+            })
+            .OrderBy(x => x.Item.DrgVolume)
+            .ThenBy(x => x.Item.DrgNumber)
+            .ToList();
+
+        var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+            _settingsService.GlobalSettings.ProjectNumber,
+            _settingsService.GlobalSettings.ProjectIdentifier,
+            _settingsService.GlobalSettings.ProjectName,
+            _settingsService.GlobalSettings.Originator,
+            "ZZ",
+            "XX",
+            "MX",
+            _settingsService.GlobalSettings.Role,
+            "0002",
+            "MasterDocumentsList",
+            null, null, null);
+
+        var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
+        var workbook = TryLoadTemplate("MasterDocumentsList.xlsx") ?? new XLWorkbook();
+        var worksheet = GetOrCreateWorksheet(workbook, "Master Documents");
+
+        var commonContext = BuildCommonTokenContext("Master Documents List", null);
+        ApplyTemplateTokens(workbook, commonContext);
+        ApplyCommonHeaderHeuristics(worksheet, "Master Documents List", null);
+
+        var templateRange = TryGetNamedRange(workbook, "MasterDocumentListData", "MasterDocumentsList", "DocumentListRange");
+
+        if (templateRange != null)
+        {
+            PopulateRowsFromNamedRange(worksheet,
+                templateRange,
+                allItems,
+                item => MergeContexts(commonContext, BuildMasterDocumentContext(item.Item, item.Transmittal)));
+        }
+
+        SaveAndOpen(workbook, folderPath, fileName);
+    }
+
+
+
     private void ApplyTransmittalFormatRow(IXLWorksheet worksheet, IXLRange formatRange, List<TransmittalModel> transmittals, List<int> dateColumns)
     {
         if (formatRange == null || dateColumns.Count == 0)
