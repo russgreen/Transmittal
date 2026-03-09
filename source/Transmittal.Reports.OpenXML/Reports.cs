@@ -985,8 +985,9 @@ public class Reports
             .ToList();
 
         var rows = dedupedItems
-            .GroupBy(x => x.Item.DrgNumber)
-            .OrderBy(g => g.Key)
+            .GroupBy(x => new { x.Item.DrgVolume, x.Item.DrgNumber })
+            .OrderBy(g => g.Key.DrgVolume)
+            .ThenBy(g => g.Key.DrgNumber)
             .Select(g => new SummaryItemRow
             {
                 RevisionsByTransmittal = g
@@ -1014,10 +1015,6 @@ public class Reports
             {
                 row.RowContext = MergeContexts(commonContext, BuildTransmittalItemContext(row.TemplateItem, row.TemplateTransmittal));
             }
-            //else
-            //{
-            //    row.RowContext = new Dictionary<string, string>(commonContext, StringComparer.OrdinalIgnoreCase);
-            //}
         }
 
         return rows;
