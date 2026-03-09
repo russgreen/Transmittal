@@ -853,182 +853,6 @@ public class Reports
         }
     }
 
-    private int FindHeaderRow(IXLWorksheet worksheet, IEnumerable<string> keywords, int startRow, int endRow)
-    {
-        var normalizedKeywords = keywords
-            .Where(k => !string.IsNullOrWhiteSpace(k))
-            .Select(k => k.Trim())
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        if (!normalizedKeywords.Any())
-        {
-            return 0;
-        }
-
-        var bestRow = 0;
-        var bestScore = 0;
-
-        for (var row = startRow; row <= endRow; row++)
-        {
-            var cells = worksheet.Row(row).CellsUsed().Select(c => c.GetFormattedString()).ToList();
-            if (!cells.Any())
-            {
-                continue;
-            }
-
-            var score = normalizedKeywords.Count(k => cells.Any(c => c.Contains(k, StringComparison.OrdinalIgnoreCase)));
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestRow = row;
-            }
-        }
-
-        return bestRow;
-    }
-
-    private int[] ResolveDirectoryColumns(IXLWorksheet worksheet, int headerRow)
-    {
-        var map = worksheet.Row(headerRow).CellsUsed().ToDictionary(c => c.GetFormattedString().Trim(), c => c.Address.ColumnNumber, StringComparer.OrdinalIgnoreCase);
-
-        var nameCol = FindColumnByKeyword(map, "Name") ?? 1;
-        var companyCol = FindColumnByKeyword(map, "Company") ?? nameCol + 1;
-        var emailCol = FindColumnByKeyword(map, "Email") ?? companyCol + 1;
-        var telCol = FindColumnByKeyword(map, "Tel") ?? (FindColumnByKeyword(map, "Telephone") ?? emailCol + 1);
-        var roleCol = FindColumnByKeyword(map, "Role") ?? (FindColumnByKeyword(map, "Position") ?? telCol + 1);
-
-        return new[] { nameCol, companyCol, emailCol, telCol, roleCol };
-    }
-
-    private int[] ResolveItemColumns(IXLWorksheet worksheet, int headerRow)
-    {
-        var map = worksheet.Row(headerRow).CellsUsed().ToDictionary(c => c.GetFormattedString().Trim(), c => c.Address.ColumnNumber, StringComparer.OrdinalIgnoreCase);
-        var numberCol = FindColumnByKeyword(map, "Drawing") ?? (FindColumnByKeyword(map, "Document") ?? 1);
-        var nameCol = FindColumnByKeyword(map, "Name") ?? numberCol + 1;
-        var revCol = FindColumnByKeyword(map, "Rev") ?? nameCol + 1;
-        var statusCol = FindColumnByKeyword(map, "Status") ?? revCol + 1;
-        var packageCol = FindColumnByKeyword(map, "Package") ?? statusCol + 1;
-        return new[] { numberCol, nameCol, revCol, statusCol, packageCol };
-    }
-
-    private int FindDistributionHeaderRow(IXLWorksheet worksheet, int searchStart)
-    {
-        for (var row = searchStart; row <= Math.Max(searchStart + 200, worksheet.LastRowUsed()?.RowNumber() ?? searchStart); row++)
-        {
-            var text = string.Join("|", worksheet.Row(row).CellsUsed().Select(c => c.GetFormattedString()));
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                continue;
-            }
-
-            if (text.Contains("Format", StringComparison.OrdinalIgnoreCase) && text.Contains("Copies", StringComparison.OrdinalIgnoreCase))
-            {
-                return row;
-            }
-
-            if (text.Contains("Company", StringComparison.OrdinalIgnoreCase) && text.Contains("Person", StringComparison.OrdinalIgnoreCase))
-            {
-                return row;
-            }
-        }
-
-        return 0;
-    }
-
-    private int[] ResolveDistributionColumns(IXLWorksheet worksheet, int headerRow)
-    {
-        var map = worksheet.Row(headerRow).CellsUsed().ToDictionary(c => c.GetFormattedString().Trim(), c => c.Address.ColumnNumber, StringComparer.OrdinalIgnoreCase);
-        var nameCol = FindColumnByKeyword(map, "Person") ?? (FindColumnByKeyword(map, "Name") ?? 1);
-        var companyCol = FindColumnByKeyword(map, "Company") ?? nameCol + 1;
-        var formatCol = FindColumnByKeyword(map, "Format") ?? companyCol + 1;
-        var copiesCol = FindColumnByKeyword(map, "Copies") ?? formatCol + 1;
-        return new[] { nameCol, companyCol, formatCol, copiesCol };
-    }
-
-    private SummarySection FindSummarySheetSection(IXLWorksheet worksheet)
-    {
-        var section = new SummarySection();
-
-        section.HeaderRow = FindHeaderRow(worksheet, new[] { "Drawing No", "Document ID", "Number", "Document Number" }, 1, 220);
-        if (section.HeaderRow == 0)
-        {
-            section.HeaderRow = FindHeaderRow(worksheet, new[] { "Rev" }, 1, 220);
-        }
-
-        var revColumns = worksheet.Row(section.HeaderRow).CellsUsed()
-            .Where(c => c.GetFormattedString().Equals("Rev", StringComparison.OrdinalIgnoreCase))
-            .Select(c => c.Address.ColumnNumber)
-            .ToList();
-
-        section.FirstDataColumn = revColumns.Count > 0 ? revColumns.Min() : 5;
-        section.DateRows = FindNearestDateRows(worksheet, section.HeaderRow);
-
-        section.StartRow = section.HeaderRow + 1;
-        section.EndRow = FindSectionEndRow(worksheet, section.StartRow, section.HeaderRow, new[] { "Year", "Recipient", "Distribution", "DISTRIBUTION", "DOCUMENTATION LIST" });
-
-        section.NumberColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Document ID", "Drawing", "Number" }) ?? 1;
-        section.NameColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Name" }) ?? (section.NumberColumn + 1);
-        section.PaperColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Paper" }) ?? (section.NameColumn + 1);
-        section.LatestRevColumn = FindHeaderColumn(worksheet, section.HeaderRow, new[] { "Rev" }) ?? (section.NameColumn + 1);
-
-        var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? section.LatestRevColumn;
-        section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
-
-        return section;
-    }
-
-    private SummarySection FindSummaryDistributionSection(IXLWorksheet worksheet, SummarySection sheetSection)
-    {
-        var section = new SummarySection();
-
-        var recipientRow = FindHeaderRow(worksheet, new[] { "Recipient" }, 1, 260);
-        if (recipientRow > 0)
-        {
-            section.HeaderRow = recipientRow;
-            section.StartRow = recipientRow + 1;
-            section.DateRows = FindNearestDateRows(worksheet, recipientRow);
-            section.FirstDataColumn = FindFirstNonEmptyDataColumn(worksheet, recipientRow, 2);
-            section.NumberColumn = 1;
-            section.NameColumn = 1;
-            section.PaperColumn = 0;
-            section.LatestRevColumn = 0;
-            section.EndRow = FindSectionEndRow(worksheet, section.StartRow, recipientRow, new[] { "Year", "END" });
-            section.FormatRow = recipientRow;
-            section.CompanyColumn = 0;
-            var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? 20;
-            section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
-            return section;
-        }
-
-        var companyPersonHeader = FindHeaderRow(worksheet, new[] { "Company", "Person" }, 1, 260);
-        if (companyPersonHeader > 0)
-        {
-            section.HeaderRow = companyPersonHeader;
-            section.StartRow = companyPersonHeader + 1;
-            section.DateRows = FindNearestDateRows(worksheet, companyPersonHeader);
-            section.FirstDataColumn = FindFirstNonEmptyDataColumn(worksheet, section.DateRows.DayRow, 2);
-            section.NameColumn = FindHeaderColumn(worksheet, companyPersonHeader, new[] { "Person", "Name" }) ?? 2;
-            section.CompanyColumn = FindHeaderColumn(worksheet, companyPersonHeader, new[] { "Company" }) ?? 1;
-            section.EndRow = FindSectionEndRow(worksheet, section.StartRow, companyPersonHeader, new[] { "DOCUMENTATION", "Document", "Drawing" });
-            section.FormatRow = FindHeaderRow(worksheet, new[] { "METHOD OF ISSUE", "E=mail", "Format" }, 1, companyPersonHeader);
-            var lastColumn = worksheet.LastColumnUsed()?.ColumnNumber() ?? 20;
-            section.TemplateRow = CaptureTemplateRow(worksheet, worksheet.Range(section.StartRow, 1, section.StartRow, lastColumn));
-            return section;
-        }
-
-        section.HeaderRow = sheetSection.EndRow + 2;
-        section.StartRow = section.HeaderRow + 1;
-        section.EndRow = section.StartRow + 30;
-        section.FirstDataColumn = sheetSection.FirstDataColumn;
-        section.DateRows = sheetSection.DateRows;
-        section.NameColumn = 1;
-        section.CompanyColumn = 2;
-        section.FormatRow = section.HeaderRow;
-        section.TemplateRow = sheetSection.TemplateRow;
-        return section;
-    }
-
     private List<SummaryItemRow> BuildSummaryItemRows(List<TransmittalModel> transmittals, Dictionary<string, string> commonContext)
     {
         var orderedTransmittals = transmittals
@@ -1148,161 +972,6 @@ public class Reports
         }
 
         return rows;
-    }
-
-    private void ApplySummaryDateRows(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<int> dateColumns)
-    {
-        if (section.DateRows.DayRow == 0 || section.FirstDataColumn == 0 || dateColumns.Count == 0)
-        {
-            return;
-        }
-
-        var count = Math.Min(dateColumns.Count, columns.Count);
-
-        for (var i = 0; i < count; i++)
-        {
-            var date = columns[i].Date;
-            worksheet.Cell(section.DateRows.YearRow, dateColumns[i]).Value = date.Year % 100;
-            worksheet.Cell(section.DateRows.MonthRow, dateColumns[i]).Value = date.Month;
-            worksheet.Cell(section.DateRows.DayRow, dateColumns[i]).Value = date.Day;
-        }
-    }
-
-    private void ApplySummaryFormatRow(
-        IXLWorksheet worksheet,
-        SummarySection section,
-        List<TransmittalModel> transmittals,
-        List<int> dateColumns,
-        bool forceWriteAllColumns)
-    {
-        if (section.FormatRow <= 0 || section.DateRows.DayRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
-        {
-            return;
-        }
-
-        var ordered = transmittals.OrderBy(t => t.TransDate).ThenBy(t => t.ID).ToList();
-        var count = Math.Min(dateColumns.Count, ordered.Count);
-
-        for (var i = 0; i < count; i++)
-        {
-            var format = ordered[i].Distribution
-                .GroupBy(d => d.TransFormat)
-                .OrderByDescending(g => g.Count())
-                .Select(g => g.Key)
-                .FirstOrDefault() ?? "";
-
-            if (string.IsNullOrWhiteSpace(format))
-            {
-                continue;
-            }
-
-            if (forceWriteAllColumns || worksheet.Cell(section.FormatRow, dateColumns[i]).DataType == XLDataType.Text || section.FormatRow != section.HeaderRow)
-            {
-                worksheet.Cell(section.FormatRow, dateColumns[i]).Value = format;
-            }
-        }
-    }
-
-    private int WriteSummaryDocumentMatrix(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<SummaryItemRow> rows, List<int> dateColumns)
-    {
-        if (section.StartRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
-        {
-            return 0;
-        }
-
-        var insertedRows = 0;
-        if (rows.Count > Math.Max(0, section.EndRow - section.StartRow + 1))
-        {
-            var extra = rows.Count - Math.Max(0, section.EndRow - section.StartRow + 1);
-            worksheet.Row(section.EndRow + 1).InsertRowsAbove(extra);
-            section.EndRow += extra;
-            insertedRows = extra;
-        }
-
-        worksheet.Range(section.StartRow, 1, section.EndRow, Math.Max(section.FirstDataColumn + columns.Count + 5, section.NameColumn + 2)).Clear(XLClearOptions.Contents);
-
-        var columnCount = Math.Min(dateColumns.Count, columns.Count);
-
-        for (var i = 0; i < rows.Count; i++)
-        {
-            var row = section.StartRow + i;
-            var item = rows[i];
-            var summaryDataStyle = worksheet.Cell(row, dateColumns[0]).Style;
-
-            if (section.TemplateRow != null)
-            {
-                ResetTemplateRow(worksheet, row, section.TemplateRow);
-                RenderTemplateRow(worksheet, row, section.TemplateRow, item.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
-            }
-
-            for (var c = 0; c < columnCount; c++)
-            {
-                var targetCell = worksheet.Cell(row, dateColumns[c]);
-                targetCell.Style = summaryDataStyle;
-                if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
-                {
-                    targetCell.Value = rev;
-                }
-            }
-        }
-
-        return insertedRows;
-    }
-
-    private void WriteSummaryDistributionMatrix(IXLWorksheet worksheet, SummarySection section, List<SummaryColumn> columns, List<SummaryDistributionRow> rows, List<int> dateColumns)
-    {
-        if (section.StartRow <= 0 || section.FirstDataColumn <= 0 || dateColumns.Count == 0)
-        {
-            return;
-        }
-
-        var capacity = Math.Max(0, section.EndRow - section.StartRow + 1);
-        if (rows.Count > capacity)
-        {
-            worksheet.Row(section.EndRow + 1).InsertRowsAbove(rows.Count - capacity);
-            section.EndRow += rows.Count - capacity;
-        }
-
-        var distributionDataRowStyle = worksheet.Row(section.StartRow).Style;
-        worksheet.Range(section.StartRow, 1, section.EndRow, section.FirstDataColumn + columns.Count + 5).Clear(XLClearOptions.Contents);
-        var columnCount = Math.Min(dateColumns.Count, columns.Count);
-
-        for (var i = 0; i < rows.Count; i++)
-        {
-            var rowNumber = section.StartRow + i;
-            var row = rows[i];
-            var summaryDataStyle = worksheet.Cell(rowNumber, dateColumns[0]).Style;
-
-            if (section.TemplateRow != null)
-            {
-                ResetTemplateRow(worksheet, rowNumber, section.TemplateRow);
-                RenderTemplateRow(worksheet, rowNumber, section.TemplateRow, row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
-            }
-            else
-            {
-                worksheet.Row(rowNumber).Style = distributionDataRowStyle;
-            }
-
-            for (var c = 0; c < columnCount; c++)
-            {
-                var targetCell = worksheet.Cell(rowNumber, dateColumns[c]);
-                targetCell.Style = summaryDataStyle;
-
-                if (!row.FormatByTransmittal.TryGetValue(columns[c].TransmittalId, out var cell))
-                {
-                    continue;
-                }
-
-                if (targetCell.DataType == XLDataType.Number || targetCell.Style.NumberFormat.Format == "0" || targetCell.Style.NumberFormat.NumberFormatId > 0)
-                {
-                    targetCell.Value = cell.Copies;
-                }
-                else
-                {
-                    targetCell.Value = cell.Copies > 0 ? $"{cell.Copies}" : string.Empty;
-                }
-            }
-        }
     }
 
     private DateRows FindNearestDateRows(IXLWorksheet worksheet, int anchorRow)
@@ -1451,98 +1120,6 @@ public class Reports
         }
     }
 
-    private List<int> GetDateColumns(IXLWorksheet worksheet, DateRows rows, int fallbackStart)
-    {
-        var columns = new SortedSet<int>();
-
-        if (rows.DayRow > 0)
-        {
-            foreach (var cell in worksheet.Row(rows.DayRow).CellsUsed())
-            {
-                if (cell.Address.ColumnNumber < fallbackStart)
-                {
-                    continue;
-                }
-
-                var text = cell.GetFormattedString().Trim();
-                if (int.TryParse(text, out _))
-                {
-                    columns.Add(cell.Address.ColumnNumber);
-                }
-            }
-        }
-
-        if (columns.Count == 0)
-        {
-            for (var col = fallbackStart; col < fallbackStart + 60; col++)
-            {
-                columns.Add(col);
-            }
-        }
-
-        return columns.ToList();
-    }
-
-    private int FindSectionEndRow(IXLWorksheet worksheet, int startRow, int headerRow, IEnumerable<string> stopKeywords)
-    {
-        var maxRow = worksheet.LastRowUsed()?.RowNumber() ?? (startRow + 100);
-        for (var row = startRow; row <= maxRow; row++)
-        {
-            var text = worksheet.Cell(row, 1).GetFormattedString();
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                continue;
-            }
-
-            if (row > headerRow + 1 && stopKeywords.Any(k => text.Contains(k, StringComparison.OrdinalIgnoreCase)))
-            {
-                return row - 1;
-            }
-        }
-
-        return maxRow;
-    }
-
-    private int FindFirstNonEmptyDataColumn(IXLWorksheet worksheet, int row, int minColumn)
-    {
-        foreach (var cell in worksheet.Row(row).CellsUsed())
-        {
-            if (cell.Address.ColumnNumber >= minColumn)
-            {
-                return cell.Address.ColumnNumber;
-            }
-        }
-
-        return minColumn;
-    }
-
-    private int? FindHeaderColumn(IXLWorksheet worksheet, int row, IEnumerable<string> keywords)
-    {
-        foreach (var cell in worksheet.Row(row).CellsUsed())
-        {
-            var text = cell.GetFormattedString();
-            if (keywords.Any(k => text.Contains(k, StringComparison.OrdinalIgnoreCase)))
-            {
-                return cell.Address.ColumnNumber;
-            }
-        }
-
-        return null;
-    }
-
-    private int? FindColumnByKeyword(Dictionary<string, int> headerMap, string keyword)
-    {
-        foreach (var kv in headerMap)
-        {
-            if (kv.Key.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-            {
-                return kv.Value;
-            }
-        }
-
-        return null;
-    }
-
     private IXLRange TryGetNamedRange(XLWorkbook workbook, params string[] names)
     {
         if (names == null || names.Length == 0)
@@ -1592,7 +1169,7 @@ public class Reports
         return workbook.Worksheets.FirstOrDefault() ?? workbook.AddWorksheet(name);
     }
 
-    private static void SaveAndOpen(XLWorkbook workbook, string folderPath, string fileName)
+    private void SaveAndOpen(XLWorkbook workbook, string folderPath, string fileName)
     {
         Directory.CreateDirectory(folderPath);
 
@@ -1601,30 +1178,23 @@ public class Reports
             : $"{fileName}.xlsx";
 
         var outputPath = Path.Combine(folderPath, outputFileName);
-        workbook.SaveAs(outputPath);
-
-        Process.Start(new ProcessStartInfo
+        try
         {
-            FileName = outputPath,
-            UseShellExecute = true
-        });
-    }
+            workbook.SaveAs(outputPath);
 
-    private static int TrimTrailingBlankRows(IXLWorksheet worksheet, int startRow, int endRow)
-    {
-        if (startRow <= 0 || endRow < startRow)
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = outputPath,
+                UseShellExecute = true
+            });
+        }
+        catch 
         {
-            return endRow;
+
         }
 
-        var trimmedEnd = endRow;
-        while (trimmedEnd > startRow && !worksheet.Row(trimmedEnd).CellsUsed(XLCellsUsedOptions.Contents).Any())
-        {
-            trimmedEnd--;
-        }
-
-        return trimmedEnd;
     }
+
 }
 
 
