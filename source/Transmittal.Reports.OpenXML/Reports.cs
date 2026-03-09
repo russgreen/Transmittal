@@ -275,9 +275,12 @@ public class Reports
             var columnCount = Math.Min(dateColumns.Count, columns.Count);
             for (var c = 0; c < columnCount; c++)
             {
+                var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
+                targetCell.Style = worksheet.Cell(template.RowNumber, dateColumns[c]).Style;
+
                 if (item.RevisionsByTransmittal.TryGetValue(columns[c].TransmittalId, out var rev))
                 {
-                    worksheet.Cell(targetRow, dateColumns[c]).Value = rev;
+                    targetCell.Value = rev;
                 }
             }
         }
@@ -310,12 +313,14 @@ public class Reports
             var columnCount = Math.Min(dateColumns.Count, columns.Count);
             for (var c = 0; c < columnCount; c++)
             {
+                var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
+                targetCell.Style = worksheet.Cell(template.RowNumber, dateColumns[c]).Style;
+
                 if (!row.FormatByTransmittal.TryGetValue(columns[c].TransmittalId, out var cell))
                 {
                     continue;
                 }
 
-                var targetCell = worksheet.Cell(targetRow, dateColumns[c]);
                 if (targetCell.DataType == XLDataType.Number || targetCell.Style.NumberFormat.Format == "0" || targetCell.Style.NumberFormat.NumberFormatId > 0)
                 {
                     targetCell.Value = cell.Copies;
@@ -1562,3 +1567,5 @@ public class Reports
         return trimmedEnd;
     }
 }
+
+
