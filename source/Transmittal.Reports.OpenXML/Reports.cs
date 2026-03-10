@@ -1258,7 +1258,7 @@ public class Reports
     }
 
     private static List<PreparedRow<T>> ApplyTemplateSorting<T>(List<PreparedRow<T>> rows, TemplateRow template, List<int> sortColumns)
-{
+    {
     if (rows.Count <= 1 || sortColumns.Count == 0)
     {
         return rows;
