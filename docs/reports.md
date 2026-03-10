@@ -66,7 +66,7 @@ General recommendations:
 The engine preserves worksheet layout as much as possible and writes data into detected regions.
 
 ### Supported text tokens
-
+{% raw %}
 These placeholders are replaced in **all worksheet text cells**:
 - `{{Project}}`
 - `{{ProjectDisplay}}`
@@ -77,7 +77,7 @@ These placeholders are replaced in **all worksheet text cells**:
 - `{{ReportTitle}}`
 - `{{ReportDate}}`
 - `{{TransmittalDate}}`
-
+{% endraw %}
 Token notes:
 - Tokens are intended to be used exactly as shown (including braces).
 - Tokens can be used in headings, footers/notes cells, cover blocks, etc.
@@ -142,6 +142,7 @@ This template displays a matrix of all documents across multiple transmittals, p
 - `TransmittalFormatData` – If present, marks the row where the most common transmittal format (e.g., "PDF", "Email") will be written for each transmittal column
 
 **Date row detection:**
+{% raw %}
 The engine locates the Year/Month/Day rows using token markers:
 - `{{DateYear}}` – Marks the row that should display the transmittal year (YY format)
 - `{{DateMonth}}` – Marks the row that should display the transmittal month
@@ -167,7 +168,7 @@ If these tokens are not found, the engine falls back to detecting rows labeled `
 - Use `{{PersonName}}`, `{{CompanyName}}`, etc. tokens in the `DistributionListData` row for dynamic recipient fields
 - If using `TransmittalFormatData`, place it on a row that aligns with your transmittal date columns (typically above or below the date rows)
 - Leave visual space around the matrix regions to accommodate row/column growth
-
+{% endraw %}
 ### Master documents template (`MasterDocumentsList.xlsx`)
 
 This template displays a chronological list of all documents across all transmittals in the project.
@@ -181,19 +182,19 @@ This template displays a chronological list of all documents across all transmit
 3. Sorts all transmittal items by transmittal date and ID
 4. Writes one row per document/transmittal combination
 5. Inserts additional rows as needed
-
+{% raw %}
 **Available tokens for the template row:**
 Template rows can use any of the following tokens:
 - Document fields: `{{DrgNumber}}`, `{{DrgRev}}`, `{{DrgName}}`, `{{DrgPaper}}`, `{{DrgScale}}`, `{{DrgDrawn}}`, `{{DrgChecked}}`
 - Extended document fields: `{{DrgProj}}`, `{{DrgOriginator}}`, `{{DrgVolume}}`, `{{DrgLevel}}`, `{{DrgType}}`, `{{DrgRole}}`, `{{DrgStatus}}`, `{{DrgPackage}}`
 - Transmittal fields: `{{TransID}}`, `{{TransDate}}`, `{{DateYear}}`, `{{DateMonth}}`, `{{DateDay}}`
 - Project fields: `{{ProjectID}}`, `{{ProjectNumber}}`, `{{ProjectName}}`
-
+{% endraw %}
 **Authoring tips:**
 - Define the `MasterDocumentsList` or `MasterDocumentsListData` named range on the template row
 - Place tokens in the template row cells where you want document/transmittal data displayed
 - Apply desired formatting (borders, fonts, alignment, number formats) to the template row; this formatting will be applied to all inserted rows
-- The report is sorted chronologically by transmittal date, so consider adding date columns for easy reference
+- The report is sorted chronologically with the transmittal date, so consider adding date columns for easy reference
 - Consider using table formatting or banded rows for better readability of long lists
 
 ### Formatting and layout best practices
@@ -255,6 +256,7 @@ Named ranges are essential for OpenXML templates. To create or modify them:
 
 ### Token reference summary
 
+{% raw %}
 **Global tokens** (available in all templates):
 - `{{Project}}` or `{{ProjectDisplay}}` – Full project display name
 - `{{ProjectName}}` – Project name only
@@ -291,7 +293,7 @@ Named ranges are essential for OpenXML templates. To create or modify them:
 - `{{DateYear}}` – Year value
 - `{{DateMonth}}` – Month value
 - `{{DateDay}}` – Day value
+{% endraw %}
 
-Instructions for upgrading older reports to the latest version of the report template that supports version 2.* can be found [here](/Transmittal/settings/reports_v2upgrade/)
 
 
