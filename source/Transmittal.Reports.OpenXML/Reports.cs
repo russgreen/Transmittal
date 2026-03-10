@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using Transmittal.Library.Extensions;
@@ -60,9 +61,6 @@ public class Reports
 
         var filtered = projectDirectory
             .Where(x => x.Person.ShowInReport == true)
-            .OrderBy(x => x.Company.CompanyName)
-            .ThenBy(x => x.Person.LastName)
-            .ThenBy(x => x.Person.FirstName)
             .ToList();
 
         if (templateRange != null)
@@ -73,8 +71,6 @@ public class Reports
                 model => MergeContexts(commonContext, BuildProjectDirectoryContext(model)));
         }
 
-
-        //worksheet.Columns().AdjustToContents();
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
@@ -107,7 +103,10 @@ public class Reports
 
         if (sheetsRange != null && distributionRange != null)
         {
-            var templateOrderedItems = transmittal.Items.OrderBy(x => x.DrgNumber).ToList();
+            var templateOrderedItems = transmittal.Items
+                .OrderBy(x => x.DrgVolume)
+                .ThenBy(x => x.DrgNumber)
+                .ToList();
             PopulateRowsFromNamedRange(worksheet,
                 sheetsRange,
                 templateOrderedItems,
@@ -317,10 +316,22 @@ public class Reports
         }
 
         var template = CaptureTemplateRow(worksheet, dataRange);
+        var sortColumns = GetSortColumnsAndClearTags(worksheet, template);
+
+        var preparedRows = rows
+            .Select(row => new PreparedRow<SummaryItemRow>
+            {
+                Item = row,
+                Context = row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            })
+            .ToList();
+
+        preparedRows = ApplyTemplateSorting(preparedRows, template, sortColumns);
+
         var targetRow = template.RowNumber;
         var insertedRows = 0;
 
-        for (var i = 0; i < rows.Count; i++)
+        for (var i = 0; i < preparedRows.Count; i++)
         {
             if (i > 0)
             {
@@ -330,8 +341,8 @@ public class Reports
                 ResetTemplateRow(worksheet, targetRow, template);
             }
 
-            var item = rows[i];
-            RenderTemplateRow(worksheet, targetRow, template, item.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            var item = preparedRows[i].Item;
+            RenderTemplateRow(worksheet, targetRow, template, preparedRows[i].Context);
 
             var columnCount = Math.Min(dateColumns.Count, columns.Count);
             for (var c = 0; c < columnCount; c++)
@@ -358,9 +369,21 @@ public class Reports
         }
 
         var template = CaptureTemplateRow(worksheet, dataRange);
+        var sortColumns = GetSortColumnsAndClearTags(worksheet, template);
+
+        var preparedRows = rows
+            .Select(row => new PreparedRow<SummaryDistributionRow>
+            {
+                Item = row,
+                Context = row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            })
+            .ToList();
+
+        preparedRows = ApplyTemplateSorting(preparedRows, template, sortColumns);
+
         var targetRow = template.RowNumber;
 
-        for (var i = 0; i < rows.Count; i++)
+        for (var i = 0; i < preparedRows.Count; i++)
         {
             if (i > 0)
             {
@@ -369,8 +392,8 @@ public class Reports
                 ResetTemplateRow(worksheet, targetRow, template);
             }
 
-            var row = rows[i];
-            RenderTemplateRow(worksheet, targetRow, template, row.RowContext ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+            var row = preparedRows[i].Item;
+            RenderTemplateRow(worksheet, targetRow, template, preparedRows[i].Context);
 
             var columnCount = Math.Min(dateColumns.Count, columns.Count);
             for (var c = 0; c < columnCount; c++)
@@ -413,7 +436,15 @@ public class Reports
             return null;
         }
 
-        return new XLWorkbook(templatePath);
+        try
+        {
+            return new XLWorkbook(templatePath);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Template load failed (unexpected): {templatePath}. {ex.Message}");
+            return null;
+        }
     }
 
     private void ApplyTemplateTokens(
@@ -494,11 +525,11 @@ public class Reports
         return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["CompanyName"] = company?.CompanyName ?? string.Empty,
-            ["Role"] = person?.Position ?? company?.Role ?? string.Empty,
+            ["Role"] = company?.Role ?? string.Empty,
             ["Address"] = company?.Address ?? string.Empty,
             ["LastName"] = person?.LastName ?? string.Empty,
             ["FirstName"] = person?.FirstName ?? string.Empty,
-            ["Tel"] = person?.Tel ?? company?.Tel ?? string.Empty,
+            ["Tel"] = company?.Tel ?? string.Empty,
             ["Fax"] = company?.Fax ?? string.Empty,
             ["Website"] = company?.Website ?? string.Empty,
             ["DDI"] = person?.Tel ?? string.Empty,
@@ -535,7 +566,7 @@ public class Reports
             ["DrgType"] = item.DrgType ?? string.Empty,
             ["DrgRole"] = item.DrgRole ?? string.Empty,
             ["DrgStatus"] = item.DrgStatus ?? string.Empty,
-            ["DrgPackage" ]= item.DrgPackage ?? string.Empty,
+            ["DrgPackage"]= item.DrgPackage ?? string.Empty,
         };
     }
 
@@ -575,8 +606,19 @@ public class Reports
         Func<T, Dictionary<string, string>> contextFactory)
     {
         var template = CaptureTemplateRow(worksheet, templateRange);
+        var sortColumns = GetSortColumnsAndClearTags(worksheet, template);
 
-        if (rows.Count == 0)
+        var preparedRows = rows
+            .Select(row => new PreparedRow<T>
+            {
+                Item = row,
+                Context = contextFactory(row) ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            })
+            .ToList();
+
+        preparedRows = ApplyTemplateSorting(preparedRows, template, sortColumns);
+
+        if (preparedRows.Count == 0)
         {
             ResetTemplateRow(worksheet, template.RowNumber, template);
             ClearTokenCells(worksheet, template.RowNumber, template);
@@ -585,7 +627,7 @@ public class Reports
 
         var targetRow = template.RowNumber;
 
-        for (var i = 0; i < rows.Count; i++)
+        for (var i = 0; i < preparedRows.Count; i++)
         {
             if (i > 0)
             {
@@ -594,7 +636,7 @@ public class Reports
                 ResetTemplateRow(worksheet, targetRow, template);
             }
 
-            RenderTemplateRow(worksheet, targetRow, template, contextFactory(rows[i]));
+            RenderTemplateRow(worksheet, targetRow, template, preparedRows[i].Context);
         }
     }
 
@@ -873,8 +915,6 @@ public class Reports
 
         var rows = dedupedItems
             .GroupBy(x => new { x.Item.DrgVolume, x.Item.DrgNumber })
-            .OrderBy(g => g.Key.DrgVolume)
-            .ThenBy(g => g.Key.DrgNumber)
             .Select(g => new SummaryItemRow
             {
                 RevisionsByTransmittal = g
@@ -921,7 +961,6 @@ public class Reports
             .ThenBy(t => t.ID)
             .SelectMany(t => t.Distribution.Select(d => new { t.ID, Dist = d }))
             .GroupBy(x => x.Dist.PersonID)
-            .OrderBy(g => g.Key)
             .Select(g =>
             {
                 var person = _contactDirectoryService.GetPerson(g.Key);
@@ -952,8 +991,6 @@ public class Reports
                     RowContext = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 };
             })
-            .OrderBy(r => r.CompanyModel?.CompanyName ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
-            .ThenBy(r => r.Person?.FullName ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
             .ToList();
 
         foreach (var row in rows)
@@ -1198,6 +1235,163 @@ public class Reports
 
     }
 
+    private static List<int> GetSortColumnsAndClearTags(IXLWorksheet worksheet, TemplateRow template)
+    {
+        var sortColumns = new List<int>();
+        var sortRow = template.RowNumber + 1;
+
+        for (var col = template.FirstColumn; col <= template.LastColumn; col++)
+        {
+            var cell = worksheet.Cell(sortRow, col);
+            var text = cell.GetString();
+
+            if (string.IsNullOrWhiteSpace(text) || text.IndexOf("<<sort>>", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                continue;
+            }
+
+            sortColumns.Add(col);
+            cell.Value = string.Empty;
+        }
+
+        return sortColumns;
+    }
+
+    private static List<PreparedRow<T>> ApplyTemplateSorting<T>(List<PreparedRow<T>> rows, TemplateRow template, List<int> sortColumns)
+{
+    if (rows.Count <= 1 || sortColumns.Count == 0)
+    {
+        return rows;
+    }
+
+    IOrderedEnumerable<PreparedRow<T>> ordered = null;
+
+    foreach (var column in sortColumns)
+    {
+        ordered = ordered == null
+            ? rows.OrderBy(r => GetSortValueForColumn(template, column, r.Context), StringComparer.CurrentCultureIgnoreCase)
+            : ordered.ThenBy(r => GetSortValueForColumn(template, column, r.Context), StringComparer.CurrentCultureIgnoreCase);
+    }
+
+    return ordered?.ToList() ?? rows;
 }
+
+private static string GetSortValueForColumn(TemplateRow template, int column, Dictionary<string, string> context)
+{
+    var templateCell = template.Cells.FirstOrDefault(c => c.Column == column);
+    if (templateCell == null || templateCell.HasFormula)
+    {
+        return string.Empty;
+    }
+
+    if (templateCell.DataType == XLDataType.Text && !string.IsNullOrWhiteSpace(templateCell.TextValue))
+    {
+        return ReplaceTokens(templateCell.TextValue, context)?.Trim() ?? string.Empty;
+    }
+
+    return templateCell.Value.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
+}
+
+private sealed class PreparedRow<T>
+{
+    public T Item { get; set; }
+    public Dictionary<string, string> Context { get; set; }
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
