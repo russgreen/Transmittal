@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.1" version="23.5" Modules="simple" RootPath="." Language="en" Id="{52EA00FE-6324-4094-929A-7D0C5D54BB42}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.1" version="23.5.1" Modules="simple" RootPath="." Language="en" Id="{52EA00FE-6324-4094-929A-7D0C5D54BB42}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_APP_FILE" Value="[#Transmittal.Analytics.TrayApp.exe]"/>
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
@@ -14,10 +14,10 @@
     <ROW Property="AiSkipExitDlg" Value="1"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Russ Green"/>
-    <ROW Property="ProductCode" Value="1033:{6BFD81AC-147C-4295-9258-311A217189B1} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{9AAE719C-8AA6-4D65-A820-22A0B6C9C05A} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Transmittal"/>
-    <ROW Property="ProductVersion" Value="3.7.4" Options="32"/>
+    <ROW Property="ProductVersion" Value="3.8.0" Options="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{F31AFEA8-2419-4915-9D65-7A2EE7F3F07A}"/>
@@ -135,7 +135,6 @@
     <ROW Component="ExcelNumberFormat.dll" ComponentId="{47FFD11F-B0E8-4C20-8382-D5B37E993779}" Directory_="APPDIR" Attributes="0" KeyPath="ExcelNumberFormat.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
     <ROW Component="Humanizer.dll_1" ComponentId="{F775CE70-0C04-43C4-BCEA-41E4BE8986CC}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Humanizer.dll_1"/>
-    <ROW Component="JetBrains.Annotations.dll" ComponentId="{9D7A1217-A3C6-43DA-868F-A2EE96C9B799}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="JetBrains.Annotations.dll"/>
     <ROW Component="LICENSE" ComponentId="{CD7ABAA4-028B-47C0-9498-8E84F7032A56}" Directory_="node_Dir" Attributes="0" KeyPath="LICENSE" Type="0"/>
     <ROW Component="Microsoft" ComponentId="{90D2D416-9ADB-4757-A4EF-3230BF67C888}" Directory_="APPDIR" Attributes="260" KeyPath="Microsoft"/>
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll" ComponentId="{64E0409F-0A2B-469D-8DF0-9C117A80C95E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll"/>
@@ -624,7 +623,6 @@
     <ROW File="Dapper.dll_1" Component_="Dapper.dll_1" FileName="Dapper.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Dapper.dll" SelfReg="false"/>
     <ROW File="e_sqlite3.dll" Component_="e_sqlite3.dll" FileName="E_SQLI~1.DLL|e_sqlite3.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\e_sqlite3.dll" SelfReg="false"/>
     <ROW File="Humanizer.dll_1" Component_="Humanizer.dll_1" FileName="HUMANI~1.DLL|Humanizer.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Humanizer.dll" SelfReg="false"/>
-    <ROW File="JetBrains.Annotations.dll" Component_="JetBrains.Annotations.dll" FileName="JETBRA~1.DLL|JetBrains.Annotations.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\JetBrains.Annotations.dll" SelfReg="false"/>
     <ROW File="Microsoft.Data.Sqlite.dll_7" Component_="Microsoft.Data.Sqlite.dll_7" FileName="MICROS~1.DLL|Microsoft.Data.Sqlite.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Data.Sqlite.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
     <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
@@ -1360,7 +1358,6 @@
     <ROW Feature_="MainFeature" Component_="Dapper.dll_1"/>
     <ROW Feature_="MainFeature" Component_="e_sqlite3.dll"/>
     <ROW Feature_="MainFeature" Component_="Humanizer.dll_1"/>
-    <ROW Feature_="MainFeature" Component_="JetBrains.Annotations.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Data.Sqlite.dll_7"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
