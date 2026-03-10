@@ -89,6 +89,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
 		<ProjectReference Include="..\Transmittal.Reports\Transmittal.Reports.csproj" />
+		<ProjectReference Include="..\Transmittal.Reports.OpenXML\Transmittal.Reports.OpenXML.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
+using Transmittal.Desktop.Services;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -243,9 +244,10 @@ internal partial class DirectoryViewModel : BaseViewModel
 
         BuildProjectDirectory();
 
-        Reports.Reports reports = new(_settingsService, 
-            _contactDirectoryService, 
-            _transmittalService);
+        var reports = new ReportsFacade(_settingsService,
+            _contactDirectoryService,
+            _transmittalService,
+            _logger);
 
         reports.ShowProjectDirectoryReport(_projectDirectory);
     }
@@ -258,9 +260,10 @@ internal partial class DirectoryViewModel : BaseViewModel
             _logger.LogInformation("{command}", nameof(ShowTransmittalHistoryReportCommand));
         }
 
-        Reports.Reports reports = new(_settingsService,
+        var reports = new ReportsFacade(_settingsService,
             _contactDirectoryService,
-            _transmittalService);
+            _transmittalService,
+            _logger);
 
         var transmittals = _transmittalService.GetTransmittals_ByPerson(SelectedPerson.ID);
 

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Windows;
+using Transmittal.Desktop.Services;
 using Transmittal.Desktop.Views;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
@@ -108,9 +109,10 @@ public partial class App : Application
                 {
                     TransmittalID = int.Parse(e.Args[0].Substring(e.Args[0].IndexOf("=") + 1));
 
-                    Reports.Reports report = new(Host.GetService<ISettingsService>(),
+                    var report = new ReportsFacade(Host.GetService<ISettingsService>(),
     Host.GetService<IContactDirectoryService>(),
-    Host.GetService<ITransmittalService>());
+    Host.GetService<ITransmittalService>(),
+    Host.GetService<ILogger<App>>());
 
                     report.ShowTransmittalReport(TransmittalID);
                     Current.Shutdown();
