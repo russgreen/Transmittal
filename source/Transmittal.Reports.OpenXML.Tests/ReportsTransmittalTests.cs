@@ -97,4 +97,51 @@ public class ReportsTransmittalTests
         await Assert.That(worksheet.Cell(1, 3).GetString()).IsEqualTo("E");
         await Assert.That(worksheet.Cell(1, 4).GetString()).IsEqualTo("2");
     }
+
+    [Test]
+    public async Task TransmittalReport_ItemRows_SortUsingTemplateSortTag()
+    {
+        var sut = ReportsTestHelpers.CreateSut();
+        var transmittal = new TransmittalModel
+        {
+            ID = 12,
+            TransDate = new DateTime(2024, 5, 15),
+            Items =
+            [
+                new TransmittalItemModel { DrgVolume = "B", DrgNumber = "200", DrgRev = "P03", DrgName = "Doc B" },
+                new TransmittalItemModel { DrgVolume = "A", DrgNumber = "300", DrgRev = "P04", DrgName = "Doc C" },
+                new TransmittalItemModel { DrgVolume = "A", DrgNumber = "100", DrgRev = "P02", DrgName = "Doc A" }
+            ]
+        };
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.AddWorksheet("Transmittal");
+        worksheet.Cell(1, 1).Value = "{{DrgVolume}}";
+        worksheet.Cell(1, 2).Value = "{{DrgNumber}}";
+        worksheet.Cell(1, 3).Value = "{{DrgRev}}";
+        worksheet.Cell(2, 1).Value = "<<sort>>";
+        worksheet.Cell(2, 2).Value = "<<sort>>";
+        var templateRange = worksheet.Range(1, 1, 1, 3);
+
+        ReportsTestHelpers.InvokePopulateRowsFromNamedRange(
+            sut,
+            worksheet,
+            templateRange,
+            transmittal.Items,
+            item => ReportsTestHelpers.InvokeInstancePrivate<Dictionary<string, string>>(
+                sut,
+                "BuildTransmittalItemContext",
+                [typeof(TransmittalItemModel), typeof(TransmittalModel)],
+                item,
+                transmittal));
+
+        await Assert.That(worksheet.Cell(1, 1).GetString()).IsEqualTo("A");
+        await Assert.That(worksheet.Cell(1, 2).GetString()).IsEqualTo("100");
+
+        await Assert.That(worksheet.Cell(2, 1).GetString()).IsEqualTo("A");
+        await Assert.That(worksheet.Cell(2, 2).GetString()).IsEqualTo("300");
+
+        await Assert.That(worksheet.Cell(3, 1).GetString()).IsEqualTo("B");
+        await Assert.That(worksheet.Cell(3, 2).GetString()).IsEqualTo("200");
+    }
 }

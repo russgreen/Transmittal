@@ -209,4 +209,96 @@ public class ReportsSummaryTests
         await Assert.That(worksheet.Cell(2, 6).GetValue<int>()).IsEqualTo(4);
         await Assert.That(worksheet.Cell(3, 6).GetValue<int>()).IsEqualTo(22);
     }
+
+    [Test]
+    public async Task PopulateRowsFromNamedRange_SortsRowsByTaggedColumn()
+    {
+        var sut = ReportsTestHelpers.CreateSut();
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.AddWorksheet("Summary");
+        worksheet.Cell(1, 1).Value = "{{Name}}";
+        worksheet.Cell(1, 2).Value = "{{Code}}";
+        worksheet.Cell(2, 1).Value = "<<sort>>";
+
+        var dataRange = worksheet.Range(1, 1, 1, 2);
+
+        var rows = new List<SortRow>
+        {
+            new() { Name = "Zulu", Code = "03" },
+            new() { Name = "alpha", Code = "01" },
+            new() { Name = "Mike", Code = "02" }
+        };
+
+        ReportsTestHelpers.InvokePopulateRowsFromNamedRange(
+            sut,
+            worksheet,
+            dataRange,
+            rows,
+            row => new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Name"] = row.Name,
+                ["Code"] = row.Code
+            });
+
+        await Assert.That(worksheet.Cell(1, 1).GetString()).IsEqualTo("alpha");
+        await Assert.That(worksheet.Cell(1, 2).GetString()).IsEqualTo("01");
+
+        await Assert.That(worksheet.Cell(2, 1).GetString()).IsEqualTo("Mike");
+        await Assert.That(worksheet.Cell(2, 2).GetString()).IsEqualTo("02");
+
+        await Assert.That(worksheet.Cell(3, 1).GetString()).IsEqualTo("Zulu");
+        await Assert.That(worksheet.Cell(3, 2).GetString()).IsEqualTo("03");
+
+        await Assert.That(worksheet.Cell(2, 1).GetString()).IsNotEqualTo("<<sort>>");
+    }
+
+    [Test]
+    public async Task PopulateRowsFromNamedRange_SortsRowsByMultipleTaggedColumns()
+    {
+        var sut = ReportsTestHelpers.CreateSut();
+
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.AddWorksheet("Summary");
+        worksheet.Cell(1, 1).Value = "{{Group}}";
+        worksheet.Cell(1, 2).Value = "{{Name}}";
+        worksheet.Cell(2, 1).Value = "<<sort>>";
+        worksheet.Cell(2, 2).Value = "<<sort>>";
+
+        var dataRange = worksheet.Range(1, 1, 1, 2);
+
+        var rows = new List<SortRow>
+        {
+            new() { Group = "B", Name = "Beta" },
+            new() { Group = "A", Name = "Zulu" },
+            new() { Group = "A", Name = "Alpha" }
+        };
+
+        ReportsTestHelpers.InvokePopulateRowsFromNamedRange(
+            sut,
+            worksheet,
+            dataRange,
+            rows,
+            row => new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Group"] = row.Group,
+                ["Name"] = row.Name
+            });
+
+        await Assert.That(worksheet.Cell(1, 1).GetString()).IsEqualTo("A");
+        await Assert.That(worksheet.Cell(1, 2).GetString()).IsEqualTo("Alpha");
+
+        await Assert.That(worksheet.Cell(2, 1).GetString()).IsEqualTo("A");
+        await Assert.That(worksheet.Cell(2, 2).GetString()).IsEqualTo("Zulu");
+
+        await Assert.That(worksheet.Cell(3, 1).GetString()).IsEqualTo("B");
+        await Assert.That(worksheet.Cell(3, 2).GetString()).IsEqualTo("Beta");
+    }
+
+    private sealed class SortRow
+    {
+        public string Group { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+    }
 }
