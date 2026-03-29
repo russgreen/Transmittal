@@ -160,6 +160,13 @@
     <BuildType Solution="Release 2025|*" Project="Release" />
     <BuildType Solution="Release 2026|*" Project="Release" />
     <BuildType Solution="Release 2027|*" Project="Release" />
+    <Build Solution="Debug 2021|Any CPU" Project="false" />
+    <Build Solution="Debug 2022|Any CPU" Project="false" />
+    <Build Solution="Debug 2023|Any CPU" Project="false" />
+    <Build Solution="Debug 2024|Any CPU" Project="false" />
+    <Build Solution="Debug 2025|Any CPU" Project="false" />
+    <Build Solution="Debug 2026|Any CPU" Project="false" />
+    <Build Solution="Debug 2027|Any CPU" Project="false" />
   </Project>
   <Project Path="source/Transmittal.Reports.OpenXML/Transmittal.Reports.OpenXML.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug" />
