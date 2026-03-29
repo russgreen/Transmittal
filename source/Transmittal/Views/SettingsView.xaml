@@ -209,7 +209,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Database" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0" >
+                <GroupBox Header="Database / Reporting" Style="{DynamicResource GroupBoxStyled}" Margin="0,10,0,0" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
