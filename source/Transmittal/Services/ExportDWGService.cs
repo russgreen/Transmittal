@@ -28,100 +28,100 @@ internal class ExportDWGService : IExportDWGService
     {
         var fullPath = string.Empty;
 
-        Transaction trans = null;
-        try
+        using (Transaction trans = new Transaction(exportDocument, "Export DWG"))
         {
-            trans = new Transaction(exportDocument, "Export DWG");
-            var failOpt = trans.GetFailureHandlingOptions();
-            
-            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            trans.SetFailureHandlingOptions(failOpt);
-            trans.Start();
-
-            IList<ElementId> lviews = new List<ElementId>();
-            foreach (Autodesk.Revit.DB.View View in views)
+            try
             {
-                lviews.Add(View.Id);
-            }
+                var failOpt = trans.GetFailureHandlingOptions();
+                
+                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                trans.SetFailureHandlingOptions(failOpt);
+                trans.Start();
 
-            fullPath = Path.Combine(folderPath, exportFileName);
-
-            if (Directory.Exists(folderPath) == false)
-            {
-                Directory.CreateDirectory(folderPath);
-            }
-
-            if (File.Exists(fullPath) == true)
-            {
-                try
+                IList<ElementId> lviews = new List<ElementId>();
+                foreach (Autodesk.Revit.DB.View View in views)
                 {
-                    File.Delete(fullPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error deleting existing DWG");
-                    exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
-                    fullPath = Path.Combine(folderPath, exportFileName);
-                }
-            }
-
-            // export the sheet
-            exportDocument.Export(folderPath, exportFileName, lviews, dwgExportOptions);
-
-            //delete the PCP file
-            var pcpFile = Path.Combine(folderPath, exportFileName.ToLower().Replace(".dwg" , ".pcp"));
-            if (File.Exists(pcpFile))
-            {
-                File.Delete(pcpFile);
-            }
-
-            if (dwgExportOptions.SharedCoords == true)
-            {
-                // export each view as dwg to support shared coordinates
-                lviews = new List<ElementId>();
-                ViewSheet vs = null;
-                foreach (ViewSheet sheet in views)
-                {
-                    vs = sheet;
+                    lviews.Add(View.Id);
                 }
 
-                // Autodesk.Revit.DB.ViewSheet.Views' is obsolete: 'This property is obsolete in Revit 2015.  Use GetAllPlacedViews() instead.'
-                // For Each v As Autodesk.Revit.DB.View In vs.Views
-                var usedViews = new ViewSet();
-                foreach (ElementId id in vs.GetAllPlacedViews())
+                fullPath = Path.Combine(folderPath, exportFileName);
+
+                if (Directory.Exists(folderPath) == false)
                 {
-                    Autodesk.Revit.DB.View usedView = exportDocument.GetElement(id) as Autodesk.Revit.DB.View;
-                    usedViews.Insert(usedView);
+                    Directory.CreateDirectory(folderPath);
                 }
 
-                foreach (Autodesk.Revit.DB.View v in usedViews)
+                if (File.Exists(fullPath) == true)
                 {
-                    lviews.Add(v.Id);
-                    // export the view
+                    try
+                    {
+                        File.Delete(fullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error deleting existing DWG");
+                        exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                        fullPath = Path.Combine(folderPath, exportFileName);
+                    }
+                }
+
+                // export the sheet
+                exportDocument.Export(folderPath, exportFileName, lviews, dwgExportOptions);
+
+                //delete the PCP file
+                var pcpFile = Path.Combine(folderPath, exportFileName.ToLower().Replace(".dwg" , ".pcp"));
+                if (File.Exists(pcpFile))
+                {
+                    File.Delete(pcpFile);
+                }
+
+                if (dwgExportOptions.SharedCoords == true)
+                {
+                    // export each view as dwg to support shared coordinates
+                    lviews = new List<ElementId>();
+                    ViewSheet vs = null;
+                    foreach (ViewSheet sheet in views)
+                    {
+                        vs = sheet;
+                    }
+
+                    // Autodesk.Revit.DB.ViewSheet.Views' is obsolete: 'This property is obsolete in Revit 2015.  Use GetAllPlacedViews() instead.'
+                    // For Each v As Autodesk.Revit.DB.View In vs.Views
+                    var usedViews = new ViewSet();
+                    foreach (ElementId id in vs.GetAllPlacedViews())
+                    {
+                        Autodesk.Revit.DB.View usedView = exportDocument.GetElement(id) as Autodesk.Revit.DB.View;
+                        usedViews.Insert(usedView);
+                    }
+
+                    foreach (Autodesk.Revit.DB.View v in usedViews)
+                    {
+                        lviews.Add(v.Id);
+                        // export the view
 #if REVIT2018
-                        string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
+                            string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
+                            exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #else
-                    string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
-                    exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
+                        string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
+                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #endif
 
-                    pcpFile = Path.Combine(folderPath, ViewFileName.ToLower().Replace(".dwg", ".pcp"));
-                    if (File.Exists(pcpFile))
-                    {
-                        File.Delete(pcpFile);
+                        pcpFile = Path.Combine(folderPath, ViewFileName.ToLower().Replace(".dwg", ".pcp"));
+                        if (File.Exists(pcpFile))
+                        {
+                            File.Delete(pcpFile);
+                        }
                     }
                 }
             }
-        }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Error exporting DWG");
-            
-        }
-        finally
-        {
-            trans.RollBack();
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error exporting DWG");
+            }
+            finally
+            {
+                trans.RollBack();
+            }
         }
 
         return fullPath;

@@ -27,50 +27,49 @@ internal class ExportDWFService : IExportDWFService
     {
         var fullPath = string.Empty;
 
-        Transaction trans = null;
-        try
+        using (Transaction trans = new Transaction(exportDocument, "Export DWF"))
         {
-            trans = new Transaction(exportDocument, "Export DWF");
-            var failOpt = trans.GetFailureHandlingOptions();
-            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            trans.SetFailureHandlingOptions(failOpt);
-
-            fullPath = Path.Combine(folderPath, exportFileName);
-
-            if (Directory.Exists(folderPath) == false)
+            try
             {
-                Directory.CreateDirectory(folderPath);
-            }
+                var failOpt = trans.GetFailureHandlingOptions();
+                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                trans.SetFailureHandlingOptions(failOpt);
 
-            if (File.Exists(fullPath) == true)
+                fullPath = Path.Combine(folderPath, exportFileName);
+
+                if (Directory.Exists(folderPath) == false)
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                if (File.Exists(fullPath) == true)
+                {
+                    try
+                    {
+                        File.Delete(fullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error deleting existing DWF");
+                        exportFileName.Replace(".dwf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwf");
+                        fullPath = Path.Combine(folderPath, exportFileName);
+                    }
+                }
+
+                trans.Start();
+
+                dwfExportOptions.PaperFormat = sheetsize;
+
+                exportDocument.Export(folderPath, exportFileName, views, dwfExportOptions);
+            }
+            catch(Exception ex)
             {
-                try
-                {
-                    File.Delete(fullPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error deleting existing DWF");
-                    exportFileName.Replace(".dwf", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwf");
-                    fullPath = Path.Combine(folderPath, exportFileName);
-                }
+                _logger.LogError(ex, "Error exporting DWF");
             }
-
-            trans.Start();
-
-            dwfExportOptions.PaperFormat = sheetsize;
-
-            exportDocument.Export(folderPath, exportFileName, views, dwfExportOptions);
-
-        }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Error exporting DWF");
-            
-        }
-        finally
-        {
-            trans.RollBack();
+            finally
+            {
+                trans.RollBack();
+            }
         }
 
         return fullPath;
