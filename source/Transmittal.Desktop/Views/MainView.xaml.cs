@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
+using Transmittal.Library.DataAccess;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Views
@@ -15,6 +16,7 @@ namespace Transmittal.Desktop.Views
     {
         private readonly ViewModels.MainViewModel _viewModel;
         private readonly ISettingsService _settingsService;
+        private readonly IDataConnection _dataConnection;
         private readonly ILogger<MainView> _logger;
 
         public MainView()
@@ -22,6 +24,7 @@ namespace Transmittal.Desktop.Views
             InitializeComponent();
 
             _settingsService = Host.GetService<ISettingsService>();
+            _dataConnection = Host.GetService<IDataConnection>();
             _logger = Host.GetService<ILogger<MainView>>();
 
             _viewModel = Host.GetService<ViewModels.MainViewModel>();
@@ -103,20 +106,28 @@ namespace Transmittal.Desktop.Views
 
             if (dialog.ShowDialog() == true)
             {
-                //we don't have a file so copy the template to the new file
-                System.IO.File.Copy(_settingsService.GlobalSettings.DatabaseTemplateFile, dialog.FileName, true);
+                try
+                {
+                    // Create database schema from code instead of copying a template file
+                    _dataConnection.CreateDatabaseSchema(dialog.FileName);
 
-                _settingsService.GlobalSettings.DatabaseFile = dialog.FileName;
-                _settingsService.GlobalSettings.RecordTransmittals = true;
-                _settingsService.GetSettings();
+                    _settingsService.GlobalSettings.DatabaseFile = dialog.FileName;
+                    _settingsService.GlobalSettings.RecordTransmittals = true;
+                    _settingsService.GetSettings();
 
-                //pop up the settings dialog to set the project details
-                SettingsView view = new();
-                view.ShowDialog();
+                    //pop up the settings dialog to set the project details
+                    SettingsView view = new();
+                    view.ShowDialog();
 
-                _viewModel.SetParameterValuesCommand.Execute(null);
+                    _viewModel.SetParameterValuesCommand.Execute(null);
 
-                _viewModel.UpdateMRUCommand.Execute(null);  
+                    _viewModel.UpdateMRUCommand.Execute(null);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error creating new database at {DbFilePath}", dialog.FileName);
+                    MessageBox.Show($"Error creating database: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

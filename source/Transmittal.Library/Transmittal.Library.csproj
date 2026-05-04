@@ -13,16 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\TemplateDatabase.tdb" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\TemplateDatabase.tdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
 	<PackageReference Include="Microsoft.Data.Sqlite" Version="10.*" />
 	<PackageReference Include="Microsoft.Playwright" Version="1.58.0" />

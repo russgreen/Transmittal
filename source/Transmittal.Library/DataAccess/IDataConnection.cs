@@ -20,4 +20,7 @@ public interface IDataConnection
 
     // Database upgrade support
     void UpgradeDatabase(string dbFilePath);
+
+    // Database schema creation support
+    void CreateDatabaseSchema(string dbFilePath);
 }

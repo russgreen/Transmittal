@@ -343,6 +343,211 @@ public class SQLiteDataAccess : IDataConnection
         throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
     }
 
+    public void CreateDatabaseSchema(string dbFilePath)
+    {
+        int maxRetries = 3;
+        int retryDelay = 1000;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
+
+                    // Set busy timeout to wait for the database to become available
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;");
+
+                    // Enable foreign keys
+                    dbConnection.Execute("PRAGMA foreign_keys = ON;");
+
+                    // Create Company table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Company"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""CompanyName""	TEXT NOT NULL,
+                            ""Role""	TEXT,
+                            ""Address""	TEXT,
+                            ""Tel""	TEXT,
+                            ""Fax""	TEXT,
+                            ""Website""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Person table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Person"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""LastName""	TEXT NOT NULL,
+                            ""FirstName""	TEXT,
+                            ""Email""	TEXT,
+                            ""Tel""	TEXT,
+                            ""Mobile""	TEXT,
+                            ""Position""	TEXT,
+                            ""Notes""	TEXT,
+                            ""CompanyID""	INTEGER,
+                            ""ShowInReport""	INTEGER NOT NULL DEFAULT 1,
+                            ""Archive""	INTEGER NOT NULL DEFAULT 0,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create IssueFormat table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""IssueFormat"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""Code""	TEXT,
+                            ""Description""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create DocumentStatus table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""DocumentStatus"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""Code""	TEXT,
+                            ""Description""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Settings table - correct column order to match template
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Settings"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""DateFormatString""	TEXT,
+                            ""DrawingIssueStore""	TEXT,
+                            ""DrawingIssueStore2""	TEXT,
+                            ""IssueSheetStore""	TEXT,
+                            ""ReportStore""	TEXT,
+                            ""DirectoryStore""	TEXT,
+                            ""FileNameFilter""	TEXT,
+                            ""FileNameFilter2""	TEXT,
+                            ""ProjectIdentifier""	TEXT,
+                            ""ProjectNumber""	TEXT,
+                            ""ProjectName""	TEXT,
+                            ""ClientName""	TEXT,
+                            ""UseExtranet""	INTEGER,
+                            ""UseISO19650""	INTEGER,
+                            ""UseDrawingIssueStore2""	INTEGER,
+                            ""UseRevit""	INTEGER,
+                            ""Originator""	TEXT,
+                            ""Role""	TEXT,
+                            ""ProjectIdentifierParamGuid""	TEXT,
+                            ""OriginatorParamGuid""	TEXT,
+                            ""RoleParamGuid""	TEXT,
+                            ""SheetVolumeParamGuid""	TEXT,
+                            ""SheetLevelParamGuid""	TEXT,
+                            ""DocumentTypeParamGuid""	TEXT,
+                            ""SheetStatusParamGuid""	TEXT,
+                            ""SheetStatusDescriptionParamGuid""	TEXT,
+                            ""SheetPackageParamGuid""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Transmittal table - with DEFAULT CURRENT_DATE for TransDate
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Transmittal"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""TransDate""	TEXT NOT NULL DEFAULT CURRENT_DATE,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create TransmittalDistribution table - without defaults on TransFormat/TransCopies
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""TransmittalDistribution"" (
+                            ""TransDistID""	INTEGER NOT NULL UNIQUE,
+                            ""TransID""	INTEGER NOT NULL,
+                            ""PersonID""	INTEGER NOT NULL,
+                            ""TransFormat""	TEXT,
+                            ""TransCopies""	INTEGER,
+                            PRIMARY KEY(""TransDistID"" AUTOINCREMENT)
+                        );");
+
+                    // Create TransmittalItems table - DrgOriginator is TEXT, match column order
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""TransmittalItems"" (
+                            ""TransItemID""	INTEGER NOT NULL UNIQUE,
+                            ""TransID""	INTEGER NOT NULL,
+                            ""DrgProj""	TEXT,
+                            ""DrgOriginator""	TEXT,
+                            ""DrgVolume""	TEXT,
+                            ""DrgLevel""	TEXT,
+                            ""DrgType""	TEXT,
+                            ""DrgRole""	TEXT,
+                            ""DrgNumber""	TEXT NOT NULL,
+                            ""DrgName""	TEXT,
+                            ""DrgStatus""	TEXT,
+                            ""DrgRev""	TEXT,
+                            ""DrgDrawn""	TEXT,
+                            ""DrgChecked""	TEXT,
+                            ""DrgScale""	TEXT,
+                            ""DrgPaper""	TEXT,
+                            ""DrgPackage""	TEXT,
+                            PRIMARY KEY(""TransItemID"" AUTOINCREMENT)
+                        );");
+
+                    // Insert default Settings record
+                    dbConnection.Execute(@"
+                        INSERT INTO Settings (ID, DateFormatString, UseExtranet, UseISO19650, UseRevit, UseDrawingIssueStore2)
+                        VALUES (1, 'dd.MM.yy', 0, 0, 0, 0);");
+
+                    // Insert default IssueFormats
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('P', 'Paper');");
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('C', 'Cloud');");
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('E', 'Email');");
+
+                    // Insert default DocumentStatuses
+                    var documentStatuses = new[]
+                    {
+                        ("S0", "PRELIMINARY WIP"),
+                        ("S1", "FOR CO-ORDINATION"),
+                        ("S2", "FOR INFORMATION"),
+                        ("S3", "FOR REVIEW AND COMMENT"),
+                        ("S4", "FOR STAGE APPROVAL"),
+                        ("S5", "FOR STAGE APPROVAL"),
+                        ("A3", "CONTRACTUAL STAGE 3"),
+                        ("A4", "CONTRACTUAL STAGE 4"),
+                        ("A5", "CONTRACTUAL STAGE 5"),
+                        ("A6", "CONTRACTUAL STAGE 6"),
+                        ("CR", "AS BUILT")
+                    };
+
+                    foreach (var status in documentStatuses)
+                    {
+                        dbConnection.Execute("INSERT INTO DocumentStatus (Code, Description) VALUES (@Code, @Description);",
+                            new { Code = status.Item1, Description = status.Item2 });
+                    }
+
+                    _logger.LogInformation("Database schema created successfully at {DbFilePath}", dbFilePath);
+                    return; // Success, exit the method
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Database schema creation failed after {MaxRetries} attempts.", maxRetries);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during database schema creation.");
+                throw;
+            }
+        }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
+    }
+
     private bool ColumnExists(string dbFilePath, string columnName, string tableName)
     {
         string sql = $"SELECT INSTR(sql, '{columnName}') FROM sqlite_master WHERE type='table' AND name='{tableName}';";
