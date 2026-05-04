@@ -139,7 +139,8 @@
                                            AllowSorting="True"
                                            NavigationMode="Cell" 
                                            SelectionMode="Extended" 
-                                           GridValidationMode="InView" CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
+                                           GridValidationMode="InView" 
+                                           CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="DrgNumber" SortDirection="Ascending" />
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
