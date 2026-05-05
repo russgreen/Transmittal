@@ -19,6 +19,8 @@ public class SQLiteDataAccess : IDataConnection
     private SqliteConnection _connection;
     private SqliteTransaction _transaction;
 
+    private const int _latestSchemaVersion = 3;
+
     public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, 
         IMessageBoxService messageBox)
     {
@@ -199,7 +201,34 @@ public class SQLiteDataAccess : IDataConnection
 
     public void UpgradeDatabase(string dbFilePath)
     {
-         Dictionary<string, string> columnsToAdd = new Dictionary<string, string>();
+        int currentVersion = GetDatabaseVersion(dbFilePath);
+        _logger.LogInformation("Current database version: {Version}", currentVersion);
+
+        if (currentVersion == 0)
+        {
+            // Legacy database (pre-versioning) - run legacy upgrade code
+            _logger.LogInformation("Detected legacy database (version 0). Running legacy upgrade code.");
+            RunLegacyUpgrade(dbFilePath);
+            // After legacy upgrade, set version to 3
+            SetDatabaseVersion(dbFilePath, 3);
+            _logger.LogInformation("Legacy database upgraded and version set to 3");
+        }
+        else if (currentVersion == 3)
+        {
+            // Current version is 3, check if future schema versions need to be applied
+            //ApplySchemaV4(dbFilePath);
+            //SetDatabaseVersion(dbFilePath, 4);
+            _logger.LogInformation("Database v3 upgrade check completed");
+        }
+        else if (currentVersion > _latestSchemaVersion)
+        {
+            _logger.LogWarning("Database version {CurrentVersion} is newer than application version {LatestVersion}", currentVersion, _latestSchemaVersion);
+        }
+    }
+
+    private void RunLegacyUpgrade(string dbFilePath)
+    {
+        Dictionary<string, string> columnsToAdd = new Dictionary<string, string>();
 
         //first check of the required columns exist before adding to the dictionary to create them.
         //added at v1.2.0
@@ -278,8 +307,8 @@ public class SQLiteDataAccess : IDataConnection
             return;
         }
 
-        int maxRetries = 3; // Maximum number of retries
-        int retryDelay = 1000; // Delay between retries in milliseconds
+        int maxRetries = 3;
+        int retryDelay = 1000;
         int attempt = 0;
 
         while (attempt < maxRetries)
@@ -290,8 +319,7 @@ public class SQLiteDataAccess : IDataConnection
                 {
                     dbConnection.Open();
 
-                    // Set busy timeout to wait for the database to become available
-                    dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;");
 
                     foreach (var column in columnsToAdd)
                     {
@@ -303,39 +331,36 @@ public class SQLiteDataAccess : IDataConnection
                         catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
                         {
                             _logger.LogWarning(ex, "Database is busy while adding column [{ColumnName}].", column.Key);
-                            throw; // Re-throw to trigger retry logic
+                            throw;
                         }
                         catch (Exception ex)
                         {
                             _logger.LogError(ex, "Failed to add column [{ColumnName}].", column.Key);
-                            throw; // Re-throw to ensure the operation is not silently ignored
+                            throw;
                         }
                     }
 
-                    return; // Success, exit the method
+                    return;
                 }
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
             {
-                // Log the busy error and retry
                 _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
                 attempt++;
 
                 if (attempt < maxRetries)
                 {
-                    System.Threading.Thread.Sleep(retryDelay); // Wait before retrying
+                    System.Threading.Thread.Sleep(retryDelay);
                 }
                 else
                 {
                     _logger.LogError(ex, "Database upgrade failed after {MaxRetries} attempts.", maxRetries);
-                    throw; // Re-throw the exception after max retries
+                    throw;
                 }
             }
             catch (Exception ex)
             {
-                // Log and re-throw other exceptions
                 _logger.LogError(ex, "An error occurred during database upgrade.");
-                
                 throw;
             }
         }
@@ -344,6 +369,13 @@ public class SQLiteDataAccess : IDataConnection
     }
 
     public void CreateDatabaseSchema(string dbFilePath)
+    {
+        ApplySchemaV3(dbFilePath);
+        SetDatabaseVersion(dbFilePath, 3);
+        _logger.LogInformation("Database schema v3 created and version set to 3");
+    }
+
+    private void ApplySchemaV3(string dbFilePath)
     {
         int maxRetries = 3;
         int retryDelay = 1000;
@@ -519,8 +551,8 @@ public class SQLiteDataAccess : IDataConnection
                             new { Code = status.Item1, Description = status.Item2 });
                     }
 
-                    _logger.LogInformation("Database schema created successfully at {DbFilePath}", dbFilePath);
-                    return; // Success, exit the method
+                    _logger.LogInformation("Schema v3 created successfully at {DbFilePath}", dbFilePath);
+                    return;
                 }
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
@@ -548,6 +580,11 @@ public class SQLiteDataAccess : IDataConnection
         throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
     }
 
+    private void ApplySchemaV4(string dbFilePath)
+    {
+        _logger.LogDebug("ApplySchemaV4: No schema changes for v4 at this time");
+    }
+
     private bool ColumnExists(string dbFilePath, string columnName, string tableName)
     {
         string sql = $"SELECT INSTR(sql, '{columnName}') FROM sqlite_master WHERE type='table' AND name='{tableName}';";
@@ -560,5 +597,77 @@ public class SQLiteDataAccess : IDataConnection
         }
 
         return true;
+    }
+
+    private int GetDatabaseVersion(string dbFilePath)
+    {
+        try
+        {
+            using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+            {
+                dbConnection.Open();
+                var version = dbConnection.QuerySingleOrDefault<int>("PRAGMA user_version;");
+                _logger.LogDebug("Database version retrieved: {Version}", version);
+                return version;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to retrieve database version, assuming version 0");
+            return 0;
+        }
+    }
+
+    private void SetDatabaseVersion(string dbFilePath, int version)
+    {
+        int maxRetries = 3;
+        int retryDelay = 1000;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
+                    using (var cmd = dbConnection.CreateCommand())
+                    {
+                        cmd.CommandText = "PRAGMA busy_timeout = 10000;";
+                        cmd.ExecuteNonQuery();
+                    }
+                    // Set the user version directly with DbCommand (not Dapper)
+                    using (var cmd = dbConnection.CreateCommand())
+                    {
+                        cmd.CommandText = $"PRAGMA user_version = {version};";
+                        cmd.ExecuteNonQuery();
+                    }
+                    _logger.LogInformation("Database version set to {Version}", version);
+                    return;
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                _logger.LogWarning(ex, "Database is busy while setting version. Retrying (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Failed to set database version after {MaxRetries} attempts.", maxRetries);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while setting database version.");
+                throw;
+            }
+        }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without setting version.");
     }
 }
