@@ -557,7 +557,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void SetSheetStatus(ViewSheet sheet, string status, string description)
     {
-        Transaction trans = null;
         var paramList = new List<Parameter>();
         var paramSet = sheet.Parameters;
         var enumerator = paramSet.GetEnumerator();
@@ -575,21 +574,23 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 if (param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusParamGuid)
                 {
                     {
-                        try
+                        using (Transaction trans = new Transaction(App.RevitDocument, "Set Sheet Status"))
                         {
-                            trans = new Transaction(App.RevitDocument, "Set Sheet Status");
-                            var failOpt = trans.GetFailureHandlingOptions();
-                            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-                            trans.SetFailureHandlingOptions(failOpt);
-                            trans.Start();
+                            try
+                            {
+                                var failOpt = trans.GetFailureHandlingOptions();
+                                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                                trans.SetFailureHandlingOptions(failOpt);
+                                trans.Start();
 
-                            param.Set(status);
-                            
-                            trans.Commit();
-                        }
-                        catch (Exception)
-                        {
-                            trans.RollBack();
+                                param.Set(status);
+                                
+                                trans.Commit();
+                            }
+                            catch (Exception)
+                            {
+                                trans.RollBack();
+                            }
                         }
                     }
                 }
@@ -598,21 +599,23 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 {
                     if (param.GUID.ToString() == _settingsService.GlobalSettings.SheetStatusDescriptionParamGuid)
                     {
-                        try
+                        using (Transaction trans = new Transaction(App.RevitDocument, "Set Sheet Status Description"))
                         {
-                            trans = new Transaction(App.RevitDocument, "Set Sheet Status Description");
-                            var failOpt = trans.GetFailureHandlingOptions();
-                            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-                            trans.SetFailureHandlingOptions(failOpt);
-                            trans.Start();
+                            try
+                            {
+                                var failOpt = trans.GetFailureHandlingOptions();
+                                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                                trans.SetFailureHandlingOptions(failOpt);
+                                trans.Start();
 
-                            param.Set(description);
+                                param.Set(description);
 
-                            trans.Commit();
-                        }
-                        catch (Exception)
-                        {
-                            trans.RollBack();
+                                trans.Commit();
+                            }
+                            catch (Exception)
+                            {
+                                trans.RollBack();
+                            }
                         }
                     }
                 }
@@ -1440,22 +1443,23 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 {
                     if (revision.Issued == false)
                     {
-                        Transaction trans = null;
-                        try
+                        using (Transaction trans = new Transaction(App.RevitDocument, "Set Revision Issued"))
                         {
-                            trans = new Transaction(App.RevitDocument, "Set Revision Issued");
-                            var failOpt = trans.GetFailureHandlingOptions();
-                            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-                            trans.SetFailureHandlingOptions(failOpt);
-                            trans.Start();
+                            try
+                            {
+                                var failOpt = trans.GetFailureHandlingOptions();
+                                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                                trans.SetFailureHandlingOptions(failOpt);
+                                trans.Start();
 
-                            revision.Issued = true;
+                                revision.Issued = true;
 
-                            trans.Commit();
-                        }
-                        catch (Exception)
-                        {
-                            trans.RollBack();
+                                trans.Commit();
+                            }
+                            catch (Exception)
+                            {
+                                trans.RollBack();
+                            }
                         }
                     }
                 }
@@ -1471,20 +1475,21 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         string issueDate = DateTime.Now.ToString(_settingsService.GlobalSettings.DateFormatString);
 
-        Transaction trans = null;
         try
         {
-            trans = new Transaction(App.RevitDocument, "Set Issue Date");
-            var failOpt = trans.GetFailureHandlingOptions();
-            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            trans.SetFailureHandlingOptions(failOpt);
-            trans.Start();
-            sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(issueDate);
-            trans.Commit();
+            using (Transaction trans = new Transaction(App.RevitDocument, "Set Issue Date"))
+            {
+                var failOpt = trans.GetFailureHandlingOptions();
+                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                trans.SetFailureHandlingOptions(failOpt);
+                trans.Start();
+                sheet.get_Parameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(issueDate);
+                trans.Commit();
+            }
         }
         catch
         {
-            trans.RollBack();
+            // TODO improve error handling
         }
     }
 

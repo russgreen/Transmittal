@@ -43,32 +43,33 @@ internal partial class RevisionsViewModel : BaseViewModel, IRevisionRequester
     public void RevisionComplete(RevisionDataModel model)
     {
         //save the new revision into the model
-        Transaction trans = null;
-        try
+        using (Transaction trans = new Transaction(App.RevitDocument, "Create Revision"))
         {
-            trans = new Transaction(App.RevitDocument, "Create Revision");
-
-            trans.Start();
-            var newRevision = Revision.Create(App.RevitDocument);
-            newRevision.Description = model.Description;
-            newRevision.IssuedBy = model.IssuedBy;
-            newRevision.IssuedTo = model.IssuedTo;
-            newRevision.RevisionDate = model.RevDate;
+            try
+            {
+                    trans.Start();
+                    var newRevision = Revision.Create(App.RevitDocument);
+                    newRevision.Description = model.Description;
+                    newRevision.IssuedBy = model.IssuedBy;
+                    newRevision.IssuedTo = model.IssuedTo;
+                    newRevision.RevisionDate = model.RevDate;
 
 #if REVIT2022_OR_GREATER
-            newRevision.RevisionNumberingSequenceId = model.SequenceId;
+                    newRevision.RevisionNumberingSequenceId = model.SequenceId;
 #else
-            //no sequence ID until 2022
-            newRevision.NumberType = model.Numbering;
+                    //no sequence ID until 2022
+                    newRevision.NumberType = model.Numbering;
 #endif
 
-            trans.Commit();
-        }
-        catch (Exception ex)
-        {
-            _messageBoxService.ShowOk("Error creating revision", ex.Message);
-            
-            trans.RollBack();
+                    trans.Commit();
+
+            }
+            catch (Exception ex)
+            {
+                _messageBoxService.ShowOk("Error creating revision", ex.Message);
+                
+                trans.RollBack();
+            }
         }
 
         LoadRevisions();

@@ -25,52 +25,51 @@ internal class ExportPDFService : IExportPDFService
     {
         var fullPath = string.Empty;
 
-        Transaction trans = null;
-        try
+        using (Transaction trans = new Transaction(App.RevitDocument, "Export PDF"))
         {
-            trans = new Transaction(App.RevitDocument, "Export PDF");
-            var failOpt = trans.GetFailureHandlingOptions();
-            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            trans.SetFailureHandlingOptions(failOpt);
-            trans.Start();
-
-            // configure filename path for final PDF save location
-            fullPath = Path.Combine(folderPath, exportFileName);
-
-            if (Directory.Exists(folderPath) == false)
+            try
             {
-                Directory.CreateDirectory(folderPath);
+                var failOpt = trans.GetFailureHandlingOptions();
+                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                trans.SetFailureHandlingOptions(failOpt);
+                trans.Start();
+
+                // configure filename path for final PDF save location
+                fullPath = Path.Combine(folderPath, exportFileName);
+
+                if (Directory.Exists(folderPath) == false)
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var sheet = views.OfType<ViewSheet>().FirstOrDefault();
+
+                var viewIDs = new List<ElementId>();
+                viewIDs.Add(sheet.Id);
+
+                var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
+
+                pdfExportOptions.FileName = exportFileName;
+
+                if (paper.Width > paper.Height)
+                {
+                    pdfExportOptions.PaperOrientation = PageOrientationType.Landscape;
+                }
+                else
+                {
+                    pdfExportOptions.PaperOrientation = PageOrientationType.Portrait;
+                }
+
+                App.RevitDocument.Export(folderPath, viewIDs, pdfExportOptions);
             }
-
-            var sheet = views.OfType<ViewSheet>().FirstOrDefault();
-
-            var viewIDs = new List<ElementId>();
-            viewIDs.Add(sheet.Id);
-
-            var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
-
-            pdfExportOptions.FileName = exportFileName;
-
-            if (paper.Width > paper.Height)
+            catch(Exception ex)
             {
-                pdfExportOptions.PaperOrientation = PageOrientationType.Landscape;
+                _logger.LogError(ex, "Error exporting pdf file");
             }
-            else
+            finally
             {
-                pdfExportOptions.PaperOrientation = PageOrientationType.Portrait;
+                trans.RollBack();
             }
-
-            App.RevitDocument.Export(folderPath, viewIDs, pdfExportOptions);
-        }
-
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Error exporting pdf file");
-            
-        }
-        finally
-        {
-            trans.RollBack();
         }
 
         if (!fullPath.EndsWith(".pdf"))
@@ -101,163 +100,162 @@ internal class ExportPDFService : IExportPDFService
             }
         }
 
-        Transaction trans = null;
-        try
+        currentDefaultPrinterName = System.Printing.LocalPrintServer.GetDefaultPrintQueue().FullName;
+        SetDefaultPrinter(pdfPrinterName);
+
+        using (Transaction trans = new Transaction(App.RevitDocument, "Export PDF"))
         {
-            currentDefaultPrinterName = System.Printing.LocalPrintServer.GetDefaultPrintQueue().FullName;
-            SetDefaultPrinter(pdfPrinterName);
-
-            trans = new Transaction(App.RevitDocument, "Export PDF");
-            var failOpt = trans.GetFailureHandlingOptions();
-            failOpt.SetFailuresPreprocessor(new WarningSwallower());
-            trans.SetFailureHandlingOptions(failOpt);
-            trans.Start();
-
-            fullPath = Path.Combine(folderPath, exportFileName);
-
-            if (Directory.Exists(folderPath) == false)
+            try
             {
-                Directory.CreateDirectory(folderPath);
-            }
+                var failOpt = trans.GetFailureHandlingOptions();
+                failOpt.SetFailuresPreprocessor(new WarningSwallower());
+                trans.SetFailureHandlingOptions(failOpt);
+                trans.Start();
 
-            if (File.Exists($"{fullPath}.pdf") == true)
-            {
-                try
+                fullPath = Path.Combine(folderPath, exportFileName);
+
+                if (Directory.Exists(folderPath) == false)
                 {
-                    File.Delete($"{fullPath}.pdf");
+                    Directory.CreateDirectory(folderPath);
                 }
-                catch (Exception ex)
+
+                if (File.Exists($"{fullPath}.pdf") == true)
                 {
-                    _logger.LogError(ex, "Error deleting file pdf");
-                    //TODO append a date time to the file name
-                    exportFileName = $"{exportFileName} ({DateTime.Now.ToLongTimeString().Replace(":", "")})";
-                    fullPath = Path.Combine(folderPath, exportFileName);
+                    try
+                    {
+                        File.Delete($"{fullPath}.pdf");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error deleting file pdf");
+                        //TODO append a date time to the file name
+                        exportFileName = $"{exportFileName} ({DateTime.Now.ToLongTimeString().Replace(":", "")})";
+                        fullPath = Path.Combine(folderPath, exportFileName);
+                    }
                 }
-            }
 
-            if (!fullPath.EndsWith(".pdf"))
-            {
-                fullPath = $"{fullPath}.pdf";
-            }
-
-            var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
-
-            PDF24Settings transmittalPDF24Settings = new()
-            {
-                AutoSaveDir = folderPath,
-                AutoSaveFileCmd = "",
-                AutoSaveFilename = exportFileName,
-                AutoSaveOpenDir = false,
-                AutoSaveOverwrite = true,
-                AutoSaveOverwriteFile = true,
-                AutoSaveProfile = "default/best",
-                AutoSaveShowProgress = false,
-                AutoSaveUseFileCmd = false,
-                FilenameErasements = "",
-                Handler = "autoSave",
-                LoadInCreatorIfOpen = false,
-                ShellCmd = ""
-            };
-
-            SetPDF24Settings(transmittalPDF24Settings);
-
-            //set the print manager 
-            PrintManager printManager = App.RevitDocument.PrintManager;
-            printManager.PrintSetup.CurrentPrintSetting = printManager.PrintSetup.InSession;
-            printManager.SelectNewPrintDriver(pdfPrinterName);
-            printManager.PrintToFile = true;
-            printManager.PrintToFileName = fullPath;
-            printManager.PrintRange = Autodesk.Revit.DB.PrintRange.Select;
-            printManager.Apply();
-
-            var printViewSet = new ViewSet();
-            printViewSet.Insert(sheet);
-            var viewSheetSetting = printManager.ViewSheetSetting;
-            viewSheetSetting.CurrentViewSheetSet.Views = printViewSet;
-            viewSheetSetting.SaveAs("transmittal");
-
-            printManager.PrintSetup.InSession.PrintParameters.ZoomType = ZoomType.Zoom;
-            printManager.PrintSetup.InSession.PrintParameters.Zoom = 100;
-            if (paper.Width > paper.Height)
-            {
-                // pParams.PageOrientation = PageOrientationType.Landscape
-                printManager.PrintSetup.InSession.PrintParameters.PageOrientation = PageOrientationType.Landscape;
-            }
-            else
-            {
-                // pParams.PageOrientation = PageOrientationType.Portrait
-                printManager.PrintSetup.InSession.PrintParameters.PageOrientation = PageOrientationType.Portrait;
-            }
-
-            printManager.PrintSetup.InSession.PrintParameters.PaperPlacement = PaperPlacementType.Center;
-            printManager.PrintSetup.InSession.PrintParameters.ColorDepth = pdfExportOptions.ColorDepth;
-            printManager.PrintSetup.InSession.PrintParameters.RasterQuality = pdfExportOptions.RasterQuality;
-            printManager.PrintSetup.InSession.PrintParameters.HiddenLineViews = HiddenLineViewsType.VectorProcessing;
-            printManager.PrintSetup.InSession.PrintParameters.ViewLinksinBlue = pdfExportOptions.ViewLinksInBlue;
-            printManager.PrintSetup.InSession.PrintParameters.HideReforWorkPlanes = pdfExportOptions.HideReferencePlane;
-            printManager.PrintSetup.InSession.PrintParameters.HideUnreferencedViewTags = pdfExportOptions.HideUnreferencedViewTags;
-            printManager.PrintSetup.InSession.PrintParameters.HideCropBoundaries = pdfExportOptions.HideCropBoundaries;
-            printManager.PrintSetup.InSession.PrintParameters.HideScopeBoxes = pdfExportOptions.HideScopeBoxes;
-            printManager.PrintSetup.InSession.PrintParameters.ReplaceHalftoneWithThinLines = pdfExportOptions.ReplaceHalftoneWithThinLines;
-            printManager.PrintSetup.InSession.PrintParameters.MaskCoincidentLines = pdfExportOptions.MaskCoincidentLines;
-
-            string PaperSource = "<default tray>";
-            foreach (Autodesk.Revit.DB.PaperSource ps in printManager.PaperSources)
-            {
-                if (ps.Name.Equals(PaperSource))
+                if (!fullPath.EndsWith(".pdf"))
                 {
-                    printManager.PrintSetup.CurrentPrintSetting.PrintParameters.PaperSource = ps;
-                    break;
+                    fullPath = $"{fullPath}.pdf";
                 }
-            }
 
-            //string PaperSize = Util.GetPapersize(Width, Height);
-            foreach (Autodesk.Revit.DB.PaperSize ps in printManager.PaperSizes)
-            {
-                // TODO - Handle custom paper sizes
-                if (ps.Name.Equals(paper.Name))//PaperSize))
+                var paper = sheet.GetTitleBlockFamilyInstance().GetPaperSizeModel();
+
+                PDF24Settings transmittalPDF24Settings = new()
                 {
-                    // pParams.PaperSize = ps
-                    printManager.PrintSetup.InSession.PrintParameters.PaperSize = ps;
-                    break;
+                    AutoSaveDir = folderPath,
+                    AutoSaveFileCmd = "",
+                    AutoSaveFilename = exportFileName,
+                    AutoSaveOpenDir = false,
+                    AutoSaveOverwrite = true,
+                    AutoSaveOverwriteFile = true,
+                    AutoSaveProfile = "default/best",
+                    AutoSaveShowProgress = false,
+                    AutoSaveUseFileCmd = false,
+                    FilenameErasements = "",
+                    Handler = "autoSave",
+                    LoadInCreatorIfOpen = false,
+                    ShellCmd = ""
+                };
+
+                SetPDF24Settings(transmittalPDF24Settings);
+
+                //set the print manager 
+                PrintManager printManager = App.RevitDocument.PrintManager;
+                printManager.PrintSetup.CurrentPrintSetting = printManager.PrintSetup.InSession;
+                printManager.SelectNewPrintDriver(pdfPrinterName);
+                printManager.PrintToFile = true;
+                printManager.PrintToFileName = fullPath;
+                printManager.PrintRange = Autodesk.Revit.DB.PrintRange.Select;
+                printManager.Apply();
+
+                var printViewSet = new ViewSet();
+                printViewSet.Insert(sheet);
+                var viewSheetSetting = printManager.ViewSheetSetting;
+                viewSheetSetting.CurrentViewSheetSet.Views = printViewSet;
+                viewSheetSetting.SaveAs("transmittal");
+
+                printManager.PrintSetup.InSession.PrintParameters.ZoomType = ZoomType.Zoom;
+                printManager.PrintSetup.InSession.PrintParameters.Zoom = 100;
+                if (paper.Width > paper.Height)
+                {
+                    // pParams.PageOrientation = PageOrientationType.Landscape
+                    printManager.PrintSetup.InSession.PrintParameters.PageOrientation = PageOrientationType.Landscape;
                 }
                 else
                 {
-                    // TODO - Pick the next largest papersize to ensure it fits.
+                    // pParams.PageOrientation = PageOrientationType.Portrait
+                    printManager.PrintSetup.InSession.PrintParameters.PageOrientation = PageOrientationType.Portrait;
                 }
-            }
 
-            try
+                printManager.PrintSetup.InSession.PrintParameters.PaperPlacement = PaperPlacementType.Center;
+                printManager.PrintSetup.InSession.PrintParameters.ColorDepth = pdfExportOptions.ColorDepth;
+                printManager.PrintSetup.InSession.PrintParameters.RasterQuality = pdfExportOptions.RasterQuality;
+                printManager.PrintSetup.InSession.PrintParameters.HiddenLineViews = HiddenLineViewsType.VectorProcessing;
+                printManager.PrintSetup.InSession.PrintParameters.ViewLinksinBlue = pdfExportOptions.ViewLinksInBlue;
+                printManager.PrintSetup.InSession.PrintParameters.HideReforWorkPlanes = pdfExportOptions.HideReferencePlane;
+                printManager.PrintSetup.InSession.PrintParameters.HideUnreferencedViewTags = pdfExportOptions.HideUnreferencedViewTags;
+                printManager.PrintSetup.InSession.PrintParameters.HideCropBoundaries = pdfExportOptions.HideCropBoundaries;
+                printManager.PrintSetup.InSession.PrintParameters.HideScopeBoxes = pdfExportOptions.HideScopeBoxes;
+                printManager.PrintSetup.InSession.PrintParameters.ReplaceHalftoneWithThinLines = pdfExportOptions.ReplaceHalftoneWithThinLines;
+                printManager.PrintSetup.InSession.PrintParameters.MaskCoincidentLines = pdfExportOptions.MaskCoincidentLines;
+
+                string PaperSource = "<default tray>";
+                foreach (Autodesk.Revit.DB.PaperSource ps in printManager.PaperSources)
+                {
+                    if (ps.Name.Equals(PaperSource))
+                    {
+                        printManager.PrintSetup.CurrentPrintSetting.PrintParameters.PaperSource = ps;
+                        break;
+                    }
+                }
+
+                //string PaperSize = Util.GetPapersize(Width, Height);
+                foreach (Autodesk.Revit.DB.PaperSize ps in printManager.PaperSizes)
+                {
+                    // TODO - Handle custom paper sizes
+                    if (ps.Name.Equals(paper.Name))//PaperSize))
+                    {
+                        // pParams.PaperSize = ps
+                        printManager.PrintSetup.InSession.PrintParameters.PaperSize = ps;
+                        break;
+                    }
+                    else
+                    {
+                        // TODO - Pick the next largest papersize to ensure it fits.
+                    }
+                }
+
+                try
+                {
+                    printManager.PrintSetup.SaveAs("transmittal");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error saving print setup");
+                }
+
+                printManager.Apply();
+                printManager.SubmitPrint(); // (sheet)
+
+                //wait for the print to finish
+                while (!File.Exists(fullPath))
+                {
+                    System.Threading.Thread.Sleep(500);
+                }
+
+                viewSheetSetting.Delete();
+
+                SetDefaultPrinter(currentDefaultPrinterName);
+            }
+            catch(Exception ex)
             {
-                printManager.PrintSetup.SaveAs("transmittal");
+                _logger.LogError(ex, "Error creating pdf");
             }
-            catch (Exception ex)
+            finally
             {
-                _logger.LogError(ex, "Error saving print setup");
+                trans.RollBack();
             }
-
-            printManager.Apply();
-            printManager.SubmitPrint(); // (sheet)
-
-            //wait for the print to finish
-            while (!File.Exists(fullPath))
-            {
-                System.Threading.Thread.Sleep(500);
-            }
-
-            viewSheetSetting.Delete();
-
-            SetDefaultPrinter(currentDefaultPrinterName);
-        }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Error creating pdf");
-            
-        }
-        finally
-        {
-
-            trans.RollBack();
         }
 
         SetPDF24Settings(pDF24Settings);
