@@ -15,14 +15,18 @@ namespace Transmittal.Library.DataAccess;
 public class SQLiteDataAccess : IDataConnection
 {
     private readonly ILogger<SQLiteDataAccess> _logger;
+    private readonly IMessageBoxService _messageBox;
 
     private SqliteConnection _connection;
     private SqliteTransaction _transaction;
+
+    private const int _latestSchemaVersion = 3;
 
     public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, 
         IMessageBoxService messageBox)
     {
         _logger = logger;
+        _messageBox = messageBox;
     }
 
     public bool CheckConnection(string dbFilePath)
@@ -199,7 +203,51 @@ public class SQLiteDataAccess : IDataConnection
 
     public void UpgradeDatabase(string dbFilePath)
     {
-         Dictionary<string, string> columnsToAdd = new Dictionary<string, string>();
+        int currentVersion = GetDatabaseVersion(dbFilePath);
+        _logger.LogInformation("Current database version: {Version}", currentVersion);
+
+        try
+        {
+            if (currentVersion == 0)
+            {
+
+                // Legacy database (pre-versioning) - run legacy upgrade code
+                _logger.LogInformation("Detected legacy database (version 0). Running legacy upgrade code.");
+                RunLegacyUpgrade(dbFilePath);
+                // After legacy upgrade, set version to 3
+                SetDatabaseVersion(dbFilePath, 3);
+                currentVersion = 3;
+                _logger.LogInformation("Legacy database upgraded and version set to 3");
+            }
+
+            if (currentVersion == 3)
+            {
+                // Current version is 3, check if future schema versions need to be applied
+                //ApplySchemaV4(dbFilePath);
+                //SetDatabaseVersion(dbFilePath, 4);
+                //currentVersion = 4;
+                _logger.LogInformation("Database v3 upgrade check completed");
+            }
+
+            if (currentVersion > _latestSchemaVersion)
+            {
+                //this could be hi
+                _logger.LogWarning("Database version {CurrentVersion} is newer than application version {LatestVersion}", currentVersion, _latestSchemaVersion);
+                _messageBox.ShowOk("Application version", "You appear to be opening a database which is newer than your current application version. Please check for software updates.");
+            }
+
+        }
+        catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_READONLY)
+        {
+            _logger.LogWarning(ex, "Database upgrade skipped because the database is read-only: {DbFilePath}", dbFilePath);
+            _messageBox.ShowOk("Database upgrade", "The selected database is read-only and cannot be upgraded. Please remove read-only permissions and try again.");
+            return;
+        }
+    }
+
+    private void RunLegacyUpgrade(string dbFilePath)
+    {
+        Dictionary<string, string> columnsToAdd = new Dictionary<string, string>();
 
         //first check of the required columns exist before adding to the dictionary to create them.
         //added at v1.2.0
@@ -278,8 +326,8 @@ public class SQLiteDataAccess : IDataConnection
             return;
         }
 
-        int maxRetries = 3; // Maximum number of retries
-        int retryDelay = 1000; // Delay between retries in milliseconds
+        int maxRetries = 3;
+        int retryDelay = 1000;
         int attempt = 0;
 
         while (attempt < maxRetries)
@@ -290,8 +338,7 @@ public class SQLiteDataAccess : IDataConnection
                 {
                     dbConnection.Open();
 
-                    // Set busy timeout to wait for the database to become available
-                    dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;");
 
                     foreach (var column in columnsToAdd)
                     {
@@ -303,44 +350,259 @@ public class SQLiteDataAccess : IDataConnection
                         catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
                         {
                             _logger.LogWarning(ex, "Database is busy while adding column [{ColumnName}].", column.Key);
-                            throw; // Re-throw to trigger retry logic
+                            throw;
                         }
                         catch (Exception ex)
                         {
                             _logger.LogError(ex, "Failed to add column [{ColumnName}].", column.Key);
-                            throw; // Re-throw to ensure the operation is not silently ignored
+                            throw;
                         }
                     }
 
-                    return; // Success, exit the method
+                    return;
                 }
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
             {
-                // Log the busy error and retry
                 _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
                 attempt++;
 
                 if (attempt < maxRetries)
                 {
-                    System.Threading.Thread.Sleep(retryDelay); // Wait before retrying
+                    System.Threading.Thread.Sleep(retryDelay);
                 }
                 else
                 {
                     _logger.LogError(ex, "Database upgrade failed after {MaxRetries} attempts.", maxRetries);
-                    throw; // Re-throw the exception after max retries
+                    throw;
                 }
             }
             catch (Exception ex)
             {
-                // Log and re-throw other exceptions
                 _logger.LogError(ex, "An error occurred during database upgrade.");
-                
                 throw;
             }
         }
 
         throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
+    }
+
+    public void CreateDatabaseSchema(string dbFilePath)
+    {
+        ApplySchemaV3(dbFilePath);
+        //ApplySchemaV4(dbFilePath);
+        SetDatabaseVersion(dbFilePath, 3);
+        _logger.LogInformation("Database schema v3 created and version set to 3");
+    }
+
+    private void ApplySchemaV3(string dbFilePath)
+    {
+        int maxRetries = 3;
+        int retryDelay = 1000;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
+
+                    // Set busy timeout to wait for the database to become available
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;");
+
+                    // Enable foreign keys
+                    dbConnection.Execute("PRAGMA foreign_keys = ON;");
+
+                    // Create Company table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Company"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""CompanyName""	TEXT NOT NULL,
+                            ""Role""	TEXT,
+                            ""Address""	TEXT,
+                            ""Tel""	TEXT,
+                            ""Fax""	TEXT,
+                            ""Website""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Person table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Person"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""LastName""	TEXT NOT NULL,
+                            ""FirstName""	TEXT,
+                            ""Email""	TEXT,
+                            ""Tel""	TEXT,
+                            ""Mobile""	TEXT,
+                            ""Position""	TEXT,
+                            ""Notes""	TEXT,
+                            ""CompanyID""	INTEGER,
+                            ""ShowInReport""	INTEGER NOT NULL DEFAULT 1,
+                            ""Archive""	INTEGER NOT NULL DEFAULT 0,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create IssueFormat table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""IssueFormat"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""Code""	TEXT,
+                            ""Description""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create DocumentStatus table
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""DocumentStatus"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""Code""	TEXT,
+                            ""Description""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Settings table - correct column order to match template
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Settings"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""DateFormatString""	TEXT,
+                            ""DrawingIssueStore""	TEXT,
+                            ""DrawingIssueStore2""	TEXT,
+                            ""IssueSheetStore""	TEXT,
+                            ""ReportStore""	TEXT,
+                            ""DirectoryStore""	TEXT,
+                            ""FileNameFilter""	TEXT,
+                            ""FileNameFilter2""	TEXT,
+                            ""ProjectIdentifier""	TEXT,
+                            ""ProjectNumber""	TEXT,
+                            ""ProjectName""	TEXT,
+                            ""ClientName""	TEXT,
+                            ""UseExtranet""	INTEGER,
+                            ""UseISO19650""	INTEGER,
+                            ""UseDrawingIssueStore2""	INTEGER,
+                            ""UseRevit""	INTEGER,
+                            ""Originator""	TEXT,
+                            ""Role""	TEXT,
+                            ""ProjectIdentifierParamGuid""	TEXT,
+                            ""OriginatorParamGuid""	TEXT,
+                            ""RoleParamGuid""	TEXT,
+                            ""SheetVolumeParamGuid""	TEXT,
+                            ""SheetLevelParamGuid""	TEXT,
+                            ""DocumentTypeParamGuid""	TEXT,
+                            ""SheetStatusParamGuid""	TEXT,
+                            ""SheetStatusDescriptionParamGuid""	TEXT,
+                            ""SheetPackageParamGuid""	TEXT,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create Transmittal table - with DEFAULT CURRENT_DATE for TransDate
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""Transmittal"" (
+                            ""ID""	INTEGER NOT NULL UNIQUE,
+                            ""TransDate""	TEXT NOT NULL DEFAULT CURRENT_DATE,
+                            PRIMARY KEY(""ID"" AUTOINCREMENT)
+                        );");
+
+                    // Create TransmittalDistribution table - without defaults on TransFormat/TransCopies
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""TransmittalDistribution"" (
+                            ""TransDistID""	INTEGER NOT NULL UNIQUE,
+                            ""TransID""	INTEGER NOT NULL,
+                            ""PersonID""	INTEGER NOT NULL,
+                            ""TransFormat""	TEXT,
+                            ""TransCopies""	INTEGER,
+                            PRIMARY KEY(""TransDistID"" AUTOINCREMENT)
+                        );");
+
+                    // Create TransmittalItems table - DrgOriginator is TEXT, match column order
+                    dbConnection.Execute(@"
+                        CREATE TABLE ""TransmittalItems"" (
+                            ""TransItemID""	INTEGER NOT NULL UNIQUE,
+                            ""TransID""	INTEGER NOT NULL,
+                            ""DrgProj""	TEXT,
+                            ""DrgOriginator""	TEXT,
+                            ""DrgVolume""	TEXT,
+                            ""DrgLevel""	TEXT,
+                            ""DrgType""	TEXT,
+                            ""DrgRole""	TEXT,
+                            ""DrgNumber""	TEXT NOT NULL,
+                            ""DrgName""	TEXT,
+                            ""DrgStatus""	TEXT,
+                            ""DrgRev""	TEXT,
+                            ""DrgDrawn""	TEXT,
+                            ""DrgChecked""	TEXT,
+                            ""DrgScale""	TEXT,
+                            ""DrgPaper""	TEXT,
+                            ""DrgPackage""	TEXT,
+                            PRIMARY KEY(""TransItemID"" AUTOINCREMENT)
+                        );");
+
+                    // Insert default Settings record
+                    dbConnection.Execute(@"
+                        INSERT INTO Settings (ID, DateFormatString, UseExtranet, UseISO19650, UseRevit, UseDrawingIssueStore2)
+                        VALUES (1, 'dd.MM.yy', 0, 0, 0, 0);");
+
+                    // Insert default IssueFormats
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('P', 'Paper');");
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('C', 'Cloud');");
+                    dbConnection.Execute("INSERT INTO IssueFormat (Code, Description) VALUES ('E', 'Email');");
+
+                    // Insert default DocumentStatuses
+                    var documentStatuses = new[]
+                    {
+                        ("S0", "PRELIMINARY WIP"),
+                        ("S1", "FOR CO-ORDINATION"),
+                        ("S2", "FOR INFORMATION"),
+                        ("S3", "FOR REVIEW AND COMMENT"),
+                        ("S4", "FOR STAGE APPROVAL"),
+                        ("S5", "FOR STAGE APPROVAL"),
+                        ("A3", "CONTRACTUAL STAGE 3"),
+                        ("A4", "CONTRACTUAL STAGE 4"),
+                        ("A5", "CONTRACTUAL STAGE 5"),
+                        ("A6", "CONTRACTUAL STAGE 6"),
+                        ("CR", "AS BUILT")
+                    };
+
+                    foreach (var status in documentStatuses)
+                    {
+                        dbConnection.Execute("INSERT INTO DocumentStatus (Code, Description) VALUES (@Code, @Description);",
+                            new { Code = status.Item1, Description = status.Item2 });
+                    }
+
+                    _logger.LogInformation("Schema v3 created successfully at {DbFilePath}", dbFilePath);
+                    return;
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Database schema creation failed after {MaxRetries} attempts.", maxRetries);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during database schema creation.");
+                throw;
+            }
+        }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without completing the operation.");
+    }
+
+    private void ApplySchemaV4(string dbFilePath)
+    {
+        _logger.LogDebug("ApplySchemaV4: No schema changes for v4 at this time");
     }
 
     private bool ColumnExists(string dbFilePath, string columnName, string tableName)
@@ -355,5 +617,77 @@ public class SQLiteDataAccess : IDataConnection
         }
 
         return true;
+    }
+
+    private int GetDatabaseVersion(string dbFilePath)
+    {
+        try
+        {
+            using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+            {
+                dbConnection.Open();
+                var version = dbConnection.QuerySingleOrDefault<int>("PRAGMA user_version;");
+                _logger.LogDebug("Database version retrieved: {Version}", version);
+                return version;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to retrieve database version, assuming version 0");
+            return 0;
+        }
+    }
+
+    private void SetDatabaseVersion(string dbFilePath, int version)
+    {
+        int maxRetries = 3;
+        int retryDelay = 1000;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
+                    using (var cmd = dbConnection.CreateCommand())
+                    {
+                        cmd.CommandText = "PRAGMA busy_timeout = 10000;";
+                        cmd.ExecuteNonQuery();
+                    }
+                    // Set the user version directly with DbCommand (not Dapper)
+                    using (var cmd = dbConnection.CreateCommand())
+                    {
+                        cmd.CommandText = $"PRAGMA user_version = {version};";
+                        cmd.ExecuteNonQuery();
+                    }
+                    _logger.LogInformation("Database version set to {Version}", version);
+                    return;
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                _logger.LogWarning(ex, "Database is busy while setting version. Retrying (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Failed to set database version after {MaxRetries} attempts.", maxRetries);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while setting database version.");
+                throw;
+            }
+        }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without setting version.");
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Autodesk.Revit.DB;
+using Microsoft.Extensions.Logging;
 using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 using Transmittal.ViewModels;
 
@@ -13,6 +15,8 @@ namespace Transmittal.Views;
 public partial class SettingsView : Window
 {
     private readonly SettingsViewModel _viewModel;
+    private readonly IDataConnection _dataConnection;
+    private readonly ILogger<SettingsView> _logger;
     
     public SettingsView()
     {
@@ -21,6 +25,8 @@ public partial class SettingsView : Window
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
         _viewModel = Host.GetService<ViewModels.SettingsViewModel>();
+        _dataConnection = Host.GetService<IDataConnection>();
+        _logger = Host.GetService<ILogger<SettingsView>>();
         DataContext = _viewModel;   
 
         _viewModel.ClosingRequest += (sender, e) => this.Close();
@@ -148,9 +154,17 @@ public partial class SettingsView : Window
 
             if (dialog.ShowDialog() == true)
             {
-                //we don't have a file so copy the template to the new file
-                File.Copy(_viewModel.DatabaseTemplateFile, dialog.FileName);
-                _viewModel.DatabaseFile = dialog.FileName;
+                try
+                {
+                    // Create database schema from code instead of copying a template file
+                    _dataConnection.CreateDatabaseSchema(dialog.FileName);
+                    _viewModel.DatabaseFile = dialog.FileName;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error creating new database at {DbFilePath}", dialog.FileName);
+                    MessageBox.Show($"Error creating database: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
