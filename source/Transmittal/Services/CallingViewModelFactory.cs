@@ -20,7 +20,7 @@ internal class CallingViewModelFactory : ICallingViewModelFactory
 
     public NewCompanyViewModel CreateNewCompanyViewModel(ICompanyRequester caller)
     {
-        return new NewCompanyViewModel(caller, _contactDirectoryService);
+        return new NewCompanyViewModel(caller, _contactDirectoryService, _messageBoxService);
     }
 
     public NewRevisionViewModel CreateNewPackageViewModel(IRevisionRequester caller)

@@ -126,12 +126,14 @@ internal sealed class FakeContactDirectoryService : IContactDirectoryService
     public List<CompanyModel> GetCompanies_All() => _companies.Values.ToList();
     public CompanyModel GetCompany(int companyID) => _companies[companyID];
     public void CreateCompany(CompanyModel model) => _companies[model.ID] = model;
+    public List<CompanyModel> FindCompanyMatches(string companyName, int maxResults = 5) => new();
     public void UpdateCompany(CompanyModel model) => _companies[model.ID] = model;
     public void DeleteCompany(CompanyModel model) => _companies.Remove(model.ID);
     public List<PersonModel> GetPeople_ByCompany(int companyID) => _people.Values.Where(p => p.CompanyID == companyID).ToList();
     public List<PersonModel> GetPeople_All() => _people.Values.ToList();
     public PersonModel GetPerson(int personID) => _people[personID];
     public void CreatePerson(PersonModel model) => _people[model.ID] = model;
+    public List<PersonModel> FindPersonMatches(string firstName, string lastName, string email, int? companyID = null, int maxResults = 5) => new();
     public void UpdatePerson(PersonModel model) => _people[model.ID] = model;
     public void DeletePerson(PersonModel model) => _people.Remove(model.ID);
     public List<ProjectDirectoryModel> GetProjectDirectory(bool IncludeArchivedUsers = true) => new();

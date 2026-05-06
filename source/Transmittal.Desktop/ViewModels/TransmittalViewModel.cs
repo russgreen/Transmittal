@@ -162,12 +162,40 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
 
     public void PersonComplete(PersonModel model)
     {
-        _contactDirectoryService.CreatePerson(model);
+        var personToUse = model;
+        var personMatch = _contactDirectoryService
+            .FindPersonMatches(model.FirstName, model.LastName, model.Email, model.CompanyID)
+            .FirstOrDefault();
+
+        if (personMatch != null)
+        {
+            var useExisting = _messageBoxService.ShowYesNo(
+                "Similar contact found",
+                $"A similar contact already exists:\n\n{personMatch.FullNameReversed}\n\nUse the existing contact instead of creating a new one?");
+
+            if (useExisting)
+            {
+                personToUse = personMatch;
+            }
+            else
+            {
+                _contactDirectoryService.CreatePerson(model);
+            }
+        }
+        else
+        {
+            _contactDirectoryService.CreatePerson(model);
+        }
+
+        if (ProjectDirectory.Any(x => x.Person.ID == personToUse.ID))
+        {
+            return;
+        }
 
         ProjectDirectoryModel projectDirectoryModel = new()
         {
-            Person = model,
-            Company = _contactDirectoryService.GetCompany(model.CompanyID)
+            Person = personToUse,
+            Company = _contactDirectoryService.GetCompany(personToUse.CompanyID)
         };
 
         ProjectDirectory.Add(projectDirectoryModel);

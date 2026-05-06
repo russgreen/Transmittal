@@ -486,7 +486,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             if (_settingsService.GlobalSettings.UseISO19650 == true)
             {
-                //todo validate the selected sheets meet ISO19650 rules and all parameters have values
+                //TODO validate the selected sheets meet ISO19650 rules and all parameters have values
                 foreach (var item in sheetsWithExportFormatsSet)
                 {
                     if ((string.IsNullOrEmpty(item.DrgVolume)) ||
@@ -509,7 +509,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         if (_settingsService.GlobalSettings.UseISO19650 == true)
         {
-            //todo validate the selected sheets meet ISO19650 rules and all parameters have values
+            //TODO validate the selected sheets meet ISO19650 rules and all parameters have values
             foreach (var item in SelectedDrawingSheets.Cast<TransmittalItemModel>())
             {
                 if ((string.IsNullOrEmpty(item.DrgVolume)) ||
@@ -833,12 +833,40 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     
     public void PersonComplete(PersonModel model)
     {
-        _contactDirectoryService.CreatePerson(model);
+        var personToUse = model;
+        var personMatch = _contactDirectoryService
+            .FindPersonMatches(model.FirstName, model.LastName, model.Email, model.CompanyID)
+            .FirstOrDefault();
+
+        if (personMatch != null)
+        {
+            var useExisting = _messageBoxService.ShowYesNo(
+                "Similar contact found",
+                $"A similar contact already exists:\n\n{personMatch.FullNameReversed}\n\nUse the existing contact instead of creating a new one?");
+
+            if (useExisting)
+            {
+                personToUse = personMatch;
+            }
+            else
+            {
+                _contactDirectoryService.CreatePerson(model);
+            }
+        }
+        else
+        {
+            _contactDirectoryService.CreatePerson(model);
+        }
+
+        if (ProjectDirectory.Any(x => x.Person.ID == personToUse.ID))
+        {
+            return;
+        }
 
         ProjectDirectoryModel projectDirectoryModel = new()
         {
-            Person = model,
-            Company = _contactDirectoryService.GetCompany(model.CompanyID)
+            Person = personToUse,
+            Company = _contactDirectoryService.GetCompany(personToUse.CompanyID)
         };
 
         ProjectDirectory.Add(projectDirectoryModel);
@@ -1148,7 +1176,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         pdf.FilePath = filePath;
         _exportedFiles.Add(pdf);
 
-        //TODO - actually check if the export worked OK
+        //TODO actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting PDF...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);
@@ -1187,7 +1215,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             }
         }
 
-        //TODO - actually check if the export worked OK
+        //TODO actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWG...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);
@@ -1238,7 +1266,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         dwf.FilePath = filePath;
         _exportedFiles.Add(dwf);
 
-        //TODO - actually check if the export worked OK
+        //TODO actually check if the export worked OK
         SheetTaskProgressLabel = "Exporting DWF...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);

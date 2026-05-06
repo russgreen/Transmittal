@@ -231,7 +231,7 @@ public class SQLiteDataAccess : IDataConnection
 
             if (currentVersion > _latestSchemaVersion)
             {
-                //this could be hi
+                // The database was created or upgraded by a newer application version, so warn the user about the version mismatch.
                 _logger.LogWarning("Database version {CurrentVersion} is newer than application version {LatestVersion}", currentVersion, _latestSchemaVersion);
                 _messageBox.ShowOk("Application version", "You appear to be opening a database which is newer than your current application version. Please check for software updates.");
             }

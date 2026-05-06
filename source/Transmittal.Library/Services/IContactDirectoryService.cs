@@ -52,6 +52,25 @@ public interface IContactDirectoryService
     /// </summary>
     /// <param name="model"></param>
     void CreatePerson(PersonModel model);
+
+    /// <summary>
+    /// Find potential duplicate or similar companies by name.
+    /// </summary>
+    /// <param name="companyName">Company name to compare against existing entries.</param>
+    /// <param name="maxResults">Maximum number of matches to return.</param>
+    /// <returns>Ordered list of likely matches (best match first).</returns>
+    List<CompanyModel> FindCompanyMatches(string companyName, int maxResults = 5);
+
+    /// <summary>
+    /// Find potential duplicate or similar people by name/email and optional company.
+    /// </summary>
+    /// <param name="firstName">First name to compare.</param>
+    /// <param name="lastName">Last name to compare.</param>
+    /// <param name="email">Email to compare.</param>
+    /// <param name="companyID">Optional company ID to boost matching relevance.</param>
+    /// <param name="maxResults">Maximum number of matches to return.</param>
+    /// <returns>Ordered list of likely matches (best match first).</returns>
+    List<PersonModel> FindPersonMatches(string firstName, string lastName, string email, int? companyID = null, int maxResults = 5);
     /// <summary>
     /// Update a contact
     /// </summary>
