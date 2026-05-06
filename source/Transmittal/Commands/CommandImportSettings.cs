@@ -48,7 +48,7 @@ internal class CommandImportSettings : ExternalCommand
                 string jsonString = File.ReadAllText(jsonFilePath);
                 var settings = JsonSerializer.Deserialize<ImportSettingsModel>(jsonString);
 
-                //TODO : perform some checks here to make sure we have a valid JSON.
+                //TODO perform some checks here to make sure we have a valid JSON.
 
                 var newView = new Views.SettingsView();
 

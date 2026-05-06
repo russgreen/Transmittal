@@ -213,7 +213,7 @@ internal class ExportPDFService : IExportPDFService
                 //string PaperSize = Util.GetPapersize(Width, Height);
                 foreach (Autodesk.Revit.DB.PaperSize ps in printManager.PaperSizes)
                 {
-                    // TODO - Handle custom paper sizes
+                    // TODO Handle custom paper sizes
                     if (ps.Name.Equals(paper.Name))//PaperSize))
                     {
                         // pParams.PaperSize = ps
@@ -222,7 +222,7 @@ internal class ExportPDFService : IExportPDFService
                     }
                     else
                     {
-                        // TODO - Pick the next largest papersize to ensure it fits.
+                        // TODO Pick the next largest papersize to ensure it fits.
                     }
                 }
 
