@@ -172,7 +172,6 @@ public class SettingsService : ISettingsService
         SaveIssueFormats();
         SaveDocumentStatuses();
     }
-    //TODO save document statuses and issue formats to the database
 
     private List<IssueFormatModel> GetIssueFormats()
     {
