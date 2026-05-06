@@ -169,6 +169,19 @@ public class SQLiteDataAccessTests
     }
 
     [Test]
+    public async Task UpgradeDatabase_ShouldHandleReadOnlyLegacyDatabaseSafely()
+    {
+        CreateLegacyDatabase(_dbPath);
+        var readOnlyPath = $"{_dbPath};Mode=ReadOnly";
+
+        await Task.Run(() => _dataAccess.UpgradeDatabase(readOnlyPath));
+
+        var settingsColumns = GetTableColumns(_dbPath, "Settings");
+        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(0);
+        await Assert.That(settingsColumns.Contains("ClientName")).IsFalse();
+    }
+
+    [Test]
     public async Task CreateDatabaseSchema_CompanyTableShouldHaveCorrectColumns()
     {
         await Task.Run(() => _dataAccess.CreateDatabaseSchema(_dbPath));
@@ -466,6 +479,12 @@ public class SQLiteDataAccessTests
 
         try
         {
+            var attributes = File.GetAttributes(path);
+            if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+            {
+                File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
+            }
+
             File.Delete(path);
         }
         catch (IOException)

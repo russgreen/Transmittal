@@ -15,6 +15,7 @@ namespace Transmittal.Library.DataAccess;
 public class SQLiteDataAccess : IDataConnection
 {
     private readonly ILogger<SQLiteDataAccess> _logger;
+    private readonly IMessageBoxService _messageBox;
 
     private SqliteConnection _connection;
     private SqliteTransaction _transaction;
@@ -25,6 +26,7 @@ public class SQLiteDataAccess : IDataConnection
         IMessageBoxService messageBox)
     {
         _logger = logger;
+        _messageBox = messageBox;
     }
 
     public bool CheckConnection(string dbFilePath)
@@ -204,25 +206,42 @@ public class SQLiteDataAccess : IDataConnection
         int currentVersion = GetDatabaseVersion(dbFilePath);
         _logger.LogInformation("Current database version: {Version}", currentVersion);
 
-        if (currentVersion == 0)
+        try
         {
-            // Legacy database (pre-versioning) - run legacy upgrade code
-            _logger.LogInformation("Detected legacy database (version 0). Running legacy upgrade code.");
-            RunLegacyUpgrade(dbFilePath);
-            // After legacy upgrade, set version to 3
-            SetDatabaseVersion(dbFilePath, 3);
-            _logger.LogInformation("Legacy database upgraded and version set to 3");
+            if (currentVersion == 0)
+            {
+
+                // Legacy database (pre-versioning) - run legacy upgrade code
+                _logger.LogInformation("Detected legacy database (version 0). Running legacy upgrade code.");
+                RunLegacyUpgrade(dbFilePath);
+                // After legacy upgrade, set version to 3
+                SetDatabaseVersion(dbFilePath, 3);
+                currentVersion = 3;
+                _logger.LogInformation("Legacy database upgraded and version set to 3");
+            }
+
+            if (currentVersion == 3)
+            {
+                // Current version is 3, check if future schema versions need to be applied
+                //ApplySchemaV4(dbFilePath);
+                //SetDatabaseVersion(dbFilePath, 4);
+                //currentVersion = 4;
+                _logger.LogInformation("Database v3 upgrade check completed");
+            }
+
+            if (currentVersion > _latestSchemaVersion)
+            {
+                //this could be hi
+                _logger.LogWarning("Database version {CurrentVersion} is newer than application version {LatestVersion}", currentVersion, _latestSchemaVersion);
+                _messageBox.ShowOk("Application version", "You appear to be opening a database which is newer than your current application version. Please check for software updates.");
+            }
+
         }
-        else if (currentVersion == 3)
+        catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_READONLY)
         {
-            // Current version is 3, check if future schema versions need to be applied
-            //ApplySchemaV4(dbFilePath);
-            //SetDatabaseVersion(dbFilePath, 4);
-            _logger.LogInformation("Database v3 upgrade check completed");
-        }
-        else if (currentVersion > _latestSchemaVersion)
-        {
-            _logger.LogWarning("Database version {CurrentVersion} is newer than application version {LatestVersion}", currentVersion, _latestSchemaVersion);
+            _logger.LogWarning(ex, "Database upgrade skipped because the database is read-only: {DbFilePath}", dbFilePath);
+            _messageBox.ShowOk("Database upgrade", "The selected database is read-only and cannot be upgraded. Please remove read-only permissions and try again.");
+            return;
         }
     }
 
@@ -371,6 +390,7 @@ public class SQLiteDataAccess : IDataConnection
     public void CreateDatabaseSchema(string dbFilePath)
     {
         ApplySchemaV3(dbFilePath);
+        //ApplySchemaV4(dbFilePath);
         SetDatabaseVersion(dbFilePath, 3);
         _logger.LogInformation("Database schema v3 created and version set to 3");
     }
