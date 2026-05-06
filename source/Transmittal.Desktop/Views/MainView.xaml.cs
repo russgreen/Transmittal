@@ -106,6 +106,16 @@ namespace Transmittal.Desktop.Views
 
             if (dialog.ShowDialog() == true)
             {
+                if (File.Exists(dialog.FileName))
+                {
+                    MessageBox.Show(
+                        "That database file already exists.\n\nUse the existing database file instead, or choose a different filename to create a new one.",
+                        "Database file already exists",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
                 try
                 {
                     // Create database schema from code instead of copying a template file
