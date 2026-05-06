@@ -58,8 +58,19 @@ internal partial class NewPersonViewModel : BaseViewModel, ICompanyRequester
 
     public void CompanyComplete(CompanyModel model)
     {
-        _contactDirectoryService.CreateCompany(model);
-        Companies.Add(model);
+        if (model.ID <= 0)
+        {
+            _contactDirectoryService.CreateCompany(model);
+        }
+
+        var existingCompany = Companies.FirstOrDefault(x => x.ID == model.ID);
+        if (existingCompany == null)
+        {
+            Companies.Add(model);
+            existingCompany = model;
+        }
+
+        CompanyID = existingCompany.ID;
     }
 
     partial void OnCompanyIDChanged(int value)

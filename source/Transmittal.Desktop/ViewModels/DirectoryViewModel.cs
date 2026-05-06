@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
+using System.Windows;
 using Transmittal.Desktop.Services;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -19,11 +20,13 @@ internal partial class DirectoryViewModel : BaseViewModel
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
+    private readonly IMessageBoxService _messageBoxService;
     private readonly ILogger<DirectoryViewModel> _logger;
 
     public string WindowTitle { get; private set; }
 
     private List<ProjectDirectoryModel> _projectDirectory;
+    private bool _suppressCreateCallbacks;
 
     [ObservableProperty]
     private ObservableCollection<PersonModel> _people;
@@ -45,17 +48,20 @@ internal partial class DirectoryViewModel : BaseViewModel
         _settingsService = null;
         _contactDirectoryService = null;
         _transmittalService = null;
+        _messageBoxService = null;
         _logger = null;
     }
 
     public DirectoryViewModel(ISettingsService settingsService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
+        IMessageBoxService messageBoxService,
         ILogger<DirectoryViewModel> logger)
     {
         _settingsService = settingsService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
+        _messageBoxService = messageBoxService;
         _logger = logger;
 
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -163,10 +169,32 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     private void People_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        if (_suppressCreateCallbacks)
+        {
+            return;
+        }
+
         if(e.Action == NotifyCollectionChangedAction.Add)
         {
             PersonModel person = (PersonModel)e.NewItems[0];
             person.PropertyChanged += Person_PropertyChanged;
+
+            var personMatch = _contactDirectoryService
+                .FindPersonMatches(person.FirstName, person.LastName, person.Email, person.CompanyID)
+                .FirstOrDefault();
+
+            if (personMatch != null)
+            {
+                var useExisting = _messageBoxService.ShowYesNo(
+                    "Similar contact found",
+                    $"A similar contact already exists:\n\n{personMatch.FullNameReversed}\n\nUse the existing contact instead of creating a new one?");
+
+                if (useExisting)
+                {
+                    ReuseExistingPerson(person, personMatch);
+                    return;
+                }
+            }
 
             _contactDirectoryService.CreatePerson(person);
         }
@@ -174,13 +202,84 @@ internal partial class DirectoryViewModel : BaseViewModel
 
     private void Companies_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
+        if (_suppressCreateCallbacks)
+        {
+            return;
+        }
+
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
             CompanyModel company = (CompanyModel)e.NewItems[0];
             company.PropertyChanged += Company_PropertyChanged;
 
+            var companyMatch = _contactDirectoryService.FindCompanyMatches(company.CompanyName).FirstOrDefault();
+            if (companyMatch != null)
+            {
+                var useExisting = _messageBoxService.ShowYesNo(
+                    "Similar company found",
+                    $"A similar company already exists:\n\n{companyMatch.CompanyName}\n\nUse the existing company instead of creating a new one?");
+
+                if (useExisting)
+                {
+                    ReuseExistingCompany(company, companyMatch);
+                    return;
+                }
+            }
+
             _contactDirectoryService.CreateCompany(company);
         }
+    }
+
+    private void ReuseExistingPerson(PersonModel newPerson, PersonModel existingMatch)
+    {
+        Application.Current?.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _suppressCreateCallbacks = true;
+            try
+            {
+                newPerson.PropertyChanged -= Person_PropertyChanged;
+                People.Remove(newPerson);
+
+                var existingPerson = People.FirstOrDefault(x => x.ID == existingMatch.ID);
+                if (existingPerson == null)
+                {
+                    People.Add(existingMatch);
+                    existingPerson = existingMatch;
+                }
+
+                SelectedPerson = existingPerson;
+            }
+            finally
+            {
+                _suppressCreateCallbacks = false;
+            }
+        }));
+    }
+
+    private void ReuseExistingCompany(CompanyModel newCompany, CompanyModel existingMatch)
+    {
+        Application.Current?.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            _suppressCreateCallbacks = true;
+            try
+            {
+                newCompany.PropertyChanged -= Company_PropertyChanged;
+                Companies.Remove(newCompany);
+
+                var existingCompany = Companies.FirstOrDefault(x => x.ID == existingMatch.ID);
+                if (existingCompany == null)
+                {
+                    Companies.Add(existingMatch);
+                    existingCompany = existingMatch;
+                }
+
+                SelectedCompany = existingCompany;
+            }
+            finally
+            {
+                _suppressCreateCallbacks = false;
+            }
+        }));
     }
 
     [RelayCommand]

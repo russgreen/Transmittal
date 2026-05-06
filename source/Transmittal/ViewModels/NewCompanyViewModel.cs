@@ -1,5 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
@@ -13,6 +14,7 @@ public partial class NewCompanyViewModel : BaseViewModel
 {
     private readonly ICompanyRequester _callingViewModel;
     private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly IMessageBoxService _messageBoxService;
 
     [ObservableProperty]
     private CompanyModel _company = new();
@@ -25,10 +27,12 @@ public partial class NewCompanyViewModel : BaseViewModel
     public IContactDirectoryService ContactDirectoryService => _contactDirectoryService;
 
     public NewCompanyViewModel(ICompanyRequester caller, 
-        IContactDirectoryService contactDirectoryService)
+        IContactDirectoryService contactDirectoryService,
+        IMessageBoxService messageBoxService)
     {
         _callingViewModel = caller;
         _contactDirectoryService = contactDirectoryService;
+        _messageBoxService = messageBoxService;
 
         this.ValidateAllProperties();
     }
@@ -36,7 +40,24 @@ public partial class NewCompanyViewModel : BaseViewModel
     [RelayCommand]
     private void SendCompany()
     {
-        Company.CompanyName = CompanyName;
+        var companyName = CompanyName?.Trim();
+        var companyMatch = _contactDirectoryService.FindCompanyMatches(companyName).FirstOrDefault();
+
+        if (companyMatch != null)
+        {
+            var useExisting = _messageBoxService.ShowYesNo(
+                "Similar company found",
+                $"A similar company already exists:\n\n{companyMatch.CompanyName}\n\nUse the existing company instead of creating a new one?");
+
+            if (useExisting)
+            {
+                _callingViewModel.CompanyComplete(companyMatch);
+                this.OnClosingRequest();
+                return;
+            }
+        }
+
+        Company.CompanyName = companyName;
         _callingViewModel.CompanyComplete(Company);
         this.OnClosingRequest();
     }

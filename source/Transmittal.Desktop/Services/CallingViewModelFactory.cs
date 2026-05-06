@@ -11,15 +11,18 @@ namespace Transmittal.Desktop.Services;
 internal class CallingViewModelFactory : ICallingViewModelFactory
 {
     private readonly IContactDirectoryService _contactDirectoryService;
+    private readonly IMessageBoxService _messageBoxService;
 
-    public CallingViewModelFactory(IContactDirectoryService contactDirectoryService)
+    public CallingViewModelFactory(IContactDirectoryService contactDirectoryService,
+        IMessageBoxService messageBoxService)
     {
         _contactDirectoryService = contactDirectoryService;
+        _messageBoxService = messageBoxService;
     }
 
     public NewCompanyViewModel CreateNewCompanyViewModel(ICompanyRequester caller)
     {
-        return new NewCompanyViewModel(caller, _contactDirectoryService);
+        return new NewCompanyViewModel(caller, _contactDirectoryService, _messageBoxService);
     }
 
     public NewPersonViewModel CreateNewPersonViewModel(IPersonRequester caller)
