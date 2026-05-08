@@ -59,6 +59,22 @@
     <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Project="false" />
   </Project>
+  <Project Path="source/Transmittal.Browser/Transmittal.Browser.csproj" Id="54b40f09-3f0a-424f-89d6-e8182ee37b6a">
+    <BuildType Solution="Debug 2021|*" Project="Debug" />
+    <BuildType Solution="Debug 2022|*" Project="Debug" />
+    <BuildType Solution="Debug 2023|*" Project="Debug" />
+    <BuildType Solution="Debug 2024|*" Project="Debug" />
+    <BuildType Solution="Debug 2025|*" Project="Debug" />
+    <BuildType Solution="Debug 2026|*" Project="Debug" />
+    <BuildType Solution="Debug 2027|*" Project="Debug" />
+    <BuildType Solution="Release 2021|*" Project="Release" />
+    <BuildType Solution="Release 2022|*" Project="Release" />
+    <BuildType Solution="Release 2023|*" Project="Release" />
+    <BuildType Solution="Release 2024|*" Project="Release" />
+    <BuildType Solution="Release 2025|*" Project="Release" />
+    <BuildType Solution="Release 2026|*" Project="Release" />
+    <BuildType Solution="Release 2027|*" Project="Release" />
+  </Project>
   <Project Path="source/Transmittal.Desktop/Transmittal.Desktop.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug" />
     <BuildType Solution="Debug 2022|*" Project="Debug" />

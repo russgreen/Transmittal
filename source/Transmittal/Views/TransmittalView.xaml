@@ -484,7 +484,7 @@
                                    VerticalAlignment="Center" >
                             <Run Text="Create a draft" />
                             <Run Text="{Binding FileTransferType}"/>
-                            <Run Text="upload in Edge"/>
+                            <Run Text="upload"/>
                         </TextBlock>
                     </StackPanel>
 

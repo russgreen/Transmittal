@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Playwright;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Sockets;
-using System.Security.AccessControl;
-using System.Text;
+using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Transmittal.Library.Services;
@@ -19,10 +18,13 @@ public class FileTransferService : IFileTransferService
     private readonly ILogger<FileTransferService> _logger;
     private readonly ISettingsService _settingsService;
 
-
     private readonly string _browserPath = string.Empty;
+    private readonly string _browserUserDataDirectory;
     private const int _debugPort = 9222;
     private const string _localAddress = "127.0.0.1";
+    private const string _browserExeName = "Transmittal.Browser.exe";
+    private const string _filesManifestArgument = "--files-manifest=";
+    private const string _showRedropHintArgument = "--show-redrop-hint=";
 
     public FileTransferService(ILogger<FileTransferService> logger,
         ISettingsService settingsService)
@@ -30,7 +32,8 @@ public class FileTransferService : IFileTransferService
         _logger = logger;
         _settingsService = settingsService;
 
-        _browserPath = GetBrowserPath();
+        _browserPath = GetTransmittalBrowserPath();
+        _browserUserDataDirectory = GetBrowserUserDataDirectory();
     }
 
     public async Task<bool> PrepareFileTransferUploadAsync(List<string> filePaths)
@@ -55,7 +58,7 @@ public class FileTransferService : IFileTransferService
 
     private async Task<bool> WeTransfer(List<string> filePaths)
     {
-        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync();
+        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filePaths);
         if (!browserRunning)
         {
             return false;
@@ -77,10 +80,17 @@ public class FileTransferService : IFileTransferService
 
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
                
-        var dropZone = page.GetByTestId("drop-zone");
-        var fileInput = dropZone.Locator("input[type='file']");
-        await fileInput.WaitForAsync(new() { State = WaitForSelectorState.Attached });
-        await fileInput.SetInputFilesAsync(filePaths);
+        try
+        {
+            var dropZone = page.GetByTestId("drop-zone");
+            var fileInput = dropZone.Locator("input[type='file']");
+            await fileInput.WaitForAsync(new() { State = WaitForSelectorState.Attached });
+            await fileInput.SetInputFilesAsync(filePaths);
+        }
+        catch (PlaywrightException ex)
+        {
+            _logger.LogWarning(ex, "Automatic WeTransfer upload did not complete. Users can drag files from the browser side panel.");
+        }
 
         return true;
     }
@@ -88,7 +98,7 @@ public class FileTransferService : IFileTransferService
 
     private async Task<bool> Smash(List<string> filePaths)
     {
-        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync();
+        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filePaths);
         if (!browserRunning)
         {
             return false;
@@ -120,111 +130,72 @@ public class FileTransferService : IFileTransferService
         "input[type='file']"
     };
 
-        foreach (var selector in uploadInputCandidates)
+        try
         {
-            var input = page.Locator(selector).First;
-            if (await input.CountAsync() > 0)
+            foreach (var selector in uploadInputCandidates)
             {
-                await input.SetInputFilesAsync(files);
-                _logger.LogDebug("Files assigned through selector: {Selector}", selector);
-                return true;
+                var input = page.Locator(selector).First;
+                if (await input.CountAsync() > 0)
+                {
+                    await input.SetInputFilesAsync(files);
+                    _logger.LogDebug("Files assigned through selector: {Selector}", selector);
+                    return true;
+                }
             }
+
+            // Fallback: click the central CTA and handle file chooser.
+            var chooser = await page.RunAndWaitForFileChooserAsync(async () =>
+            {
+                await page.GetByRole(AriaRole.Button, new() { NameRegex = new System.Text.RegularExpressions.Regex("send|file|upload|select", System.Text.RegularExpressions.RegexOptions.IgnoreCase) })
+                          .First
+                          .ClickAsync();
+            });
+
+            await chooser.SetFilesAsync(files);
+            _logger.LogDebug("Files assigned through file chooser fallback.");
         }
-
-        // Fallback: click the central CTA and handle file chooser.
-        var chooser = await page.RunAndWaitForFileChooserAsync(async () =>
+        catch (PlaywrightException ex)
         {
-            await page.GetByRole(AriaRole.Button, new() { NameRegex = new System.Text.RegularExpressions.Regex("send|file|upload|select", System.Text.RegularExpressions.RegexOptions.IgnoreCase) })
-                      .First
-                      .ClickAsync();
-        });
-
-        await chooser.SetFilesAsync(files);
-        _logger.LogDebug("Files assigned through file chooser fallback.");
+            _logger.LogWarning(ex, "Automatic Smash upload did not complete. Users can drag files from the browser side panel.");
+        }
 
         return true;
     }
 
 
 
-    private string GetBrowserPath()
+    private string GetTransmittalBrowserPath()
     {
-        //var defaultBrowser = GetDefaultBrowserPath();
-        var browserPath = GetEdgePath();
+        var configuredPath = Environment.GetEnvironmentVariable("TRANSMITTAL_BROWSER_PATH");
+        if (!string.IsNullOrWhiteSpace(configuredPath) && File.Exists(configuredPath))
+        {
+            return configuredPath;
+        }
 
-        //if (defaultBrowser.Contains("chrome.exe", StringComparison.OrdinalIgnoreCase))
-        //{
-        //    browserPath = GetChromePath();
-        //}
+        var appContextDirectory = AppContext.BaseDirectory;
+        var candidatePaths = new List<string>
+        {
+            Path.Combine(appContextDirectory, _browserExeName),
+            Path.Combine(appContextDirectory, "Transmittal.Browser", _browserExeName)
+        };
 
-        return browserPath;
+        var entryAssemblyDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location ?? string.Empty);
+        if (!string.IsNullOrWhiteSpace(entryAssemblyDirectory))
+        {
+            candidatePaths.Add(Path.Combine(entryAssemblyDirectory, _browserExeName));
+        }
+
+        return candidatePaths.FirstOrDefault(File.Exists) ?? string.Empty;
     }
 
-    private string GetDefaultBrowserPath()
+    private static string GetBrowserUserDataDirectory()
     {
-        const string userChoice = @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice";
-
-        using var key = Registry.CurrentUser.OpenSubKey(userChoice);
-        var progId = key?.GetValue("ProgId")?.ToString() ?? "";
-
-        if (string.IsNullOrWhiteSpace(progId))
-        {
-            return "";
-        }
-
-        using var commandKey = Registry.ClassesRoot.OpenSubKey($@"{progId}\shell\open\command");
-        var command = commandKey?.GetValue(null)?.ToString() ?? "";
-
-        if (command.StartsWith("\""))
-        {
-            int end = command.IndexOf('"', 1);
-            return command.Substring(1, end - 1);
-        }
-
-        int space = command.IndexOf(' ');
-        if (space > 0)
-        {
-            return command.Substring(0, space);
-        }
-
-        return command;
-
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Transmittal",
+            "Browser",
+            "UserData");
     }
-
-    private string GetEdgePath()
-    {
-
-        var x86 = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-            "Microsoft", "Edge", "Application", "msedge.exe");
-
-        if (File.Exists(x86))
-        {
-            return x86;
-        }
-
-        var x64 = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            "Microsoft", "Edge", "Application", "msedge.exe");
-
-        if (File.Exists(x64))
-        {
-            return x64;
-        }
-
-        return string.Empty;
-    }
-
-    private string GetChromePath()
-    {
-
-        var path = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                    "Google", "Chrome", "Application", "chrome.exe");
-
-        return File.Exists(path) ? path : "";
-    }
-
 
     private async Task<bool> TryClickIfVisibleAsync(ILocator locator, string description, int timeoutMs = 5000)
     {
@@ -248,24 +219,31 @@ public class FileTransferService : IFileTransferService
         }
     }
 
-    private async Task<bool> LaunchBrowserWithRemoteDebuggingAsync()
+    private async Task<bool> LaunchBrowserWithRemoteDebuggingAsync(List<string> filePaths)
     {
-        if(await IsBrowserWithRemoteDebuggingRunningAsync(_debugPort))
+        if (string.IsNullOrWhiteSpace(_browserPath))
         {
-            _logger.LogInformation("Browser with remote debugging is already running.");
-            return true;
+            _logger.LogError("{BrowserExecutable} could not be found. Ensure it is deployed with the app.", _browserExeName);
+            return false;
+        }
+
+        var filesManifestPath = CreateTransferFilesManifest(filePaths);
+
+        if (await IsBrowserWithRemoteDebuggingRunningAsync(_debugPort))
+        {
+            _logger.LogInformation("Browser with remote debugging is already running. Restarting to refresh transfer file panel.");
+            KillExistingBrowser();
         }
 
         try
         {
-            KillExistingBrower();
-            LaunchWithRemoteDebugging(_browserPath);
+            LaunchWithRemoteDebugging(_browserPath, filesManifestPath, showRedropHint: true);
             WaitForPort(_debugPort);
             return await WaitForDevToolsEndpointAsync(_debugPort, TimeSpan.FromSeconds(5));
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
+            _logger.LogError(ex, "Failed to start {BrowserPath} for file transfer automation", _browserPath);
         }
 
         return false;
@@ -292,7 +270,7 @@ public class FileTransferService : IFileTransferService
         }
     }
 
-    private void KillExistingBrower()
+    private void KillExistingBrowser()
     {
         var processes = new Dictionary<int, Process>();
 
@@ -320,15 +298,39 @@ public class FileTransferService : IFileTransferService
         }
     }
     
-    private Process LaunchWithRemoteDebugging(string browserPath)
+    private Process LaunchWithRemoteDebugging(string browserPath, string filesManifestPath, bool showRedropHint)
     {
+        Directory.CreateDirectory(_browserUserDataDirectory);
+
         var psi = new ProcessStartInfo
         {
             FileName = browserPath,
-            Arguments = "--remote-debugging-port=9222 --no-first-run --no-default-browser-check",
+            Arguments =
+                $"--remote-debugging-port={_debugPort} " +
+                $"--user-data-dir=\"{_browserUserDataDirectory}\" " +
+                $"--start-url=about:blank " +
+                $"{_filesManifestArgument}\"{filesManifestPath}\" " +
+                $"{_showRedropHintArgument}{showRedropHint.ToString().ToLowerInvariant()}",
             UseShellExecute = false
         };
-        return Process.Start(psi);
+        return Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start browser process at {browserPath}.");
+    }
+
+    private string CreateTransferFilesManifest(List<string> filePaths)
+    {
+        Directory.CreateDirectory(_browserUserDataDirectory);
+
+        var validFilePaths = filePaths
+            .Where(path => !string.IsNullOrWhiteSpace(path))
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var manifestPath = Path.Combine(_browserUserDataDirectory, "transfer-files-manifest.json");
+        var json = JsonSerializer.Serialize(validFilePaths);
+        File.WriteAllText(manifestPath, json);
+
+        return manifestPath;
     }
 
     private void WaitForPort(int port, int timeoutMs = 20000)

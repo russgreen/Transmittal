@@ -14,9 +14,12 @@
 		</PropertyGroup>
 
 		<!-- Read the license key from the key file -->
-		<ReadLinesFromFile File="$(KeyFile)">
+		<ReadLinesFromFile File="$(KeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="LicenseKey" />
 		</ReadLinesFromFile>
+		<PropertyGroup>
+			<LicenseKey Condition="'$(LicenseKey)' == ''">$(DummyKey)</LicenseKey>
+		</PropertyGroup>
 
 		<!-- Replace the dummy key with the actual license key -->
 		<ReplaceFileText
@@ -34,9 +37,12 @@
 		</PropertyGroup>
 		
 		<!-- Read the license key from the key file -->
-		<ReadLinesFromFile File="$(KeyFile)">
+		<ReadLinesFromFile File="$(KeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="LicenseKey" />
 		</ReadLinesFromFile>
+		<PropertyGroup>
+			<LicenseKey Condition="'$(LicenseKey)' == ''">$(DummyKey)</LicenseKey>
+		</PropertyGroup>
 		
 		<!-- Replace the dummy key with the actual license key -->
 		<ReplaceFileText
@@ -60,13 +66,17 @@
 			<ApiSecretDummyKey>##APISECRET##</ApiSecretDummyKey>
 		</PropertyGroup>
 
-		<ReadLinesFromFile File="$(MeasurementIdKeyFile)">
+		<ReadLinesFromFile File="$(MeasurementIdKeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="MeasurementIdKey" />
 		</ReadLinesFromFile>
 
-		<ReadLinesFromFile File="$(ApiSecretKeyFile)">
+		<ReadLinesFromFile File="$(ApiSecretKeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="ApiSecretKey" />
 		</ReadLinesFromFile>
+		<PropertyGroup>
+			<MeasurementIdKey Condition="'$(MeasurementIdKey)' == ''">$(MeasurementIdFileDummyKey)</MeasurementIdKey>
+			<ApiSecretKey Condition="'$(ApiSecretKey)' == ''">$(ApiSecretDummyKey)</ApiSecretKey>
+		</PropertyGroup>
 
 		<ReplaceFileText
 		  InputFilename="$(SourceFile)"
@@ -90,13 +100,17 @@
 			<ApiSecretDummyKey>##APISECRET##</ApiSecretDummyKey>
 		</PropertyGroup>
 
-		<ReadLinesFromFile File="$(MeasurementIdKeyFile)">
+		<ReadLinesFromFile File="$(MeasurementIdKeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="MeasurementIdKey" />
 		</ReadLinesFromFile>
 
-		<ReadLinesFromFile File="$(ApiSecretKeyFile)">
+		<ReadLinesFromFile File="$(ApiSecretKeyFile)" ContinueOnError="WarnAndContinue">
 			<Output TaskParameter="Lines" PropertyName="ApiSecretKey" />
 		</ReadLinesFromFile>
+		<PropertyGroup>
+			<MeasurementIdKey Condition="'$(MeasurementIdKey)' == ''">$(MeasurementIdFileDummyKey)</MeasurementIdKey>
+			<ApiSecretKey Condition="'$(ApiSecretKey)' == ''">$(ApiSecretDummyKey)</ApiSecretKey>
+		</PropertyGroup>
 
 		<ReplaceFileText
 		  InputFilename="$(SourceFile)"

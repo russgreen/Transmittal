@@ -273,6 +273,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             if (key != null)
             {
                 EnablePerSheetExportFormats = Convert.ToBoolean(key.GetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats));
+                SendFileTransfer = Convert.ToBoolean(key.GetValue("SendFileTransfer", SendFileTransfer));
             }
         }
     }
@@ -893,6 +894,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     partial void OnRecordTransmittalChanged(bool value)
     {
         ValidateTransmittal();
+    }
+
+    partial void OnSendFileTransferChanged(bool value)
+    {
+        Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        if (key == null)
+        {
+            Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Transmittal", true);
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        }
+
+        key.SetValue("SendFileTransfer", SendFileTransfer, Microsoft.Win32.RegistryValueKind.String);
+
+        key.Close();
     }
 
     private void ProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -1780,16 +1795,4 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         return folders.OrderBy(x => x).ToList();
     }
 
-    partial void OnSendFileTransferChanged(bool oldValue, bool newValue)
-    {
-        if (newValue == true)
-        {
-            if (!_messageBoxService.ShowYesNo(
-                "File Transfer Preview Feature",
-                "Any running Edge browser windows may be closed and reopened when using this feature. Would you still like to continue using it?"))
-            {
-                SendFileTransfer = oldValue;
-            }
-        }
-    }
 }
