@@ -156,6 +156,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
             SelectedDistribution = new();
             SelectedDistribution.CollectionChanged += SelectedDistribution_CollectionChanged;
         }
+
+        using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", false))
+        {
+            if (key != null)
+            {
+                SendFileTransfer = Convert.ToBoolean(key.GetValue("SendFileTransfer", SendFileTransfer));
+            }
+        }
     }
 
     #region Distribution
@@ -219,6 +227,20 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private void ProjectDirectory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
 
+    }
+
+    partial void OnSendFileTransferChanged(bool value)
+    {
+        Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        if (key == null)
+        {
+            Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Transmittal", true);
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", true);
+        }
+
+        key.SetValue("SendFileTransfer", SendFileTransfer, Microsoft.Win32.RegistryValueKind.String);
+
+        key.Close();
     }
 
     private void Distribution_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -453,16 +475,4 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         DispatcherHelper.DoEvents();
     }
 
-    partial void OnSendFileTransferChanged(bool oldValue, bool newValue)
-    {
-        if(newValue == true)
-        {
-            if(!_messageBoxService.ShowYesNo(
-                "File Transfer Preview Feature", 
-                "Any running Edge browser windows may be closed and reopened when using this feature. Would you still like to continue using it?"))
-            {
-                SendFileTransfer = oldValue;
-            }
-        }
-    }
 }

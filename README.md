@@ -46,6 +46,14 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **File Parsing**: Automatic filename parsing for standardized naming conventions
 - **Drag & Drop**: Easy document addition via drag and drop interface
 
+### Browser Application
+- **File Transfer Tool**: Specialized browser for uploading documents to web portals
+- **WebView2 Integration**: Modern Chromium-based browser engine
+- **Persistent File Panel**: Maintain access to files across web page navigation
+- **Session Persistence**: Remember browser state and files between sessions
+- **Drag & Drop Support**: Re-drop files after authentication or page reloads
+- **Remote Debugging**: Built-in support for debugging with Chrome DevTools
+
 ## Requirements
 
 ### For Revit 2021-2024
@@ -70,6 +78,11 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **Framework**: .NET 8
 - **Database**: SQLite (embedded)
 
+### For Browser Application
+- **Operating System**: Windows 10/11 (64-bit)
+- **Framework**: .NET 8
+- **WebView2**: Microsoft Edge WebView2 Runtime (automatically installed with Windows 10/11)
+
 ## Solution Architecture
 
 The solution consists of multiple projects targeting different .NET frameworks and use cases:
@@ -77,8 +90,9 @@ The solution consists of multiple projects targeting different .NET frameworks a
 ```
 Transmittal/
 ├── source/
-│   ├── Transmittal/                      # Revit Add-in (.NET Framework 4.8 / .NET 8)
+│   ├── Transmittal/                      # Revit Add-in (.NET Framework 4.8 / .NET 8 / .NET 10)
 │   ├── Transmittal.Desktop/              # Standalone WPF Application (.NET 8)
+│   ├── Transmittal.Browser/              # Browser Application for File Uploads (.NET 8)
 │   ├── Transmittal.Library/              # Shared Core Library (Multi-target)
 │   ├── Transmittal.Reports/              # Report Generation (.NET 8)
 │   └── Transmittal.Library.Tests/        # Unit Tests (.NET 8)
@@ -108,6 +122,13 @@ Transmittal/
 - **IoC**: Microsoft.Extensions.Hosting
 - **Analytics**: Transmittal.Analytics.Client
 
+#### Transmittal.Browser (File Upload Browser)
+- **UI Framework**: WPF
+- **MVVM**: CommunityToolkit.MVVM
+- **Browser Engine**: Microsoft.Web.WebView2 (Chromium-based)
+- **IoC**: Microsoft.Extensions.Hosting
+- **Target Framework**: .NET 8 (Windows)
+
 #### Transmittal.Library (Core)
 - **Database**: Microsoft.Data.Sqlite with Dapper ORM
 - **HTTP Client**: System.Net.Http
@@ -128,6 +149,7 @@ The solution uses multiple build configurations for different Revit versions:
 - **Debug/Release R24**: Revit 2024 (.NET Framework 4.8)
 - **Debug/Release R25**: Revit 2025 (.NET 8)
 - **Debug/Release R26**: Revit 2026 (.NET 8)
+- **Debug/Release R27**: Revit 2027 (.NET 10)
 
 ## Building the Solution
 
