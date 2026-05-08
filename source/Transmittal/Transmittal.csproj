@@ -163,16 +163,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Transmittal.Browser\Transmittal.Browser.csproj"
-	                    ReferenceOutputAssembly="false"
-	                    SetTargetFramework="TargetFramework=net8.0-windows"
-	                    SetConfiguration="Configuration=Debug"
-	                    Condition="$(Configuration.Contains('Debug'))" />
-	  <ProjectReference Include="..\Transmittal.Browser\Transmittal.Browser.csproj"
-	                    ReferenceOutputAssembly="false"
-	                    SetTargetFramework="TargetFramework=net8.0-windows"
-	                    SetConfiguration="Configuration=Release"
-	                    Condition="$(Configuration.Contains('Release'))" />
 	  <ProjectReference Include="..\Transmittal.Library\Transmittal.Library.csproj" />
 	</ItemGroup>
 
@@ -188,29 +178,6 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-
-	<PropertyGroup>
-		<TransmittalBrowserBuildConfiguration Condition="$(Configuration.Contains('Release'))">Release</TransmittalBrowserBuildConfiguration>
-		<TransmittalBrowserBuildConfiguration Condition="'$(TransmittalBrowserBuildConfiguration)' == ''">Debug</TransmittalBrowserBuildConfiguration>
-	</PropertyGroup>
-
-	<Target Name="CopyTransmittalBrowserArtifacts" AfterTargets="Build">
-		<PropertyGroup>
-			<TransmittalBrowserOutputDir>$(MSBuildThisFileDirectory)..\Transmittal.Browser\bin\$(TransmittalBrowserBuildConfiguration)\</TransmittalBrowserOutputDir>
-		</PropertyGroup>
-
-		<ItemGroup>
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Transmittal.Browser.exe" Condition="Exists('$(TransmittalBrowserOutputDir)Transmittal.Browser.exe')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Transmittal.Browser.deps.json" Condition="Exists('$(TransmittalBrowserOutputDir)Transmittal.Browser.deps.json')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Transmittal.Browser.runtimeconfig.json" Condition="Exists('$(TransmittalBrowserOutputDir)Transmittal.Browser.runtimeconfig.json')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Transmittal.Browser.dll" Condition="Exists('$(TransmittalBrowserOutputDir)Transmittal.Browser.dll')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Microsoft.Web.WebView2.Core.dll" Condition="Exists('$(TransmittalBrowserOutputDir)Microsoft.Web.WebView2.Core.dll')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)Microsoft.Web.WebView2.Wpf.dll" Condition="Exists('$(TransmittalBrowserOutputDir)Microsoft.Web.WebView2.Wpf.dll')" />
-			<TransmittalBrowserArtifacts Include="$(TransmittalBrowserOutputDir)WebView2Loader.dll" Condition="Exists('$(TransmittalBrowserOutputDir)WebView2Loader.dll')" />
-		</ItemGroup>
-
-		<Copy SourceFiles="@(TransmittalBrowserArtifacts)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
-	</Target>
 
 </Project>
  
