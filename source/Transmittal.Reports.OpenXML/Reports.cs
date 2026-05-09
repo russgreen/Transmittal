@@ -132,7 +132,7 @@ public class Reports : IReportsService
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
-    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null)
+    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)
     {
         var orderedTransmittals = (transmittals ?? _transmittalService.GetTransmittals())
             .OrderBy(x => x.TransDate)
@@ -150,6 +150,21 @@ public class Reports : IReportsService
             "0001",
             "TransmittalSummary",
             null, null, null);
+
+        if (!string.IsNullOrEmpty(personName))
+        {
+            fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+            _settingsService.GlobalSettings.ProjectIdentifier,
+            _settingsService.GlobalSettings.ProjectName,
+            _settingsService.GlobalSettings.Originator,
+            "ZZ",
+            "XX",
+            "MX",
+            _settingsService.GlobalSettings.Role,
+            "0002",
+            $"TransmittalSummary_{personName}",
+            null, null, null);
+        }
 
         var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
         var workbook = TryLoadTemplate("TransmittalSummary.xlsx") ?? new XLWorkbook();

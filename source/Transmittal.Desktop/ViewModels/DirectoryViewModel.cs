@@ -366,6 +366,6 @@ internal partial class DirectoryViewModel : BaseViewModel
 
         var transmittals = _transmittalService.GetTransmittals_ByPerson(SelectedPerson.ID);
 
-        reports.ShowTransmittalSummaryReport(transmittals);
+        reports.ShowTransmittalSummaryReport(transmittals, SelectedPerson.FullName);
     }
 }

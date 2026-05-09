@@ -5,7 +5,7 @@
     },
     "Transmittal.Desktop --database": {
       "commandName": "Project",
-      "commandLineArgs": "--database=\"D:\\_archisoft\\projects\\Transmittal Testing\\TestingExistingTemplateDatabase - With Spaces.tdb\""
+      "commandLineArgs": "--database=\"C:\\Users\\russg\\OneDrive\\Transmittal Testing\\0002-TRN-XX-XX-DB-A-0001.tdb\""
     },
     "Transmittal.Desktop --database 2": {
       "commandName": "Project",
