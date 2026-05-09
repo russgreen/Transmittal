@@ -11,7 +11,7 @@ using Transmittal.Reports.OpenXML.Models;
 
 namespace Transmittal.Reports.OpenXML;
 
-public class Reports
+public class Reports : IReportsService
 {
     private static readonly Regex TokenRegex = new("{{\\s*(?<name>[^{}]+?)\\s*}}", RegexOptions.Compiled);
 

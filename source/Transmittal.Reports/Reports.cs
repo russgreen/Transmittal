@@ -10,7 +10,7 @@ using Transmittal.Reports.Mapping;
 
 namespace Transmittal.Reports
 {
-    public class Reports
+    public class Reports : IReportsService
     {
         private readonly ISettingsService _settingsService;
         private readonly IContactDirectoryService _contactDirectoryService;

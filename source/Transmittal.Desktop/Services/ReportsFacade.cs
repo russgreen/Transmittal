@@ -7,7 +7,7 @@ using System;
 
 namespace Transmittal.Desktop.Services;
 
-internal sealed class ReportsFacade
+internal sealed class ReportsFacade : IReportsService
 {
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
