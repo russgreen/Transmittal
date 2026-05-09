@@ -7,7 +7,7 @@ using System;
 
 namespace Transmittal.Desktop.Services;
 
-internal sealed class ReportsFacade
+internal sealed class ReportsFacade : IReportsService
 {
     private readonly ISettingsService _settingsService;
     private readonly IContactDirectoryService _contactDirectoryService;
@@ -48,15 +48,15 @@ internal sealed class ReportsFacade
         fallbackReports.ShowTransmittalReport(transmittalID);
     }
 
-    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null)
+    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)
     {
-        if (TryInvokeOpenXmlReport("TransmittalSummary.xlsx", nameof(ShowTransmittalSummaryReport), transmittals))
+        if (TryInvokeOpenXmlReport("TransmittalSummary.xlsx", nameof(ShowTransmittalSummaryReport), transmittals, personName))
         {
             return;
         }
 
         var fallbackReports = new global::Transmittal.Reports.Reports(_settingsService, _contactDirectoryService, _transmittalService);
-        fallbackReports.ShowTransmittalSummaryReport(transmittals);
+        fallbackReports.ShowTransmittalSummaryReport(transmittals, personName);
     }
 
     public void ShowMasterDocumentsListReport()

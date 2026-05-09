@@ -10,7 +10,7 @@ using Transmittal.Reports.Mapping;
 
 namespace Transmittal.Reports
 {
-    public class Reports
+    public class Reports : IReportsService
     {
         private readonly ISettingsService _settingsService;
         private readonly IContactDirectoryService _contactDirectoryService;
@@ -145,7 +145,7 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
-        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null)//bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)//bool useISO, string projectIdentifier, string projectName)
         {
             Stream report = GetReport(  "TransmittalSummary.rdlc");
 
@@ -160,6 +160,21 @@ namespace Transmittal.Reports
                 "0001",
                 "TransmittalSummary",
                 null, null, null);
+
+            if(!string.IsNullOrEmpty(personName))
+            {
+                fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
+                _settingsService.GlobalSettings.ProjectIdentifier,
+                _settingsService.GlobalSettings.ProjectName,
+                _settingsService.GlobalSettings.Originator,
+                "ZZ",
+                "XX",
+                "MX",
+                _settingsService.GlobalSettings.Role,
+                "0002",
+                $"TransmittalSummary_{personName}",
+                null, null, null);
+            }
 
             var frm = NewReportViewerWPF(
                 "Transmittal Summary",
