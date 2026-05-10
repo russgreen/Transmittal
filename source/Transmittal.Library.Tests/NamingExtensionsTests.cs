@@ -125,4 +125,15 @@ public class NamingExtensionsTests
         // Assert
         await Assert.That(result).IsEqualTo(expected);
     }
+
+    [Test]
+    [Arguments("5010", "5000", 10)]
+    [Arguments("00011", "00001", 10)]
+    [Arguments("0010", "", 10)]
+    [Arguments("0010", "not-a-number", 10)]
+    public async Task BuildTransmittalSheetNumber_ShouldUseConfiguredFirstNumberOffset(string expected, string firstNumber, int transmittalId)
+    {
+        var result = firstNumber.BuildTransmittalSheetNumber(transmittalId);
+        await Assert.That(result).IsEqualTo(expected);
+    }
 }

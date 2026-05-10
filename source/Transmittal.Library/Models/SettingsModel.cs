@@ -156,7 +156,7 @@ public partial class SettingsModel : ObservableValidator
     private string _transmittalSheetDocumentTypeCode = "TL";
 
     [ObservableProperty]
-    private string _transmittalSheetFirstNumber = "0001";
+    private string _transmittalSheetFirstNumber = "0000";
 
     [ObservableProperty]
     private string _transmittalSummaryDocumentTypeCode = "MX";

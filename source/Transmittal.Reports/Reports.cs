@@ -97,7 +97,7 @@ namespace Transmittal.Reports
                             "XX",
                             _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode,
                             _settingsService.GlobalSettings.Role,
-                            transmittal.ID.ToString().PadLeft(4, '0'),
+                            _settingsService.GlobalSettings.TransmittalSheetFirstNumber.BuildTransmittalSheetNumber(transmittal.ID),
                             "TransmittalRecord",
                             null, null, null);
 
@@ -145,7 +145,7 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
-        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)//bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null, int personID = 0)//bool useISO, string projectIdentifier, string projectName)
         {
             Stream report = GetReport(  "TransmittalSummary.rdlc");
 
@@ -171,7 +171,7 @@ namespace Transmittal.Reports
                 "XX",
                 _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
+                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID),
                 $"TransmittalSummary_{personName}",
                 null, null, null);
             }

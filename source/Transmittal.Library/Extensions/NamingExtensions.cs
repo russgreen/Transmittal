@@ -175,6 +175,29 @@ public static class NamingExtensions
         return illegalString;
     }
 
+    /// <summary>
+    /// Builds a transmittal sheet number from a configured first number and the transmittal ID.
+    /// </summary>
+    /// <param name="firstNumber">Configured first number, e.g. 5000 or 00001.</param>
+    /// <param name="transmittalId">The transmittal ID to offset from the configured first number.</param>
+    /// <param name="fallbackWidth">Pad width used when firstNumber is blank or invalid.</param>
+    /// <returns>Computed number string preserving configured width where applicable.</returns>
+    public static string BuildTransmittalSheetNumber(this string firstNumber, int transmittalId, int fallbackWidth = 4)
+    {
+        if (string.IsNullOrWhiteSpace(firstNumber) ||
+            !long.TryParse(firstNumber.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var baseNumber))
+        {
+            return transmittalId.ToString(CultureInfo.InvariantCulture).PadLeft(fallbackWidth, '0');
+        }
+
+        var output = (baseNumber + transmittalId).ToString(CultureInfo.InvariantCulture);
+        var configuredWidth = firstNumber.Trim().Length;
+
+        return output.Length >= configuredWidth
+            ? output
+            : output.PadLeft(configuredWidth, '0');
+    }
+
     public static string RemoveTrailingSymbols(this string inputString)
     {
         if (string.IsNullOrEmpty(inputString))

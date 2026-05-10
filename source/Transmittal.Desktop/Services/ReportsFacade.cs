@@ -48,15 +48,15 @@ internal sealed class ReportsFacade : IReportsService
         fallbackReports.ShowTransmittalReport(transmittalID);
     }
 
-    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)
+    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null, int personID = 0)
     {
-        if (TryInvokeOpenXmlReport("TransmittalSummary.xlsx", nameof(ShowTransmittalSummaryReport), transmittals, personName))
+        if (TryInvokeOpenXmlReport("TransmittalSummary.xlsx", nameof(ShowTransmittalSummaryReport), transmittals, personName, personID))
         {
             return;
         }
 
         var fallbackReports = new global::Transmittal.Reports.Reports(_settingsService, _contactDirectoryService, _transmittalService);
-        fallbackReports.ShowTransmittalSummaryReport(transmittals, personName);
+        fallbackReports.ShowTransmittalSummaryReport(transmittals, personName, personID);
     }
 
     public void ShowMasterDocumentsListReport()

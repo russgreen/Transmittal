@@ -86,7 +86,7 @@ public class Reports : IReportsService
             "XX",
             _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            transmittal.ID.ToString().PadLeft(4, '0'),
+            _settingsService.GlobalSettings.TransmittalSheetFirstNumber.BuildTransmittalSheetNumber(transmittal.ID),
             "TransmittalRecord",
             null, null, null);
 
@@ -132,7 +132,7 @@ public class Reports : IReportsService
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
-    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)
+    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null, int personID = 0)
     {
         var orderedTransmittals = (transmittals ?? _transmittalService.GetTransmittals())
             .OrderBy(x => x.TransDate)
@@ -161,7 +161,7 @@ public class Reports : IReportsService
             "XX",
             _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
+            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID),
             $"TransmittalSummary_{personName}",
             null, null, null);
         }
