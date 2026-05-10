@@ -86,17 +86,19 @@ public class SQLiteDataAccessTests
 
         using var conn = OpenConnection(_dbPath);
         var settings = conn.QuerySingle<SettingsRecord>(
-            "SELECT ID, DateFormatString FROM Settings WHERE ID = 1;");
+            "SELECT ID, DateFormatString, ShowFileTransfer, FileTransferType FROM Settings WHERE ID = 1;");
 
         await Assert.That(settings.ID).IsEqualTo(1);
         await Assert.That(settings.DateFormatString).IsEqualTo("dd.MM.yy");
+        await Assert.That(settings.ShowFileTransfer).IsTrue();
+        await Assert.That(settings.FileTransferType).IsEqualTo(0);
     }
 
     [Test]
-    public async Task CreateDatabaseSchema_ShouldSetDatabaseVersionToThree()
+    public async Task CreateDatabaseSchema_ShouldSetDatabaseVersionToFour()
     {
         await Task.Run(() => _dataAccess.CreateDatabaseSchema(_dbPath));
-        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(3);
+        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(4);
     }
 
     [Test]
@@ -111,25 +113,25 @@ public class SQLiteDataAccessTests
     }
 
     [Test]
-    public async Task UpgradeDatabase_ShouldUpgradeLegacyDatabaseFromVersionZeroToThree()
+    public async Task UpgradeDatabase_ShouldUpgradeLegacyDatabaseFromVersionZeroToFour()
     {
         CreateLegacyDatabase(_dbPath);
         await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(0);
 
         await Task.Run(() => _dataAccess.UpgradeDatabase(_dbPath));
 
-        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(3);
+        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(4);
     }
 
     [Test]
     public async Task UpgradeDatabase_ShouldNotChangeVersionForCurrentDatabase()
     {
         await Task.Run(() => _dataAccess.CreateDatabaseSchema(_dbPath));
-        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(3);
+        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(4);
 
         await Task.Run(() => _dataAccess.UpgradeDatabase(_dbPath));
 
-        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(3);
+        await Assert.That(GetDatabaseVersion(_dbPath)).IsEqualTo(4);
     }
 
     [Test]
@@ -163,8 +165,19 @@ public class SQLiteDataAccessTests
         await Assert.That(settingsColumns).Contains("UseRevit");
         await Assert.That(settingsColumns).Contains("DrawingIssueStore2");
         await Assert.That(settingsColumns).Contains("UseDrawingIssueStore2");
+        await Assert.That(settingsColumns).Contains("ShowFileTransfer");
+        await Assert.That(settingsColumns).Contains("FileTransferType");
+        await Assert.That(settingsColumns).Contains("ProjectDirectoryDocumentTypeCode");
+        await Assert.That(settingsColumns).Contains("ProjectDirectoryFirstNumber");
+        await Assert.That(settingsColumns).Contains("TransmittalSheetDocumentTypeCode");
+        await Assert.That(settingsColumns).Contains("TransmittalSheetFirstNumber");
+        await Assert.That(settingsColumns).Contains("TransmittalSummaryDocumentTypeCode");
+        await Assert.That(settingsColumns).Contains("TransmittalSummaryFirstNumber");
+        await Assert.That(settingsColumns).Contains("MasterDocumentsListDocumentTypeCode");
+        await Assert.That(settingsColumns).Contains("MasterDocumentsListFirstNumber");
         await Assert.That(transmittalItemColumns).Contains("DrgPackage");
         await Assert.That(companyColumns).Contains("Role");
+        await Assert.That(companyColumns).Contains("OrganizationCode");
         await Assert.That(personColumns).Contains("Archive");
     }
 
@@ -190,6 +203,7 @@ public class SQLiteDataAccessTests
         await Assert.That(columns).Contains("ID");
         await Assert.That(columns).Contains("CompanyName");
         await Assert.That(columns).Contains("Role");
+        await Assert.That(columns).Contains("OrganizationCode");
         await Assert.That(columns).Contains("Address");
         await Assert.That(columns).Contains("Tel");
         await Assert.That(columns).Contains("Fax");
@@ -265,7 +279,17 @@ public class SQLiteDataAccessTests
             "DocumentTypeParamGuid",
             "SheetStatusParamGuid",
             "SheetStatusDescriptionParamGuid",
-            "SheetPackageParamGuid");
+            "SheetPackageParamGuid",
+            "ShowFileTransfer",
+            "FileTransferType",
+            "ProjectDirectoryDocumentTypeCode",
+            "ProjectDirectoryFirstNumber",
+            "TransmittalSheetDocumentTypeCode",
+            "TransmittalSheetFirstNumber",
+            "TransmittalSummaryDocumentTypeCode",
+            "TransmittalSummaryFirstNumber",
+            "MasterDocumentsListDocumentTypeCode",
+            "MasterDocumentsListFirstNumber");
     }
 
     [Test]
@@ -509,6 +533,8 @@ public class SQLiteDataAccessTests
     {
         public int ID { get; set; }
         public string DateFormatString { get; set; } = string.Empty;
+        public bool ShowFileTransfer { get; set; }
+        public int FileTransferType { get; set; }
     }
 }
 

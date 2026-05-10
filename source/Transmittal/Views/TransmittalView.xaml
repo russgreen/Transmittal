@@ -422,10 +422,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
-                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
-                Click="Button_AddToDirectory_Click" >
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
+                            Click="Button_AddToDirectory_Click" >
                         <Button.Background>
                             <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
                         </Button.Background>
@@ -471,7 +471,8 @@
                        TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20"
+                                Visibility="{Binding ShowFileTransfer, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="SendFileTransfer" HorizontalAlignment="Center"
                                   IsChecked="{Binding SendFileTransfer}" />
                         <TextBlock Text="PREVIEW FEATURE" 

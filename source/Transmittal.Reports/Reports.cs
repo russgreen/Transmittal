@@ -39,11 +39,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
                 "XX",
-                "DY",
+                "XX",
+                _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0001",
+                _settingsService.GlobalSettings.ProjectDirectoryFirstNumber,
                 "ProjectDirectory",
                 null, null, null);
 
@@ -93,9 +93,9 @@ namespace Transmittal.Reports
                             _settingsService.GlobalSettings.ProjectIdentifier,
                             _settingsService.GlobalSettings.ProjectName,
                             _settingsService.GlobalSettings.Originator,
-                            "ZZ",
                             "XX",
-                            "TL",
+                            "XX",
+                            _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode,
                             _settingsService.GlobalSettings.Role,
                             transmittal.ID.ToString().PadLeft(4, '0'),
                             "TransmittalRecord",
@@ -153,11 +153,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
                 "XX",
-                "MX",
+                "XX",
+                _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0001",
+                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
                 "TransmittalSummary",
                 null, null, null);
 
@@ -169,9 +169,9 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.Originator,
                 "ZZ",
                 "XX",
-                "MX",
+                _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0002",
+                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
                 $"TransmittalSummary_{personName}",
                 null, null, null);
             }
@@ -241,11 +241,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
                 "XX",
-                "MX",
+                "XX",
+                _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0002",
+                _settingsService.GlobalSettings.MasterDocumentsListFirstNumber,
                 "MasterDocumentsList",
                 null, null, null);
 

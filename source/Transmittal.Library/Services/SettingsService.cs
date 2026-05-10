@@ -76,6 +76,22 @@ public class SettingsService : ISettingsService
 
                     GlobalSettings.DrawingIssueStore2 = dbSettings.DrawingIssueStore2 ?? GlobalSettings.DrawingIssueStore2;
                     GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2 ? dbSettings.UseDrawingIssueStore2 : GlobalSettings.UseDrawingIssueStore2;
+
+                    GlobalSettings.ProjectDirectoryDocumentTypeCode = dbSettings.ProjectDirectoryDocumentTypeCode ?? string.Empty;
+                    GlobalSettings.ProjectDirectoryFirstNumber = dbSettings.ProjectDirectoryFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSheetDocumentTypeCode = dbSettings.TransmittalSheetDocumentTypeCode ?? string.Empty;
+                    GlobalSettings.TransmittalSheetFirstNumber = dbSettings.TransmittalSheetFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSummaryDocumentTypeCode = dbSettings.TransmittalSummaryDocumentTypeCode ?? string.Empty;
+                    GlobalSettings.TransmittalSummaryFirstNumber = dbSettings.TransmittalSummaryFirstNumber ?? string.Empty;
+                    GlobalSettings.MasterDocumentsListDocumentTypeCode = dbSettings.MasterDocumentsListDocumentTypeCode ?? string.Empty;
+                    GlobalSettings.MasterDocumentsListFirstNumber = dbSettings.MasterDocumentsListFirstNumber ?? string.Empty;
+
+                    GlobalSettings.ShowFileTransfer = dbSettings.ShowFileTransfer;
+
+                    if (Enum.IsDefined(typeof(Enums.FileTransferType), dbSettings.FileTransferType))
+                    {
+                        GlobalSettings.FileTransferType = dbSettings.FileTransferType;
+                    }
                 }
 
                 //get status and issue formats from database
@@ -90,7 +106,7 @@ public class SettingsService : ISettingsService
             }
         }
 
-        GlobalSettings.FileTransferType = GetTransferServiceToUse();
+        GetTransferServiceFromRegistry();
     }
 
     public void UpdateSettings()
@@ -126,7 +142,17 @@ public class SettingsService : ISettingsService
                 "DocumentTypeParamGuid = @DocumentTypeParamGuid, " +
                 "SheetStatusParamGuid = @SheetStatusParamGuid, " +
                 "SheetStatusDescriptionParamGuid = @SheetStatusDescriptionParamGuid, " +
-                "SheetPackageParamGuid = @SheetPackageParamGuid " +
+                "SheetPackageParamGuid = @SheetPackageParamGuid, " +
+                "ShowFileTransfer = @ShowFileTransfer, " +
+                "FileTransferType = @FileTransferType, " +
+                "ProjectDirectoryDocumentTypeCode = @ProjectDirectoryDocumentTypeCode, " +
+                "ProjectDirectoryFirstNumber = @ProjectDirectoryFirstNumber, " +
+                "TransmittalSheetDocumentTypeCode = @TransmittalSheetDocumentTypeCode, " +
+                "TransmittalSheetFirstNumber = @TransmittalSheetFirstNumber, " +
+                "TransmittalSummaryDocumentTypeCode = @TransmittalSummaryDocumentTypeCode, " +
+                "TransmittalSummaryFirstNumber = @TransmittalSummaryFirstNumber, " +
+                "MasterDocumentsListDocumentTypeCode = @MasterDocumentsListDocumentTypeCode, " +
+                "MasterDocumentsListFirstNumber = @MasterDocumentsListFirstNumber " +
                 "WHERE ID=1;";
 
             _connection.SaveData(
@@ -159,7 +185,17 @@ public class SettingsService : ISettingsService
                     DocumentTypeParamGuid = GlobalSettings.DocumentTypeParamGuid,
                     SheetStatusParamGuid = GlobalSettings.SheetStatusParamGuid,
                     SheetStatusDescriptionParamGuid = GlobalSettings.SheetStatusDescriptionParamGuid,
-                    SheetPackageParamGuid = GlobalSettings.SheetPackageParamGuid
+                    SheetPackageParamGuid = GlobalSettings.SheetPackageParamGuid,
+                    ShowFileTransfer = GlobalSettings.ShowFileTransfer,
+                    FileTransferType = GlobalSettings.FileTransferType,
+                    ProjectDirectoryDocumentTypeCode = GlobalSettings.ProjectDirectoryDocumentTypeCode,
+                    ProjectDirectoryFirstNumber = GlobalSettings.ProjectDirectoryFirstNumber,
+                    TransmittalSheetDocumentTypeCode = GlobalSettings.TransmittalSheetDocumentTypeCode,
+                    TransmittalSheetFirstNumber = GlobalSettings.TransmittalSheetFirstNumber,
+                    TransmittalSummaryDocumentTypeCode = GlobalSettings.TransmittalSummaryDocumentTypeCode,
+                    TransmittalSummaryFirstNumber = GlobalSettings.TransmittalSummaryFirstNumber,
+                    MasterDocumentsListDocumentTypeCode = GlobalSettings.MasterDocumentsListDocumentTypeCode,
+                    MasterDocumentsListFirstNumber = GlobalSettings.MasterDocumentsListFirstNumber
                 });
         }
         catch (Exception ex)
@@ -254,12 +290,9 @@ public class SettingsService : ISettingsService
 
     }
 
-    /// <summary>
-    /// Temporary settings pulled from Registry.  Settings eventually will be stored in the project database and Revit, but for now this is an easy way to toggle between file transfer services without having to update the Revit schema.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    private Enums.FileTransferType GetTransferServiceToUse()
+
+    // method allow group policy to be set to force the transfer service.
+    private void GetTransferServiceFromRegistry()
     {
         using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Transmittal", false))
         {
@@ -269,12 +302,10 @@ public class SettingsService : ISettingsService
 
                 if (stringValue != null && Enum.TryParse(stringValue.ToString(), out Enums.FileTransferType service))
                 {
-                    return service;
+                    GlobalSettings.FileTransferType = service;
                 }
             }
         }
-
-        return Enums.FileTransferType.WeTransfer;
     }
 }
     

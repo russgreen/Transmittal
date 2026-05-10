@@ -17,7 +17,7 @@ public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
     private readonly ISettingsService _settingsService;
-        
+
     public TransmittalView()
     {
         InitializeComponent();

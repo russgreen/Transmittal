@@ -99,6 +99,12 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private string _fileNameFilter2;
 
     [ObservableProperty]
+    private bool _useFileTransferService;
+
+    [ObservableProperty]
+    private Library.Enums.FileTransferType _fileTransferServiceType;
+
+    [ObservableProperty]
     private ObservableCollection<IssueFormatModel> _issueFormats;
 
     [ObservableProperty]
@@ -127,6 +133,55 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
     [ObservableProperty]
     private string _directoryStorePath;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _projectDirectoryDocumentTypeCode;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _projectDirectoryFirstNumber;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSheetDocumentTypeCode;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSheetFirstNumber;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSummaryDocumentTypeCode;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSummaryFirstNumber;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _masterDocumentsListDocumentTypeCode;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _masterDocumentsListFirstNumber;
+
 
     [ObservableProperty]
     private bool _useCustomSharedParameters;
@@ -382,6 +437,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         IssueFormats = new ObservableCollection<IssueFormatModel>(_settingsService.GlobalSettings.IssueFormats);
         DocumentStatuses = new ObservableCollection<DocumentStatusModel>(_settingsService.GlobalSettings.DocumentStatuses);
 
+        UseFileTransferService = _settingsService.GlobalSettings.ShowFileTransfer;
+        FileTransferServiceType = _settingsService.GlobalSettings.FileTransferType;
+
         //DATABASE SETTINGS
         RecordTransmittals = _settingsService.GlobalSettings.RecordTransmittals;
         DatabaseFile = _settingsService.GlobalSettings.DatabaseFile;
@@ -389,6 +447,15 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         ReportTemplatePath = _settingsService.GlobalSettings.ReportStore;
         IssueSheetStorePath = _settingsService.GlobalSettings.IssueSheetStore;
         DirectoryStorePath = _settingsService.GlobalSettings.DirectoryStore;
+
+        ProjectDirectoryDocumentTypeCode = _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode;
+        ProjectDirectoryFirstNumber = _settingsService.GlobalSettings.ProjectDirectoryFirstNumber;
+        TransmittalSheetDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode;
+        TransmittalSheetFirstNumber = _settingsService.GlobalSettings.TransmittalSheetFirstNumber;
+        TransmittalSummaryDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode;
+        TransmittalSummaryFirstNumber = _settingsService.GlobalSettings.TransmittalSummaryFirstNumber;
+        MasterDocumentsListDocumentTypeCode = _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode;
+        MasterDocumentsListFirstNumber = _settingsService.GlobalSettings.MasterDocumentsListFirstNumber;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = _settingsService.GlobalSettings.UseCustomSharedParameters;
@@ -426,6 +493,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         IssueFormats = new ObservableCollection<IssueFormatModel>(settings.IssueFormats);
         DocumentStatuses = new ObservableCollection<DocumentStatusModel>(settings.DocumentStatuses);
 
+        UseFileTransferService = settings.ShowFileTransfer;
+        FileTransferServiceType = settings.FileTransferType;
+
         //DATABASE SETTINGS
         RecordTransmittals = settings.RecordTransmittals;
         DatabaseFile = string.Empty; //we can't really save the database file in an import settings file
@@ -433,6 +503,15 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         ReportTemplatePath = settings.ReportStore;
         IssueSheetStorePath = settings.IssueSheetStore;
         DirectoryStorePath = settings.DirectoryStore;
+
+        ProjectDirectoryDocumentTypeCode = settings.ProjectDirectoryDocumentTypeCode;
+        ProjectDirectoryFirstNumber = settings.ProjectDirectoryFirstNumber;
+        TransmittalSheetDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode;
+        TransmittalSheetFirstNumber = settings.TransmittalSheetFirstNumber;
+        TransmittalSummaryDocumentTypeCode = settings.TransmittalSummaryDocumentTypeCode;
+        TransmittalSummaryFirstNumber = settings.TransmittalSummaryFirstNumber;
+        MasterDocumentsListDocumentTypeCode = settings.MasterDocumentsListDocumentTypeCode;
+        MasterDocumentsListFirstNumber = settings.MasterDocumentsListFirstNumber;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = settings.UseCustomSharedParameters;
@@ -465,6 +544,9 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.UseDrawingIssueStore2 = UseDrawingIssueStore2;
         _settingsService.GlobalSettings.DrawingIssueStore2 = DrawingIssueStore2?.Trim();
 
+        _settingsService.GlobalSettings.ShowFileTransfer = UseFileTransferService;
+        _settingsService.GlobalSettings.FileTransferType = FileTransferServiceType;
+
         _settingsService.GlobalSettings.IssueFormats = IssueFormats.ToList();
         _settingsService.GlobalSettings.DocumentStatuses = DocumentStatuses.ToList();
 
@@ -476,6 +558,15 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
         _settingsService.GlobalSettings.ReportStore = ReportTemplatePath?.Trim();
         _settingsService.GlobalSettings.IssueSheetStore = IssueSheetStorePath?.Trim();
         _settingsService.GlobalSettings.DirectoryStore = DirectoryStorePath?.Trim();
+
+        _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode = ProjectDirectoryDocumentTypeCode;
+        _settingsService.GlobalSettings.ProjectDirectoryFirstNumber = ProjectDirectoryFirstNumber;
+        _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode = TransmittalSheetDocumentTypeCode;
+        _settingsService.GlobalSettings.TransmittalSheetFirstNumber = TransmittalSheetFirstNumber;
+        _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode = TransmittalSummaryDocumentTypeCode;
+        _settingsService.GlobalSettings.TransmittalSummaryFirstNumber = TransmittalSummaryFirstNumber;
+        _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode = MasterDocumentsListDocumentTypeCode;
+        _settingsService.GlobalSettings.MasterDocumentsListFirstNumber = MasterDocumentsListFirstNumber;
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = UseCustomSharedParameters;
         

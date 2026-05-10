@@ -72,6 +72,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
     private bool _sendFileTransfer = false;
 
     [ObservableProperty]
+    private bool _showFileTransfer = true;
+
+    [ObservableProperty]
     private bool _isBackEnabled = true;
 
     [ObservableProperty]
@@ -138,6 +141,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
         IssueFormat = IssueFormats.FirstOrDefault();
 
         FileTransferType = _settingsService.GlobalSettings.FileTransferType;
+        ShowFileTransfer = _settingsService.GlobalSettings.ShowFileTransfer;
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {

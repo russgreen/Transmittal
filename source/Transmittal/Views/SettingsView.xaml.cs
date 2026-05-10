@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging;
 using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Models;
 using Transmittal.ViewModels;
@@ -326,5 +328,36 @@ public partial class SettingsView : Window
             FileName = "https://russgreen.github.io/Transmittal/settings/",
             UseShellExecute = true
         });
+    }
+
+
+    private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+    {
+        e.Handled = !IsNumeric((TextBox)sender, e.Text);
+    }
+
+    private void NumericTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+    {
+        if (!e.SourceDataObject.GetDataPresent(DataFormats.Text, true))
+        {
+            e.CancelCommand();
+            return;
+        }
+
+        var pasteText = e.SourceDataObject.GetData(DataFormats.Text) as string ?? string.Empty;
+        if (!IsNumeric((TextBox)sender, pasteText))
+        {
+            e.CancelCommand();
+        }
+    }
+
+    private bool IsNumeric(TextBox textBox, string newText)
+    {
+        var positiveIntRegex = new Regex(@"^[0-9]\d*$");
+
+        var proposed = textBox.Text.Remove(textBox.SelectionStart, textBox.SelectionLength)
+            .Insert(textBox.SelectionStart, newText);
+
+        return string.IsNullOrEmpty(proposed) || positiveIntRegex.IsMatch(proposed);
     }
 }
