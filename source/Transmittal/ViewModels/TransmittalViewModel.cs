@@ -671,7 +671,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 try
                 {
                     sheet.FindParameter(BuiltInParameter.SHEET_NAME).Set(sheetModel.DrgName);
-                    sheet.FindParameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(sheetModel.IssueDate);
+                    sheet.FindParameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(sheetModel.IssueDate.ToDateFormat(_settingsService.GlobalSettings.DateFormatString));
                     sheet.FindParameter(BuiltInParameter.SHEET_DRAWN_BY).Set(sheetModel.DrgDrawn);
                     sheet.FindParameter(BuiltInParameter.SHEET_CHECKED_BY).Set(sheetModel.DrgChecked);
 
