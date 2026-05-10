@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Standalone Application"
+title: "Desktop App"
 description: "Desktop application for document transmittal management outside of Revit"
 permalink: /standalone/
 ---
