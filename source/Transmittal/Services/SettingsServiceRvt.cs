@@ -353,11 +353,23 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ProjectDirectoryFirstNumber), typeof(string));
         fieldBuilder.SetDocumentation("Project directory report first number");
 
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ProjectDirectoryVolume), typeof(string));
+        fieldBuilder.SetDocumentation("Project directory report volume or functional code");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.ProjectDirectoryLevel), typeof(string));
+        fieldBuilder.SetDocumentation("Project directory report level or spatial code");
+
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode), typeof(string));
         fieldBuilder.SetDocumentation("Transmittal sheet report document type code");
 
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSheetFirstNumber), typeof(string));
         fieldBuilder.SetDocumentation("Transmittal sheet report first number");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSheetVolume), typeof(string));
+        fieldBuilder.SetDocumentation("Transmittal sheet report volume or functional code");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSheetLevel), typeof(string));
+        fieldBuilder.SetDocumentation("Transmittal sheet report level or spatial code");
 
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode), typeof(string));
         fieldBuilder.SetDocumentation("Transmittal summary report document type code");
@@ -365,11 +377,23 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSummaryFirstNumber), typeof(string));
         fieldBuilder.SetDocumentation("Transmittal summary report first number");
 
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSummaryVolume), typeof(string));
+        fieldBuilder.SetDocumentation("Transmittal summary report volume or functional code");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.TransmittalSummaryLevel), typeof(string));
+        fieldBuilder.SetDocumentation("Transmittal summary report level or spatial code");
+
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode), typeof(string));
         fieldBuilder.SetDocumentation("Master documents list report document type code");
 
         fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.MasterDocumentsListFirstNumber), typeof(string));
         fieldBuilder.SetDocumentation("Master documents list report first number");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.MasterDocumentsListVolume), typeof(string));
+        fieldBuilder.SetDocumentation("Master documents list report volume or functional code");
+
+        fieldBuilder = schemaBuilder.AddSimpleField(nameof(_settingsService.GlobalSettings.MasterDocumentsListLevel), typeof(string));
+        fieldBuilder.SetDocumentation("Master documents list report level or spatial code");
 
         _schema = schemaBuilder.Finish(); // register the Schema object
 
@@ -461,12 +485,20 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode)), _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryFirstNumber)), _settingsService.GlobalSettings.ProjectDirectoryFirstNumber);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryVolume)), _settingsService.GlobalSettings.ProjectDirectoryVolume);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryLevel)), _settingsService.GlobalSettings.ProjectDirectoryLevel);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode)), _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetFirstNumber)), _settingsService.GlobalSettings.TransmittalSheetFirstNumber);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetVolume)), _settingsService.GlobalSettings.TransmittalSheetVolume);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetLevel)), _settingsService.GlobalSettings.TransmittalSheetLevel);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode)), _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryFirstNumber)), _settingsService.GlobalSettings.TransmittalSummaryFirstNumber);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryVolume)), _settingsService.GlobalSettings.TransmittalSummaryVolume);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryLevel)), _settingsService.GlobalSettings.TransmittalSummaryLevel);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode)), _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode);
                 entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListFirstNumber)), _settingsService.GlobalSettings.MasterDocumentsListFirstNumber);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListVolume)), _settingsService.GlobalSettings.MasterDocumentsListVolume);
+                entity.Set<string>(_schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListLevel)), _settingsService.GlobalSettings.MasterDocumentsListLevel);
 
                 dataStorageElement.SetEntity(entity);
 
@@ -820,18 +852,34 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
                 schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode)));
             _settingsService.GlobalSettings.ProjectDirectoryFirstNumber = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryFirstNumber)));
+            _settingsService.GlobalSettings.ProjectDirectoryVolume = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryVolume)));
+            _settingsService.GlobalSettings.ProjectDirectoryLevel = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.ProjectDirectoryLevel)));
             _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode)));
             _settingsService.GlobalSettings.TransmittalSheetFirstNumber = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetFirstNumber)));
+            _settingsService.GlobalSettings.TransmittalSheetVolume = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetVolume)));
+            _settingsService.GlobalSettings.TransmittalSheetLevel = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSheetLevel)));
             _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode)));
             _settingsService.GlobalSettings.TransmittalSummaryFirstNumber = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryFirstNumber)));
+            _settingsService.GlobalSettings.TransmittalSummaryVolume = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryVolume)));
+            _settingsService.GlobalSettings.TransmittalSummaryLevel = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.TransmittalSummaryLevel)));
             _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode)));
             _settingsService.GlobalSettings.MasterDocumentsListFirstNumber = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListFirstNumber)));
+            _settingsService.GlobalSettings.MasterDocumentsListVolume = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListVolume)));
+            _settingsService.GlobalSettings.MasterDocumentsListLevel = entity.Get<string>(
+                schema.GetField(nameof(_settingsService.GlobalSettings.MasterDocumentsListLevel)));
         }
         catch (Exception ex)
         {

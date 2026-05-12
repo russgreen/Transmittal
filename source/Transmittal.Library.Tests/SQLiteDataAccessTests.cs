@@ -169,12 +169,20 @@ public class SQLiteDataAccessTests
         await Assert.That(settingsColumns).Contains("FileTransferType");
         await Assert.That(settingsColumns).Contains("ProjectDirectoryDocumentTypeCode");
         await Assert.That(settingsColumns).Contains("ProjectDirectoryFirstNumber");
+        await Assert.That(settingsColumns).Contains("ProjectDirectoryVolume");
+        await Assert.That(settingsColumns).Contains("ProjectDirectoryLevel");
         await Assert.That(settingsColumns).Contains("TransmittalSheetDocumentTypeCode");
         await Assert.That(settingsColumns).Contains("TransmittalSheetFirstNumber");
+        await Assert.That(settingsColumns).Contains("TransmittalSheetVolume");
+        await Assert.That(settingsColumns).Contains("TransmittalSheetLevel");
         await Assert.That(settingsColumns).Contains("TransmittalSummaryDocumentTypeCode");
         await Assert.That(settingsColumns).Contains("TransmittalSummaryFirstNumber");
+        await Assert.That(settingsColumns).Contains("TransmittalSummaryVolume");
+        await Assert.That(settingsColumns).Contains("TransmittalSummaryLevel");
         await Assert.That(settingsColumns).Contains("MasterDocumentsListDocumentTypeCode");
         await Assert.That(settingsColumns).Contains("MasterDocumentsListFirstNumber");
+        await Assert.That(settingsColumns).Contains("MasterDocumentsListVolume");
+        await Assert.That(settingsColumns).Contains("MasterDocumentsListLevel");
         await Assert.That(transmittalItemColumns).Contains("DrgPackage");
         await Assert.That(companyColumns).Contains("Role");
         await Assert.That(companyColumns).Contains("OrganizationCode");
@@ -284,12 +292,20 @@ public class SQLiteDataAccessTests
             "FileTransferType",
             "ProjectDirectoryDocumentTypeCode",
             "ProjectDirectoryFirstNumber",
+            "ProjectDirectoryVolume",
+            "ProjectDirectoryLevel",
             "TransmittalSheetDocumentTypeCode",
             "TransmittalSheetFirstNumber",
+            "TransmittalSheetVolume",
+            "TransmittalSheetLevel",
             "TransmittalSummaryDocumentTypeCode",
             "TransmittalSummaryFirstNumber",
+            "TransmittalSummaryVolume",
+            "TransmittalSummaryLevel",
             "MasterDocumentsListDocumentTypeCode",
-            "MasterDocumentsListFirstNumber");
+            "MasterDocumentsListFirstNumber",
+            "MasterDocumentsListVolume",
+            "MasterDocumentsListLevel");
     }
 
     [Test]

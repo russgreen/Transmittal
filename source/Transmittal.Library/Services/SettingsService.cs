@@ -79,12 +79,20 @@ public class SettingsService : ISettingsService
 
                     GlobalSettings.ProjectDirectoryDocumentTypeCode = dbSettings.ProjectDirectoryDocumentTypeCode ?? string.Empty;
                     GlobalSettings.ProjectDirectoryFirstNumber = dbSettings.ProjectDirectoryFirstNumber ?? string.Empty;
+                    GlobalSettings.ProjectDirectoryVolume = dbSettings.ProjectDirectoryVolume ?? GlobalSettings.ProjectDirectoryVolume;
+                    GlobalSettings.ProjectDirectoryLevel = dbSettings.ProjectDirectoryLevel ?? GlobalSettings.ProjectDirectoryLevel;
                     GlobalSettings.TransmittalSheetDocumentTypeCode = dbSettings.TransmittalSheetDocumentTypeCode ?? string.Empty;
                     GlobalSettings.TransmittalSheetFirstNumber = dbSettings.TransmittalSheetFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSheetVolume = dbSettings.TransmittalSheetVolume ?? GlobalSettings.TransmittalSheetVolume;
+                    GlobalSettings.TransmittalSheetLevel = dbSettings.TransmittalSheetLevel ?? GlobalSettings.TransmittalSheetLevel;
                     GlobalSettings.TransmittalSummaryDocumentTypeCode = dbSettings.TransmittalSummaryDocumentTypeCode ?? string.Empty;
                     GlobalSettings.TransmittalSummaryFirstNumber = dbSettings.TransmittalSummaryFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSummaryVolume = dbSettings.TransmittalSummaryVolume ?? GlobalSettings.TransmittalSummaryVolume;
+                    GlobalSettings.TransmittalSummaryLevel = dbSettings.TransmittalSummaryLevel ?? GlobalSettings.TransmittalSummaryLevel;
                     GlobalSettings.MasterDocumentsListDocumentTypeCode = dbSettings.MasterDocumentsListDocumentTypeCode ?? string.Empty;
                     GlobalSettings.MasterDocumentsListFirstNumber = dbSettings.MasterDocumentsListFirstNumber ?? string.Empty;
+                    GlobalSettings.MasterDocumentsListVolume = dbSettings.MasterDocumentsListVolume ?? GlobalSettings.MasterDocumentsListVolume;
+                    GlobalSettings.MasterDocumentsListLevel = dbSettings.MasterDocumentsListLevel ?? GlobalSettings.MasterDocumentsListLevel;
 
                     GlobalSettings.ShowFileTransfer = dbSettings.ShowFileTransfer;
 
@@ -147,12 +155,20 @@ public class SettingsService : ISettingsService
                 "FileTransferType = @FileTransferType, " +
                 "ProjectDirectoryDocumentTypeCode = @ProjectDirectoryDocumentTypeCode, " +
                 "ProjectDirectoryFirstNumber = @ProjectDirectoryFirstNumber, " +
+                "ProjectDirectoryVolume = @ProjectDirectoryVolume, " +
+                "ProjectDirectoryLevel = @ProjectDirectoryLevel, " +
                 "TransmittalSheetDocumentTypeCode = @TransmittalSheetDocumentTypeCode, " +
                 "TransmittalSheetFirstNumber = @TransmittalSheetFirstNumber, " +
+                "TransmittalSheetVolume = @TransmittalSheetVolume, " +
+                "TransmittalSheetLevel = @TransmittalSheetLevel, " +
                 "TransmittalSummaryDocumentTypeCode = @TransmittalSummaryDocumentTypeCode, " +
                 "TransmittalSummaryFirstNumber = @TransmittalSummaryFirstNumber, " +
+                "TransmittalSummaryVolume = @TransmittalSummaryVolume, " +
+                "TransmittalSummaryLevel = @TransmittalSummaryLevel, " +
                 "MasterDocumentsListDocumentTypeCode = @MasterDocumentsListDocumentTypeCode, " +
-                "MasterDocumentsListFirstNumber = @MasterDocumentsListFirstNumber " +
+                "MasterDocumentsListFirstNumber = @MasterDocumentsListFirstNumber, " +
+                "MasterDocumentsListVolume = @MasterDocumentsListVolume, " +
+                "MasterDocumentsListLevel = @MasterDocumentsListLevel " +
                 "WHERE ID=1;";
 
             _connection.SaveData(
@@ -190,12 +206,20 @@ public class SettingsService : ISettingsService
                     FileTransferType = GlobalSettings.FileTransferType,
                     ProjectDirectoryDocumentTypeCode = GlobalSettings.ProjectDirectoryDocumentTypeCode,
                     ProjectDirectoryFirstNumber = GlobalSettings.ProjectDirectoryFirstNumber,
+                    ProjectDirectoryVolume = GlobalSettings.ProjectDirectoryVolume,
+                    ProjectDirectoryLevel = GlobalSettings.ProjectDirectoryLevel,
                     TransmittalSheetDocumentTypeCode = GlobalSettings.TransmittalSheetDocumentTypeCode,
                     TransmittalSheetFirstNumber = GlobalSettings.TransmittalSheetFirstNumber,
+                    TransmittalSheetVolume = GlobalSettings.TransmittalSheetVolume,
+                    TransmittalSheetLevel = GlobalSettings.TransmittalSheetLevel,
                     TransmittalSummaryDocumentTypeCode = GlobalSettings.TransmittalSummaryDocumentTypeCode,
                     TransmittalSummaryFirstNumber = GlobalSettings.TransmittalSummaryFirstNumber,
+                    TransmittalSummaryVolume = GlobalSettings.TransmittalSummaryVolume,
+                    TransmittalSummaryLevel = GlobalSettings.TransmittalSummaryLevel,
                     MasterDocumentsListDocumentTypeCode = GlobalSettings.MasterDocumentsListDocumentTypeCode,
-                    MasterDocumentsListFirstNumber = GlobalSettings.MasterDocumentsListFirstNumber
+                    MasterDocumentsListFirstNumber = GlobalSettings.MasterDocumentsListFirstNumber,
+                    MasterDocumentsListVolume = GlobalSettings.MasterDocumentsListVolume,
+                    MasterDocumentsListLevel = GlobalSettings.MasterDocumentsListLevel
                 });
         }
         catch (Exception ex)

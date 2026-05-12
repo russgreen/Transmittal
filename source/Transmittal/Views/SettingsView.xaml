@@ -238,6 +238,8 @@
                         <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="40" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -247,6 +249,7 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
@@ -255,13 +258,13 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
+                    <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" 
                         x:Name="UseDatabase" Content="Use Project Database" 
                         IsChecked="{Binding RecordTransmittals}" Margin="0,0,0,5"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
+                    <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,0,0"
                         Text="Project database file not found!" Foreground="Red" 
                         Visibility="{Binding DatabaseNotFound, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <Button Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,5"
+                    <Button Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,0,0,5"
                         x:Name="buttonLoadSettingsFromDatabase"
                         Content="Load settings from database"
                         Visibility="{Binding IsChecked, ElementName=UseDatabase, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -270,11 +273,11 @@
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,0,5"
                         Text="Project database"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,5,5"
                         Text="{Binding DatabaseFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                         BorderBrush="{Binding DatabaseNotFound, Converter={StaticResource BrushColorConverter}}"/>
-                    <Button Grid.Row="2" Grid.Column="3" Margin="0,0,0,5"
+                    <Button Grid.Row="2" Grid.Column="5" Margin="0,0,0,5"
                         x:Name="buttonDatabaseBrowse"
                         Content="..." 
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" 
@@ -283,10 +286,10 @@
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"
                         Text="Report templates"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,5,5"
                         Text="{Binding ReportTemplatePath}"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <Button Grid.Row="3" Grid.Column="3" Margin="0,0,0,5"
+                    <Button Grid.Row="3" Grid.Column="5" Margin="0,0,0,5"
                         x:Name="buttonReportPathBrowse"
                         Content="..." 
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonReportPathBrowse_Click" />
@@ -294,10 +297,10 @@
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,0,0,5"
                         Text="Issue sheet store"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,5,5"
                         Text="{Binding IssueSheetStorePath}"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <Button Grid.Row="4" Grid.Column="3" Margin="0,0,0,5"
+                    <Button Grid.Row="4" Grid.Column="5" Margin="0,0,0,5"
                         x:Name="buttonIssueSheetStorePathBrowse"
                         Content="..." 
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonIssueSheetStorePathBrowse_Click" />
@@ -305,67 +308,104 @@
                     <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"
                         Text="Directory store"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,5,5"
                         Text="{Binding DirectoryStorePath}"
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <Button Grid.Row="5" Grid.Column="3" Margin="0,0,0,5"
+                    <Button Grid.Row="5" Grid.Column="5" Margin="0,0,0,5"
                         x:Name="buttonDirectoryStorePathBrowse"
                         Content="..." 
                         IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" Click="buttonDirectoryStorePathBrowse_Click"  />
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="0,5,0,5"
+                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" Margin="0,5,0,5"
+                               Text="Report filename settings"
+                               IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>                    
+                    
+                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,5,0,5"
                                Text="Report"
                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBlock Grid.Row="6" Grid.Column="1" Margin="0,5,0,5"
-                               Text="Document Type Code"
+                    
+                     <TextBlock Grid.Row="7" Grid.Column="1" Margin="0,5,0,5"
+                               Text="Volume / Functional"
                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBlock Grid.Row="6" Grid.Column="2" Margin="0,5,0,5"
-                               Text="Document Number"
+                    <TextBlock Grid.Row="7" Grid.Column="2" Margin="0,5,0,5"
+                               Text="Level / Spatial"
+                               IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>                   
+                    
+                    <TextBlock Grid.Row="7" Grid.Column="3" Margin="0,5,0,5"
+                               Text="Type Code"
+                               IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
+                    <TextBlock Grid.Row="7" Grid.Column="4" Margin="0,5,0,5"
+                               Text="Number"
                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
                     
-                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="0,0,0,5"
+                    <TextBlock Grid.Row="8" Grid.Column="0" Margin="0,0,0,5"
                                  Text="Project Directory"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBox Grid.Row="7" Grid.Column="1" Margin="0,0,5,5"
+
+                    <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,5,5"
+                                Text="{Binding ProjectDirectoryVolume}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="8" Grid.Column="2" Margin="0,0,5,5"
+                                Text="{Binding ProjectDirectoryLevel}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="8" Grid.Column="3" Margin="0,0,5,5"
                                 Text="{Binding ProjectDirectoryDocumentTypeCode}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="7" Grid.Column="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="8" Grid.Column="4" Margin="0,0,5,5"
                                 Text="{Binding ProjectDirectoryFirstNumber}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                                 PreviewTextInput="NumericTextBox_PreviewTextInput" 
                                 DataObject.Pasting="NumericTextBox_Pasting"/>
 
-                    <TextBlock Grid.Row="8" Grid.Column="0" Margin="0,0,0,5"
+                    <TextBlock Grid.Row="9" Grid.Column="0" Margin="0,0,0,5"
                                  Text="Transmittal Sheet"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBox Grid.Row="8" Grid.Column="1" Margin="0,0,5,5"
+                    <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,5,5"
+                                Text="{Binding TransmittalSheetVolume}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="9" Grid.Column="2" Margin="0,0,5,5"
+                                Text="{Binding TransmittalSheetLevel}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="9" Grid.Column="3" Margin="0,0,5,5"
                                 Text="{Binding TransmittalSheetDocumentTypeCode}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="8" Grid.Column="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="9" Grid.Column="4" Margin="0,0,5,5"
                                 Text="{Binding TransmittalSheetFirstNumber}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                                 PreviewTextInput="NumericTextBox_PreviewTextInput" 
                                 DataObject.Pasting="NumericTextBox_Pasting"/>
 
-                    <TextBlock Grid.Row="9" Grid.Column="0" Margin="0,0,0,5"
+                    <TextBlock Grid.Row="10" Grid.Column="0" Margin="0,0,0,5"
                                  Text="Transmittal Summary"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBox Grid.Row="9" Grid.Column="1" Margin="0,0,5,5"
+                    <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,5,5"
+                                Text="{Binding TransmittalSummaryVolume}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="10" Grid.Column="2" Margin="0,0,5,5"
+                                Text="{Binding TransmittalSummaryLevel}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="10" Grid.Column="3" Margin="0,0,5,5"
                                 Text="{Binding TransmittalSummaryDocumentTypeCode}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="9" Grid.Column="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="10" Grid.Column="4" Margin="0,0,5,5"
                                 Text="{Binding TransmittalSummaryFirstNumber}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                                 PreviewTextInput="NumericTextBox_PreviewTextInput" 
                                 DataObject.Pasting="NumericTextBox_Pasting"/>
 
-                    <TextBlock Grid.Row="10" Grid.Column="0" Margin="0,0,0,5"
+                    <TextBlock Grid.Row="11" Grid.Column="0" Margin="0,0,0,5"
                                  Text="Master Document List"
                                  IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"/>
-                    <TextBox Grid.Row="10" Grid.Column="1" Margin="0,0,5,5"
+                    <TextBox Grid.Row="11" Grid.Column="1" Margin="0,0,5,5"
+                                Text="{Binding MasterDocumentsListVolume}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="11" Grid.Column="2" Margin="0,0,5,5"
+                                Text="{Binding MasterDocumentsListLevel}"
+                                IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
+                    <TextBox Grid.Row="11" Grid.Column="3" Margin="0,0,5,5"
                                 Text="{Binding MasterDocumentsListDocumentTypeCode}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}" />
-                    <TextBox Grid.Row="10" Grid.Column="2" Margin="0,0,5,5"
+                    <TextBox Grid.Row="11" Grid.Column="4" Margin="0,0,5,5"
                                 Text="{Binding MasterDocumentsListFirstNumber}"
                                 IsEnabled="{Binding IsChecked, ElementName=UseDatabase}"
                                 PreviewTextInput="NumericTextBox_PreviewTextInput" 

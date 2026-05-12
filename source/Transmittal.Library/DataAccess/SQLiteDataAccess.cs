@@ -628,6 +628,14 @@ public class SQLiteDataAccess : IDataConnection
         {
             columnsToAdd.Add("ProjectDirectoryFirstNumber", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryFirstNumber TEXT NOT NULL DEFAULT ''");
         }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryVolume", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryVolume", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryLevel", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryLevel", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
         if (!ColumnExists(dbFilePath, "TransmittalSheetDocumentTypeCode", "Settings"))
         {
             columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT ''");
@@ -635,6 +643,14 @@ public class SQLiteDataAccess : IDataConnection
         if (!ColumnExists(dbFilePath, "TransmittalSheetFirstNumber", "Settings"))
         {
             columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT ''");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetVolume", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetVolume", "ALTER TABLE Settings ADD COLUMN TransmittalSheetVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetLevel", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetLevel", "ALTER TABLE Settings ADD COLUMN TransmittalSheetLevel TEXT NOT NULL DEFAULT 'XX'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryDocumentTypeCode", "Settings"))
         {
@@ -644,6 +660,14 @@ public class SQLiteDataAccess : IDataConnection
         {
             columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT ''");
         }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryVolume", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryVolume", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryLevel", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryLevel", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListDocumentTypeCode", "Settings"))
         {
             columnsToAdd.Add("MasterDocumentsListDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListDocumentTypeCode TEXT NOT NULL DEFAULT ''");
@@ -651,6 +675,14 @@ public class SQLiteDataAccess : IDataConnection
         if (!ColumnExists(dbFilePath, "MasterDocumentsListFirstNumber", "Settings"))
         {
             columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT ''");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListVolume", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListVolume", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListLevel", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListLevel", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListLevel TEXT NOT NULL DEFAULT 'XX'");
         }
 
         if (columnsToAdd.Count == 0)

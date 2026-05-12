@@ -150,6 +150,18 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [Required]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _projectDirectoryVolume;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _projectDirectoryLevel;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _transmittalSheetDocumentTypeCode;
 
     [ObservableProperty]
@@ -157,6 +169,18 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _transmittalSheetFirstNumber;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSheetVolume;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSheetLevel;
 
     [ObservableProperty]
     [Required]
@@ -174,6 +198,18 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [Required]
     [NotifyDataErrorInfo]
     [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSummaryVolume;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _transmittalSummaryLevel;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _masterDocumentsListDocumentTypeCode;
 
     [ObservableProperty]
@@ -182,6 +218,17 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
     private string _masterDocumentsListFirstNumber;
 
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _masterDocumentsListVolume;
+
+    [ObservableProperty]
+    [Required]
+    [NotifyDataErrorInfo]
+    [NotifyPropertyChangedFor(nameof(HasAnyErrors))]
+    private string _masterDocumentsListLevel;
 
     [ObservableProperty]
     private bool _useCustomSharedParameters;
@@ -450,12 +497,23 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         ProjectDirectoryDocumentTypeCode = _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode;
         ProjectDirectoryFirstNumber = _settingsService.GlobalSettings.ProjectDirectoryFirstNumber;
+        ProjectDirectoryVolume = _settingsService.GlobalSettings.ProjectDirectoryVolume;
+        ProjectDirectoryLevel = _settingsService.GlobalSettings.ProjectDirectoryLevel;
+
         TransmittalSheetDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode;
         TransmittalSheetFirstNumber = _settingsService.GlobalSettings.TransmittalSheetFirstNumber;
+        TransmittalSheetVolume = _settingsService.GlobalSettings.TransmittalSheetVolume;
+        TransmittalSheetLevel = _settingsService.GlobalSettings.TransmittalSheetLevel;
+
         TransmittalSummaryDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode;
         TransmittalSummaryFirstNumber = _settingsService.GlobalSettings.TransmittalSummaryFirstNumber;
+        TransmittalSummaryVolume = _settingsService.GlobalSettings.TransmittalSummaryVolume;
+        TransmittalSummaryLevel = _settingsService.GlobalSettings.TransmittalSummaryLevel;
+
         MasterDocumentsListDocumentTypeCode = _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode;
         MasterDocumentsListFirstNumber = _settingsService.GlobalSettings.MasterDocumentsListFirstNumber;
+        MasterDocumentsListVolume = _settingsService.GlobalSettings.MasterDocumentsListVolume;
+        MasterDocumentsListLevel = _settingsService.GlobalSettings.MasterDocumentsListLevel;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = _settingsService.GlobalSettings.UseCustomSharedParameters;
@@ -506,12 +564,23 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         ProjectDirectoryDocumentTypeCode = settings.ProjectDirectoryDocumentTypeCode;
         ProjectDirectoryFirstNumber = settings.ProjectDirectoryFirstNumber;
-        TransmittalSheetDocumentTypeCode = _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode;
+        ProjectDirectoryVolume = settings.ProjectDirectoryVolume;
+        ProjectDirectoryLevel = settings.ProjectDirectoryLevel;
+
+        TransmittalSheetDocumentTypeCode = settings.TransmittalSheetDocumentTypeCode;
         TransmittalSheetFirstNumber = settings.TransmittalSheetFirstNumber;
+        TransmittalSheetVolume = settings.TransmittalSheetVolume;
+        TransmittalSheetLevel = settings.TransmittalSheetLevel;
+
         TransmittalSummaryDocumentTypeCode = settings.TransmittalSummaryDocumentTypeCode;
         TransmittalSummaryFirstNumber = settings.TransmittalSummaryFirstNumber;
+        TransmittalSummaryVolume = settings.TransmittalSummaryVolume;
+        TransmittalSummaryLevel = settings.TransmittalSummaryLevel;
+
         MasterDocumentsListDocumentTypeCode = settings.MasterDocumentsListDocumentTypeCode;
         MasterDocumentsListFirstNumber = settings.MasterDocumentsListFirstNumber;
+        MasterDocumentsListVolume = settings.MasterDocumentsListVolume;
+        MasterDocumentsListLevel = settings.MasterDocumentsListLevel;
 
         //ADVANCED SETTINGS
         UseCustomSharedParameters = settings.UseCustomSharedParameters;
@@ -561,12 +630,23 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
 
         _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode = ProjectDirectoryDocumentTypeCode;
         _settingsService.GlobalSettings.ProjectDirectoryFirstNumber = ProjectDirectoryFirstNumber;
+        _settingsService.GlobalSettings.ProjectDirectoryVolume = ProjectDirectoryVolume;
+        _settingsService.GlobalSettings.ProjectDirectoryLevel = ProjectDirectoryLevel;
+        
         _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode = TransmittalSheetDocumentTypeCode;
         _settingsService.GlobalSettings.TransmittalSheetFirstNumber = TransmittalSheetFirstNumber;
+        _settingsService.GlobalSettings.TransmittalSheetVolume = TransmittalSheetVolume;
+        _settingsService.GlobalSettings.TransmittalSheetLevel = TransmittalSheetLevel;
+        
         _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode = TransmittalSummaryDocumentTypeCode;
         _settingsService.GlobalSettings.TransmittalSummaryFirstNumber = TransmittalSummaryFirstNumber;
+        _settingsService.GlobalSettings.TransmittalSummaryVolume = TransmittalSummaryVolume;
+        _settingsService.GlobalSettings.TransmittalSummaryLevel = TransmittalSummaryLevel;
+        
         _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode = MasterDocumentsListDocumentTypeCode;
         _settingsService.GlobalSettings.MasterDocumentsListFirstNumber = MasterDocumentsListFirstNumber;
+        _settingsService.GlobalSettings.MasterDocumentsListVolume = MasterDocumentsListVolume;
+        _settingsService.GlobalSettings.MasterDocumentsListLevel = MasterDocumentsListLevel;
 
         _settingsService.GlobalSettings.UseCustomSharedParameters = UseCustomSharedParameters;
         

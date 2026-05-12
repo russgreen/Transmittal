@@ -138,7 +138,7 @@
                                            AllowFiltering="True"
                                            AllowSorting="True"
                                            NavigationMode="Cell" 
-                                           SelectionMode="Extended" 
+                                           SelectionMode="Extended"
                                            GridValidationMode="InView" 
                                            CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
