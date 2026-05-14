@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using Nice3point.Revit.Extensions;
 using Serilog.Context;
 using Serilog.Core;
@@ -133,7 +134,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private DWFImageQuality _dwfImageQuality;
 
-    public List<DWGLayerMappingModel> DwgLayerMappings { get; private set; }
+    [ObservableProperty]
+    private ObservableCollection<DWGLayerMappingModel> _dwgLayerMappings;
     [ObservableProperty]
     private DWGLayerMappingModel _dwgLayerMapping;
 
@@ -197,6 +199,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private List<DocumentModel> _exportedFiles = new();
     private List<string> _additionalExportFiles = new();
+    private DWGLayerMappingModel _customDwgLayerMapping;
+    private bool _suppressDwgLayerMappingChange;
+    private DWGLayerMappingModel _previousDwgLayerMapping;
 
     public TransmittalViewModel()
     {
@@ -314,12 +319,198 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         DwfColor = ColorDepthType.Color;
         DwfImageQuality = DWFImageQuality.Default;
 
-        DwgExportOptions.MergedViews = true; //force this to merge the views by default
-        DwgLayerMappings = _exportDWGService.GetDWGLayerMappings();
-        DwgLayerMapping = DwgLayerMappings.FirstOrDefault();
+        DwgExportOptions = _exportDWGService.GetDocumentDWGExportOptions(App.RevitDocument);
+        InitializeDwgLayerMappings(DwgExportOptions.LayerMapping);
 
         DwgVersions = Enum.GetValues(typeof(ACADVersion));
-        DwgVersion = ACADVersion.Default;        
+        DwgVersion = DwgExportOptions.FileVersion;
+    }
+
+    private void InitializeDwgLayerMappings(string layerMapping)
+    {
+        var mappings = _exportDWGService.GetDWGLayerMappings();
+        _customDwgLayerMapping = null;
+
+        var selectedMapping = SelectDwgLayerMappingModel(mappings, layerMapping);
+        mappings.Add(CreateLoadLayerMappingAction());
+
+        DwgLayerMappings = new ObservableCollection<DWGLayerMappingModel>(mappings);
+        SetDwgLayerMappingSelection(selectedMapping ?? DwgLayerMappings.FirstOrDefault(x => x.IsActionItem == false), false);
+    }
+
+    private DWGLayerMappingModel SelectDwgLayerMappingModel(List<DWGLayerMappingModel> mappings, string layerMapping)
+    {
+        if (string.IsNullOrWhiteSpace(layerMapping))
+        {
+            return mappings.FirstOrDefault();
+        }
+
+        var standardMapping = mappings.FirstOrDefault(x => string.Equals(x.LayerMapping, layerMapping, StringComparison.OrdinalIgnoreCase));
+        if (standardMapping != null)
+        {
+            return standardMapping;
+        }
+
+        _customDwgLayerMapping = CreateCustomLayerMapping(layerMapping);
+        mappings.Add(_customDwgLayerMapping);
+        return _customDwgLayerMapping;
+    }
+
+    private DWGLayerMappingModel CreateCustomLayerMapping(string layerMapping)
+    {
+        var fileName = Path.GetFileName(layerMapping);
+
+        return new DWGLayerMappingModel()
+        {
+            Id = 1000,
+            Name = string.IsNullOrWhiteSpace(fileName) ? layerMapping : fileName,
+            LayerMapping = layerMapping,
+            IsCustom = true
+        };
+    }
+
+    private DWGLayerMappingModel CreateLoadLayerMappingAction()
+    {
+        return new DWGLayerMappingModel()
+        {
+            Id = 9999,
+            Name = "Load settings from file....",
+            LayerMapping = string.Empty,
+            IsActionItem = true
+        };
+    }
+
+    private void SetDwgLayerMappingSelection(DWGLayerMappingModel mapping, bool persist)
+    {
+        if (mapping == null)
+        {
+            return;
+        }
+
+        var mappingToSelect = ResolveCurrentDwgLayerMapping(mapping);
+        if (mappingToSelect == null)
+        {
+            return;
+        }
+
+        _suppressDwgLayerMappingChange = true;
+        DwgLayerMapping = null;
+        DwgLayerMapping = mappingToSelect;
+        _suppressDwgLayerMappingChange = false;
+
+        ApplyDwgLayerMapping(mappingToSelect, persist);
+    }
+
+    private DWGLayerMappingModel ResolveCurrentDwgLayerMapping(DWGLayerMappingModel mapping)
+    {
+        if (mapping == null)
+        {
+            return null;
+        }
+
+        if (DwgLayerMappings == null || DwgLayerMappings.Count == 0)
+        {
+            return mapping;
+        }
+
+        var idMatch = DwgLayerMappings.FirstOrDefault(x => x.Id == mapping.Id && x.IsActionItem == mapping.IsActionItem);
+        if (idMatch != null)
+        {
+            return idMatch;
+        }
+
+        if (!string.IsNullOrWhiteSpace(mapping.LayerMapping))
+        {
+            var layerMatch = DwgLayerMappings.FirstOrDefault(x =>
+                x.IsActionItem == mapping.IsActionItem &&
+                string.Equals(x.LayerMapping, mapping.LayerMapping, StringComparison.OrdinalIgnoreCase));
+
+            if (layerMatch != null)
+            {
+                return layerMatch;
+            }
+        }
+
+        return DwgLayerMappings.FirstOrDefault(x => x.IsActionItem == false);
+    }
+
+    private void ApplyDwgLayerMapping(DWGLayerMappingModel mapping, bool persist)
+    {
+        if (mapping == null || mapping.IsActionItem)
+        {
+            return;
+        }
+
+        _previousDwgLayerMapping = mapping;
+        DwgExportOptions.LayerMapping = mapping.LayerMapping;
+
+        if (persist)
+        {
+            _exportDWGService.SaveDocumentDWGExportOptions(App.RevitDocument, DwgExportOptions);
+        }
+    }
+
+    partial void OnDwgLayerMappingChanged(DWGLayerMappingModel value)
+    {
+        if (_suppressDwgLayerMappingChange || value == null)
+        {
+            return;
+        }
+
+        if (value.IsActionItem)
+        {
+            var previousMapping = _previousDwgLayerMapping ?? DwgLayerMappings?.FirstOrDefault(x => x.IsActionItem == false);
+            if (previousMapping != null)
+            {
+                SetDwgLayerMappingSelection(previousMapping, false);
+            }
+
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                SelectCustomLayerMappingFile(previousMapping);
+            }), DispatcherPriority.Background);
+
+            return;
+        }
+
+        ApplyDwgLayerMapping(value, true);
+    }
+
+    private void SelectCustomLayerMappingFile(DWGLayerMappingModel previousMapping)
+    {
+        var dialog = new OpenFileDialog
+        {
+            Filter = "Layer Mapping Files (*.txt)|*.txt|All files (*.*)|*.*",
+            Title = "Select layer mapping file"
+        };
+
+        if (!string.IsNullOrWhiteSpace(_customDwgLayerMapping?.LayerMapping))
+        {
+            dialog.InitialDirectory = Path.GetDirectoryName(_customDwgLayerMapping.LayerMapping);
+        }
+        else if (!string.IsNullOrWhiteSpace(DwgExportOptions?.LayerMapping) && File.Exists(DwgExportOptions.LayerMapping))
+        {
+            dialog.InitialDirectory = Path.GetDirectoryName(DwgExportOptions.LayerMapping);
+        }
+
+        if (dialog.ShowDialog() == true)
+        {
+            _customDwgLayerMapping = CreateCustomLayerMapping(dialog.FileName);
+
+            var mappings = _exportDWGService.GetDWGLayerMappings();
+            mappings.Add(_customDwgLayerMapping);
+            mappings.Add(CreateLoadLayerMappingAction());
+            DwgLayerMappings = new ObservableCollection<DWGLayerMappingModel>(mappings);
+
+            SetDwgLayerMappingSelection(_customDwgLayerMapping, true);
+            return;
+        }
+
+        var mappingToRestore = previousMapping ?? DwgLayerMappings?.FirstOrDefault(x => x.IsActionItem == false);
+        if (mappingToRestore != null)
+        {
+            SetDwgLayerMappingSelection(mappingToRestore, false);
+        }
     }
 
     private void WireUpDistributionPage()
@@ -1203,7 +1394,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SendProgressMessage(totalSheets);
 
         DwgExportOptions.FileVersion = (ACADVersion)DwgVersion;
-        DwgExportOptions.LayerMapping = DwgLayerMapping.Name;
+        DwgExportOptions.LayerMapping = DwgLayerMapping?.LayerMapping ?? DwgExportOptions.LayerMapping;
 
 #if REVIT2025_OR_GREATER
         var folderPath = _settingsService.GlobalSettings.DrawingIssueStore.ParseFolderName(Enums.ExportFormatType.DWG.ToString(), drawingSheet.DrgPackage, drawingSheet.DrgSheetCollection);

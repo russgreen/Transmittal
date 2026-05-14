@@ -15,5 +15,9 @@ internal interface IExportDWGService
     /// <returns>full path to the exported file</returns>
     string ExportDWG(string exportFileName, string folderPath, DWGExportOptions dwgExportOptions, ViewSet views, Document exportDocument);
 
+    DWGExportOptions GetDocumentDWGExportOptions(Document exportDocument);
+
+    void SaveDocumentDWGExportOptions(Document exportDocument, DWGExportOptions dwgExportOptions);
+
     List<DWGLayerMappingModel> GetDWGLayerMappings();
 }

@@ -178,7 +178,6 @@
     <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Solution="Debug 2021|Any CPU" Project="false" />
     <Build Solution="Debug 2022|Any CPU" Project="false" />
-    <Build Solution="Debug 2023|Any CPU" Project="false" />
     <Build Solution="Debug 2024|Any CPU" Project="false" />
     <Build Solution="Debug 2025|Any CPU" Project="false" />
     <Build Solution="Debug 2026|Any CPU" Project="false" />
@@ -201,7 +200,7 @@
     <BuildType Solution="Release 2027|*" Project="Release" />
     <Build Solution="Debug 2021|*" Project="false" />
     <Build Solution="Debug 2022|*" Project="false" />
-    <Build Solution="Debug 2023|*" Project="false" />
+    <Build Solution="Debug 2023|x64" Project="false" />
     <Build Solution="Debug 2024|*" Project="false" />
     <Build Solution="Debug 2025|*" Project="false" />
     <Build Solution="Debug 2026|*" Project="false" />
