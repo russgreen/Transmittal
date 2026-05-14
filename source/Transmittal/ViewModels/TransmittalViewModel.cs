@@ -1838,7 +1838,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     if (retryCount > 3)
                     {
                         _logger.LogError(ex, "Error copying email addresses to clipboard");
-                        _logger.LogError("Email addresses : {emailAddresses}", emailAddresses.ToString());
                         break;
                     }
                     Thread.Sleep(100);
