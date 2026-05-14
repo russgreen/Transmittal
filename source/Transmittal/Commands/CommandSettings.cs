@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
 using Serilog.Context;
+using Transmittal.Exceptions;
 using Transmittal.Services;
 
 namespace Transmittal.Commands;
@@ -24,7 +25,16 @@ internal class CommandSettings : ExternalCommand
         App.CachedUiApp = RevitContext.UiApplication;
         App.RevitDocument = RevitContext.ActiveDocument;
 
-        var newView = new Views.SettingsView();
-        newView.ShowDialog();
+        try
+        {
+            var newView = new Views.SettingsView();
+            newView.ShowDialog();
+        }
+        catch (SchemaVersionTooNewException ex)
+        {
+            // Newer schema detected - user needs to upgrade app, don't show settings
+            _logger.LogError(ex, "Document schema version too new");
+            return;
+        }
     }
 }

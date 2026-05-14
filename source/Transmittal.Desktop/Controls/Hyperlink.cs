@@ -32,7 +32,9 @@ public class Hyperlink : Button
     private void RequestNavigate(object sender, RoutedEventArgs eventArgs)
     {
         if (string.IsNullOrEmpty(NavigateUri))
+        {
             return;
+        }
 
         System.Diagnostics.ProcessStartInfo sInfo = new(new Uri(NavigateUri).AbsoluteUri)
         {

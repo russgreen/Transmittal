@@ -7,6 +7,7 @@ using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
 using Serilog.Context;
 using System.Diagnostics;
+using Transmittal.Exceptions;
 using Transmittal.Library.Services;
 using Transmittal.Services;
 
@@ -57,18 +58,27 @@ public class CommandTransmittal : ExternalCommand
             // add a showdialog watcher
             App.CachedUiApp.DialogBoxShowing += AppDialogShowing;
 
-            if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
+            try
             {
-                var settingsView = new Views.SettingsView();
-                settingsView.ShowDialog();
+                if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
+                {
+                    var settingsView = new Views.SettingsView();
+                    settingsView.ShowDialog();
+                }
+                else
+                {
+                    var transmittalView = new Views.TransmittalView();
+                    transmittalView.ShowDialog();
+                }
             }
-            else
+            catch (SchemaVersionTooNewException ex)
             {
-                var transmittalView = new Views.TransmittalView();
-                transmittalView.ShowDialog();
+                // Newer schema detected - user needs to upgrade app, don't show settings
+                _logger.LogError(ex, "Document schema version too new");
+                return;
             }
 
-            return;            
+            return;
             
         }
         catch (Exception ex)

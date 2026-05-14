@@ -21,11 +21,16 @@ public partial class AboutView : Window
 
     private void OpenLink(object sender, RoutedEventArgs e)
     {
-        if (e.OriginalSource is not Hyperlink link) return;
-
+        if (e.OriginalSource is not Hyperlink link)
+        {
+            return;
+        }
 
         var uri = link.NavigateUri;
-        if (uri == null) return;
+        if (uri == null)
+        {
+            return;
+        }
 
         var psi = new ProcessStartInfo
         {
