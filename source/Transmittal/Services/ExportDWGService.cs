@@ -127,14 +127,66 @@ internal class ExportDWGService : IExportDWGService
         return fullPath;
     }
 
+    public DWGExportOptions GetDocumentDWGExportOptions(Document exportDocument)
+    {
+        if (exportDocument == null)
+        {
+            throw new ArgumentNullException(nameof(exportDocument));
+        }
+
+        var activeSettings = ExportDWGSettings.GetActivePredefinedSettings(exportDocument);
+        var exportOptions = activeSettings?.GetDWGExportOptions();
+
+        return exportOptions ?? new DWGExportOptions();
+    }
+
+    public void SaveDocumentDWGExportOptions(Document exportDocument, DWGExportOptions dwgExportOptions)
+    {
+        if (exportDocument == null)
+        {
+            throw new ArgumentNullException(nameof(exportDocument));
+        }
+
+        if (dwgExportOptions == null)
+        {
+            throw new ArgumentNullException(nameof(dwgExportOptions));
+        }
+
+        var activeSettings = ExportDWGSettings.GetActivePredefinedSettings(exportDocument);
+        if (activeSettings == null)
+        {
+            _logger.LogInformation("No active predefined DWG export settings found for the current document.");
+            return;
+        }
+
+        using (Transaction trans = new Transaction(exportDocument, "Update DWG Export Options"))
+        {
+            try
+            {
+                trans.Start();
+                activeSettings.SetDWGExportOptions(dwgExportOptions);
+                trans.Commit();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating DWG export options");
+                if (trans.GetStatus() == TransactionStatus.Started)
+                {
+                    trans.RollBack();
+                }
+                throw;
+            }
+        }
+    }
+
     public List<DWGLayerMappingModel> GetDWGLayerMappings()
     {
         return new()
         {
-            new DWGLayerMappingModel() { Id = 0, Name = "BS1192" },
-            new DWGLayerMappingModel() { Id = 1, Name = "AIA" },
-            new DWGLayerMappingModel() { Id = 2, Name = "CP83" },
-            new DWGLayerMappingModel() { Id = 3, Name = "ISO13567" }
+            new DWGLayerMappingModel() { Id = 0, Name = "BS1192", LayerMapping = "BS1192" },
+            new DWGLayerMappingModel() { Id = 1, Name = "AIA", LayerMapping = "AIA" },
+            new DWGLayerMappingModel() { Id = 2, Name = "CP83", LayerMapping = "CP83" },
+            new DWGLayerMappingModel() { Id = 3, Name = "ISO13567", LayerMapping = "ISO13567" }
         };
     }
 }

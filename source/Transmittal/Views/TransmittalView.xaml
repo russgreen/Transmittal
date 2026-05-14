@@ -296,7 +296,7 @@
                                     <StackPanel Width="150">
                                         <TextBlock Text="Layer mapping" />
                                         <ComboBox ItemsSource="{Binding DwgLayerMappings}" 
-                                              SelectedItem="{Binding DwgLayerMapping}">
+                                              SelectedItem="{Binding DwgLayerMapping, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"/>
