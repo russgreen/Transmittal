@@ -68,9 +68,13 @@ public partial class RevisionsView : Window
         if (sender is System.Windows.Controls.TextBox box)
         {
             if (string.IsNullOrEmpty(box.Text))
+            {
                 box.Background = (ImageBrush)FindResource("watermark");
+            }
             else
+            {
                 box.Background = null;
+            }
         }
 
         this.sfDataGridRevisions.SearchHelper.SearchBrush = Brushes.Green;
@@ -89,7 +93,9 @@ public class GridSelectionControllerExt : GridSelectionController
     {
         base.ProcessSelectedItemChanged(handle);
         if (handle.NewValue != null)
+        {
             this.DataGrid.ScrollInView(this.CurrentCellManager.CurrentRowColumnIndex);
+        }
     }
 
 }

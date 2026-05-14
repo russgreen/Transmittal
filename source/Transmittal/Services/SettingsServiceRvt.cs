@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB.ExtensibleStorage;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Extensions;
+using Transmittal.Exceptions;
 using Transmittal.Library.DataAccess;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Models;
@@ -21,6 +22,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private const string _schemaNameV3 = "TransmittalAppSettingsV3";
     private const string _schemaGuidV3 = "8D2FD527-CF54-45DB-9248-C65F6729D18B";
     private const string _vendorID = "Transmittal";
+    private const int _latestSchemaVersion = 3;
 
     // project paramaters
     private const string _projectIdentifierParamGuid = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
@@ -39,6 +41,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private readonly ISettingsService _settingsService;
     private readonly IDataConnection _dataConnection;
     private readonly ILogger<SettingsServiceRvt> _logger;
+    private readonly IMessageBoxService _messageBox;
 
     private Schema _oldSchemaV0 = null;
     private Schema _oldSchemaV1 = null;
@@ -47,11 +50,13 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
     public SettingsServiceRvt(IDataConnection dataConnection, 
         ISettingsService settingsService,
-        ILogger<SettingsServiceRvt> logger)
+        ILogger<SettingsServiceRvt> logger,
+        IMessageBoxService messageBox)
     {
         _settingsService = settingsService;
         _dataConnection = dataConnection;
         _logger = logger;
+        _messageBox = messageBox;
 
         _schema = null;
     }
@@ -87,6 +92,15 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             _schema = GetSchema(new Guid(_schemaGuidV3));
             _logger.LogDebug("Found schema V3");
+        }
+
+        // Check for newer schema versions that this application doesn't support
+        int newerSchemaVersion = DetectNewerSchemas();
+        if (newerSchemaVersion > _latestSchemaVersion)
+        {
+            _logger.LogWarning("Transmittal settings schema version {NewerVersion} detected, but application only supports up to version {LatestVersion}", newerSchemaVersion, _latestSchemaVersion);
+            _messageBox.ShowOk("Application version", "You appear to be opening a Revit file which was created or edited with a newer version of Transmittal. Please check for software updates.");
+            throw new SchemaVersionTooNewException(newerSchemaVersion, _latestSchemaVersion);
         }
 
         if (_schema != null)
@@ -714,6 +728,53 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             }
             return false;
         }
+    }
+
+    private int DetectNewerSchemas()
+    {
+        int newerSchemaVersion = -1;
+        IList<Schema> schemas = Schema.ListSchemas();
+
+        foreach (Schema schema in schemas)
+        {
+            // Only check schemas belonging to Transmittal vendor
+            if (!schema.VendorId.Equals( _vendorID,  StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            // Check if schema name matches Transmittal pattern
+            if (!schema.SchemaName.StartsWith("TransmittalAppSettings"))
+            {
+                continue;
+            }
+
+            // Extract version number from schema name (e.g., "TransmittalAppSettingsV4" -> 4)
+            string schemaName = schema.SchemaName;
+            int version = 0;
+
+            // Try to parse version from name
+            if (schemaName == "TransmittalAppSettings")
+            {
+                version = 0;
+            }
+            else if (schemaName.StartsWith("TransmittalAppSettingsV") && int.TryParse(schemaName.Substring("TransmittalAppSettingsV".Length), out int parsedVersion))
+            {
+                version = parsedVersion;
+            }
+            else
+            {
+                continue; // Skip if we can't parse the version
+            }
+
+            // Track the highest newer version found
+            if (version > _latestSchemaVersion && version > newerSchemaVersion)
+            {
+                newerSchemaVersion = version;
+            }
+        }
+
+        return newerSchemaVersion;
     }
 
     private DataStorage FindDataStorageElement(Document doc, Schema schema)
