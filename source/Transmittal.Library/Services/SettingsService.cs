@@ -77,20 +77,20 @@ public class SettingsService : ISettingsService
                     GlobalSettings.DrawingIssueStore2 = dbSettings.DrawingIssueStore2 ?? GlobalSettings.DrawingIssueStore2;
                     GlobalSettings.UseDrawingIssueStore2 = dbSettings.UseDrawingIssueStore2 ? dbSettings.UseDrawingIssueStore2 : GlobalSettings.UseDrawingIssueStore2;
 
-                    GlobalSettings.ProjectDirectoryDocumentTypeCode = dbSettings.ProjectDirectoryDocumentTypeCode ?? string.Empty;
-                    GlobalSettings.ProjectDirectoryFirstNumber = dbSettings.ProjectDirectoryFirstNumber ?? string.Empty;
+                    GlobalSettings.ProjectDirectoryDocumentTypeCode = dbSettings.ProjectDirectoryDocumentTypeCode ?? GlobalSettings.ProjectDirectoryDocumentTypeCode;
+                    GlobalSettings.ProjectDirectoryFirstNumber = dbSettings.ProjectDirectoryFirstNumber ?? GlobalSettings.ProjectDirectoryFirstNumber;
                     GlobalSettings.ProjectDirectoryVolume = dbSettings.ProjectDirectoryVolume ?? GlobalSettings.ProjectDirectoryVolume;
                     GlobalSettings.ProjectDirectoryLevel = dbSettings.ProjectDirectoryLevel ?? GlobalSettings.ProjectDirectoryLevel;
-                    GlobalSettings.TransmittalSheetDocumentTypeCode = dbSettings.TransmittalSheetDocumentTypeCode ?? string.Empty;
-                    GlobalSettings.TransmittalSheetFirstNumber = dbSettings.TransmittalSheetFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSheetDocumentTypeCode = dbSettings.TransmittalSheetDocumentTypeCode ?? GlobalSettings.TransmittalSheetDocumentTypeCode;
+                    GlobalSettings.TransmittalSheetFirstNumber = dbSettings.TransmittalSheetFirstNumber ?? GlobalSettings.TransmittalSheetFirstNumber;
                     GlobalSettings.TransmittalSheetVolume = dbSettings.TransmittalSheetVolume ?? GlobalSettings.TransmittalSheetVolume;
                     GlobalSettings.TransmittalSheetLevel = dbSettings.TransmittalSheetLevel ?? GlobalSettings.TransmittalSheetLevel;
-                    GlobalSettings.TransmittalSummaryDocumentTypeCode = dbSettings.TransmittalSummaryDocumentTypeCode ?? string.Empty;
-                    GlobalSettings.TransmittalSummaryFirstNumber = dbSettings.TransmittalSummaryFirstNumber ?? string.Empty;
+                    GlobalSettings.TransmittalSummaryDocumentTypeCode = dbSettings.TransmittalSummaryDocumentTypeCode ?? GlobalSettings.TransmittalSummaryDocumentTypeCode;
+                    GlobalSettings.TransmittalSummaryFirstNumber = dbSettings.TransmittalSummaryFirstNumber ?? GlobalSettings.TransmittalSummaryFirstNumber;
                     GlobalSettings.TransmittalSummaryVolume = dbSettings.TransmittalSummaryVolume ?? GlobalSettings.TransmittalSummaryVolume;
                     GlobalSettings.TransmittalSummaryLevel = dbSettings.TransmittalSummaryLevel ?? GlobalSettings.TransmittalSummaryLevel;
-                    GlobalSettings.MasterDocumentsListDocumentTypeCode = dbSettings.MasterDocumentsListDocumentTypeCode ?? string.Empty;
-                    GlobalSettings.MasterDocumentsListFirstNumber = dbSettings.MasterDocumentsListFirstNumber ?? string.Empty;
+                    GlobalSettings.MasterDocumentsListDocumentTypeCode = dbSettings.MasterDocumentsListDocumentTypeCode ?? GlobalSettings.MasterDocumentsListDocumentTypeCode;
+                    GlobalSettings.MasterDocumentsListFirstNumber = dbSettings.MasterDocumentsListFirstNumber ?? GlobalSettings.MasterDocumentsListFirstNumber;
                     GlobalSettings.MasterDocumentsListVolume = dbSettings.MasterDocumentsListVolume ?? GlobalSettings.MasterDocumentsListVolume;
                     GlobalSettings.MasterDocumentsListLevel = dbSettings.MasterDocumentsListLevel ?? GlobalSettings.MasterDocumentsListLevel;
 
