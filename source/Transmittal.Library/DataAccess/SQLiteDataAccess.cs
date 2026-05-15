@@ -638,11 +638,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT 'DY'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT '0001'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetVolume", "Settings"))
         {
@@ -654,11 +654,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSummaryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryDocumentTypeCode TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("TransmittalSummaryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryDocumentTypeCode TEXT NOT NULL DEFAULT 'TL'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT '0002'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryVolume", "Settings"))
         {
@@ -670,11 +670,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("MasterDocumentsListDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListDocumentTypeCode TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("MasterDocumentsListDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListDocumentTypeCode TEXT NOT NULL DEFAULT 'MX'");
         }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT '0001'");
         }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListVolume", "Settings"))
         {
