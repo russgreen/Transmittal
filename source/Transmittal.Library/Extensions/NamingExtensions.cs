@@ -217,7 +217,9 @@ public static class NamingExtensions
     public static bool IsValidEmailAddress(this string inputString)
     {
         if (string.IsNullOrWhiteSpace(inputString))
+        {
             return false;
+        }
 
         try
         {
@@ -226,7 +228,9 @@ public static class NamingExtensions
 
             // Examines if the email is in proper form
             if (!Regex.IsMatch(inputString, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250)))
+            {
                 return false;
+            }
         }
         catch (RegexMatchTimeoutException)
         {
