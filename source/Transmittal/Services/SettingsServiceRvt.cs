@@ -25,7 +25,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     private const string _schemaNameV4 = "TransmittalAppSettingsV4";
     private const string _schemaGuidV4 = "5A3671ED-90E7-48B3-8BC1-D2C37CF31D5A";
     private const string _vendorID = "Transmittal";
-    private const int _latestSchemaVersion = 3;
+    private const int _latestSchemaVersion = 4;
 
     // project paramaters
     private const string _projectIdentifierParamGuid = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
@@ -142,7 +142,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
             }
             if (_oldSchemaV3 != null)
             {
-                // Migrate forward by materializing v3 values into GlobalSettings before creating v4 schema.
+                //we still have the old schema so get settings from it then delete it
                 _logger.LogDebug("Getting settings from {schemeName}", _oldSchemaV3.SchemaName);
                 GetSettingsFromSchemaV3();
                 DeleteSchema(_oldSchemaV3);
