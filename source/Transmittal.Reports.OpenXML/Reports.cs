@@ -553,6 +553,7 @@ public class Reports : IReportsService
             ["Position"] = person?.Position ?? string.Empty,
             ["ContactName"] = person?.FullName ?? string.Empty,
             ["PersonName"] = person?.FullName ?? string.Empty,
+            ["OrganisationCode"] = company?.OrganisationCode ?? string.Empty,
         };
     }
 
@@ -1289,29 +1290,29 @@ public class Reports : IReportsService
     }
 
     return ordered?.ToList() ?? rows;
-}
-
-private static string GetSortValueForColumn(TemplateRow template, int column, Dictionary<string, string> context)
-{
-    var templateCell = template.Cells.FirstOrDefault(c => c.Column == column);
-    if (templateCell == null || templateCell.HasFormula)
-    {
-        return string.Empty;
     }
-
-    if (templateCell.DataType == XLDataType.Text && !string.IsNullOrWhiteSpace(templateCell.TextValue))
+    
+    private static string GetSortValueForColumn(TemplateRow template, int column, Dictionary<string, string> context)
     {
-        return ReplaceTokens(templateCell.TextValue, context)?.Trim() ?? string.Empty;
+        var templateCell = template.Cells.FirstOrDefault(c => c.Column == column);
+        if (templateCell == null || templateCell.HasFormula)
+        {
+            return string.Empty;
+        }
+    
+        if (templateCell.DataType == XLDataType.Text && !string.IsNullOrWhiteSpace(templateCell.TextValue))
+        {
+            return ReplaceTokens(templateCell.TextValue, context)?.Trim() ?? string.Empty;
+        }
+    
+        return templateCell.Value.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
     }
-
-    return templateCell.Value.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
-}
-
-private sealed class PreparedRow<T>
-{
-    public T Item { get; set; }
-    public Dictionary<string, string> Context { get; set; }
-}
+    
+    private sealed class PreparedRow<T>
+    {
+        public T Item { get; set; }
+        public Dictionary<string, string> Context { get; set; }
+    }
 }
 
 

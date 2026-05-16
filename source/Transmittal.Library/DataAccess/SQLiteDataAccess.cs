@@ -608,9 +608,9 @@ public class SQLiteDataAccess : IDataConnection
     {
         var columnsToAdd = new Dictionary<string, string>();
 
-        if (!ColumnExists(dbFilePath, "OrganizationCode", "Company"))
+        if (!ColumnExists(dbFilePath, "OrganisationCode", "Company"))
         {
-            columnsToAdd.Add("OrganizationCode", "ALTER TABLE Company ADD COLUMN OrganizationCode TEXT");
+            columnsToAdd.Add("OrganisationCode", "ALTER TABLE Company ADD COLUMN OrganisationCode TEXT");
         }
         if (!ColumnExists(dbFilePath, "ShowFileTransfer", "Settings"))
         {

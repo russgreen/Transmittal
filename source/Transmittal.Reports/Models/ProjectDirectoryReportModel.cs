@@ -18,11 +18,11 @@ public class ProjectDirectoryReportModel : Transmittal.Library.Models.ProjectDir
         }
     }
 
-    public string OrganizationCode
+    public string OrganisationCode
     {
         get
         {
-            return Company.OrganizationCode;
+            return Company.OrganisationCode;
         }
     }
 
