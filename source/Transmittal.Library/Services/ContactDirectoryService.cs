@@ -32,8 +32,8 @@ public class ContactDirectoryService : IContactDirectoryService
 
         try
         {
-            string sql = "INSERT INTO Company (CompanyName, Role, Address, Tel, Fax, Website) " +
-                "VALUES (@CompanyName, @Role, @Address, @Tel, @Fax, @Website); " +
+            string sql = "INSERT INTO Company (CompanyName, Role, OrganisationCode, Address, Tel, Fax, Website) " +
+                "VALUES (@CompanyName, @Role, @OrganisationCode, @Address, @Tel, @Fax, @Website); " +
                 "SELECT last_insert_rowid();";
 
             model.ID = _connection.CreateData<CompanyModel, dynamic>(
@@ -42,6 +42,7 @@ public class ContactDirectoryService : IContactDirectoryService
                 {
                     CompanyName = model.CompanyName,
                     Role = model.Role,
+                    OrganisationCode = model.OrganisationCode,
                     Address = model.Address,
                     Tel = model.Tel,
                     Fax = model.Fax,
@@ -264,6 +265,7 @@ public class ContactDirectoryService : IContactDirectoryService
             string sql = "UPDATE Company SET " +
                 "CompanyName = @CompanyName, " +
                 "Role = @Role, " +
+                "OrganisationCode = @OrganisationCode, " +
                 "Address = @Address, " +
                 "Tel = @Tel, " +
                 "Fax = @Fax, " +
@@ -276,6 +278,7 @@ public class ContactDirectoryService : IContactDirectoryService
                 {
                     CompanyName = model.CompanyName,
                     Role = model.Role,
+                    OrganisationCode = model.OrganisationCode,
                     Address = model.Address,
                     Tel = model.Tel,
                     Fax = model.Fax,

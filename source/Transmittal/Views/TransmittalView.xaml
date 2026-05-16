@@ -138,7 +138,7 @@
                                            AllowFiltering="True"
                                            AllowSorting="True"
                                            NavigationMode="Cell" 
-                                           SelectionMode="Extended" 
+                                           SelectionMode="Extended"
                                            GridValidationMode="InView" 
                                            CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
@@ -187,7 +187,9 @@
                             <!--<syncfusion:GridTextColumn MappingName="DrgPaper" HeaderText="Paper" Width="75" />-->
                             <syncfusion:GridTextColumn MappingName="DrgSheetCollection" HeaderText="Sheet Collection" Width="120" IsHidden="True" />
                             <syncfusion:GridTextColumn MappingName="DrgScale" HeaderText="Scale" Width="75" AllowEditing="False"/>
-                            <syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />
+                            <!--<syncfusion:GridTextColumn MappingName="IssueDate" HeaderText="Issue Date" Width="100" />-->
+                            <syncfusion:GridDateTimeColumn HeaderText="Date" MappingName="IssueDate"  Width="100"  />
+
                             <syncfusion:GridTextColumn MappingName="DrgDrawn" HeaderText="Dr" Width="75" />
                             <syncfusion:GridTextColumn MappingName="DrgChecked" HeaderText="Ch" Width="75" />
                             <syncfusion:GridTextColumn MappingName="RevDate" HeaderText="Rev Date" Width="100" AllowEditing="False"/>
@@ -420,10 +422,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Top" 
-                IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
-                Click="Button_AddToDirectory_Click" >
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top" 
+                            IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
+                            Click="Button_AddToDirectory_Click" >
                         <Button.Background>
                             <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
                         </Button.Background>
@@ -469,7 +471,8 @@
                        TextWrapping="Wrap" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20">
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,0,0,20"
+                                Visibility="{Binding ShowFileTransfer, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="SendFileTransfer" HorizontalAlignment="Center"
                                   IsChecked="{Binding SendFileTransfer}" />
                         <TextBlock Text="PREVIEW FEATURE" 

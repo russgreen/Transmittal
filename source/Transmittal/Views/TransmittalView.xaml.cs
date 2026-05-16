@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Transmittal.Library.Services;
 using Transmittal.Models;
 
 namespace Transmittal.Views;
@@ -15,7 +16,8 @@ namespace Transmittal.Views;
 public partial class TransmittalView : Window
 {
     private readonly ViewModels.TransmittalViewModel _viewModel;
-        
+    private readonly ISettingsService _settingsService;
+
     public TransmittalView()
     {
         InitializeComponent();
@@ -23,6 +25,7 @@ public partial class TransmittalView : Window
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
         _viewModel = Host.GetService<ViewModels.TransmittalViewModel>();
+        _settingsService = Host.GetService<ISettingsService>();
         DataContext = _viewModel;
 
         _viewModel.ClosingRequest += (sender, e) => this.Close();
@@ -33,6 +36,13 @@ public partial class TransmittalView : Window
         this.sfDataGridSheets.AutoExpandGroups = true;
         this.sfDataGridSheets.AllowFrozenGroupHeaders = true;
 #endif
+
+        var column = this.sfDataGridSheets.Columns["IssueDate"] as Syncfusion.UI.Xaml.Grid.GridDateTimeColumn;
+        if (column != null)
+        {
+            column.Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern;
+            column.CustomPattern  = _settingsService.GlobalSettings.DateFormatString;
+        }
     }
 
     private void WizardControl_Help(object sender, RoutedEventArgs e)

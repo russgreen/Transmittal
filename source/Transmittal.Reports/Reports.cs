@@ -39,11 +39,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
-                "XX",
-                "DY",
+                _settingsService.GlobalSettings.ProjectDirectoryVolume,
+                _settingsService.GlobalSettings.ProjectDirectoryLevel,
+                _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0001",
+                _settingsService.GlobalSettings.ProjectDirectoryFirstNumber,
                 "ProjectDirectory",
                 null, null, null);
 
@@ -93,11 +93,11 @@ namespace Transmittal.Reports
                             _settingsService.GlobalSettings.ProjectIdentifier,
                             _settingsService.GlobalSettings.ProjectName,
                             _settingsService.GlobalSettings.Originator,
-                            "ZZ",
-                            "XX",
-                            "TL",
+                            _settingsService.GlobalSettings.TransmittalSheetVolume,
+                            _settingsService.GlobalSettings.TransmittalSheetLevel,
+                            _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode,
                             _settingsService.GlobalSettings.Role,
-                            transmittal.ID.ToString().PadLeft(4, '0'),
+                            _settingsService.GlobalSettings.TransmittalSheetFirstNumber.BuildTransmittalSheetNumber(transmittal.ID),
                             "TransmittalRecord",
                             null, null, null);
 
@@ -145,7 +145,7 @@ namespace Transmittal.Reports
             frm.ShowDialog();
         }
 
-        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)//bool useISO, string projectIdentifier, string projectName)
+        public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null, int personID = 0)//bool useISO, string projectIdentifier, string projectName)
         {
             Stream report = GetReport(  "TransmittalSummary.rdlc");
 
@@ -153,11 +153,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
-                "XX",
-                "MX",
+                _settingsService.GlobalSettings.TransmittalSummaryVolume,
+                _settingsService.GlobalSettings.TransmittalSummaryLevel,
+                _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0001",
+                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
                 "TransmittalSummary",
                 null, null, null);
 
@@ -167,11 +167,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
-                "XX",
-                "MX",
+                _settingsService.GlobalSettings.TransmittalSummaryVolume,
+                _settingsService.GlobalSettings.TransmittalSummaryLevel,
+                _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0002",
+                _settingsService.GlobalSettings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID),
                 $"TransmittalSummary_{personName}",
                 null, null, null);
             }
@@ -241,11 +241,11 @@ namespace Transmittal.Reports
                 _settingsService.GlobalSettings.ProjectIdentifier,
                 _settingsService.GlobalSettings.ProjectName,
                 _settingsService.GlobalSettings.Originator,
-                "ZZ",
-                "XX",
-                "MX",
+                _settingsService.GlobalSettings.MasterDocumentsListVolume,
+                _settingsService.GlobalSettings.MasterDocumentsListLevel,
+                _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode,
                 _settingsService.GlobalSettings.Role,
-                "0002",
+                _settingsService.GlobalSettings.MasterDocumentsListFirstNumber,
                 "MasterDocumentsList",
                 null, null, null);
 

@@ -45,5 +45,24 @@ public static class DateExtensions
     public static string ToStringDD(this DateTime date)
     {
         return date.Day.ToString("D2");
-    }    
+    }
+
+    /// <summary>
+    /// Reformats a date string to the specified format string
+    /// </summary>
+    /// <param name="dateString">The date string to reformat</param>
+    /// <param name="targetFormat">The target format string (e.g., "dd.MM.yy")</param>
+    /// <returns>Reformatted date string, or original string if parsing fails</returns>
+    public static string ToDateFormat(this string dateString, string targetFormat)
+    {
+        if (string.IsNullOrWhiteSpace(dateString))
+            return dateString;
+
+        if (DateTime.TryParse(dateString, out DateTime parsedDate))
+        {
+            return parsedDate.ToString(targetFormat);
+        }
+
+        return dateString;
+    }
 }

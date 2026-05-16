@@ -141,5 +141,58 @@ public partial class SettingsModel : ObservableValidator
     private string _sheetPackageParamGuid;
 
     [ObservableProperty]
+    private bool _showFileTransfer = true;
+
+    [ObservableProperty]
     private FileTransferType _fileTransferType;
+
+    [ObservableProperty]
+    private string _projectDirectoryDocumentTypeCode = "DY";
+
+    [ObservableProperty]
+    private string _projectDirectoryFirstNumber = "0001";
+
+    [ObservableProperty]
+    private string _projectDirectoryVolume = "XX";
+
+    [ObservableProperty]
+    private string _projectDirectoryLevel = "XX";
+
+    [ObservableProperty]
+    private string _transmittalSheetDocumentTypeCode = "TL";
+
+    [ObservableProperty]
+    private string _transmittalSheetFirstNumber = "0000";
+
+    [ObservableProperty]
+    private string _transmittalSheetVolume = "XX";
+
+    [ObservableProperty]
+    private string _transmittalSheetLevel = "XX";
+
+    [ObservableProperty]
+    private string _transmittalSummaryDocumentTypeCode = "MX";
+
+    [ObservableProperty]
+    private string _transmittalSummaryFirstNumber = "0001";
+
+    [ObservableProperty]
+    private string _transmittalSummaryVolume = "XX";
+
+    [ObservableProperty]
+    private string _transmittalSummaryLevel = "XX";
+
+    [ObservableProperty]
+    private string _masterDocumentsListDocumentTypeCode = "MX";
+
+    [ObservableProperty]
+    private string _masterDocumentsListFirstNumber = "0002";
+
+    [ObservableProperty]
+    private string _masterDocumentsListVolume = "XX";
+
+    [ObservableProperty]
+    private string _masterDocumentsListLevel = "XX";
+
+
 }

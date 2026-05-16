@@ -177,6 +177,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _sendFileTransfer = false;
 
+    [ObservableProperty]
+    private bool _showFileTransfer = true;
 
     /// SUMMARY PROGRESS
     [ObservableProperty]
@@ -548,6 +550,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IssueFormat = IssueFormats.FirstOrDefault();
 
         FileTransferType = _settingsService.GlobalSettings.FileTransferType;
+        ShowFileTransfer = _settingsService.GlobalSettings.ShowFileTransfer;
 
         if (_settingsService.GlobalSettings.RecordTransmittals == true)
         {
@@ -884,9 +887,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             if ((sheetModel.DrgNumber ?? "") == (sheet.SheetNumber ?? ""))
             {
                 try
-                {
+                {       
                     sheet.FindParameter(BuiltInParameter.SHEET_NAME).Set(sheetModel.DrgName);
-                    sheet.FindParameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(sheetModel.IssueDate);
+                    sheet.FindParameter(BuiltInParameter.SHEET_ISSUE_DATE).Set(sheetModel.IssueDate.ToDateFormat(_settingsService.GlobalSettings.DateFormatString));
                     sheet.FindParameter(BuiltInParameter.SHEET_DRAWN_BY).Set(sheetModel.DrgDrawn);
                     sheet.FindParameter(BuiltInParameter.SHEET_CHECKED_BY).Set(sheetModel.DrgChecked);
 

@@ -17,6 +17,9 @@ public partial class CompanyModel : ObservableValidator
     private string _role;
 
     [ObservableProperty]
+    private string _organisationCode;
+
+    [ObservableProperty]
     private string _address;
 
     [ObservableProperty]

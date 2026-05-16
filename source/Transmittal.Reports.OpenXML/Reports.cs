@@ -41,11 +41,11 @@ public class Reports : IReportsService
             _settingsService.GlobalSettings.ProjectIdentifier,
             _settingsService.GlobalSettings.ProjectName,
             _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "DY",
+                _settingsService.GlobalSettings.ProjectDirectoryVolume,
+                _settingsService.GlobalSettings.ProjectDirectoryLevel,
+            _settingsService.GlobalSettings.ProjectDirectoryDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            "0001",
+            _settingsService.GlobalSettings.ProjectDirectoryFirstNumber,
             "ProjectDirectory",
             null, null, null);
 
@@ -82,11 +82,11 @@ public class Reports : IReportsService
             _settingsService.GlobalSettings.ProjectIdentifier,
             _settingsService.GlobalSettings.ProjectName,
             _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "TL",
+            _settingsService.GlobalSettings.TransmittalSheetVolume,
+            _settingsService.GlobalSettings.TransmittalSheetLevel,
+            _settingsService.GlobalSettings.TransmittalSheetDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            transmittal.ID.ToString().PadLeft(4, '0'),
+            _settingsService.GlobalSettings.TransmittalSheetFirstNumber.BuildTransmittalSheetNumber(transmittal.ID),
             "TransmittalRecord",
             null, null, null);
 
@@ -132,7 +132,7 @@ public class Reports : IReportsService
         SaveAndOpen(workbook, folderPath, fileName);
     }
 
-    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null)
+    public void ShowTransmittalSummaryReport(List<TransmittalModel> transmittals = null, string personName = null, int personID = 0)
     {
         var orderedTransmittals = (transmittals ?? _transmittalService.GetTransmittals())
             .OrderBy(x => x.TransDate)
@@ -143,11 +143,11 @@ public class Reports : IReportsService
             _settingsService.GlobalSettings.ProjectIdentifier,
             _settingsService.GlobalSettings.ProjectName,
             _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "MX",
+                _settingsService.GlobalSettings.TransmittalSummaryVolume,
+                _settingsService.GlobalSettings.TransmittalSummaryLevel,
+            _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            "0001",
+            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
             "TransmittalSummary",
             null, null, null);
 
@@ -157,11 +157,11 @@ public class Reports : IReportsService
             _settingsService.GlobalSettings.ProjectIdentifier,
             _settingsService.GlobalSettings.ProjectName,
             _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "MX",
+                _settingsService.GlobalSettings.TransmittalSummaryVolume,
+                _settingsService.GlobalSettings.TransmittalSummaryLevel,
+            _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            "0002",
+            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID),
             $"TransmittalSummary_{personName}",
             null, null, null);
         }
@@ -248,11 +248,11 @@ public class Reports : IReportsService
             _settingsService.GlobalSettings.ProjectIdentifier,
             _settingsService.GlobalSettings.ProjectName,
             _settingsService.GlobalSettings.Originator,
-            "ZZ",
-            "XX",
-            "MX",
+                _settingsService.GlobalSettings.MasterDocumentsListVolume,
+                _settingsService.GlobalSettings.MasterDocumentsListLevel,
+            _settingsService.GlobalSettings.MasterDocumentsListDocumentTypeCode,
             _settingsService.GlobalSettings.Role,
-            "0002",
+            _settingsService.GlobalSettings.MasterDocumentsListFirstNumber,
             "MasterDocumentsList",
             null, null, null);
 
@@ -553,6 +553,7 @@ public class Reports : IReportsService
             ["Position"] = person?.Position ?? string.Empty,
             ["ContactName"] = person?.FullName ?? string.Empty,
             ["PersonName"] = person?.FullName ?? string.Empty,
+            ["OrganisationCode"] = company?.OrganisationCode ?? string.Empty,
         };
     }
 
@@ -1289,29 +1290,29 @@ public class Reports : IReportsService
     }
 
     return ordered?.ToList() ?? rows;
-}
-
-private static string GetSortValueForColumn(TemplateRow template, int column, Dictionary<string, string> context)
-{
-    var templateCell = template.Cells.FirstOrDefault(c => c.Column == column);
-    if (templateCell == null || templateCell.HasFormula)
-    {
-        return string.Empty;
     }
-
-    if (templateCell.DataType == XLDataType.Text && !string.IsNullOrWhiteSpace(templateCell.TextValue))
+    
+    private static string GetSortValueForColumn(TemplateRow template, int column, Dictionary<string, string> context)
     {
-        return ReplaceTokens(templateCell.TextValue, context)?.Trim() ?? string.Empty;
+        var templateCell = template.Cells.FirstOrDefault(c => c.Column == column);
+        if (templateCell == null || templateCell.HasFormula)
+        {
+            return string.Empty;
+        }
+    
+        if (templateCell.DataType == XLDataType.Text && !string.IsNullOrWhiteSpace(templateCell.TextValue))
+        {
+            return ReplaceTokens(templateCell.TextValue, context)?.Trim() ?? string.Empty;
+        }
+    
+        return templateCell.Value.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
     }
-
-    return templateCell.Value.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
-}
-
-private sealed class PreparedRow<T>
-{
-    public T Item { get; set; }
-    public Dictionary<string, string> Context { get; set; }
-}
+    
+    private sealed class PreparedRow<T>
+    {
+        public T Item { get; set; }
+        public Dictionary<string, string> Context { get; set; }
+    }
 }
 
 

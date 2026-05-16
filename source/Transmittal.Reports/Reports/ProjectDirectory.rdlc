@@ -1,5 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:am="http://schemas.microsoft.com/sqlserver/reporting/authoringmetadata">
+  <am:AuthoringMetadata>
+    <am:CreatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:CreatedBy>
+    <am:UpdatedBy>
+      <am:Name>MSRB</am:Name>
+      <am:Version>15.0.20283.0</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2026-05-16T07:19:06.6478330Z</am:LastModifiedTimestamp>
+  </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="DummyDataSource">
@@ -7,6 +18,7 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>6c34c856-7e4d-4524-9ae0-893086665d85</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -23,6 +35,10 @@
         </Field>
         <Field Name="Role">
           <DataField>Role</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="OrganisationCode">
+          <DataField>OrganisationCode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Address">
@@ -189,7 +205,8 @@
                               <TextRun>
                                 <Value>=
 IIF(String.IsNullOrEmpty(Fields!Role.Value),"", Fields!Role.Value + System.Environment.NewLine )
-+ Fields!CompanyName.Value</Value>
++ Fields!CompanyName.Value + 
+IIF(String.IsNullOrEmpty(Fields!OrganisationCode.Value),"", " (" + Fields!OrganisationCode.Value + ")" )</Value>
                                 <Style>
                                   <FontWeight>Bold</FontWeight>
                                 </Style>

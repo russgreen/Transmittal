@@ -20,7 +20,7 @@ public class SQLiteDataAccess : IDataConnection
     private SqliteConnection _connection;
     private SqliteTransaction _transaction;
 
-    private const int _latestSchemaVersion = 3;
+    private const int _latestSchemaVersion = 4;
 
     public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, 
         IMessageBoxService messageBox)
@@ -222,11 +222,15 @@ public class SQLiteDataAccess : IDataConnection
 
             if (currentVersion == 3)
             {
-                // Current version is 3, check if future schema versions need to be applied
-                //ApplySchemaV4(dbFilePath);
-                //SetDatabaseVersion(dbFilePath, 4);
-                //currentVersion = 4;
-                _logger.LogInformation("Database v3 upgrade check completed");
+                ApplySchemaV4(dbFilePath);
+                SetDatabaseVersion(dbFilePath, 4);
+                currentVersion = 4;
+                _logger.LogInformation("Database upgraded from v3 to v4");
+            }
+
+            if (currentVersion == 4)
+            {
+                _logger.LogInformation("Database v4 upgrade check completed");
             }
 
             if (currentVersion > _latestSchemaVersion)
@@ -319,7 +323,7 @@ public class SQLiteDataAccess : IDataConnection
             columnsToAdd.Add("UseDrawingIssueStore2", "ALTER TABLE Settings ADD COLUMN UseDrawingIssueStore2 INTEGER");
         }
 
-
+       
         if (columnsToAdd.Count == 0)
         {
             _logger.LogDebug("No columns to add to database");
@@ -390,9 +394,9 @@ public class SQLiteDataAccess : IDataConnection
     public void CreateDatabaseSchema(string dbFilePath)
     {
         ApplySchemaV3(dbFilePath);
-        //ApplySchemaV4(dbFilePath);
-        SetDatabaseVersion(dbFilePath, 3);
-        _logger.LogInformation("Database schema v3 created and version set to 3");
+        ApplySchemaV4(dbFilePath);
+        SetDatabaseVersion(dbFilePath, 4);
+        _logger.LogInformation("Database schema v4 created and version set to 4");
     }
 
     private void ApplySchemaV3(string dbFilePath)
@@ -602,7 +606,136 @@ public class SQLiteDataAccess : IDataConnection
 
     private void ApplySchemaV4(string dbFilePath)
     {
-        _logger.LogDebug("ApplySchemaV4: No schema changes for v4 at this time");
+        var columnsToAdd = new Dictionary<string, string>();
+
+        if (!ColumnExists(dbFilePath, "OrganisationCode", "Company"))
+        {
+            columnsToAdd.Add("OrganisationCode", "ALTER TABLE Company ADD COLUMN OrganisationCode TEXT");
+        }
+        if (!ColumnExists(dbFilePath, "ShowFileTransfer", "Settings"))
+        {
+            columnsToAdd.Add("ShowFileTransfer", "ALTER TABLE Settings ADD COLUMN ShowFileTransfer INTEGER NOT NULL DEFAULT 1");
+        }
+        if (!ColumnExists(dbFilePath, "FileTransferType", "Settings"))
+        {
+            columnsToAdd.Add("FileTransferType", "ALTER TABLE Settings ADD COLUMN FileTransferType INTEGER NOT NULL DEFAULT 0");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryDocumentTypeCode", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryDocumentTypeCode TEXT NOT NULL DEFAULT ''");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryFirstNumber", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryFirstNumber", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryFirstNumber TEXT NOT NULL DEFAULT ''");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryVolume", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryVolume", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "ProjectDirectoryLevel", "Settings"))
+        {
+            columnsToAdd.Add("ProjectDirectoryLevel", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetDocumentTypeCode", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT 'DY'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetFirstNumber", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT '0001'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetVolume", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetVolume", "ALTER TABLE Settings ADD COLUMN TransmittalSheetVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSheetLevel", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSheetLevel", "ALTER TABLE Settings ADD COLUMN TransmittalSheetLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryDocumentTypeCode", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryDocumentTypeCode TEXT NOT NULL DEFAULT 'TL'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryFirstNumber", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT '0002'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryVolume", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryVolume", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "TransmittalSummaryLevel", "Settings"))
+        {
+            columnsToAdd.Add("TransmittalSummaryLevel", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListDocumentTypeCode", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListDocumentTypeCode TEXT NOT NULL DEFAULT 'MX'");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListFirstNumber", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT '0001'");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListVolume", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListVolume", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListVolume TEXT NOT NULL DEFAULT 'XX'");
+        }
+        if (!ColumnExists(dbFilePath, "MasterDocumentsListLevel", "Settings"))
+        {
+            columnsToAdd.Add("MasterDocumentsListLevel", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListLevel TEXT NOT NULL DEFAULT 'XX'");
+        }
+
+        if (columnsToAdd.Count == 0)
+        {
+            _logger.LogDebug("ApplySchemaV4: No schema changes required");
+            return;
+        }
+
+        int maxRetries = 3;
+        int retryDelay = 1000;
+        int attempt = 0;
+
+        while (attempt < maxRetries)
+        {
+            try
+            {
+                using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};"))
+                {
+                    dbConnection.Open();
+                    dbConnection.Execute("PRAGMA busy_timeout = 10000;");
+
+                    foreach (var column in columnsToAdd)
+                    {
+                        dbConnection.Execute(column.Value);
+                        _logger.LogInformation("Successfully added column [{ColumnName}] to table.", column.Key);
+                    }
+
+                    return;
+                }
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY)
+            {
+                _logger.LogWarning(ex, "Database is busy. Retrying operation (Attempt {Attempt}/{MaxRetries})...", attempt + 1, maxRetries);
+                attempt++;
+
+                if (attempt < maxRetries)
+                {
+                    System.Threading.Thread.Sleep(retryDelay);
+                }
+                else
+                {
+                    _logger.LogError(ex, "Database v4 schema update failed after {MaxRetries} attempts.", maxRetries);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred during v4 schema update.");
+                throw;
+            }
+        }
+
+        throw new InvalidOperationException("Unexpected error: Retry loop exited without completing v4 schema update.");
     }
 
     private bool ColumnExists(string dbFilePath, string columnName, string tableName)

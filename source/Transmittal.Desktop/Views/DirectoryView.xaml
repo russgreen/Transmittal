@@ -127,6 +127,7 @@
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn MappingName="CompanyName" HeaderText="Company Name" Width="350" />
                         <syncfusion:GridTextColumn MappingName="Role" HeaderText="Role" Width="150" />
+                        <syncfusion:GridTextColumn MappingName="OrganisationCode" HeaderText="Code" Width="100" />
                         <syncfusion:GridTemplateColumn MappingName="Address" HeaderText="Address" TextWrapping="Wrap" Width="200"  >
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>

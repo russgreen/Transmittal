@@ -191,7 +191,8 @@
                     <CheckBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Margin="0,10,0,20" 
                               Content="Zip documents" IsChecked="{Binding ZipDocuments}" />
 
-                    <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top" >
+                    <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Top"
+                                Visibility="{Binding ShowFileTransfer, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <CheckBox x:Name="SendFileTransfer" HorizontalAlignment="Center"
                                   IsChecked="{Binding SendFileTransfer}" />
                         <TextBlock Text="PREVIEW FEATURE"    
