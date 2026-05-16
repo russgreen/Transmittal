@@ -200,6 +200,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private List<DocumentModel> _exportedFiles = new();
     private List<string> _additionalExportFiles = new();
     private DWGLayerMappingModel _customDwgLayerMapping;
+    private int _nextCustomDwgLayerMappingId = 1000;
     private bool _suppressDwgLayerMappingChange;
     private DWGLayerMappingModel _previousDwgLayerMapping;
 
@@ -328,7 +329,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void InitializeDwgLayerMappings(string layerMapping)
     {
+        _nextCustomDwgLayerMappingId = 1000;
         var mappings = _exportDWGService.GetDWGLayerMappings();
+        AddDocumentLayerMappings(mappings);
         _customDwgLayerMapping = null;
 
         var selectedMapping = SelectDwgLayerMappingModel(mappings, layerMapping);
@@ -345,15 +348,36 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return mappings.FirstOrDefault();
         }
 
-        var standardMapping = mappings.FirstOrDefault(x => string.Equals(x.LayerMapping, layerMapping, StringComparison.OrdinalIgnoreCase));
-        if (standardMapping != null)
+        var existingMapping = mappings.FirstOrDefault(x => string.Equals(x.LayerMapping, layerMapping, StringComparison.OrdinalIgnoreCase));
+        if (existingMapping != null)
         {
-            return standardMapping;
+            return existingMapping;
         }
 
         _customDwgLayerMapping = CreateCustomLayerMapping(layerMapping);
         mappings.Add(_customDwgLayerMapping);
         return _customDwgLayerMapping;
+    }
+
+    private void AddDocumentLayerMappings(List<DWGLayerMappingModel> mappings)
+    {
+        var documentMappings = _exportDWGService.GetDocumentDWGLayerMappings(App.RevitDocument);
+        foreach (var documentMapping in documentMappings)
+        {
+            if (string.IsNullOrWhiteSpace(documentMapping))
+            {
+                continue;
+            }
+
+            var exists = mappings.Any(x =>
+                x.IsActionItem == false &&
+                string.Equals(x.LayerMapping, documentMapping, StringComparison.OrdinalIgnoreCase));
+
+            if (!exists)
+            {
+                mappings.Add(CreateCustomLayerMapping(documentMapping));
+            }
+        }
     }
 
     private DWGLayerMappingModel CreateCustomLayerMapping(string layerMapping)
@@ -362,7 +386,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         return new DWGLayerMappingModel()
         {
-            Id = 1000,
+            Id = _nextCustomDwgLayerMappingId++,
             Name = string.IsNullOrWhiteSpace(fileName) ? layerMapping : fileName,
             LayerMapping = layerMapping,
             IsCustom = true
@@ -495,10 +519,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
         if (dialog.ShowDialog() == true)
         {
-            _customDwgLayerMapping = CreateCustomLayerMapping(dialog.FileName);
-
+            _nextCustomDwgLayerMappingId = 1000;
             var mappings = _exportDWGService.GetDWGLayerMappings();
-            mappings.Add(_customDwgLayerMapping);
+            AddDocumentLayerMappings(mappings);
+            _customDwgLayerMapping = SelectDwgLayerMappingModel(mappings, dialog.FileName);
             mappings.Add(CreateLoadLayerMappingAction());
             DwgLayerMappings = new ObservableCollection<DWGLayerMappingModel>(mappings);
 

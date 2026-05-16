@@ -140,6 +140,30 @@ internal class ExportDWGService : IExportDWGService
         return exportOptions ?? new DWGExportOptions();
     }
 
+    public List<string> GetDocumentDWGLayerMappings(Document exportDocument)
+    {
+        if (exportDocument == null)
+        {
+            throw new ArgumentNullException(nameof(exportDocument));
+        }
+
+        var uniqueMappings = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var settings = new FilteredElementCollector(exportDocument)
+            .OfClass(typeof(ExportDWGSettings))
+            .Cast<ExportDWGSettings>();
+
+        foreach (var setting in settings)
+        {
+            var layerMapping = setting.GetDWGExportOptions()?.LayerMapping;
+            if (!string.IsNullOrWhiteSpace(layerMapping))
+            {
+                uniqueMappings.Add(layerMapping);
+            }
+        }
+
+        return uniqueMappings.ToList();
+    }
+
     public void SaveDocumentDWGExportOptions(Document exportDocument, DWGExportOptions dwgExportOptions)
     {
         if (exportDocument == null)

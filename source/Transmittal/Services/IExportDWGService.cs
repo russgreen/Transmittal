@@ -17,6 +17,8 @@ internal interface IExportDWGService
 
     DWGExportOptions GetDocumentDWGExportOptions(Document exportDocument);
 
+    List<string> GetDocumentDWGLayerMappings(Document exportDocument);
+
     void SaveDocumentDWGExportOptions(Document exportDocument, DWGExportOptions dwgExportOptions);
 
     List<DWGLayerMappingModel> GetDWGLayerMappings();
