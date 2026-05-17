@@ -53,6 +53,9 @@ public partial class MainWindow : Window
 
         WebView.Source = startUri;
         _viewModel.CurrentAddress = startUri.ToString();
+
+        await FilePreviewWebView.EnsureCoreWebView2Async();
+        FilePreviewWebView.Source = new Uri("about:blank");
     }
 
     private void TransferFilesListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -82,6 +85,25 @@ public partial class MainWindow : Window
             {
                 _logger.LogError(ex, "Failed to open file {FilePath}", item.FilePath);
             }
+        }
+    }
+
+    private void TransferFilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ListBox listBox)
+        {
+            return;
+        }
+
+        var item = listBox.SelectedItems.OfType<TransferFileItem>().FirstOrDefault();
+        if (item == null)
+        {
+            return;
+        }
+
+        if (item.Exists)
+        {
+           PreviewFile(item.FilePath);
         }
     }
 
@@ -187,6 +209,38 @@ public partial class MainWindow : Window
         }
 
         WebView.CoreWebView2.Navigate(uri.ToString());
+    }
+
+    private void PreviewFile(string filePath)
+    {
+        if (!filePath.EndsWith(".pdf"))
+        {
+            return;
+        }
+
+        if(FilePreviewWebView.CoreWebView2 is null)
+        {
+            return;
+        }
+
+        var text = filePath?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return;
+        }
+
+        if (!text.Contains("://", StringComparison.Ordinal))
+        {
+            text = $"file:///{text.Replace('\\', '/')}";
+        }
+
+        if (!Uri.TryCreate(text, UriKind.Absolute, out var uri))
+        {
+            _logger.LogWarning("Invalid file path: {FilePath}", filePath);
+            return;
+        }
+
+        FilePreviewWebView.CoreWebView2.Navigate(uri.ToString());
     }
 
     private void WebViewOnNavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
