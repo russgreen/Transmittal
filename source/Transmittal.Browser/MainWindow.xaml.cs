@@ -55,6 +55,36 @@ public partial class MainWindow : Window
         _viewModel.CurrentAddress = startUri.ToString();
     }
 
+    private void TransferFilesListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not ListBox listBox)
+        {
+            return;
+        }
+
+        var item = listBox.SelectedItems.OfType<TransferFileItem>().FirstOrDefault();
+        if (item == null)
+        {
+            return;
+        }
+
+        if (item.Exists)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = item.FilePath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to open file {FilePath}", item.FilePath);
+            }
+        }
+    }
+
     private void TransferFilesListBox_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (sender is not ListBox listBox)
@@ -178,4 +208,6 @@ public partial class MainWindow : Window
 
         return null;
     }
+
+
 }
