@@ -28,7 +28,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Margin="10,10,10,0">
-                        <TextBlock Text="Drag selected files onto the browser upload area. Double to open files in the default application."
+                        <TextBlock Text="Drag selected files onto the browser upload area. Double-click to open files in the default application."
                                    TextWrapping="Wrap"
                                    FontSize="12"
                                    Margin="0,0,0,6" />
