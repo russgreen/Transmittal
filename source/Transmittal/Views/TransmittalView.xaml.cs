@@ -22,8 +22,6 @@ public partial class TransmittalView : Window
     {
         InitializeComponent();
 
-        var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
-
         _viewModel = Host.GetService<ViewModels.TransmittalViewModel>();
         _settingsService = Host.GetService<ISettingsService>();
         DataContext = _viewModel;
@@ -79,6 +77,30 @@ public partial class TransmittalView : Window
             }
         }
         //TODO stop the main window closing if the no button is clicked
+    }
+
+    private void WizardControl_Finish(object sender, RoutedEventArgs e)
+    {
+        var conflicts = _viewModel.GetCurrentFileConflicts();
+        var action = FileConflictAction.Overwrite;
+
+        if (conflicts.Count > 0)
+        {
+            action = ShowFileConflictDialog(conflicts);
+        }
+
+        var shouldContinue = _viewModel.ApplyFileConflictAction(action, conflicts);
+        if (!shouldContinue)
+        {
+            if (action == FileConflictAction.ReviseSheets)
+            {
+                wizardControl.SelectedWizardPage = wizardPage1;
+            }
+
+            return;
+        }
+
+        _viewModel.ProcessSheetsCommand.Execute(null);
     }
 
     private void ButtonRevise_Click(object sender, RoutedEventArgs e)
@@ -152,5 +174,57 @@ public partial class TransmittalView : Window
             .Insert(textBox.SelectionStart, newText);
 
         return string.IsNullOrEmpty(proposed) || positiveIntRegex.IsMatch(proposed);
+    }
+
+    private FileConflictAction ShowFileConflictDialog(IReadOnlyCollection<ExportFileCheckResult> conflicts)
+    {
+        var overwriteButton = new TaskDialogButton("Continue and overwrite existing files");
+        var useExistingButton = new TaskDialogButton("Continue and use existing exported files");
+        var reviseButton = new TaskDialogButton("Revise selected sheets");
+        var cancelButton = new TaskDialogButton(ButtonType.Cancel);
+
+        var taskDialog = new TaskDialog
+        {
+            WindowTitle = "Export file conflicts detected",
+            MainInstruction = $"{conflicts.Count} export file(s) already exist.",
+            Content = BuildConflictContent(conflicts),
+            MainIcon = TaskDialogIcon.Warning,
+            ButtonStyle = TaskDialogButtonStyle.CommandLinks,
+            Buttons = { overwriteButton, useExistingButton, reviseButton, cancelButton }
+        };
+
+        var button = taskDialog.ShowDialog(this);
+
+        if (button == overwriteButton)
+        {
+            return FileConflictAction.Overwrite;
+        }
+
+        if (button == useExistingButton)
+        {
+            return FileConflictAction.UseExisting;
+        }
+
+        if (button == reviseButton)
+        {
+            return FileConflictAction.ReviseSheets;
+        }
+
+        return FileConflictAction.Cancel;
+    }
+
+    private static string BuildConflictContent(IReadOnlyCollection<ExportFileCheckResult> conflicts)
+    {
+        var lines = conflicts
+            .Take(20)
+            .Select(x => $"{x.SheetNumber} ({x.ExportFormat})");
+
+        var content = string.Join(Environment.NewLine, lines);
+        if (conflicts.Count > 20)
+        {
+            content = $"{content}{Environment.NewLine}... and {conflicts.Count - 20} more";
+        }
+
+        return content;
     }
 }

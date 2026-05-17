@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"
-        xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:r2021="R2021"
         x:Class="Transmittal.Views.TransmittalView" 
@@ -30,18 +29,14 @@
 
     <Grid>
         
-        <syncfusion:WizardControl Style="{DynamicResource WizardControlStyle1}"
+        <syncfusion:WizardControl x:Name="wizardControl"
+                                  Style="{DynamicResource WizardControlStyle1}"
                                   BackEnabled="{Binding IsBackEnabled}" 
                                   NextEnabled="True" 
                                   FinishEnabled="{Binding IsFinishEnabled}"
+                                  Finish="WizardControl_Finish"
                                   Help="WizardControl_Help" 
                                   Cancel="WizardControl_Cancel">
-
-            <interactivity:Interaction.Triggers>
-                <interactivity:EventTrigger EventName="Finish">
-                    <interactivity:InvokeCommandAction Command="{Binding ProcessSheetsCommand}"  />
-                </interactivity:EventTrigger>
-            </interactivity:Interaction.Triggers>
 
             <syncfusion:WizardPage x:Name="wizardPage1" 
                                    Title="Drawing Sheets" 

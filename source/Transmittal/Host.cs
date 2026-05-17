@@ -111,6 +111,7 @@ internal static class Host
                 services.AddTransient<IExportPDFService, ExportPDFService>();
                 services.AddTransient<IExportDWGService, ExportDWGService>();
                 services.AddTransient<IExportDWFService, ExportDWFService>();
+                services.AddTransient<IExportFileCheckService, ExportFileCheckService>();
                 services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
                 services.AddTransient<ITransmittalService, TransmittalService>();
                 services.AddTransient<IFileTransferService, FileTransferService>();
