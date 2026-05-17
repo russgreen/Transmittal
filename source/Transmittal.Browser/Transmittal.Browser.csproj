@@ -18,10 +18,19 @@
 
   <ItemGroup>
     <None Remove="Browser.ico" />
+    <None Remove="Resources\dwfFile.png" />
+    <None Remove="Resources\dwgFile.png" />
+    <None Remove="Resources\pdfFile.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Browser.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\dwfFile.png" />
+    <Resource Include="Resources\dwgFile.png" />
+    <Resource Include="Resources\pdfFile.png" />
   </ItemGroup>
 
   <ItemGroup>
