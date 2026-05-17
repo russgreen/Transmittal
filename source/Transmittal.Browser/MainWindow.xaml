@@ -81,16 +81,12 @@
         <TabControl  Grid.Column="1">
             <TabItem Header="File Transfer">
                 <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="11*"/>
-                        <ColumnDefinition Width="126*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Border BorderBrush="#FFD0D0D0" BorderThickness="0,0,0,1" Padding="8" Grid.ColumnSpan="2" Margin="0,0,0,813" Grid.RowSpan="2">
+                    <Border BorderBrush="#FFD0D0D0" BorderThickness="0,0,0,1" Padding="8">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -99,26 +95,26 @@
                             </Grid.ColumnDefinitions>
 
                             <Button Grid.Column="0"
-                    Content="Refresh"
-                    Padding="10,4"
-                    Margin="0,0,8,0"
-                    Click="RefreshButton_OnClick" />
+                            Content="Refresh"
+                            Padding="10,4"
+                            Margin="0,0,8,0"
+                            Click="RefreshButton_OnClick" />
 
                             <TextBox Grid.Column="1"
-                     Name="AddressBarTextBox"
-                     Text="{Binding CurrentAddress, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalContentAlignment="Center"
-                     KeyDown="AddressBarTextBox_OnKeyDown" />
+                             Name="AddressBarTextBox"
+                             Text="{Binding CurrentAddress, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             KeyDown="AddressBarTextBox_OnKeyDown" />
 
                             <Button Grid.Column="2"
-                    Content="Go"
-                    Padding="10,4"
-                    Margin="8,0,0,0"
-                    Click="GoButton_OnClick" />
+                            Content="Go"
+                            Padding="10,4"
+                            Margin="8,0,0,0"
+                            Click="GoButton_OnClick" />
                         </Grid>
                     </Border>
 
-                    <wv2:WebView2 Grid.Row="1" Name="WebView" Grid.ColumnSpan="2" />
+                    <wv2:WebView2 Grid.Row="1" Name="WebView" />
                 </Grid>
             </TabItem>
 

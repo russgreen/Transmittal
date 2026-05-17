@@ -40,7 +40,22 @@ public sealed class BrowserLaunchOptionsProvider : IBrowserLaunchOptionsProvider
             startUrl = "about:blank";
         }
 
+
+
+#if DEBUG
         var filesManifestPath = GetValue(args, FilesManifestArgument);
+
+        if (string.IsNullOrEmpty(filesManifestPath))
+        {
+            var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
+
+            filesManifestPath = System.IO.Path.Combine(newPath, @$"Transmittal.Browser", "debug-transfer-files-manifest.json");
+        }
+#else
+        var filesManifestPath = GetValue(args, FilesManifestArgument);
+#endif
+
         var showRedropHint = bool.TryParse(GetValue(args, ShowRedropHintArgument), out var showHint) && showHint;
 
         return new BrowserLaunchOptions

@@ -23,8 +23,7 @@ public class FileTransferService : IFileTransferService
     private const int _debugPort = 9222;
     private const string _localAddress = "127.0.0.1";
     private const string _browserExeName = "Transmittal.Browser.exe";
-    private const string _filesManifestArgument = "--files-manifest=";
-    private const string _showRedropHintArgument = "--show-redrop-hint=";
+
 
     public FileTransferService(ILogger<FileTransferService> logger,
         ISettingsService settingsService)
@@ -309,8 +308,8 @@ public class FileTransferService : IFileTransferService
                 $"--remote-debugging-port={_debugPort} " +
                 $"--user-data-dir=\"{_browserUserDataDirectory}\" " +
                 $"--start-url=about:blank " +
-                $"{_filesManifestArgument}\"{filesManifestPath}\" " +
-                $"{_showRedropHintArgument}{showRedropHint.ToString().ToLowerInvariant()}",
+                $"--files-manifest=\"{filesManifestPath}\" " +
+                $"--show-redrop-hint={showRedropHint.ToString().ToLowerInvariant()}",
             UseShellExecute = false
         };
         return Process.Start(psi) ?? throw new InvalidOperationException($"Failed to start browser process at {browserPath}.");
