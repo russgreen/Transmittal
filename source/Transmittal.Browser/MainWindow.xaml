@@ -28,7 +28,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Margin="10,10,10,0">
-                        <TextBlock Text="Drag selected files onto the browser upload area."
+                        <TextBlock Text="Drag selected files onto the browser upload area. Double-click to open files in the default application."
                                    TextWrapping="Wrap"
                                    FontSize="12"
                                    Margin="0,0,0,6" />
@@ -45,7 +45,7 @@
                              SelectionMode="Extended"
                              ItemsSource="{Binding TransferFiles}"
                              PreviewMouseLeftButtonDown="TransferFilesListBox_OnPreviewMouseLeftButtonDown"
-                             PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove">
+                             PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove" MouseDoubleClick="TransferFilesListBox_MouseDoubleClick" SelectionChanged="TransferFilesListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="2">
@@ -78,41 +78,55 @@
             </Expander>
         </Border>
 
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <TabControl  Grid.Column="1">
+            <TabItem Header="File Transfer">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-            <Border BorderBrush="#FFD0D0D0" BorderThickness="0,0,0,1" Padding="8">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="#FFD0D0D0" BorderThickness="0,0,0,1" Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0"
+                            <Button Grid.Column="0"
                             Content="Refresh"
                             Padding="10,4"
                             Margin="0,0,8,0"
                             Click="RefreshButton_OnClick" />
 
-                    <TextBox Grid.Column="1"
+                            <TextBox Grid.Column="1"
                              Name="AddressBarTextBox"
                              Text="{Binding CurrentAddress, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              KeyDown="AddressBarTextBox_OnKeyDown" />
 
-                    <Button Grid.Column="2"
+                            <Button Grid.Column="2"
                             Content="Go"
                             Padding="10,4"
                             Margin="8,0,0,0"
                             Click="GoButton_OnClick" />
-                </Grid>
-            </Border>
+                        </Grid>
+                    </Border>
 
-            <wv2:WebView2 Grid.Row="1" Name="WebView" />
-        </Grid>
+                    <wv2:WebView2 Grid.Row="1" Name="WebView" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="PDF Preview">
+                <Border >
+                    <wv2:WebView2 Name="FilePreviewWebView" />
+                </Border>
+
+            </TabItem>
+
+        </TabControl>
+
+
     </Grid>
 </Window>
