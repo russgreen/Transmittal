@@ -530,7 +530,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
     {
         Schema schema = GetSchema(new Guid(_schemaGuidV0));
         DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-        Entity entity = dataStorageElement.GetEntity(_oldSchemaV0);
+        Entity entity = dataStorageElement.GetEntity(schema);
 
         _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
             schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -582,7 +582,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             Schema schema = GetSchema(new Guid(_schemaGuidV1));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-            Entity entity = dataStorageElement.GetEntity(_oldSchemaV1);
+            Entity entity = dataStorageElement.GetEntity(schema);
 
             _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -650,7 +650,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             Schema schema = GetSchema(new Guid(_schemaGuidV2));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-            Entity entity = dataStorageElement.GetEntity(_oldSchemaV2);
+            Entity entity = dataStorageElement.GetEntity(schema);
 
             _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -720,7 +720,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         {
             Schema schema = GetSchema(new Guid(_schemaGuidV3));
             DataStorage dataStorageElement = FindDataStorageElement(App.RevitDocument, schema);
-            Entity entity = dataStorageElement.GetEntity(_schema);
+            Entity entity = dataStorageElement.GetEntity(schema);
 
             _settingsService.GlobalSettings.FileNameFilter = entity.Get<string>(
                 schema.GetField(nameof(_settingsService.GlobalSettings.FileNameFilter)));
@@ -782,7 +782,7 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting settings from schema V2");
+            _logger.LogError(ex, "Error getting settings from schema V3");
             
         }
 

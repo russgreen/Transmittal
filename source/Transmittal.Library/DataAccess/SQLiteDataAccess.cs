@@ -622,11 +622,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "ProjectDirectoryDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("ProjectDirectoryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryDocumentTypeCode TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("ProjectDirectoryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryDocumentTypeCode TEXT NOT NULL DEFAULT 'DY'");
         }
         if (!ColumnExists(dbFilePath, "ProjectDirectoryFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("ProjectDirectoryFirstNumber", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryFirstNumber TEXT NOT NULL DEFAULT ''");
+            columnsToAdd.Add("ProjectDirectoryFirstNumber", "ALTER TABLE Settings ADD COLUMN ProjectDirectoryFirstNumber TEXT NOT NULL DEFAULT '0001'");
         }
         if (!ColumnExists(dbFilePath, "ProjectDirectoryVolume", "Settings"))
         {
@@ -638,11 +638,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT 'DY'");
+            columnsToAdd.Add("TransmittalSheetDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSheetDocumentTypeCode TEXT NOT NULL DEFAULT 'TL'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT '0001'");
+            columnsToAdd.Add("TransmittalSheetFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSheetFirstNumber TEXT NOT NULL DEFAULT '0000'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSheetVolume", "Settings"))
         {
@@ -654,11 +654,11 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryDocumentTypeCode", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSummaryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryDocumentTypeCode TEXT NOT NULL DEFAULT 'TL'");
+            columnsToAdd.Add("TransmittalSummaryDocumentTypeCode", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryDocumentTypeCode TEXT NOT NULL DEFAULT 'MX'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT '0002'");
+            columnsToAdd.Add("TransmittalSummaryFirstNumber", "ALTER TABLE Settings ADD COLUMN TransmittalSummaryFirstNumber TEXT NOT NULL DEFAULT '0001'");
         }
         if (!ColumnExists(dbFilePath, "TransmittalSummaryVolume", "Settings"))
         {
@@ -674,7 +674,7 @@ public class SQLiteDataAccess : IDataConnection
         }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListFirstNumber", "Settings"))
         {
-            columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT '0001'");
+            columnsToAdd.Add("MasterDocumentsListFirstNumber", "ALTER TABLE Settings ADD COLUMN MasterDocumentsListFirstNumber TEXT NOT NULL DEFAULT '0002'");
         }
         if (!ColumnExists(dbFilePath, "MasterDocumentsListVolume", "Settings"))
         {
