@@ -49,8 +49,15 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="2">
-                                    <TextBlock Text="{Binding FileName}"
-                                               FontWeight="SemiBold" />
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Image Width="16" Height="16" Margin="0,0,6,0"
+                                               VerticalAlignment="Center"
+                                               Source="{Binding IconUri}"
+                                               Visibility="{Binding HasIcon, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding FileName}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
                                     <TextBlock Text="{Binding FilePath}"
                                                FontSize="11"
                                                Foreground="#FF555555"
