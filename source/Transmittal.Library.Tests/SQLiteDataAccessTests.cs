@@ -185,7 +185,7 @@ public class SQLiteDataAccessTests
         await Assert.That(settingsColumns).Contains("MasterDocumentsListLevel");
         await Assert.That(transmittalItemColumns).Contains("DrgPackage");
         await Assert.That(companyColumns).Contains("Role");
-        await Assert.That(companyColumns).Contains("OrganizationCode");
+        await Assert.That(companyColumns).Contains("OrganisationCode");
         await Assert.That(personColumns).Contains("Archive");
     }
 
@@ -211,7 +211,7 @@ public class SQLiteDataAccessTests
         await Assert.That(columns).Contains("ID");
         await Assert.That(columns).Contains("CompanyName");
         await Assert.That(columns).Contains("Role");
-        await Assert.That(columns).Contains("OrganizationCode");
+        await Assert.That(columns).Contains("OrganisationCode");
         await Assert.That(columns).Contains("Address");
         await Assert.That(columns).Contains("Tel");
         await Assert.That(columns).Contains("Fax");
@@ -348,6 +348,77 @@ public class SQLiteDataAccessTests
             "DrgScale",
             "DrgPaper",
             "DrgPackage");
+    }
+
+    [Test]
+    public async Task SaveData_ShouldReapplyLatestSchemaAndRetry_WhenColumnMissing()
+    {
+        CreateVersionFourDatabaseMissingV4Columns(_dbPath);
+
+        await Task.Run(() => _dataAccess.SaveData(
+            _dbPath,
+            "UPDATE Settings SET ShowFileTransfer = @ShowFileTransfer WHERE ID = 1;",
+            new { ShowFileTransfer = 0 }));
+
+        var settingsColumns = GetTableColumns(_dbPath, "Settings");
+        await Assert.That(settingsColumns).Contains("ShowFileTransfer");
+
+        using var conn = OpenConnection(_dbPath);
+        var value = conn.QuerySingle<int>("SELECT ShowFileTransfer FROM Settings WHERE ID = 1;");
+        await Assert.That(value).IsEqualTo(0);
+    }
+
+    [Test]
+    public async Task CreateData_ShouldReapplyLatestSchemaAndRetry_WhenColumnMissing()
+    {
+        CreateVersionFourDatabaseMissingV4Columns(_dbPath);
+
+        var model = new CompanyCreateModel
+        {
+            CompanyName = "Schema Retry Ltd",
+            OrganisationCode = "SRL"
+        };
+
+        var result = await Task.Run(() => _dataAccess.CreateData(
+            _dbPath,
+            "INSERT INTO Company (CompanyName, OrganisationCode) VALUES (@CompanyName, @OrganisationCode); SELECT last_insert_rowid();",
+            model,
+            model,
+            nameof(CompanyCreateModel.ID)));
+
+        await Assert.That(result.ID).IsGreaterThan(0);
+
+        var companyColumns = GetTableColumns(_dbPath, "Company");
+        await Assert.That(companyColumns).Contains("OrganisationCode");
+
+        using var conn = OpenConnection(_dbPath);
+        var code = conn.QuerySingle<string>("SELECT OrganisationCode FROM Company WHERE ID = @Id;", new { Id = result.ID });
+        await Assert.That(code).IsEqualTo("SRL");
+    }
+
+    [Test]
+    public async Task SaveData_ShouldThrowWhenMissingColumnStillMissingAfterRecovery()
+    {
+        CreateVersionFourDatabaseMissingV4Columns(_dbPath);
+
+        var threw = false;
+        try
+        {
+            await Task.Run(() => _dataAccess.SaveData(
+                _dbPath,
+                "UPDATE Settings SET NotARealColumn = @Value WHERE ID = 1;",
+                new { Value = "x" }));
+        }
+        catch (SqliteException)
+        {
+            threw = true;
+        }
+
+        await Assert.That(threw).IsTrue();
+
+        // Recovery should have run once and added real v4 columns even though this write remains invalid.
+        var settingsColumns = GetTableColumns(_dbPath, "Settings");
+        await Assert.That(settingsColumns).Contains("ShowFileTransfer");
     }
 
     private static SQLiteDataAccess CreateDataAccess()
@@ -510,6 +581,13 @@ public class SQLiteDataAccessTests
         conn.Execute("INSERT INTO Person (LastName, FirstName, CompanyID) VALUES ('Doe', 'Jane', 1);");
     }
 
+    private static void CreateVersionFourDatabaseMissingV4Columns(string dbPath)
+    {
+        CreateLegacyDatabase(dbPath);
+        using var conn = OpenConnection(dbPath);
+        conn.Execute("PRAGMA user_version = 4;");
+    }
+
     private static void DeleteIfExists(string path)
     {
         if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
@@ -551,6 +629,13 @@ public class SQLiteDataAccessTests
         public string DateFormatString { get; set; } = string.Empty;
         public bool ShowFileTransfer { get; set; }
         public int FileTransferType { get; set; }
+    }
+
+    private sealed class CompanyCreateModel
+    {
+        public int ID { get; set; }
+        public string CompanyName { get; set; } = string.Empty;
+        public string OrganisationCode { get; set; } = string.Empty;
     }
 }
 
