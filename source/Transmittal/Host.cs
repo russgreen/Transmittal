@@ -106,7 +106,7 @@ internal static class Host
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<IMessageBoxService, MessageBoxService>();
 
-                services.AddTransient<ISettingsServiceRvt, SettingsServiceRvt>();
+                services.AddTransient<ISettingsServiceRvt, SettingsServiceRvtV2>();
                 services.AddTransient<IDataConnection, SQLiteDataAccess>();
                 services.AddTransient<IExportPDFService, ExportPDFService>();
                 services.AddTransient<IExportDWGService, ExportDWGService>();
