@@ -14,12 +14,12 @@ namespace Transmittal.Services;
 
 internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 {
-    private const string DataStorageElementName = "TransmittalSettings";
-    private const string VendorId = "Transmittal";
-    private const string SchemaNamePrefix = "TransmittalAppSettings";
-    private const int LatestSchemaVersion = 4;
+    private const string _dataStorageElementName = "TransmittalSettings";
+    private const string _vendorId = "Transmittal";
+    private const string _schemaNamePrefix = "TransmittalAppSettings";
+    private const int _latestSchemaVersion = 4;
 
-    private static readonly SchemaVersionInfo[] KnownSchemas =
+    private static readonly SchemaVersionInfo[] _knownSchemas =
     [
         new(0, "TransmittalAppSettings", "302151AE-3986-46F5-A172-0E327D0D191E"),
         new(1, "TransmittalAppSettingsV1", "42DCEC84-45AB-4CA1-8C6B-8C4853A23BCF"),
@@ -28,19 +28,21 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         new(4, "TransmittalAppSettingsV4", "5A3671ED-90E7-48B3-8BC1-D2C37CF31D5A"),
     ];
 
-    private static readonly SchemaVersionInfo LatestSchema = KnownSchemas[KnownSchemas.Length - 1];
+    private static readonly SchemaVersionInfo _latestSchema = _knownSchemas[_knownSchemas.Length - 1];
 
-    private const string ProjectIdentifierParamGuid = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
-    private const string OriginatorParamGuid = "e45313b7-8419-4803-92f0-68558f9278b2";
-    private const string RoleParamGuid = "67fcb5e8-4ffb-43b8-8ec9-c664fd997267";
-    private const string SheetVolumeParamGuid = "9c16757c-175a-451a-a5d4-c4a6ff291acb";
-    private const string SheetLevelParamGuid = "e51af162-9025-48a0-bd2c-bc833fab0db0";
-    private const string DocumentTypeParamGuid = "eb57d296-7d9c-459f-ace1-0bdaf95c3b29";
-    private const string SheetStatusParamGuid = "3304f169-ceb9-40b9-a69d-d8f3eb0a3fb9";
-    private const string SheetStatusDescriptionParamGuid = "4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a";
-    private const string SheetPackageParamGuid = "24308d83-9bd6-42cb-a801-d253b37dde03";
+    // project paramaters
+    private const string _projectIdentifierParamGuid = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
+    private const string _originatorParamGuid = "e45313b7-8419-4803-92f0-68558f9278b2";
+    private const string _roleParamGuid = "67fcb5e8-4ffb-43b8-8ec9-c664fd997267";
+    // sheet parameters
+    private const string _sheetVolumeParamGuid = "9c16757c-175a-451a-a5d4-c4a6ff291acb";
+    private const string _sheetLevelParamGuid = "e51af162-9025-48a0-bd2c-bc833fab0db0";
+    private const string _documentTypeParamGuid = "eb57d296-7d9c-459f-ace1-0bdaf95c3b29";
+    private const string _sheetStatusParamGuid = "3304f169-ceb9-40b9-a69d-d8f3eb0a3fb9";
+    private const string _sheetStatusDescriptionParamGuid = "4effad6a-f05d-43dd-afb1-c2b6c5cb5b9a";
+    private const string _sheetPackageParamGuid = "24308d83-9bd6-42cb-a801-d253b37dde03";
 
-    private static readonly (string Name, Type Type, string Documentation)[] SimpleFields =
+    private static readonly (string Name, Type Type, string Documentation)[] _simpleFields =
     [
         (nameof(SettingsModel.FileNameFilter), typeof(string), "The filename filter rule for transmittal exports"),
         (nameof(SettingsModel.FileNameFilter2), typeof(string), "The filename filter rule for transmittal export copies to extranet"),
@@ -86,7 +88,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         (nameof(SettingsModel.MasterDocumentsListLevel), typeof(string), "Master documents list report level or spatial code"),
     ];
 
-    private static readonly (string Name, string Documentation)[] MapFields =
+    private static readonly (string Name, string Documentation)[] _mapFields =
     [
         (nameof(SettingsModel.IssueFormats), "The issue formats for transmittal exports"),
         (nameof(SettingsModel.DocumentStatuses), "The document statuses for transmittal exports"),
@@ -122,7 +124,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
             EnsureLatestSchemaAndStorage(rvtDoc);
             SaveSettingsToSchemaInternal(rvtDoc);
         }
-        else if (loadedVersion < LatestSchemaVersion)
+        else if (loadedVersion < _latestSchemaVersion)
         {
             DeleteLegacySchemas(rvtDoc);
             EnsureLatestSchemaAndStorage(rvtDoc);
@@ -147,15 +149,15 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
     {
         var settings = _settingsService.GlobalSettings;
 
-        settings.ProjectIdentifierParamGuid = ProjectIdentifierParamGuid;
-        settings.OriginatorParamGuid = OriginatorParamGuid;
-        settings.RoleParamGuid = RoleParamGuid;
-        settings.SheetVolumeParamGuid = SheetVolumeParamGuid;
-        settings.SheetLevelParamGuid = SheetLevelParamGuid;
-        settings.DocumentTypeParamGuid = DocumentTypeParamGuid;
-        settings.SheetStatusParamGuid = SheetStatusParamGuid;
-        settings.SheetStatusDescriptionParamGuid = SheetStatusDescriptionParamGuid;
-        settings.SheetPackageParamGuid = SheetPackageParamGuid;
+        settings.ProjectIdentifierParamGuid = _projectIdentifierParamGuid;
+        settings.OriginatorParamGuid = _originatorParamGuid;
+        settings.RoleParamGuid = _roleParamGuid;
+        settings.SheetVolumeParamGuid = _sheetVolumeParamGuid;
+        settings.SheetLevelParamGuid = _sheetLevelParamGuid;
+        settings.DocumentTypeParamGuid = _documentTypeParamGuid;
+        settings.SheetStatusParamGuid = _sheetStatusParamGuid;
+        settings.SheetStatusDescriptionParamGuid = _sheetStatusDescriptionParamGuid;
+        settings.SheetPackageParamGuid = _sheetPackageParamGuid;
     }
 
     public bool CheckDatabaseFileExists(string filepath, bool checkConnection = true)
@@ -176,14 +178,14 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
     private int TryLoadSettingsFromExistingSchema(Document document)
     {
-        if (TryLoadSettingsFromSchema(document, LatestSchema))
+        if (TryLoadSettingsFromSchema(document, _latestSchema))
         {
-            return LatestSchema.Version;
+            return _latestSchema.Version;
         }
 
-        for (var i = KnownSchemas.Length - 2; i >= 0; i--)
+        for (var i = _knownSchemas.Length - 2; i >= 0; i--)
         {
-            var version = KnownSchemas[i];
+            var version = _knownSchemas[i];
             if (TryLoadSettingsFromSchema(document, version))
             {
                 return version.Version;
@@ -282,12 +284,12 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         var dataStorage = FindDataStorageElement(document, schema);
         if (dataStorage == null)
         {
-            throw new InvalidOperationException($"Could not find {DataStorageElementName} data storage for schema {schema.SchemaName}.");
+            throw new InvalidOperationException($"Could not find {_dataStorageElementName} data storage for schema {schema.SchemaName}.");
         }
 
         var settings = _settingsService.GlobalSettings;
 
-        using var transaction = new Transaction(document, DataStorageElementName);
+        using var transaction = new Transaction(document, _dataStorageElementName);
         transaction.Start();
 
         var entity = new Entity(schema);
@@ -342,7 +344,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
     private Schema EnsureLatestSchemaAndStorage(Document document)
     {
-        var schema = GetSchema(LatestSchema.Guid);
+        var schema = GetSchema(_latestSchema.Guid);
         if (schema == null)
         {
             schema = CreateLatestSchema();
@@ -354,10 +356,10 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
             return schema;
         }
 
-        using var transaction = new Transaction(document, DataStorageElementName);
+        using var transaction = new Transaction(document, _dataStorageElementName);
         transaction.Start();
         dataStorage = DataStorage.Create(document);
-        dataStorage.Name = DataStorageElementName;
+        dataStorage.Name = _dataStorageElementName;
         dataStorage.SetEntity(new Entity(schema));
         transaction.Commit();
 
@@ -366,19 +368,19 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
     private Schema CreateLatestSchema()
     {
-        var schemaBuilder = new SchemaBuilder(LatestSchema.Guid);
+        var schemaBuilder = new SchemaBuilder(_latestSchema.Guid);
         schemaBuilder.SetReadAccessLevel(AccessLevel.Public);
         schemaBuilder.SetWriteAccessLevel(AccessLevel.Public);
-        schemaBuilder.SetVendorId(VendorId);
-        schemaBuilder.SetSchemaName(LatestSchema.Name);
+        schemaBuilder.SetVendorId(_vendorId);
+        schemaBuilder.SetSchemaName(_latestSchema.Name);
 
-        foreach (var field in SimpleFields)
+        foreach (var field in _simpleFields)
         {
             var fieldBuilder = schemaBuilder.AddSimpleField(field.Name, field.Type);
             fieldBuilder.SetDocumentation(field.Documentation);
         }
 
-        foreach (var field in MapFields)
+        foreach (var field in _mapFields)
         {
             var fieldBuilder = schemaBuilder.AddMapField(field.Name, typeof(string), typeof(string));
             fieldBuilder.SetDocumentation(field.Documentation);
@@ -389,9 +391,9 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
     private void DeleteLegacySchemas(Document document)
     {
-        for (var i = 0; i < KnownSchemas.Length - 1; i++)
+        for (var i = 0; i < _knownSchemas.Length - 1; i++)
         {
-            var schema = GetSchema(KnownSchemas[i].Guid);
+            var schema = GetSchema(_knownSchemas[i].Guid);
             if (schema == null || !SchemaHasStorage(document, schema))
             {
                 continue;
@@ -403,7 +405,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
                 continue;
             }
 
-            using var transaction = new Transaction(document, DataStorageElementName);
+            using var transaction = new Transaction(document, _dataStorageElementName);
             transaction.Start();
             dataStorage.DeleteEntity(schema);
             transaction.Commit();
@@ -414,7 +416,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
     private void EnsureSchemaVersionSupported()
     {
         var newerSchemaVersion = DetectNewerSchemas();
-        if (newerSchemaVersion <= LatestSchemaVersion)
+        if (newerSchemaVersion <= _latestSchemaVersion)
         {
             return;
         }
@@ -422,13 +424,13 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         _logger.LogWarning(
             "Transmittal settings schema version {NewerVersion} detected, but application only supports up to version {LatestVersion}",
             newerSchemaVersion,
-            LatestSchemaVersion);
+            _latestSchemaVersion);
 
         _messageBox.ShowOk(
             "Application version",
             "You appear to be opening a Revit file which was created or edited with a newer version of Transmittal. Please check for software updates.");
 
-        throw new SchemaVersionTooNewException(newerSchemaVersion, LatestSchemaVersion);
+        throw new SchemaVersionTooNewException(newerSchemaVersion, _latestSchemaVersion);
     }
 
     private int DetectNewerSchemas()
@@ -438,12 +440,12 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
         foreach (var schema in schemas)
         {
-            if (!string.Equals(schema.VendorId, VendorId, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(schema.VendorId, _vendorId, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            if (!schema.SchemaName.StartsWith(SchemaNamePrefix, StringComparison.Ordinal))
+            if (!schema.SchemaName.StartsWith(_schemaNamePrefix, StringComparison.Ordinal))
             {
                 continue;
             }
@@ -453,7 +455,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
                 continue;
             }
 
-            if (version > LatestSchemaVersion && version > newerSchemaVersion)
+            if (version > _latestSchemaVersion && version > newerSchemaVersion)
             {
                 newerSchemaVersion = version;
             }
@@ -465,13 +467,13 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
     private static bool TryParseSchemaVersion(string schemaName, out int version)
     {
         version = -1;
-        if (schemaName == SchemaNamePrefix)
+        if (schemaName == _schemaNamePrefix)
         {
             version = 0;
             return true;
         }
 
-        var versionPrefix = $"{SchemaNamePrefix}V";
+        var versionPrefix = $"{_schemaNamePrefix}V";
         if (!schemaName.StartsWith(versionPrefix, StringComparison.Ordinal))
         {
             return false;
@@ -546,7 +548,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         var collector = new FilteredElementCollector(document)
             .OfClass(typeof(DataStorage))
             .WherePasses(new ExtensibleStorageFilter(schema.GUID))
-            .Where(e => DataStorageElementName.Equals(e.Name, StringComparison.Ordinal));
+            .Where(e => _dataStorageElementName.Equals(e.Name, StringComparison.Ordinal));
 
         return collector.FirstOrDefault() as DataStorage;
     }
