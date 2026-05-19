@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.Core;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,6 +15,15 @@ namespace Transmittal.Browser;
 
 public partial class MainWindow : Window
 {
+    private const int AccessDeniedHResult = unchecked((int)0x80070005);
+    private const string PreviewWebViewArguments =
+        "--disable-background-networking " +
+        "--disable-component-update " +
+        "--disable-sync " +
+        "--disable-default-apps " +
+        "--metrics-recording-only " +
+        "--disk-cache-size=1048576 " +
+        "--media-cache-size=1048576";
     private readonly MainWindowViewModel _viewModel;
     private readonly IBrowserLaunchOptionsProvider _launchOptionsProvider;
     private readonly ILogger<MainWindow> _logger;
@@ -34,28 +44,113 @@ public partial class MainWindow : Window
 
     private async void MainWindowLoaded(object sender, RoutedEventArgs e)
     {
-        var options = _launchOptionsProvider.GetLaunchOptions();
-        Directory.CreateDirectory(options.UserDataDirectory);
-
-        var webView2Environment = await CoreWebView2Environment.CreateAsync(
-            browserExecutableFolder: null,
-            userDataFolder: options.UserDataDirectory,
-            options: new CoreWebView2EnvironmentOptions($"--remote-debugging-port={options.RemoteDebuggingPort}"));
-
-        await WebView.EnsureCoreWebView2Async(webView2Environment);
-        WebView.NavigationCompleted += WebViewOnNavigationCompleted;
-
-        if (!Uri.TryCreate(options.StartUrl, UriKind.Absolute, out var startUri))
+        try
         {
-            _logger.LogWarning("Invalid start url {StartUrl}, defaulting to about:blank", options.StartUrl);
-            startUri = new Uri("about:blank");
+            var options = _launchOptionsProvider.GetLaunchOptions();
+            var webView2Environment = await CreateMainWebViewEnvironmentAsync(options);
+
+            await WebView.EnsureCoreWebView2Async(webView2Environment);
+            WebView.NavigationCompleted += WebViewOnNavigationCompleted;
+
+            if (!Uri.TryCreate(options.StartUrl, UriKind.Absolute, out var startUri))
+            {
+                _logger.LogWarning("Invalid start url {StartUrl}, defaulting to about:blank", options.StartUrl);
+                startUri = new Uri("about:blank");
+            }
+
+            WebView.Source = startUri;
+            _viewModel.CurrentAddress = startUri.ToString();
+
+            await InitializeFilePreviewWebViewAsync();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            HandleWebViewStartupFailure(ex);
+        }
+        catch (COMException ex) when (ex.HResult == AccessDeniedHResult)
+        {
+            HandleWebViewStartupFailure(ex);
+        }
+        catch (WebView2RuntimeNotFoundException ex)
+        {
+            HandleWebViewStartupFailure(ex);
+        }
+    }
+
+    private Task<CoreWebView2Environment> CreateMainWebViewEnvironmentAsync(BrowserLaunchOptions options)
+    {
+        var environmentOptions = new CoreWebView2EnvironmentOptions($"--remote-debugging-port={options.RemoteDebuggingPort}");
+        return CreateWebViewEnvironmentAsync(options.UserDataDirectory, environmentOptions);
+    }
+
+    private async Task InitializeFilePreviewWebViewAsync()
+    {
+        var primaryPreviewDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Transmittal",
+            "Browser",
+            "PreviewUserData");
+
+        try
+        {
+            var previewEnvironment = await CreateWebViewEnvironmentAsync(
+                primaryPreviewDirectory,
+                CreatePreviewEnvironmentOptions());
+            await FilePreviewWebView.EnsureCoreWebView2Async(previewEnvironment);
+            ConfigurePreviewWebViewSettings();
+            FilePreviewWebView.Source = new Uri("about:blank");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            HandleWebViewStartupFailure(ex, "PDF Preview");
+        }
+        catch (COMException ex) when (ex.HResult == AccessDeniedHResult)
+        {
+            HandleWebViewStartupFailure(ex, "PDF Preview");
+        }
+    }
+
+    private static Task<CoreWebView2Environment> CreateWebViewEnvironmentAsync(
+        string userDataDirectory,
+        CoreWebView2EnvironmentOptions environmentOptions)
+    {
+        Directory.CreateDirectory(userDataDirectory);
+
+        return CoreWebView2Environment.CreateAsync(
+            browserExecutableFolder: null,
+            userDataFolder: userDataDirectory,
+            options: environmentOptions);
+    }
+
+    private static CoreWebView2EnvironmentOptions CreatePreviewEnvironmentOptions()
+    {
+        return new CoreWebView2EnvironmentOptions(PreviewWebViewArguments);
+    }
+
+    private void ConfigurePreviewWebViewSettings()
+    {
+        if (FilePreviewWebView.CoreWebView2 is null)
+        {
+            return;
         }
 
-        WebView.Source = startUri;
-        _viewModel.CurrentAddress = startUri.ToString();
+        FilePreviewWebView.CoreWebView2.Settings.AreDevToolsEnabled = false;
+        FilePreviewWebView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+        FilePreviewWebView.CoreWebView2.Settings.IsStatusBarEnabled = false;
+        FilePreviewWebView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+        FilePreviewWebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+    }
 
-        await FilePreviewWebView.EnsureCoreWebView2Async();
-        FilePreviewWebView.Source = new Uri("about:blank");
+    private void HandleWebViewStartupFailure(Exception ex, string browser = "File Transfer")
+    {
+        _logger.LogError(ex, "Failed to initialize embedded browser.");
+        MessageBox.Show(
+            this,
+            $"The embedded {browser} browser could not be initialized.{Environment.NewLine}{Environment.NewLine}{ex.Message}",
+            "Transmittal Browser",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error);
+        Close();
     }
 
     private void TransferFilesListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)

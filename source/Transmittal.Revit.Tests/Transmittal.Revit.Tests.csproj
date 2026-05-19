@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Configurations>Debug R21;Debug R22;Debug R23;Debug R24;Debug R25;Debug R26;Debug R27</Configurations>
+		<Configurations>$(Configurations);Release R21;Release R22;Release R23;Release R24;Release R25;Release R26;Release R27</Configurations>
+		<PlatformTarget>x64</PlatformTarget>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('Release'))">
+		<Optimize>true</Optimize>
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(Configuration.Contains('R21'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2021</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2021;PREFORGETYPEID</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R22'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2022</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2022</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R23'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2023</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2023</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R24'))">
+		<TargetFramework>net48</TargetFramework>
+		<RevitVersion>2024</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2024</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R25'))">
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RevitVersion>2025</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2025</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R26'))">
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<RevitVersion>2026</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2026</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER;REVIT2026_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R27'))">
+		<TargetFramework>net10.0-windows</TargetFramework>
+		<RevitVersion>2027</RevitVersion>
+		<DefineConstants>$(DefineConstants);REVIT2027</DefineConstants>
+		<DefineConstants>$(DefineConstants);REVIT2022_OR_GREATER;REVIT2023_OR_GREATER;REVIT2024_OR_GREATER;REVIT2025_OR_GREATER;REVIT2026_OR_GREATER;REVIT2027_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+
+	<!-- Revit Environment Configuration -->
+	<ItemGroup>
+		<AssemblyAttribute Include="Nice3point.Revit.Injector.Attributes.RevitLanguageAttribute">
+			<_Parameter1>ENG</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nice3point.TUnit.Revit" Version="$(RevitVersion).*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Transmittal\Transmittal.csproj">
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

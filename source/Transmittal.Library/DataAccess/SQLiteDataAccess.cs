@@ -51,6 +51,7 @@ public class SQLiteDataAccess : IDataConnection
         int maxRetries = 3; // Maximum number of retries
         int retryDelay = 1000; // Delay between retries in milliseconds
         int attempt = 0;
+        bool schemaRecoveryAttempted = false;
 
         while (attempt < maxRetries)
         {
@@ -87,6 +88,12 @@ public class SQLiteDataAccess : IDataConnection
                     throw; // Re-throw the exception after max retries
                 }
             }
+            catch (SqliteException ex) when (IsMissingColumnException(ex) && !schemaRecoveryAttempted)
+            {
+                _logger.LogWarning(ex, "Missing-column error detected during CreateData. Reapplying latest schema and retrying once.");
+                ReapplyLatestSchema(dbFilePath);
+                schemaRecoveryAttempted = true;
+            }
             catch (Exception ex)
             {
                 // Log and re-throw other exceptions
@@ -113,6 +120,7 @@ public class SQLiteDataAccess : IDataConnection
         int maxRetries = 3; // Maximum number of retries
         int retryDelay = 1000; // Delay between retries in milliseconds
         int attempt = 0;
+        bool schemaRecoveryAttempted = false;
 
         while (attempt < maxRetries)
         {
@@ -144,6 +152,12 @@ public class SQLiteDataAccess : IDataConnection
                     _logger.LogError(ex, "Database operation failed after {MaxRetries} attempts.", maxRetries);
                     throw; // Re-throw the exception after max retries
                 }
+            }
+            catch (SqliteException ex) when (IsMissingColumnException(ex) && !schemaRecoveryAttempted)
+            {
+                _logger.LogWarning(ex, "Missing-column error detected during SaveData. Reapplying latest schema and retrying once.");
+                ReapplyLatestSchema(dbFilePath);
+                schemaRecoveryAttempted = true;
             }
             catch (Exception ex)
             {
@@ -397,6 +411,13 @@ public class SQLiteDataAccess : IDataConnection
         ApplySchemaV4(dbFilePath);
         SetDatabaseVersion(dbFilePath, 4);
         _logger.LogInformation("Database schema v4 created and version set to 4");
+    }
+
+    private void ReapplyLatestSchema(string dbFilePath)
+    {
+        ApplySchemaV4(dbFilePath);
+        SetDatabaseVersion(dbFilePath, _latestSchemaVersion);
+        _logger.LogInformation("Latest schema reapplied after missing-column error.");
     }
 
     private void ApplySchemaV3(string dbFilePath)
@@ -823,4 +844,17 @@ public class SQLiteDataAccess : IDataConnection
 
         throw new InvalidOperationException("Unexpected error: Retry loop exited without setting version.");
     }
+
+    private static bool IsMissingColumnException(SqliteException ex)
+    {
+        if (ex.SqliteErrorCode != SQLitePCL.raw.SQLITE_ERROR || string.IsNullOrWhiteSpace(ex.Message))
+        {
+            return false;
+        }
+
+        return ex.Message.Contains("no such column", StringComparison.OrdinalIgnoreCase) ||
+            ex.Message.Contains("has no column named", StringComparison.OrdinalIgnoreCase);
+    }
+
+
 }
