@@ -103,46 +103,11 @@ public partial class MainWindow : Window
         }
         catch (UnauthorizedAccessException ex)
         {
-            _logger.LogWarning(ex,
-                "Access denied initializing file preview WebView2 with user data directory {UserDataDirectory}; falling back to temp path.",
-                primaryPreviewDirectory);
-            await InitializeFilePreviewWithFallbackAsync(fallbackPreviewDirectory);
+            HandleWebViewStartupFailure(ex, "PDF Preview");
         }
         catch (COMException ex) when (ex.HResult == AccessDeniedHResult)
         {
-            _logger.LogWarning(ex,
-                "Access denied initializing file preview WebView2 with user data directory {UserDataDirectory}; falling back to temp path.",
-                primaryPreviewDirectory);
-            await InitializeFilePreviewWithFallbackAsync(fallbackPreviewDirectory);
-        }
-    }
-
-    private async Task InitializeFilePreviewWithFallbackAsync(string fallbackPreviewDirectory)
-    {
-        try
-        {
-            var fallbackEnvironment = await CreateWebViewEnvironmentAsync(
-                fallbackPreviewDirectory,
-                CreatePreviewEnvironmentOptions());
-            await FilePreviewWebView.EnsureCoreWebView2Async(fallbackEnvironment);
-            ConfigurePreviewWebViewSettings();
-            FilePreviewWebView.Source = new Uri("about:blank");
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            _logger.LogWarning(ex,
-                "Access denied initializing file preview WebView2 with temp user data directory {UserDataDirectory}.",
-                fallbackPreviewDirectory);
-        }
-        catch (COMException ex) when (ex.HResult == AccessDeniedHResult)
-        {
-            _logger.LogWarning(ex,
-                "Access denied initializing file preview WebView2 with temp user data directory {UserDataDirectory}.",
-                fallbackPreviewDirectory);
-        }
-        catch (WebView2RuntimeNotFoundException ex)
-        {
-            _logger.LogWarning(ex, "File preview WebView2 runtime was not found.");
+            HandleWebViewStartupFailure(ex, "PDF Preview");
         }
     }
 
@@ -177,12 +142,12 @@ public partial class MainWindow : Window
         FilePreviewWebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
     }
 
-    private void HandleWebViewStartupFailure(Exception ex)
+    private void HandleWebViewStartupFailure(Exception ex, string browser = "File Transfer")
     {
         _logger.LogError(ex, "Failed to initialize embedded browser.");
         MessageBox.Show(
             this,
-            $"The embedded browser could not be initialized.{Environment.NewLine}{Environment.NewLine}{ex.Message}",
+            $"The embedded {browser} browser could not be initialized.{Environment.NewLine}{Environment.NewLine}{ex.Message}",
             "Transmittal Browser",
             MessageBoxButton.OK,
             MessageBoxImage.Error);
