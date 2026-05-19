@@ -1419,7 +1419,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         }
     }
 
-    internal IReadOnlyList<ExportFileCheckResult> GetCurrentFileConflicts()
+    internal async Task<IReadOnlyList<ExportFileCheckResult>> GetCurrentFileConflicts()
     {
         var targetSheets = GetTargetSheetsForProcessing();
         if (targetSheets.Count == 0)
@@ -1428,10 +1428,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return Array.Empty<ExportFileCheckResult>();
         }
 
-        var checkResults = _exportFileCheckService
-            .CheckExportFilesAsync(targetSheets, EnablePerSheetExportFormats, ExportPDF, ExportDWG, ExportDWF)
-            .GetAwaiter()
-            .GetResult();
+        var checkResults = await _exportFileCheckService
+            .CheckExportFilesAsync(targetSheets, EnablePerSheetExportFormats, ExportPDF, ExportDWG, ExportDWF);
 
         SetFileCheckResults(checkResults);
 

@@ -79,9 +79,9 @@ public partial class TransmittalView : Window
         //TODO stop the main window closing if the no button is clicked
     }
 
-    private void WizardControl_Finish(object sender, RoutedEventArgs e)
+    private async void WizardControl_Finish(object sender, RoutedEventArgs e)
     {
-        var conflicts = _viewModel.GetCurrentFileConflicts();
+        var conflicts = await _viewModel.GetCurrentFileConflicts();
         var action = FileConflictAction.Overwrite;
 
         if (conflicts.Count > 0)
