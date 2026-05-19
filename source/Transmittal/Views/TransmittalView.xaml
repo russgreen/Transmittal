@@ -552,11 +552,17 @@
 
         </syncfusion:WizardControl>
 
-        <TextBlock Foreground="Red" 
-               HorizontalAlignment="Left" 
-               VerticalAlignment="Bottom" 
-               Margin="85,0,0,10"                
-               Text="{Binding DisplayMessage, Mode=OneWay}" /> 
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="85,0,0,10" >
+            <TextBlock Foreground="Red" 
+               HorizontalAlignment="Left"  
+               Margin="0,0,10,0" 
+               Text="{Binding DisplayMessage, Mode=OneWay}" />
+            
+             <TextBlock 
+               HorizontalAlignment="Left"           
+               Text="{Binding FileCheckMessage, Mode=OneWay}" />   
+        </StackPanel>
+
 
     </Grid>
 </Window>
