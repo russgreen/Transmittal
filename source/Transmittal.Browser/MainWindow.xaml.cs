@@ -90,7 +90,6 @@ public partial class MainWindow : Window
             "Transmittal",
             "Browser",
             "PreviewUserData");
-        var fallbackPreviewDirectory = Path.Combine(Path.GetTempPath(), "Transmittal", "Browser", "PreviewWebView2UserData");
 
         try
         {

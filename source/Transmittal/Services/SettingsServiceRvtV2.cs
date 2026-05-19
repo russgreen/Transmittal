@@ -17,7 +17,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
     private const string _dataStorageElementName = "TransmittalSettings";
     private const string _vendorId = "Transmittal";
     private const string _schemaNamePrefix = "TransmittalAppSettings";
-    private const int _latestSchemaVersion = 4;
+
 
     private static readonly SchemaVersionInfo[] _knownSchemas =
     [
@@ -30,7 +30,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
 
     private static readonly SchemaVersionInfo _latestSchema = _knownSchemas[_knownSchemas.Length - 1];
 
-    // project paramaters
+    // project parameters
     private const string _projectIdentifierParamGuid = "ce8c18ee-3b90-4f42-8938-ae90e3af5a6a";
     private const string _originatorParamGuid = "e45313b7-8419-4803-92f0-68558f9278b2";
     private const string _roleParamGuid = "67fcb5e8-4ffb-43b8-8ec9-c664fd997267";
@@ -124,7 +124,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
             EnsureLatestSchemaAndStorage(rvtDoc);
             SaveSettingsToSchemaInternal(rvtDoc);
         }
-        else if (loadedVersion < _latestSchemaVersion)
+        else if (loadedVersion < _latestSchema.Version)
         {
             DeleteLegacySchemas(rvtDoc);
             EnsureLatestSchemaAndStorage(rvtDoc);
@@ -416,7 +416,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
     private void EnsureSchemaVersionSupported()
     {
         var newerSchemaVersion = DetectNewerSchemas();
-        if (newerSchemaVersion <= _latestSchemaVersion)
+        if (newerSchemaVersion <= _latestSchema.Version)
         {
             return;
         }
@@ -424,13 +424,13 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
         _logger.LogWarning(
             "Transmittal settings schema version {NewerVersion} detected, but application only supports up to version {LatestVersion}",
             newerSchemaVersion,
-            _latestSchemaVersion);
+            _latestSchema.Version);
 
         _messageBox.ShowOk(
             "Application version",
             "You appear to be opening a Revit file which was created or edited with a newer version of Transmittal. Please check for software updates.");
 
-        throw new SchemaVersionTooNewException(newerSchemaVersion, _latestSchemaVersion);
+        throw new SchemaVersionTooNewException(newerSchemaVersion, _latestSchema.Version);
     }
 
     private int DetectNewerSchemas()
@@ -455,7 +455,7 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
                 continue;
             }
 
-            if (version > _latestSchemaVersion && version > newerSchemaVersion)
+            if (version > _latestSchema.Version && version > newerSchemaVersion)
             {
                 newerSchemaVersion = version;
             }

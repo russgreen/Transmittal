@@ -413,6 +413,13 @@ public class SQLiteDataAccess : IDataConnection
         _logger.LogInformation("Database schema v4 created and version set to 4");
     }
 
+    private void ReapplyLatestSchema(string dbFilePath)
+    {
+        ApplySchemaV4(dbFilePath);
+        SetDatabaseVersion(dbFilePath, _latestSchemaVersion);
+        _logger.LogInformation("Latest schema reapplied after missing-column error.");
+    }
+
     private void ApplySchemaV3(string dbFilePath)
     {
         int maxRetries = 3;
@@ -849,10 +856,5 @@ public class SQLiteDataAccess : IDataConnection
             ex.Message.Contains("has no column named", StringComparison.OrdinalIgnoreCase);
     }
 
-    private void ReapplyLatestSchema(string dbFilePath)
-    {
-        ApplySchemaV4(dbFilePath);
-        SetDatabaseVersion(dbFilePath, _latestSchemaVersion);
-        _logger.LogInformation("Latest schema reapplied after missing-column error.");
-    }
+
 }
