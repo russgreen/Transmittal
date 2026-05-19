@@ -52,6 +52,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private string _displayMessage = string.Empty;
 
+    [ObservableProperty]
+    private string _fileCheckMessage = string.Empty;
+
     private Thread _progressWindowThread;
 
     [ObservableProperty]
@@ -275,6 +278,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         WeakReferenceMessenger.Default.Register<LockFileMessage>(this, (r, m) =>
         {
             ProcessLockFileMessage(m.Value);
+        });
+
+        WeakReferenceMessenger.Default.Register<FileCheckMessage>(this, (r, m) =>
+        {
+            FileCheckMessage = m.Value;
         });
     }
 

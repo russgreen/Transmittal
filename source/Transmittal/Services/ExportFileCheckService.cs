@@ -3,6 +3,8 @@ using Transmittal.Library.Extensions;
 using Transmittal.Library.Services;
 using Transmittal.Models;
 using System.IO;
+using Transmittal.Messages;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Transmittal.Services;
 
@@ -30,6 +32,8 @@ internal class ExportFileCheckService : IExportFileCheckService
 
         return Task.Run<IReadOnlyList<ExportFileCheckResult>>(() =>
         {
+            WeakReferenceMessenger.Default.Send(new FileCheckMessage($"Checking for existing export files ..."));
+
             var results = new List<ExportFileCheckResult>();
 
             foreach (var sheet in sheets)
@@ -78,6 +82,8 @@ internal class ExportFileCheckService : IExportFileCheckService
                     results.Add(CreateResult(sheet, ExportFormatType.DWF, fileName, ".dwf"));
                 }
             }
+
+            WeakReferenceMessenger.Default.Send(new FileCheckMessage(string.Empty));
 
             return results;
         });
