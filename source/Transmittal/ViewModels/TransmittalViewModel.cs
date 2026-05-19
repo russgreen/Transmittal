@@ -10,6 +10,7 @@ using Serilog.Core;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
@@ -40,6 +41,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private readonly IExportPDFService _exportPDFService;
     private readonly IExportDWGService _exportDWGService;
     private readonly IExportDWFService _exportDWFService;
+    private readonly IExportFileCheckService _exportFileCheckService;
     private readonly IContactDirectoryService _contactDirectoryService;
     private readonly ITransmittalService _transmittalService;
     private readonly IMessageBoxService _messageBoxService;
@@ -198,9 +200,14 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private bool _isFinishEnabled = false;
     [ObservableProperty]
     private bool _isBackEnabled = true;
+    [ObservableProperty]
+    private ObservableCollection<ExportFileCheckResult> _exportFileCheckResults = new();
 
     private List<DocumentModel> _exportedFiles = new();
     private List<string> _additionalExportFiles = new();
+    private readonly Dictionary<string, string> _existingFilesToReuse = new(StringComparer.OrdinalIgnoreCase);
+    private CancellationTokenSource _fileCheckCancellationTokenSource;
+    private bool _useExistingExportedFiles;
     private DWGLayerMappingModel _customDwgLayerMapping;
     private int _nextCustomDwgLayerMappingId = 1000;
     private bool _suppressDwgLayerMappingChange;
@@ -224,6 +231,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         IExportPDFService exportPDFService,
         IExportDWGService exportDWGService,
         IExportDWFService exportDWFService,
+        IExportFileCheckService exportFileCheckService,
         IContactDirectoryService contactDirectoryService,
         ITransmittalService transmittalService,
         IMessageBoxService messageBoxService,
@@ -234,6 +242,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         _exportPDFService = exportPDFService;
         _exportDWGService = exportDWGService;
         _exportDWFService = exportDWFService;
+        _exportFileCheckService = exportFileCheckService;
         _contactDirectoryService = contactDirectoryService;
         _transmittalService = transmittalService;
         _messageBoxService = messageBoxService;
@@ -275,6 +284,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets();
+        foreach (var drawingSheet in DrawingSheets)
+        {
+            drawingSheet.PropertyChanged += DrawingSheet_PropertyChanged;
+        }
 
         using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Transmittal", false))
         {
@@ -677,6 +690,22 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     private void SelectedDrawingSheets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         ValidateSheets();
+        QueueExistingFileCheck();
+    }
+
+    private void DrawingSheet_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not DrawingSheetModel drawingSheet)
+        {
+            return;
+        }
+
+        if (!SelectedDrawingSheets.Contains(drawingSheet))
+        {
+            return;
+        }
+
+        QueueExistingFileCheck();
     }
 
     private void ValidateSheets()
@@ -994,6 +1023,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         setAggregate(DrawingSheets.Any(x => getFlag(x) == true));
 
         ValidateSheets();
+        QueueExistingFileCheck();
     }
 
     [RelayCommand]
@@ -1011,6 +1041,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     partial void OnEnablePerSheetExportFormatsChanged(bool value)
     {
         ValidateSheets();
+        QueueExistingFileCheck();
 
         if(value == false)
         {
@@ -1027,6 +1058,21 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         key.SetValue("EnablePerSheetExportFormats", EnablePerSheetExportFormats, Microsoft.Win32.RegistryValueKind.String);
         
         key.Close();
+    }
+
+    partial void OnExportPDFChanged(bool value)
+    {
+        QueueExistingFileCheck();
+    }
+
+    partial void OnExportDWGChanged(bool value)
+    {
+        QueueExistingFileCheck();
+    }
+
+    partial void OnExportDWFChanged(bool value)
+    {
+        QueueExistingFileCheck();
     }
 
     #endregion
@@ -1211,6 +1257,16 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             _logger.LogInformation("Per sheet formats : {value}", EnablePerSheetExportFormats);
         }
 
+        var targetSheets = GetTargetSheetsForProcessing();
+
+        if (targetSheets.Count == 0)
+        {
+            return;
+        }
+
+        _exportedFiles.Clear();
+        _additionalExportFiles.Clear();
+
         IsBackEnabled = false;
         IsFinishEnabled = false;
         IsWindowVisible = System.Windows.Visibility.Hidden;
@@ -1224,10 +1280,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 .OfClass(typeof(ViewSheet))
                 .Cast<ViewSheet>()
                 .ToList();
-
-            var targetSheets = EnablePerSheetExportFormats
-                ? DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true).ToList()
-                : SelectedDrawingSheets.Cast<DrawingSheetModel>().ToList();
 
             foreach (var drawingSheet in targetSheets)
             {
@@ -1273,6 +1325,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 bool exportPdf = EnablePerSheetExportFormats ? drawingSheet.ExportPDF == true : ExportPDF;
                 bool exportDwg = EnablePerSheetExportFormats ? drawingSheet.ExportDWG == true : ExportDWG;
                 bool exportDwf = EnablePerSheetExportFormats ? drawingSheet.ExportDWF == true : ExportDWF;
+
+                exportPdf = UseExistingFileIfRequested(drawingSheet, Enums.ExportFormatType.PDF, exportPdf, "PDF", totalSheets);
+                exportDwg = UseExistingFileIfRequested(drawingSheet, Enums.ExportFormatType.DWG, exportDwg, "DWG", totalSheets);
+                exportDwf = UseExistingFileIfRequested(drawingSheet, Enums.ExportFormatType.DWF, exportDwf, "DWF", totalSheets);
 
                 if (exportPdf)
                 {
@@ -1361,6 +1417,209 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             CloseProgress();
             OnClosingRequest();
         }
+    }
+
+    internal async Task<IReadOnlyList<ExportFileCheckResult>> GetCurrentFileConflicts()
+    {
+        var targetSheets = GetTargetSheetsForProcessing();
+        if (targetSheets.Count == 0)
+        {
+            SetFileCheckResults(Array.Empty<ExportFileCheckResult>());
+            return Array.Empty<ExportFileCheckResult>();
+        }
+
+        var checkResults = await _exportFileCheckService
+            .CheckExportFilesAsync(targetSheets, EnablePerSheetExportFormats, ExportPDF, ExportDWG, ExportDWF);
+
+        SetFileCheckResults(checkResults);
+
+        return checkResults.Where(x => x.FileExists).ToList();
+    }
+
+    internal bool ApplyFileConflictAction(FileConflictAction action, IReadOnlyCollection<ExportFileCheckResult> conflicts)
+    {
+        _existingFilesToReuse.Clear();
+        _useExistingExportedFiles = false;
+
+        if (action == FileConflictAction.Overwrite)
+        {
+            return true;
+        }
+
+        if (action == FileConflictAction.UseExisting)
+        {
+            _useExistingExportedFiles = true;
+            foreach (var conflict in conflicts)
+            {
+                _existingFilesToReuse[GetFileReuseKey(conflict.SheetNumber, conflict.ExportFormat)] = conflict.OutputPath;
+            }
+
+            return true;
+        }
+
+        if (action == FileConflictAction.ReviseSheets && conflicts.Count > 0)
+        {
+            SelectConflictingSheets(conflicts);
+            IsWindowVisible = System.Windows.Visibility.Visible;
+            IsBackEnabled = true;
+            IsFinishEnabled = true;
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool UseExistingFileIfRequested(DrawingSheetModel drawingSheet, Enums.ExportFormatType format, bool shouldExport, string formatLabel, int totalSheets)
+    {
+        if (!_useExistingExportedFiles || !shouldExport)
+        {
+            return shouldExport;
+        }
+
+        if (!TryAddExistingExportedFile(drawingSheet, format))
+        {
+            return shouldExport;
+        }
+
+        SheetTaskProgressLabel = $"Using existing {formatLabel}...DONE";
+        SheetTaskProcessed += 1;
+        SendProgressMessage(totalSheets);
+        return false;
+    }
+
+    private bool TryAddExistingExportedFile(DrawingSheetModel drawingSheet, Enums.ExportFormatType format)
+    {
+        if (!_existingFilesToReuse.TryGetValue(GetFileReuseKey(drawingSheet.DrgNumber, format), out var existingFilePath))
+        {
+            return false;
+        }
+
+        if (!File.Exists(existingFilePath))
+        {
+            return false;
+        }
+
+        DocumentModel existingFile = new(drawingSheet)
+        {
+            FilePath = existingFilePath
+        };
+        _exportedFiles.Add(existingFile);
+
+        if (format == Enums.ExportFormatType.DWG && (DwgExportOptions.SharedCoords || !DwgExportOptions.MergedViews))
+        {
+            var folderPath = Path.GetDirectoryName(existingFilePath) ?? string.Empty;
+            var fileNamePrefix = Path.GetFileNameWithoutExtension(existingFilePath);
+
+            var additionalDwgFiles = GetFilesWithPrefixExceptPrimary(folderPath, fileNamePrefix, ".dwg");
+            foreach (var additionalFile in additionalDwgFiles)
+            {
+                _additionalExportFiles.Add(additionalFile);
+            }
+        }
+
+        return true;
+    }
+
+    private void SelectConflictingSheets(IReadOnlyCollection<ExportFileCheckResult> conflicts)
+    {
+        var conflictSheetIds = conflicts
+            .Select(x => x.SheetId.ToString())
+            .ToHashSet();
+
+        SelectedDrawingSheets.CollectionChanged -= SelectedDrawingSheets_CollectionChanged;
+        SelectedDrawingSheets.Clear();
+
+        foreach (var drawingSheet in DrawingSheets.Where(x => conflictSheetIds.Contains(x.ID.ToString())))
+        {
+            SelectedDrawingSheets.Add(drawingSheet);
+        }
+
+        SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
+        ValidateSheets();
+        QueueExistingFileCheck();
+    }
+
+    private void QueueExistingFileCheck()
+    {
+        _fileCheckCancellationTokenSource?.Cancel();
+        _fileCheckCancellationTokenSource?.Dispose();
+        _fileCheckCancellationTokenSource = new CancellationTokenSource();
+
+        _ = CheckForExistingFilesAsync(_fileCheckCancellationTokenSource.Token);
+    }
+
+    private async Task CheckForExistingFilesAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var targetSheets = GetTargetSheetsForFileCheck();
+            if (targetSheets.Count == 0)
+            {
+                SetFileCheckResults(Array.Empty<ExportFileCheckResult>());
+                return;
+            }
+
+            var results = await _exportFileCheckService.CheckExportFilesAsync(
+                targetSheets,
+                EnablePerSheetExportFormats,
+                ExportPDF,
+                ExportDWG,
+                ExportDWF,
+                cancellationToken);
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            SetFileCheckResults(results);
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    private List<DrawingSheetModel> GetTargetSheetsForFileCheck()
+    {
+        if (SelectedDrawingSheets is null || SelectedDrawingSheets.Count == 0)
+        {
+            return new List<DrawingSheetModel>();
+        }
+
+        return EnablePerSheetExportFormats
+            ? SelectedDrawingSheets
+                .Cast<DrawingSheetModel>()
+                .Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true)
+                .ToList()
+            : SelectedDrawingSheets
+                .Cast<DrawingSheetModel>()
+                .ToList();
+    }
+
+    private List<DrawingSheetModel> GetTargetSheetsForProcessing()
+    {
+        return EnablePerSheetExportFormats
+            ? DrawingSheets.Where(x => x.ExportPDF == true || x.ExportDWG == true || x.ExportDWF == true).ToList()
+            : SelectedDrawingSheets.Cast<DrawingSheetModel>().ToList();
+    }
+
+    private void SetFileCheckResults(IReadOnlyList<ExportFileCheckResult> results)
+    {
+        if (System.Windows.Application.Current?.Dispatcher?.CheckAccess() == true)
+        {
+            ExportFileCheckResults = new ObservableCollection<ExportFileCheckResult>(results);
+            return;
+        }
+
+        System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
+        {
+            ExportFileCheckResults = new ObservableCollection<ExportFileCheckResult>(results);
+        });
+    }
+
+    private static string GetFileReuseKey(string sheetNumber, Enums.ExportFormatType format)
+    {
+        return $"{sheetNumber}:{format}";
     }
 
     private void ExportSheetToPDF(DrawingSheetModel drawingSheet, ViewSet views, string fileName, int totalSheets)
