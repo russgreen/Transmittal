@@ -366,3 +366,4 @@ MeasurementId.txt
 
 # local debug launch setting
 /Transmittal.Desktop/Properties/launchSettings.json
+/source/Transmittal.Browser/debug-transfer-files-manifest.json
