@@ -258,6 +258,8 @@
     <ROW Component="Serilog.Sinks.PeriodicBatching.dll_1" ComponentId="{A5152857-2E9F-4864-B1DA-3D1523E61AD7}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Sinks.PeriodicBatching.dll_1"/>
     <ROW Component="Serilog.dll" ComponentId="{9F739BA8-C0FA-46CD-BA80-9CC1D324AE51}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
     <ROW Component="Serilog.dll_1" ComponentId="{BC452276-3F27-4F84-8256-AD83BE1610EE}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.dll_1"/>
+    <ROW Component="SfDatagrid.WPF.Extensions.dll" ComponentId="{CFBB3F7F-173D-4E8B-BF71-699999245ABD}" Directory_="APPDIR" Attributes="256" KeyPath="SfDatagrid.WPF.Extensions.dll"/>
+    <ROW Component="SfDatagrid.WPF.Extensions.dll_1" ComponentId="{08736015-9AA1-4E3C-A6A0-FFB121215201}" Directory_="Transmittal_6_Dir" Attributes="256" KeyPath="SfDatagrid.WPF.Extensions.dll_1"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
     <ROW Component="SixLabors.Fonts.dll" ComponentId="{2DD3BA3B-7117-4194-A067-53FF51F70C75}" Directory_="APPDIR" Attributes="0" KeyPath="SixLabors.Fonts.dll"/>
     <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{DD883321-052E-4B65-AAC1-53EE59066416}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
@@ -1060,6 +1062,8 @@
     <ROW File="Transmittal.Browser.exe" Component_="Transmittal.Browser.exe" FileName="TRANSM~2.EXE|Transmittal.Browser.exe" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Browser.exe" SelfReg="false" DigSign="true"/>
     <ROW File="Transmittal.Browser.runtimeconfig.json" Component_="Transmittal.Desktop.runtimeconfig.json" FileName="TRANSM~4.JSO|Transmittal.Browser.runtimeconfig.json" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\Transmittal.Browser.runtimeconfig.json" SelfReg="false"/>
     <ROW File="WebView2Loader.dll_1" Component_="WebView2Loader.dll_1" FileName="WEBVIE~1.DLL|WebView2Loader.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\WebView2Loader.dll" SelfReg="false"/>
+    <ROW File="SfDatagrid.WPF.Extensions.dll" Component_="SfDatagrid.WPF.Extensions.dll" FileName="SFDATA~1.DLL|SfDatagrid.WPF.Extensions.dll" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\SfDatagrid.WPF.Extensions.dll" SelfReg="false"/>
+    <ROW File="SfDatagrid.WPF.Extensions.dll_1" Component_="SfDatagrid.WPF.Extensions.dll_1" FileName="SFDATA~1.DLL|SfDatagrid.WPF.Extensions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\SfDatagrid.WPF.Extensions.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1456,6 +1460,8 @@
     <ROW Feature_="MainFeature" Component_="Transmittal.Browser.dll"/>
     <ROW Feature_="MainFeature" Component_="Transmittal.Browser.exe"/>
     <ROW Feature_="MainFeature" Component_="WebView2Loader.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="SfDatagrid.WPF.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="SfDatagrid.WPF.Extensions.dll_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
