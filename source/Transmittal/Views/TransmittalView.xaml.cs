@@ -1,4 +1,5 @@
 ﻿using Ookii.Dialogs.Wpf;
+using SfDatagrid.WPF.Extensions;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
@@ -34,6 +35,8 @@ public partial class TransmittalView : Window
         this.sfDataGridSheets.AutoExpandGroups = true;
         this.sfDataGridSheets.AllowFrozenGroupHeaders = true;
 #endif
+
+        this.sfDataGridSheets.EnableCtrlDragFill();
 
         var column = this.sfDataGridSheets.Columns["IssueDate"] as Syncfusion.UI.Xaml.Grid.GridDateTimeColumn;
         if (column != null)

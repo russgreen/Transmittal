@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using SfDatagrid.WPF.Extensions;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
 using System.Windows;
@@ -25,6 +26,8 @@ public partial class TransmittalView : Window
         var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
 
         _viewModel.ClosingRequest += (sender, e) => this.Close();
+
+        this.sfDataGridDocuments.EnableCtrlDragFill();
     }
 
 

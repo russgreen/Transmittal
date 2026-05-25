@@ -74,6 +74,8 @@
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="29.*" />
 		<PackageReference Include="Syncfusion.Tools.WPF" Version="29.*" />
 
+		<PackageReference Include="SfDatagrid.WPF.Extensions" Version="*" />
+
 		<!--IOC-->
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.*" />
 
