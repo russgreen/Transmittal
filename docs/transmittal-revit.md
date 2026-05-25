@@ -9,6 +9,8 @@ Transmittal for Autodesk® Revit® provides a wizard-style UI to export drawing 
 
 You can optionally set the export formats per sheet.  The default setting results in all sheets being exported with the selected formats. With the option configured, you can also choose which sheets will export with different formats.
 
+You can now use **Ctrl + drag** in the sheets grid to quickly fill values into adjacent rows.
+
 Selected sheets can have revisions and status values set. 
 
 New revisions in the model can be created from within Transmittal while setting the revisions to selected sheets.
@@ -38,4 +40,3 @@ Exporting the report will result in it being automatically named and saved to th
 ![image](https://user-images.githubusercontent.com/1886088/178138968-4c3bbb61-646c-4297-9fb6-587450b135a2.png)
 
 To use Transmittal with Revit 2021, the freeware PDF24 printer must be installed.  This is not required for Revit 2022 and later. The PDF24 printer can be downloaded from [PDF24.org](https://download.pdf24.org/pdf24-creator-11.11.1-x64.msi)
-
