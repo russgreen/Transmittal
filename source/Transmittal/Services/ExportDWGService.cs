@@ -61,7 +61,7 @@ internal class ExportDWGService : IExportDWGService
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Error deleting existing DWG");
-                        exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                        exportFileName = exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
                         fullPath = Path.Combine(folderPath, exportFileName);
                     }
                 }
@@ -106,13 +106,24 @@ internal class ExportDWGService : IExportDWGService
                     {
                         lviews.Add(v.Id);
                         // export the view
-#if REVIT2018
-                        string viewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                        exportDocument.Export(folderPath, viewFileName, lviews, dwgExportOptions);
-#else
+
+
                         string viewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
+
+                        if (File.Exists(viewFileName) == true)
+                        {
+                            try
+                            {
+                                File.Delete(viewFileName);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Error deleting existing DWG");
+                                viewFileName = viewFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                            }
+                        }
+
                         exportDocument.Export(folderPath, viewFileName, lviews, dwgExportOptions);
-#endif
 
                         pcpFile = Path.Combine(folderPath, viewFileName.ToLower().Replace(".dwg", ".pcp"));
                         if (File.Exists(pcpFile))
