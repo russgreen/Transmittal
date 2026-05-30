@@ -103,9 +103,7 @@ internal class ExportDWGService : IExportDWGService
 
                     foreach (Autodesk.Revit.DB.View v in usedViews)
                     {
-                        lviews.Add(v.Id);
-                        // export the view
-
+                        lviews = new List<ElementId> { v.Id };
 
                         string viewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
 
