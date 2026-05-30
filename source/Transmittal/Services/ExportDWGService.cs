@@ -10,6 +10,7 @@ using Transmittal.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using Microsoft.Extensions.Logging;
+using System.Windows.Media.Animation;
 
 namespace Transmittal.Services;
 internal class ExportDWGService : IExportDWGService
@@ -91,7 +92,14 @@ internal class ExportDWGService : IExportDWGService
                     foreach (ElementId id in vs.GetAllPlacedViews())
                     {
                         Autodesk.Revit.DB.View usedView = exportDocument.GetElement(id) as Autodesk.Revit.DB.View;
-                        usedViews.Insert(usedView);
+
+                        // only export floor plans, 3D views and ceiling plans iin shared coordinates to avoid exporting
+                        // views that are not georeferenced and therefore not in the correct location in AutoCAD
+                        if (usedView.ViewType == ViewType.FloorPlan ||
+                            usedView.ViewType == ViewType.CeilingPlan )
+                        {
+                            usedViews.Insert(usedView);
+                        }
                     }
 
                     foreach (Autodesk.Revit.DB.View v in usedViews)
@@ -99,8 +107,8 @@ internal class ExportDWGService : IExportDWGService
                         lviews.Add(v.Id);
                         // export the view
 #if REVIT2018
-                            string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                            exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
+                        string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
+                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
 #else
                         string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
                         exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
