@@ -60,7 +60,7 @@ internal class ExportDWGService : IExportDWGService
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Error deleting existing DWG");
-                        exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                        exportFileName = exportFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
                         fullPath = Path.Combine(folderPath, exportFileName);
                     }
                 }
@@ -91,22 +91,40 @@ internal class ExportDWGService : IExportDWGService
                     foreach (ElementId id in vs.GetAllPlacedViews())
                     {
                         Autodesk.Revit.DB.View usedView = exportDocument.GetElement(id) as Autodesk.Revit.DB.View;
-                        usedViews.Insert(usedView);
+
+                        // only export floor plans and ceiling plans in shared coordinates to avoid exporting
+                        // views that are not georeferenced and therefore not in the correct location in AutoCAD
+                        if (usedView.ViewType == ViewType.FloorPlan ||
+                            usedView.ViewType == ViewType.CeilingPlan )
+                        {
+                            usedViews.Insert(usedView);
+                        }
                     }
 
                     foreach (Autodesk.Revit.DB.View v in usedViews)
                     {
-                        lviews.Add(v.Id);
-                        // export the view
-#if REVIT2018
-                            string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                            exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
-#else
-                        string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
-                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
-#endif
+                        lviews = new List<ElementId> { v.Id };
 
-                        pcpFile = Path.Combine(folderPath, ViewFileName.ToLower().Replace(".dwg", ".pcp"));
+                        string viewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
+
+                        var viewFullPath = Path.Combine(folderPath, viewFileName);
+                        if (File.Exists(viewFullPath))
+                        {
+                            try
+                            {
+                                File.Delete(viewFullPath);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Error deleting existing DWG");
+                                viewFileName = viewFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                                viewFullPath = Path.Combine(folderPath, viewFileName);
+                            }
+                        }
+
+                        exportDocument.Export(folderPath, viewFileName, lviews, dwgExportOptions);
+
+                        pcpFile = Path.Combine(folderPath, viewFileName.ToLower().Replace(".dwg", ".pcp"));
                         if (File.Exists(pcpFile))
                         {
                             File.Delete(pcpFile);
@@ -135,9 +153,11 @@ internal class ExportDWGService : IExportDWGService
         }
 
         var activeSettings = ExportDWGSettings.GetActivePredefinedSettings(exportDocument);
-        var exportOptions = activeSettings?.GetDWGExportOptions();
+        var exportOptions = activeSettings?.GetDWGExportOptions() ?? new DWGExportOptions();
 
-        return exportOptions ?? new DWGExportOptions();
+        exportOptions.MergedViews = true; //force this to merge the views by default
+
+        return exportOptions;
     }
 
     public List<string> GetDocumentDWGLayerMappings(Document exportDocument)
