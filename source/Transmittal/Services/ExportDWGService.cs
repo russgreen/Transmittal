@@ -93,7 +93,7 @@ internal class ExportDWGService : IExportDWGService
                     {
                         Autodesk.Revit.DB.View usedView = exportDocument.GetElement(id) as Autodesk.Revit.DB.View;
 
-                        // only export floor plans, 3D views and ceiling plans iin shared coordinates to avoid exporting
+                        // only export floor plans and ceiling plans in shared coordinates to avoid exporting
                         // views that are not georeferenced and therefore not in the correct location in AutoCAD
                         if (usedView.ViewType == ViewType.FloorPlan ||
                             usedView.ViewType == ViewType.CeilingPlan )
