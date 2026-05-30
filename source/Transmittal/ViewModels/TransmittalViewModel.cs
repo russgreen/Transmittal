@@ -91,7 +91,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     [ObservableProperty]
     private bool _exportPDFAvailable = true;
     [ObservableProperty]
-    private bool _exportPDF = true;
+    private bool _exportPDF = false;
     [ObservableProperty]
     private bool _exportDWG = false;
     [ObservableProperty]
@@ -309,10 +309,15 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void WireUpExportFormatsPage()
     {
+
+        if (!EnablePerSheetExportFormats)
+        {
+            ExportPDF = true;
+        }
+
 #if REVIT2022_OR_GREATER
         //we use the Revit 2022 API to export PDF so always available
         ExportPDFAvailable = true;
-        ExportPDF = true;
 
         //if PDF24 is installed we can use it
         PDF24Available = IsPrinterInstalled("PDF24");
@@ -559,6 +564,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             SetDwgLayerMappingSelection(mappingToRestore, false);
         }
     }
+
 
     private void WireUpDistributionPage()
     {
@@ -1051,7 +1057,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ValidateSheets();
         QueueExistingFileCheck();
 
-        if(value == false)
+        ExportPDF = false;
+
+        if (value == false)
         {
             ExportPDF = true;
         }
