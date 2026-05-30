@@ -155,11 +155,11 @@ internal class ExportDWGService : IExportDWGService
         }
 
         var activeSettings = ExportDWGSettings.GetActivePredefinedSettings(exportDocument);
-        var exportOptions = activeSettings?.GetDWGExportOptions();
+        var exportOptions = activeSettings?.GetDWGExportOptions() ?? new DWGExportOptions();
 
         exportOptions.MergedViews = true; //force this to merge the views by default
 
-        return exportOptions ?? new DWGExportOptions();
+        return exportOptions;
     }
 
     public List<string> GetDocumentDWGLayerMappings(Document exportDocument)
