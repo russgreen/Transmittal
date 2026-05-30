@@ -107,14 +107,14 @@ internal class ExportDWGService : IExportDWGService
                         lviews.Add(v.Id);
                         // export the view
 #if REVIT2018
-                        string ViewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
-                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
+                        string viewFileName = exportFileName.Replace( ".dwg", "-view_" + v.ViewName + ".dwg");
+                        exportDocument.Export(folderPath, viewFileName, lviews, dwgExportOptions);
 #else
-                        string ViewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
-                        exportDocument.Export(folderPath, ViewFileName, lviews, dwgExportOptions);
+                        string viewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
+                        exportDocument.Export(folderPath, viewFileName, lviews, dwgExportOptions);
 #endif
 
-                        pcpFile = Path.Combine(folderPath, ViewFileName.ToLower().Replace(".dwg", ".pcp"));
+                        pcpFile = Path.Combine(folderPath, viewFileName.ToLower().Replace(".dwg", ".pcp"));
                         if (File.Exists(pcpFile))
                         {
                             File.Delete(pcpFile);
