@@ -1417,7 +1417,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 }
             }
 
-            OpenExplorerToExportedFilesLocations();
+            if (!SendFileTransfer)
+            {
+                OpenExplorerToExportedFilesLocations();
+            }        
+                        
             Thread.Sleep(5000);
             CloseProgress();
             OnClosingRequest();
