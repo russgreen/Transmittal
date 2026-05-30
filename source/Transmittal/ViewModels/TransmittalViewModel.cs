@@ -1921,10 +1921,13 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return;
         }
 
-        var filesForTransfer = _exportedFiles
+        var filesForTransfer = new List<string>();
+
+        filesForTransfer.AddRange(_exportedFiles
             .Where(x => x.FilePath != null)
             .Select(x => x.FilePath)
-            .ToList();
+            .ToList());
+           
 
         if(_additionalExportFiles.Count > 0)
         {
