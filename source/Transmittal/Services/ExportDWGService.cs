@@ -10,7 +10,6 @@ using Transmittal.Models;
 using Transmittal.Library.Services;
 using Transmittal.Library.Extensions;
 using Microsoft.Extensions.Logging;
-using System.Windows.Media.Animation;
 
 namespace Transmittal.Services;
 internal class ExportDWGService : IExportDWGService
@@ -110,16 +109,18 @@ internal class ExportDWGService : IExportDWGService
 
                         string viewFileName = exportFileName.Replace(".dwg", "-view_" + v.Name + ".dwg");
 
-                        if (File.Exists(viewFileName) == true)
+                        var viewFullPath = Path.Combine(folderPath, viewFileName);
+                        if (File.Exists(viewFullPath))
                         {
                             try
                             {
-                                File.Delete(viewFileName);
+                                File.Delete(viewFullPath);
                             }
                             catch (Exception ex)
                             {
                                 _logger.LogError(ex, "Error deleting existing DWG");
                                 viewFileName = viewFileName.Replace(".dwg", $"({DateTime.Now.ToLongTimeString().Replace(":", "")}).dwg");
+                                viewFullPath = Path.Combine(folderPath, viewFileName);
                             }
                         }
 
