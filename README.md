@@ -81,7 +81,7 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 ### For Browser Application
 - **Operating System**: Windows 10/11 (64-bit)
 - **Framework**: .NET 8
-- **WebView2**: Microsoft Edge WebView2 Runtime (automatically installed with Windows 10/11)
+- **WebView2**: Microsoft Edge WebView2 Runtime 
 
 ## Solution Architecture
 
