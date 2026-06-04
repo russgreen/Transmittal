@@ -77,13 +77,36 @@
                             <syncfusion:GridTextColumn MappingName="DrgOriginator" HeaderText="Originator" Width="80" />
                             <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume / Functional" Width="80" />
                             <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level / Spatial" Width="80" />
-                            <!--<syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />-->
+                            <!--<syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />
                             <syncfusion:GridComboBoxColumn MappingName="DrgType"
                                                            HeaderText="Type"
                                                            SelectedValuePath="Code"
                                                            DisplayMemberPath="DisplayName"
                                                            ItemsSource="{Binding DocumentTypes}"
-                                                           MinimumWidth="200"/>
+                                                           MinimumWidth="200"/>-->
+                            <syncfusion:GridTemplateColumn MappingName="DrgType" HeaderText="Type" MinimumWidth="50">
+                                <!-- Display mode -->
+                                <syncfusion:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DrgType}" />
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.CellTemplate>
+
+                                <!-- Edit mode -->
+                                <syncfusion:GridTemplateColumn.EditTemplate>
+                                    <DataTemplate>
+                                        <ComboBox
+                                            IsEditable="True"
+                                            IsTextSearchEnabled="True"
+                                            StaysOpenOnEdit="True"
+                                            ItemsSource="{Binding DataContext.DocumentTypes, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            TextSearch.TextPath="Code"
+                                            Text="{Binding DrgType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            DisplayMemberPath="DisplayName" />
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.EditTemplate>
+                            </syncfusion:GridTemplateColumn>
+
                             <syncfusion:GridTextColumn MappingName="DrgRole" HeaderText="Role" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" />
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
