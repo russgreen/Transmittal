@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.Core;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -39,6 +40,8 @@ public partial class MainWindow : Window
         _logger = logger;
         DataContext = _viewModel;
 
+        MainTabControl.Opacity = 0;
+
         Loaded += MainWindowLoaded;
     }
 
@@ -52,6 +55,8 @@ public partial class MainWindow : Window
             await WebView.EnsureCoreWebView2Async(webView2Environment);
             WebView.NavigationCompleted += WebViewOnNavigationCompleted;
 
+
+
             if (!Uri.TryCreate(options.StartUrl, UriKind.Absolute, out var startUri))
             {
                 _logger.LogWarning("Invalid start url {StartUrl}, defaulting to about:blank", options.StartUrl);
@@ -61,7 +66,21 @@ public partial class MainWindow : Window
             WebView.Source = startUri;
             _viewModel.CurrentAddress = startUri.ToString();
 
+
+
+            // WPF's TabControl only adds the selected tab's content to the visual tree.
+            // FilePreviewWebView must be in the visual tree before EnsureCoreWebView2Async
+            // can initialize it. Temporarily switch to the PDF Preview tab while the window
+            // is invisible (Opacity = 0) to avoid a visible flash.
+
+            MainTabControl.Opacity = 0;
+            MainTabControl.SelectedIndex = 1;
+
             await InitializeFilePreviewWebViewAsync();
+
+            MainTabControl.SelectedIndex = 0;
+            MainTabControl.Opacity = 1;
+
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -99,6 +118,8 @@ public partial class MainWindow : Window
             await FilePreviewWebView.EnsureCoreWebView2Async(previewEnvironment);
             ConfigurePreviewWebViewSettings();
             FilePreviewWebView.Source = new Uri("about:blank");
+
+            Debug.WriteLine("File preview WebView2 environment initialized successfully.");
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -313,11 +334,6 @@ public partial class MainWindow : Window
             return;
         }
 
-        if(FilePreviewWebView.CoreWebView2 is null)
-        {
-            return;
-        }
-
         var text = filePath?.Trim() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -332,6 +348,12 @@ public partial class MainWindow : Window
         if (!Uri.TryCreate(text, UriKind.Absolute, out var uri))
         {
             _logger.LogWarning("Invalid file path: {FilePath}", filePath);
+            return;
+        }
+
+        if (FilePreviewWebView.CoreWebView2 is null)
+        {
+            _logger.LogWarning("FilePreviewWebView is not initialized; cannot preview {FilePath}", filePath);
             return;
         }
 

@@ -45,7 +45,8 @@
                              SelectionMode="Extended"
                              ItemsSource="{Binding TransferFiles}"
                              PreviewMouseLeftButtonDown="TransferFilesListBox_OnPreviewMouseLeftButtonDown"
-                             PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove" MouseDoubleClick="TransferFilesListBox_MouseDoubleClick" SelectionChanged="TransferFilesListBox_SelectionChanged">
+                             PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove" 
+                             MouseDoubleClick="TransferFilesListBox_MouseDoubleClick" SelectionChanged="TransferFilesListBox_SelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="2">
@@ -85,7 +86,7 @@
             </Expander>
         </Border>
 
-        <TabControl  Grid.Column="1">
+        <TabControl x:Name="MainTabControl" Grid.Column="1" >
             <TabItem Header="File Transfer">
                 <Grid >
                     <Grid.RowDefinitions>
