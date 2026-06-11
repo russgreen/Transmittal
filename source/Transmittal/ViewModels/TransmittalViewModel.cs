@@ -16,6 +16,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Transmittal.Commands;
@@ -564,7 +565,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             SetDwgLayerMappingSelection(mappingToRestore, false);
         }
     }
-
 
     private void WireUpDistributionPage()
     {
@@ -1273,6 +1273,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             _logger.LogInformation("Per sheet formats : {value}", EnablePerSheetExportFormats);
         }
 
+        IsFinishEnabled = false;
+
         var targetSheets = GetTargetSheetsForProcessing();
 
         if (targetSheets.Count == 0)
@@ -1733,26 +1735,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SendProgressMessage(totalSheets);
     }
 
-    private IReadOnlyList<string> GetFilesWithPrefixExceptPrimary(string folderPath, string fileNamePrefix, string primaryExtension = ".dwg")
-    {
-        if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(fileNamePrefix))
-        {
-            return Array.Empty<string>();
-        }
-
-        if (!Directory.Exists(folderPath))
-        {
-            return Array.Empty<string>();
-        }
-
-        var primaryFileName = $"{fileNamePrefix}{primaryExtension}";
-
-        return Directory.EnumerateFiles(folderPath, $"{fileNamePrefix}*", SearchOption.TopDirectoryOnly)
-            .Where(path => !Path.GetFileName(path).Equals(primaryFileName, StringComparison.OrdinalIgnoreCase))
-            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-    }
-
     private void ExportSheetToDWF(DrawingSheetModel drawingSheet, ViewSheet sheet, ViewSet views, string fileName, int totalSheets)
     {
         SheetTaskProgressLabel = "Exporting DWF...";
@@ -1782,6 +1764,26 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SheetTaskProgressLabel = "Exporting DWF...DONE";
         SheetTaskProcessed += 1;
         SendProgressMessage(totalSheets);
+    }
+
+    private IReadOnlyList<string> GetFilesWithPrefixExceptPrimary(string folderPath, string fileNamePrefix, string primaryExtension = ".dwg")
+    {
+        if (string.IsNullOrWhiteSpace(folderPath) || string.IsNullOrWhiteSpace(fileNamePrefix))
+        {
+            return Array.Empty<string>();
+        }
+
+        if (!Directory.Exists(folderPath))
+        {
+            return Array.Empty<string>();
+        }
+
+        var primaryFileName = $"{fileNamePrefix}{primaryExtension}";
+
+        return Directory.EnumerateFiles(folderPath, $"{fileNamePrefix}*", SearchOption.TopDirectoryOnly)
+            .Where(path => !Path.GetFileName(path).Equals(primaryFileName, StringComparison.OrdinalIgnoreCase))
+            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 
     private void CopyFilesForCDE()
@@ -1937,9 +1939,11 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         {
             filesForTransfer.AddRange(_additionalExportFiles);
         }
-        
-        var filesForTransferString = string.Join(";", filesForTransfer);
 
+        var transferManifestPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Transmittal", "transmittal-manifest.json");
+        var transferManifestContent = JsonSerializer.Serialize(filesForTransfer);
+        System.IO.File.WriteAllText(transferManifestPath, transferManifestContent);
 
 #if DEBUG
         var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -1953,7 +1957,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
             FileName = pathToExe,
-            Arguments = $"\"--filetransfer={filesForTransferString}\""
+            Arguments = "\"--filetransfer\""
         };
 
         Process.Start(processStartInfo);

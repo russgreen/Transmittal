@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
 using Transmittal.Desktop.Services;
 using Transmittal.Desktop.Views;
@@ -123,14 +125,32 @@ public partial class App : Application
                 {
                     settings.GetSettings();
 
-                    var files = arg.Substring(arg.IndexOf("=") + 1);
-                    var fileTransferService = Host.GetService<IFileTransferService>();
-                    var filesList = files.Split(';').ToList();
+                    var manifestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "Transmittal", "transmittal-manifest.json");
+                    List<string> filesList = new();
 
-                    if(filesList.Count > 0)
+                    if (File.Exists(manifestPath))
+                    {
+                        try
+                        {
+                            var manifestContent = File.ReadAllText(manifestPath);
+                            filesList = JsonSerializer.Deserialize<List<string>>(manifestContent) ?? new List<string>();
+                        }
+                        catch
+                        {
+                            filesList = new List<string>();
+                        }
+                        finally
+                        {
+                            File.Delete(manifestPath);
+                        }
+                    }
+
+                    var fileTransferService = Host.GetService<IFileTransferService>();
+
+                    if (filesList.Count > 0)
                     {
                         await fileTransferService.PrepareFileTransferUploadAsync(filesList);
- 
                     }
 
                     Current.Shutdown();
