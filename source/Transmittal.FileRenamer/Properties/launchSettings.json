@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Transmittal.FileRenamer": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Development\\Source\\Repos\\Transmittal\\source\\Transmittal.FileRenamer\\1001-ONS-ZZ-XX-RP-A-0001-Bimnaming-S6-P02.pdf"
+    }
+  }
+}

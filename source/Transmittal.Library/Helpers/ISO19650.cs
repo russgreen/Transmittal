@@ -121,4 +121,51 @@ public static class ISO19650
         return documentTypes;
     }
 
+    public static List<RoleModel> GetRoles()
+    {
+        List<RoleModel> roles = new List<RoleModel>();
+
+        roles.Clear();
+        roles.Add(new RoleModel() { Code = "A", Description = "Architect" });
+        roles.Add(new RoleModel() { Code = "B", Description = "Building Surveyor" });
+        roles.Add(new RoleModel() { Code = "C", Description = "Civil Engineer" });
+        roles.Add(new RoleModel() { Code = "D", Description = "Drainage, Highways Engineer" });
+        roles.Add(new RoleModel() { Code = "E", Description = "Electrical Engineer" });
+        roles.Add(new RoleModel() { Code = "F", Description = "Facilities Manager" });
+        roles.Add(new RoleModel() { Code = "G", Description = "Geographical and Land Surveyor" });
+        roles.Add(new RoleModel() { Code = "H", Description = "Heating and Ventilation Designer" });
+        roles.Add(new RoleModel() { Code = "I", Description = "Interior Designer" });
+        roles.Add(new RoleModel() { Code = "K", Description = "Client" });
+        roles.Add(new RoleModel() { Code = "L", Description = "Landscape Architect" });
+        roles.Add(new RoleModel() { Code = "M", Description = "Mechanical Engineer" });
+        roles.Add(new RoleModel() { Code = "P", Description = "Public Health Engineer" });
+        roles.Add(new RoleModel() { Code = "Q", Description = "Quantity Surveyor" });
+        roles.Add(new RoleModel() { Code = "S", Description = "Structural Engineer" });
+        roles.Add(new RoleModel() { Code = "T", Description = "Town and Country Planner" });
+        roles.Add(new RoleModel() { Code = "W", Description = "Contractor" });
+        roles.Add(new RoleModel() { Code = "X", Description = "Subcontractor" });
+        roles.Add(new RoleModel() { Code = "Y", Description = "Specialist Designer" });
+        roles.Add(new RoleModel() { Code = "Z", Description = "General(non-disciplinary)" });
+
+        return roles;
+    }
+
+    public static List<DocumentStatusModel> GetDocumentStatuses()
+    {
+        List<DocumentStatusModel> documentStatuses = new List<DocumentStatusModel>();
+
+        documentStatuses.Clear();
+        documentStatuses.Add(new DocumentStatusModel() { Code = "S0", Description = "PRELIMINARY WIP" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "S1", Description = "FOR CO-ORDINATION" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "S2", Description = "FOR INFORMATION" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "S3", Description = "FOR REVIEW AND COMMENT" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "S4", Description = "FOR STAGE APPROVAL" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A4", Description = "FOR CONSTRUCTION" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "A5", Description = "FOR CONSTRUCTION" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B4", Description = "FOR CONSTRUCTION(PARTIAL)" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "B5", Description = "FOR CONSTRUCTION(PARTIAL)" });
+        documentStatuses.Add(new DocumentStatusModel() { Code = "CR", Description = "AS BUILT" });
+
+        return documentStatuses;
+    }
 }
