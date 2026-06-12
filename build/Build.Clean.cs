@@ -1,7 +1,7 @@
-﻿using Nuke.Common;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.IO;
 
-partial class Build
+partial class Build : FalloutBuild
 {
     Target Clean => _ => _
     .Executes(() =>

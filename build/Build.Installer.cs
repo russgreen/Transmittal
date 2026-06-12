@@ -1,13 +1,20 @@
-﻿using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.ProjectModel;
+using Fallout.Common;
+using Fallout.Common.CI;
+using Fallout.Common.Execution;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.Tooling;
+using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using static Fallout.Common.EnvironmentInfo;
+using static Fallout.Common.IO.PathConstruction;
 
-partial class Build
+partial class Build : FalloutBuild
 {
     Target Installer => _ => _
         .TriggeredBy(Sign)
