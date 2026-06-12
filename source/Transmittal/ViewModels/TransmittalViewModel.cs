@@ -1273,8 +1273,6 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             _logger.LogInformation("Per sheet formats : {value}", EnablePerSheetExportFormats);
         }
 
-        IsFinishEnabled = false;
-
         var targetSheets = GetTargetSheetsForProcessing();
 
         if (targetSheets.Count == 0)

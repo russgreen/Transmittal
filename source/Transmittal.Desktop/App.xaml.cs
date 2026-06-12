@@ -142,7 +142,7 @@ public partial class App : Application
                         }
                         finally
                         {
-                            File.Delete(manifestPath);
+                            //File.Delete(manifestPath);
                         }
                     }
 
