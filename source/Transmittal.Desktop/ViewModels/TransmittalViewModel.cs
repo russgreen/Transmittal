@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Text.Json;
 using Transmittal.Desktop.Requesters;
 using Transmittal.Desktop.Services;
 using Transmittal.Library.Extensions;
@@ -382,7 +383,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IPersonRequester, I
             .Select(x => x.FilePath)
             .ToList();
 
-        _fileTransferService.PrepareFileTransferUploadAsync(filesForTransfer);
+        var transferManifestPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "Transmittal", "transmittal-manifest.json");
+        var transferManifestContent = JsonSerializer.Serialize(filesForTransfer);
+        System.IO.File.WriteAllText(transferManifestPath, transferManifestContent);
+
+        _fileTransferService.PrepareFileTransferUploadAsync(transferManifestPath);
     }
 
     internal void AddFileToDocumentsList(string file)

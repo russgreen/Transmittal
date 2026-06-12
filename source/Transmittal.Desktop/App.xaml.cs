@@ -135,22 +135,22 @@ public partial class App : Application
                         {
                             var manifestContent = File.ReadAllText(manifestPath);
                             filesList = JsonSerializer.Deserialize<List<string>>(manifestContent) ?? new List<string>();
+
+                            var fileTransferService = Host.GetService<IFileTransferService>();
+
+                            if (filesList.Count > 0)
+                            {
+                                await fileTransferService.PrepareFileTransferUploadAsync(manifestPath);
+                            }
                         }
                         catch
                         {
-                            filesList = new List<string>();
+                            //filesList = new List<string>();
                         }
                         finally
                         {
                             //File.Delete(manifestPath);
                         }
-                    }
-
-                    var fileTransferService = Host.GetService<IFileTransferService>();
-
-                    if (filesList.Count > 0)
-                    {
-                        await fileTransferService.PrepareFileTransferUploadAsync(filesList);
                     }
 
                     Current.Shutdown();
