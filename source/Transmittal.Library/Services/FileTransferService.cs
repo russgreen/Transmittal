@@ -113,7 +113,6 @@ public class FileTransferService : IFileTransferService
 
         var browser = await playwright.Chromium.ConnectOverCDPAsync($"http://{_localAddress}:{_debugPort}");
         var context = browser.Contexts.First();
-
         var page = context.Pages.FirstOrDefault() ?? await context.NewPageAsync();
 
         await page.GotoAsync("https://fromsmash.com/");
@@ -128,10 +127,10 @@ public class FileTransferService : IFileTransferService
         // Preferred path: set files directly on a real file input in the uploader area.
         var uploadInputCandidates = new[]
         {
-        "main input[type='file']",
-        "form input[type='file']",
-        "input[type='file']"
-    };
+            "main input[type='file']",
+            "form input[type='file']",
+            "input[type='file']"
+        };
 
         try
         {

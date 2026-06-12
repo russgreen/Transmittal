@@ -30,6 +30,8 @@ public partial class MainWindow : Window
     private readonly ILogger<MainWindow> _logger;
     private Point _dragStartPoint;
 
+    private GridLength _savedExpanderWidth = new GridLength(400); // Default width
+
     public MainWindow(MainWindowViewModel viewModel,
         IBrowserLaunchOptionsProvider launchOptionsProvider,
         ILogger<MainWindow> logger)
@@ -380,5 +382,34 @@ public partial class MainWindow : Window
         return null;
     }
 
+    private void Expander_Collapsed(object sender, RoutedEventArgs e)
+    {
+        // Save current width before collapsing
+        _savedExpanderWidth = ExpanderColumn.Width;
 
+        // Hide expander and splitter
+        ExpanderColumn.Width = new GridLength(30);
+        SplitterColumn.Width = new GridLength(0);
+    }
+
+    private void Expander_Expanded(object sender, RoutedEventArgs e)
+    {
+        // Restore expander and splitter
+        SplitterColumn.Width = new GridLength(5);
+        ExpanderColumn.Width = _savedExpanderWidth;
+    }
+
+    private void SelectionButton_Click(object sender, RoutedEventArgs e)
+    {
+        if(SelectionButton.Content.ToString() == "Select none")
+        {
+            this.TransferFilesListBox.UnselectAll();
+            this.SelectionButton.Content = "Select all";
+        }
+        else
+        {
+            this.TransferFilesListBox.SelectAll();
+            this.SelectionButton.Content = "Select none";
+        }
+    }
 }

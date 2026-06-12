@@ -1,14 +1,14 @@
-﻿using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.Tools.SignTool;
+using Fallout.Common;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.SignTool;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Nuke.Common.Tools.SignTool.SignToolTasks;
+using static Fallout.Common.Tools.SignTool.SignToolTasks;
 
-partial class Build
+partial class Build : FalloutBuild
 {
     Target Sign => _ => _
         .TriggeredBy(Compile)

@@ -11,82 +11,100 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="400" x:Name="ExpanderColumn" />
+            <ColumnDefinition Width="5" x:Name="SplitterColumn"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0"
-                BorderBrush="#FFD0D0D0"
-                BorderThickness="0,0,1,0"
-                Background="#FFF8F8F8">
-            <Expander IsExpanded="{Binding IsFilePanelExpanded}"
-                      ExpandDirection="Right">
-                <Grid Width="320">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+        <Expander Grid.Column="0" 
+                  IsExpanded="{Binding IsFilePanelExpanded}"
+                  ExpandDirection="Right"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                    <StackPanel Margin="10,10,10,0">
-                        <TextBlock Text="Drag selected files onto the browser upload area. Double-click to open files in the default application."
-                                   TextWrapping="Wrap"
-                                   FontSize="12"
-                                   Margin="0,0,0,6" />
-                        <TextBlock Text="{Binding RedropHint}"
-                                   TextWrapping="Wrap"
-                                   FontSize="12"
-                                   Foreground="#FF555555"
-                                   Visibility="{Binding ShowRedropHint, Converter={StaticResource BoolToVisibilityConverter}}" />
-                    </StackPanel>
+                <StackPanel Grid.Row="0" Margin="10,10,10,0">
+                    <TextBlock Text="Drag selected files onto the browser upload area. Double-click to open files in the default application."
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Margin="0,0,0,6" />
+                    <TextBlock Text="{Binding RedropHint}"
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Foreground="#FF555555"
+                       Visibility="{Binding ShowRedropHint, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
 
-                    <ListBox Grid.Row="1"
-                             Margin="10"
-                             Name="TransferFilesListBox"
-                             SelectionMode="Extended"
-                             ItemsSource="{Binding TransferFiles}"
-                             PreviewMouseLeftButtonDown="TransferFilesListBox_OnPreviewMouseLeftButtonDown"
-                             PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove" 
-                             MouseDoubleClick="TransferFilesListBox_MouseDoubleClick" SelectionChanged="TransferFilesListBox_SelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="2">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Image Width="16" Height="16" Margin="0,0,6,0"
-                                               VerticalAlignment="Center"
-                                               Source="{Binding IconUri}"
-                                               Visibility="{Binding HasIcon, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                        <TextBlock Text="{Binding FileName}"
-                                                   FontWeight="SemiBold"
-                                                   VerticalAlignment="Center" />
-                                    </StackPanel>
-                                    <TextBlock Text="{Binding FilePath}"
-                                               FontSize="11"
-                                               Foreground="#FF555555"
-                                               TextTrimming="CharacterEllipsis"
-                                               ToolTip="{Binding FilePath}" />
-                                    <TextBlock Text="File not found"
-                                               FontSize="11"
-                                               Foreground="#FFB00020">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Exists}" Value="False">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                <Button Grid.Row="1" 
+                        x:Name="SelectionButton"
+                        Margin="10"
+                        Content="Select all" 
+                        Click="SelectionButton_Click" />
+
+                <ListBox Grid.Row="2"
+                         Margin="10"
+                         Name="TransferFilesListBox"
+                         SelectionMode="Extended"
+                         ItemsSource="{Binding TransferFiles}"
+                         PreviewMouseLeftButtonDown="TransferFilesListBox_OnPreviewMouseLeftButtonDown"
+                         PreviewMouseMove="TransferFilesListBox_OnPreviewMouseMove" 
+                         MouseDoubleClick="TransferFilesListBox_MouseDoubleClick" 
+                         SelectionChanged="TransferFilesListBox_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="2">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Image Width="16" Height="16" Margin="0,0,6,0"
+                                   VerticalAlignment="Center"
+                                   Source="{Binding IconUri}"
+                                   Visibility="{Binding HasIcon, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <TextBlock Text="{Binding FileName}"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
                                 </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </Expander>
-        </Border>
+                                <TextBlock Text="{Binding FilePath}"
+                                   FontSize="11"
+                                   Foreground="#FF555555"
+                                   TextTrimming="CharacterEllipsis"
+                                   ToolTip="{Binding FilePath}" />
+                                <TextBlock Text="File not found"
+                                   FontSize="11"
+                                   Foreground="#FFB00020">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Exists}" Value="False">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Expander>
 
-        <TabControl x:Name="MainTabControl" Grid.Column="1" >
+
+
+        <!-- GridSplitter for resizing -->
+        <GridSplitter Grid.Column="1"
+                      Width="5"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="LightGray"
+                      ResizeBehavior="PreviousAndNext"
+                      ResizeDirection="Columns"/>
+
+        <TabControl x:Name="MainTabControl" Grid.Column="2" >
             <TabItem Header="File Transfer">
                 <Grid >
                     <Grid.RowDefinitions>
