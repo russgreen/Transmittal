@@ -35,29 +35,31 @@ public class FileTransferService : IFileTransferService
         _browserUserDataDirectory = GetBrowserUserDataDirectory();
     }
 
-    public async Task<bool> PrepareFileTransferUploadAsync(List<string> filePaths)
+    public async Task<bool> PrepareFileTransferUploadAsync(string filesManifestPath)
     {
         switch (_settingsService.GlobalSettings.FileTransferType)
         {
             case Enums.FileTransferType.WeTransfer:
-                return await WeTransfer(filePaths);
+                return await WeTransfer(filesManifestPath);
 
             case Enums.FileTransferType.Smash:
-                return await Smash(filePaths);
+                return await Smash(filesManifestPath);
 
             default:
                 throw new NotSupportedException($"File transfer service {_settingsService.GlobalSettings.FileTransferType} is not supported.");
         }
     }
 
-    public Task<bool> PrepareFileTransferUploadAsync(List<string> filePaths, List<string> recipientsEmails)
+    public Task<bool> PrepareFileTransferUploadAsync(string filesManifestPath, List<string> recipientsEmails)
     {
         throw new NotImplementedException();
     }
 
-    private async Task<bool> WeTransfer(List<string> filePaths)
+    private async Task<bool> WeTransfer(string filesManifestPath)
     {
-        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filePaths);
+        var filePaths = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(filesManifestPath)) ?? new List<string>();
+
+        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filesManifestPath);
         if (!browserRunning)
         {
             return false;
@@ -95,9 +97,11 @@ public class FileTransferService : IFileTransferService
     }
 
 
-    private async Task<bool> Smash(List<string> filePaths)
+    private async Task<bool> Smash(string filesManifestPath)
     {
-        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filePaths);
+        var filePaths = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(filesManifestPath)) ?? new List<string>();
+
+        var browserRunning = await LaunchBrowserWithRemoteDebuggingAsync(filesManifestPath);
         if (!browserRunning)
         {
             return false;
@@ -218,7 +222,7 @@ public class FileTransferService : IFileTransferService
         }
     }
 
-    private async Task<bool> LaunchBrowserWithRemoteDebuggingAsync(List<string> filePaths)
+    private async Task<bool> LaunchBrowserWithRemoteDebuggingAsync(string filesManifestPath)
     {
         if (string.IsNullOrWhiteSpace(_browserPath))
         {
@@ -226,7 +230,7 @@ public class FileTransferService : IFileTransferService
             return false;
         }
 
-        var filesManifestPath = CreateTransferFilesManifest(filePaths);
+        //var filesManifestPath = CreateTransferFilesManifest(filePaths);
 
         if (await IsBrowserWithRemoteDebuggingRunningAsync(_debugPort))
         {

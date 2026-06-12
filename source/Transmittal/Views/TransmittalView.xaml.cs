@@ -84,6 +84,8 @@ public partial class TransmittalView : Window
 
     private async void WizardControl_Finish(object sender, RoutedEventArgs e)
     {
+        _viewModel.IsFinishEnabled = false;
+
         var conflicts = await _viewModel.GetCurrentFileConflicts();
         var action = FileConflictAction.Overwrite;
 
@@ -95,6 +97,8 @@ public partial class TransmittalView : Window
         var shouldContinue = _viewModel.ApplyFileConflictAction(action, conflicts);
         if (!shouldContinue)
         {
+            _viewModel.IsFinishEnabled = true;
+
             if (action == FileConflictAction.ReviseSheets)
             {
                 wizardControl.SelectedWizardPage = wizardPage1;
