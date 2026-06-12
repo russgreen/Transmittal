@@ -17,7 +17,7 @@
     },
     "Transmittal.Desktop --archive": {
       "commandName": "Project",
-      "commandLineArgs": "--archive --database=\"D:\\_archisoft\\projects\\Transmittal Testing\\TestingExistingTemplateDatabase - With Spaces.tdb\""
+      "commandLineArgs": "--archive --database=\"C:\\Users\\russg\\OneDrive\\Transmittal Testing\\0001-TRN-XX-XX-DB-A-0001.tdb\""
     },
     "Transmittal.Desktop --archive2": {
       "commandName": "Project",
@@ -25,7 +25,7 @@
     },
     "Transmittal.Desktop --directory": {
       "commandName": "Project",
-      "commandLineArgs": "--directory --database=\"D:\\_archisoft\\projects\\Transmittal Testing\\TestingExistingTemplateDatabase - With Spaces.tdb\""
+      "commandLineArgs": "--directory --database=\"C:\\Users\\russg\\OneDrive\\Transmittal Testing\\0001-TRN-XX-XX-DB-A-0001.tdb\""
     },
     "Transmittal.Desktop --directory 2": {
       "commandName": "Project",
@@ -33,7 +33,7 @@
     },
     "Transmittal.Desktop --transmittal": {
       "commandName": "Project",
-      "commandLineArgs": "--transmittal=1 --database=\"D:\\_archisoft\\projects\\Transmittal Testing\\TestingExistingTemplateDatabase - With Spaces.tdb\""
+      "commandLineArgs": "--transmittal=1 --database=\"C:\\Users\\russg\\OneDrive\\Transmittal Testing\\0001-TRN-XX-XX-DB-A-0001.tdb\""
     },
     "Transmittal.Desktop --about": {
       "commandName": "Project",
