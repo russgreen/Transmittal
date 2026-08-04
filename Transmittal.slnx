@@ -191,7 +191,23 @@
     <BuildType Solution="Debug 2025|*" Project="Debug R25" />
     <BuildType Solution="Debug 2026|*" Project="Debug R26" />
     <BuildType Solution="Debug 2027|*" Project="Debug R27" />
+    <BuildType Solution="Release 2021|*" Project="Release R21" />
+    <BuildType Solution="Release 2022|*" Project="Release R22" />
+    <BuildType Solution="Release 2023|*" Project="Release R23" />
+    <BuildType Solution="Release 2024|*" Project="Release R24" />
+    <BuildType Solution="Release 2025|*" Project="Release R25" />
+    <BuildType Solution="Release 2026|*" Project="Release R26" />
+    <BuildType Solution="Release 2027|*" Project="Release R27" />
+    <BuildType Solution="Release|*" Project="Release R26" />
     <Platform Project="x64" />
+    <Build Solution="Release 2021|*" Project="false" />
+    <Build Solution="Release 2022|*" Project="false" />
+    <Build Solution="Release 2023|*" Project="false" />
+    <Build Solution="Release 2024|*" Project="false" />
+    <Build Solution="Release 2025|*" Project="false" />
+    <Build Solution="Release 2026|*" Project="false" />
+    <Build Solution="Release 2027|*" Project="false" />
+    <Build Solution="Release|*" Project="false" />
   </Project>
   <Project Path="source/Transmittal/Transmittal.csproj">
     <BuildType Solution="Debug 2021|*" Project="Debug R21" />
@@ -210,7 +226,6 @@
     <BuildType Solution="Release 2026|*" Project="Release R26" />
     <BuildType Solution="Release 2027|*" Project="Release R27" />
     <BuildType Solution="Release|*" Project="Release R26" />
-    <Build Solution="Debug|*" Project="false" />
     <Build Solution="Release|*" Project="false" />
   </Project>
 </Solution>

@@ -19,8 +19,8 @@ partial class Build : FalloutBuild
 
             //var project = Solution.Transmittal;
 
-            foreach (var project in Solution.AllProjects.Where(project => project == Solution.Transmittal || 
-            project == Solution.Transmittal_Desktop))
+            foreach (var project in Solution.AllProjects.Where(project => project.Name == "Transmittal" || 
+            project.Name == "Transmittal.Desktop"))
             {
                 AbsolutePath projectDirectory = project.Directory;
                 Log.Information(projectDirectory);

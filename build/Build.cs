@@ -5,7 +5,7 @@ using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities.Collections;
-using Fallout.Solutions;
+using Fallout.Common.ProjectModel;
 using System;
 using System.Linq;
 using static Fallout.Common.EnvironmentInfo;

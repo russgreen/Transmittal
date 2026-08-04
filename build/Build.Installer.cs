@@ -5,12 +5,13 @@ using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Utilities.Collections;
-using Fallout.Solutions;
+using Fallout.Common.ProjectModel;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using static Fallout.Common.EnvironmentInfo;
 using static Fallout.Common.IO.PathConstruction;
 
@@ -22,7 +23,8 @@ partial class Build : FalloutBuild
         .Executes(() =>
         {
             var aipProjectPath = Path.Combine(RootDirectory, @"Installer\Transmittal.aip");
-            var version = Solution.Transmittal.GetProperty("Version");
+            //var version = Solution.Transmittal.GetProperty("Version");
+            var version = GetProjectVersion(Path.Combine(RootDirectory, @"Directory.Build.props"));
 
             Log.Information("AIP : {aipProjectPath}", aipProjectPath);
             Log.Information("Version : {version}", version);
@@ -33,6 +35,30 @@ partial class Build : FalloutBuild
 
             SignMSI(version);
         });
+
+    static string GetProjectVersion(string projectFilePath)
+    {
+        var doc = XDocument.Load(projectFilePath);
+        var root = doc.Root;
+        var propertyGroup = root?
+            .Elements()
+            .FirstOrDefault(x => x.Name.LocalName == "PropertyGroup");
+
+        var versionProperties = new[]
+        {
+            "Version",
+            "VersionPrefix",
+            "ApplicationVersion",
+            "FileVersion",
+            "InformationalVersion"
+        };
+
+        var versionElement = propertyGroup?
+            .Elements()
+            .FirstOrDefault(x => versionProperties.Contains(x.Name.LocalName) && !string.IsNullOrWhiteSpace(x.Value));
+
+        return versionElement?.Value ?? "1.0.0";
+    }
 
     static void SignMSI(string version)
     {
