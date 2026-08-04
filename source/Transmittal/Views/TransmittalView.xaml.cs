@@ -36,7 +36,7 @@ public partial class TransmittalView : Window
         this.sfDataGridSheets.AllowFrozenGroupHeaders = true;
 #endif
 
-        this.sfDataGridSheets.EnableCtrlDragFill();
+        //this.sfDataGridSheets.EnableCtrlDragFill();
 
         var column = this.sfDataGridSheets.Columns["IssueDate"] as Syncfusion.UI.Xaml.Grid.GridDateTimeColumn;
         if (column != null)

@@ -94,7 +94,7 @@ internal class ExportFileCheckService : IExportFileCheckService
         var folderPath = GetFolderPath(exportFormatType, sheet);
         var outputPath = Path.Combine(folderPath, $"{fileName}{extension}");
 
-        return new ExportFileCheckResult
+        var result = new ExportFileCheckResult
         {
             SheetId = sheet.ID,
             SheetNumber = sheet.DrgNumber ?? string.Empty,
@@ -102,6 +102,8 @@ internal class ExportFileCheckService : IExportFileCheckService
             OutputPath = outputPath,
             FileExists = File.Exists(outputPath)
         };
+
+        return result;
     }
 
     private string GetFolderPath(ExportFormatType exportFormatType, DrawingSheetModel sheet)
