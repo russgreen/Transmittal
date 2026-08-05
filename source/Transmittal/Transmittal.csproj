@@ -128,7 +128,7 @@
 		<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />		
 		
 		<!--Repacking-->
-		<PackageReference Include="ILRepack" Version="2.0.44" Condition="'$(RevitVersion)' &lt; '2027'">
+		<PackageReference Include="ILRepack" Version="2.0.46" Condition="'$(RevitVersion)' &lt; '2027'">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
