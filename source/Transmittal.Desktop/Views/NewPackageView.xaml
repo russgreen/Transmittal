@@ -6,23 +6,24 @@
         xmlns:local="clr-namespace:Transmittal.Desktop.Views"
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"  
         mc:Ignorable="d"
-        Title="New Package Name" Height="140" Width="400"
+        Title="New Package Name" Width="400"
+        SizeToContent="Height"
         ResizeMode="NoResize" 
         Style="{StaticResource WindowStyle}">
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
+        <TextBlock Grid.Row="0" Margin="0,0,0,5"
                    Text="Enter the new package name to add to the list"/>
-        <TextBox Grid.Row="1"
+        <TextBox Grid.Row="1" Margin="0,0,0,5"
                  Text="{Binding PackageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  >
             <Button Content="Add" Padding="5,0,5,0" 
                     Command="{Binding SendPackageCommand}" 
                     IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}"/>

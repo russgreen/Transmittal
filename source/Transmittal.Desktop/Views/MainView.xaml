@@ -7,23 +7,28 @@
         xmlns:viewModels="clr-namespace:Transmittal.Desktop.ViewModels"   
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"  
-        Width="500" Height="290" 
+        Width="500" 
+        SizeToContent="Height"
         ResizeMode="NoResize" 
         WindowStyle="SingleBorderWindow" 
         WindowStartupLocation="CenterScreen"
         FontSize="14" FontFamily="Segoe UI Light"  >
 
     <Window.Resources>
-        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="AppStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <StackPanel Margin="10" Orientation="Vertical">
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
             <Menu Background="{x:Null}" >
 
-                <MenuItem x:Name="menuItemMain" Width="35" Height="35"   >
+                <MenuItem x:Name="menuItemMain" Width="25" Height="25" Padding="0,0,0,0"   >
                     <MenuItem.Icon>
-                        <Image Source="/Resources/Menu.png" Stretch="Uniform" Width="25" Height="25" Margin="0,-10,-10,-10" />
+                        <Image Source="/Resources/Menu.png" Stretch="Uniform" Width="25" Height="25" Margin="-10,-10,-10,-10" />
                     </MenuItem.Icon>
 
                     <MenuItem Header="New tdb file..." Click="MenuItem_New_Click">
@@ -93,37 +98,40 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="80" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
             <Button Grid.Column="0" 
-                        Margin="0,0,5,0" 
-                        x:Name="Button_Transmittal" 
-                        Background="#FF0072C6" 
-                        IsEnabled="{Binding HasDatabase}"
-                        Click="Button_Transmittal_Click" >
+                    Margin="0,0,5,0" 
+                    Height="80"
+                    x:Name="Button_Transmittal" 
+                    Background="{StaticResource Brush.Accent}" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_Transmittal_Click" >
                 <Button.Content>
                     <Image  Source="/Resources/Transmittal_Button.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
 
             <Button Grid.Column="1" 
-                        Margin="5,0,5,0"
-                        x:Name="Button_TransmittalArchive" 
-                        Background="#FF0072C6" 
-                        IsEnabled="{Binding HasDatabase}"
-                        Click="Button_TransmittalArchive_Click">
+                    Margin="5,0,5,0"
+                    Height="80"
+                    x:Name="Button_TransmittalArchive" 
+                    Background="{StaticResource Brush.Accent}" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_TransmittalArchive_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Archive_Button.png" Stretch="Uniform" />
                 </Button.Content>
             </Button>
 
             <Button Grid.Column="2" 
-                        Margin="5,0,0,0"
-                        x:Name="Button_Directory" 
-                        Background="#FF0072C6" 
-                        IsEnabled="{Binding HasDatabase}"
-                        Click="Button_Directory_Click">
+                    Margin="5,0,0,0"
+                    Height="80"
+                    x:Name="Button_Directory" 
+                    Background="{StaticResource Brush.Accent}" 
+                    IsEnabled="{Binding HasDatabase}"
+                    Click="Button_Directory_Click">
                 <Button.Content>
                     <Image  Source="/Resources/Directory_Button.png" Stretch="Uniform" />
                 </Button.Content>
@@ -138,7 +146,7 @@
                         IsEnabled="{Binding HasDatabase}"
                         Click="Button_Settings_Click"  >
                 <Button.Content>
-                    <Image  Source="/Resources/Settings.png" Stretch="Uniform" />
+                    <Image  Source="/Resources/Settings.png" Stretch="Uniform" Width="25" Height="25" />
                 </Button.Content>
             </Button>
 

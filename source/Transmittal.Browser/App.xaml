@@ -2,6 +2,55 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
+        <Color x:Key="Color.Accent">#FF3B7CF0</Color>
+        <Color x:Key="Color.White">#FFFFFFFF</Color>
+        <Color x:Key="Color.Border">#FFD3D7DC</Color>
+        <Color x:Key="Color.TextPrimary">#FF14171C</Color>
+        <SolidColorBrush x:Key="Brush.Accent" Color="{StaticResource Color.Accent}"/>
+
+        <SolidColorBrush x:Key="WindowBackground" Color="{StaticResource Color.White}" />
+        <SolidColorBrush x:Key="WindowForeground" Color="{StaticResource Color.TextPrimary}" />
+        <SolidColorBrush x:Key="ControlDefaultForeground" Color="{StaticResource Color.TextPrimary}"/>
+        <SolidColorBrush x:Key="ControlDefaultBackground" Color="Transparent"/>
+        <SolidColorBrush x:Key="ControlDefaultBorder" Color="{StaticResource Color.Border}"/>
+
+        <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}" >
+            <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+            <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}"/>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               RecognizesAccessKey="True"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <!-- Default Button in the app = buttonBaseStyle variant -->
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}"/>
 
     </Application.Resources>
 </Application>
