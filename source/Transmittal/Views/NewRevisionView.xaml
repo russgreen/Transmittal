@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:r2021="R2021"
         mc:Ignorable="d"
-        Title="New Revision" Height="300" Width="345" 
+        Title="New Revision" Width="345" 
+        SizeToContent="Height"
         WindowStyle="ToolWindow" ResizeMode="NoResize" 
         WindowStartupLocation="CenterOwner" Topmost="True">
 
@@ -30,7 +31,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -69,9 +70,9 @@
         <TextBlock Grid.Row="4" Grid.Column="0">Issued to</TextBlock>
         <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" Text="{Binding IssuedTo}"/>
 
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0" Height="23" >
-            <Button Content="OK" Width="70" Command="{Binding SendRevisionCommand}" IsDefault="True" />
-            <Button Content="Cancel" Width="70" Margin="5,0,0,0" IsCancel="True" />
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Content="Save"  Command="{Binding SendRevisionCommand}" IsDefault="True" />
+            <Button Content="Cancel" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
     </Grid>
 </Window>

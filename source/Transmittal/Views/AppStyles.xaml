@@ -49,20 +49,147 @@
         </ImageBrush.Transform>
     </ImageBrush>
 
-    <SolidColorBrush x:Key="WindowBackground" Color="White" />
-    <SolidColorBrush x:Key="WindowForeground" Color="Black" />
-    <SolidColorBrush x:Key="ControlDefaultForeground" Color="Black"/>
-    <SolidColorBrush x:Key="ControlDefaultBackground" Color="Transparent"/>
-    <SolidColorBrush x:Key="ControlDefaultBorder" Color="#FF93B8D9"/>
+    <!-- Color -->
+    <Color x:Key="Color.Accent">#FF3B7CF0</Color>
+    <Color x:Key="Color.AccentStrong">#FF2461DB</Color>
+    <Color x:Key="Color.AccentSoft">#FFEAF1FE</Color>
+    <Color x:Key="Color.Danger">#FFE5484D</Color>
+    <Color x:Key="Color.Surface1">#FFFFFFFF</Color>
+    <Color x:Key="Color.Surface2">#FFF5F6F7</Color>
+    <Color x:Key="Color.TextPrimary">#FF14171C</Color>
+    <Color x:Key="Color.TextSecondary">#FF5B6472</Color>
+    <Color x:Key="Color.TextDisabled">#FFAEB4BD</Color>
+    <Color x:Key="Color.Border">#FFD3D7DC</Color>
+    <Color x:Key="Color.BorderStrong">#FFAEB4BD</Color>
+    <Color x:Key="Color.White">#FFFFFFFF</Color>
 
-    <Style TargetType="{x:Type Button}">
+    <SolidColorBrush x:Key="Brush.Accent" Color="{StaticResource Color.Accent}"/>
+    <SolidColorBrush x:Key="Brush.AccentStrong" Color="{StaticResource Color.AccentStrong}"/>
+    <SolidColorBrush x:Key="Brush.AccentSoft" Color="{StaticResource Color.AccentSoft}"/>
+    <SolidColorBrush x:Key="Brush.Danger" Color="{StaticResource Color.Danger}"/>
+    <SolidColorBrush x:Key="Brush.Surface1" Color="{StaticResource Color.Surface1}"/>
+    <SolidColorBrush x:Key="Brush.Surface2" Color="{StaticResource Color.Surface2}"/>
+    <SolidColorBrush x:Key="Brush.TextPrimary" Color="{StaticResource Color.TextPrimary}"/>
+    <SolidColorBrush x:Key="Brush.TextSecondary" Color="{StaticResource Color.TextSecondary}"/>
+    <SolidColorBrush x:Key="Brush.TextDisabled" Color="{StaticResource Color.TextDisabled}"/>
+    <SolidColorBrush x:Key="Brush.Border" Color="{StaticResource Color.Border}"/>
+    <SolidColorBrush x:Key="Brush.BorderStrong" Color="{StaticResource Color.BorderStrong}"/>
+    <SolidColorBrush x:Key="Brush.White" Color="{StaticResource Color.White}"/>
+
+    <SolidColorBrush x:Key="WindowBackground" Color="{StaticResource Color.White}" />
+    <SolidColorBrush x:Key="WindowForeground" Color="{StaticResource Color.TextPrimary}" />
+    <SolidColorBrush x:Key="ControlDefaultForeground" Color="{StaticResource Color.TextPrimary}"/>
+    <SolidColorBrush x:Key="ControlDefaultBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="ControlDefaultBorder" Color="{StaticResource Color.Border}"/>
+
+    <!-- radius-sm = 4, radius-xs = 2 
+    <CornerRadius x:Key="Radius.Sm">4</CornerRadius>
+    <CornerRadius x:Key="Radius.Xs">2</CornerRadius>-->
+    <!-- in border add CornerRadius="{StaticResource Radius.Sm}" -->   
+    
+    <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}" >
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}"/>
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               RecognizesAccessKey="True"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
     </Style>
+
+    <!-- Default Button in the app = buttonBaseStyle variant -->
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}"/>
+
+    <!--<Style x:Key="ButtonPrimaryStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
+        <Setter Property="Foreground" Value="{StaticResource Brush.White}" />
+        <Setter Property="Background" Value="{StaticResource Brush.Accent}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               RecognizesAccessKey="True"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource Brush.AccentStrong}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
 
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource WindowBackground}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <StackPanel Orientation="Horizontal">
+                        <Border x:Name="Box" Width="16" Height="16" 
+                                Background="Transparent" 
+                                BorderBrush="{StaticResource Brush.BorderStrong}" 
+                                BorderThickness="1">
+                            <Path x:Name="Check" Data="M2,6.2 L5.2,9.4 L11,2.6" 
+                                  Stroke="{StaticResource Brush.White}"
+                                  StrokeThickness="1.6" 
+                                  StrokeStartLineCap="Round" 
+                                  StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round" 
+                                  Visibility="Collapsed"/>
+                        </Border>
+                        <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Accent}"/>
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                            <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type ComboBox}">
@@ -169,6 +296,7 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorder }"/>
     </Style>
 
     <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
@@ -194,7 +322,7 @@
                     <Grid Background="{TemplateBinding Background}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <ItemsPresenter x:Name="PART_PagesPresenter"/>
                         <syncfusion:WizardNavigationArea Background="{StaticResource WindowBackground}" Grid.Row="1"/>

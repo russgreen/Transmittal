@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        Title="New Person" Height="450" Width="400">
+        Title="New Person"  Width="400" SizeToContent="Height">
     
     <Window.Resources>
         <ResourceDictionary>
@@ -35,7 +35,7 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
@@ -52,7 +52,7 @@
                   SelectedValuePath="ID"
                   SelectedValue="{Binding CompanyID, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
                   SelectedIndex="0"/>
-        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5" 
+        <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5" Height="23"
                 x:Name="Button_AddCompany" Click="Button_AddCompany_Click">
             <Button.Background>
                 <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
@@ -79,11 +79,11 @@
         <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Person.Notes}" Margin="0,0,0,5"
                  AcceptsReturn="True"/>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  >
-            <Button Content="Save" Padding="5,0,5,0" 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"  >
+            <Button Content="Save" 
                     Command="{Binding SendPersonCommand}" 
                     IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}"/>
-            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+            <Button Content="Cancel" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
     </Grid>
 </Window>

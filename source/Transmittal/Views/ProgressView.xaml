@@ -33,7 +33,7 @@
          <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,40,0,0">
@@ -57,7 +57,7 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" >
-                <Button x:Name="CancelButton" Content="Cancel Transmittal" Width="150" Margin="0,0,0,0" Click="CancelButton_Click" />
+                <Button x:Name="CancelButton" Content="Cancel Transmittal" Click="CancelButton_Click" />
             </StackPanel>
         </Grid>       
     </GroupBox>

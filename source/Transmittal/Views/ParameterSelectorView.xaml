@@ -27,7 +27,7 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         
-        <syncfusion:SfDataGrid Grid.Row="0" Margin="0,10,0,0"
+        <syncfusion:SfDataGrid Grid.Row="0" Margin="0,10,0,5"
                                ItemsSource="{Binding Parameters}" 
                                SelectedItem="{Binding SelectedParameter}"
                                ColumnSizer="AutoLastColumnFill"
@@ -41,10 +41,9 @@
 
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2" 
                         Orientation="Horizontal" 
-                        HorizontalAlignment="Right" 
-                        Margin="0,0,0,0" Height="23" >
-                <Button Content="OK" Width="70" Command="{Binding SendParameterCommand}" IsDefault="True" />
-                <Button Content="Cancel" Width="70" Margin="5,0,0,0" IsCancel="True" />
+                        HorizontalAlignment="Right" >
+                <Button Content="Save"  Command="{Binding SendParameterCommand}" IsDefault="True" />
+                <Button Content="Cancel" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
 
     </Grid>

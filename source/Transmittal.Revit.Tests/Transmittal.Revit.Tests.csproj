@@ -72,7 +72,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nice3point.TUnit.Revit" Version="$(RevitVersion).*-*" />
+    <PackageReference Include="Nice3point.TUnit.Revit" Version="$(RevitVersion).*" />
   </ItemGroup>
 
   <ItemGroup>

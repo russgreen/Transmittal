@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        Title="New Company" Height="250" Width="400">
+        Title="New Company" Width="400" SizeToContent="Height">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -28,7 +28,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
-            <RowDefinition />
+            <RowDefinition Height="75" />
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
@@ -53,11 +53,11 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Website" />
         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Company.Website}" Margin="0,0,0,5" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Height="23" Grid.Row="6" Grid.Column="2" >
-            <Button Content="Save" Padding="5,0,5,0" 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Grid.Row="6" Grid.Column="2" >
+            <Button Content="Save" 
                     Command="{Binding SendCompanyCommand}" 
                     IsEnabled="{Binding HasErrors,  Converter={StaticResource InverseBooleanConverter}}"/>
-            <Button Content="Cancel" Padding="5,0,5,0" Margin="5,0,0,0" IsCancel="True" />
+            <Button Content="Cancel" Margin="5,0,0,0" IsCancel="True" />
         </StackPanel>
     </Grid>
 </Window>
