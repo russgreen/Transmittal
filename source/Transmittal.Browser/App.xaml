@@ -6,8 +6,10 @@
         <Color x:Key="Color.White">#FFFFFFFF</Color>
         <Color x:Key="Color.Border">#FFD3D7DC</Color>
         <Color x:Key="Color.TextPrimary">#FF14171C</Color>
+        
         <SolidColorBrush x:Key="Brush.Accent" Color="{StaticResource Color.Accent}"/>
-
+        <SolidColorBrush x:Key="Brush.Border" Color="{StaticResource Color.Border}"/>
+        
         <SolidColorBrush x:Key="WindowBackground" Color="{StaticResource Color.White}" />
         <SolidColorBrush x:Key="WindowForeground" Color="{StaticResource Color.TextPrimary}" />
         <SolidColorBrush x:Key="ControlDefaultForeground" Color="{StaticResource Color.TextPrimary}"/>

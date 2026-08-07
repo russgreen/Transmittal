@@ -200,6 +200,7 @@
     <BuildType Solution="Release 2027|*" Project="Release R27" />
     <BuildType Solution="Release|*" Project="Release R26" />
     <Platform Project="x64" />
+    <Build Solution="Debug|*" Project="false" />
     <Build Solution="Release 2021|*" Project="false" />
     <Build Solution="Release 2022|*" Project="false" />
     <Build Solution="Release 2023|*" Project="false" />
