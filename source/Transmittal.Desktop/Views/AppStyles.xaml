@@ -198,7 +198,7 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
-    </Style>
+    </Style>  
 
     <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{StaticResource WindowBackground}" />

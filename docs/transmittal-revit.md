@@ -8,8 +8,8 @@ Transmittal for Autodesk® Revit® provides a wizard-style UI to export drawing 
 <img src="../assets/images/TransmittalAddinPage1.png" width="850" >
 
 You can optionally set the export formats per sheet.  The default setting results in all sheets being exported with the selected formats. With the option configured, you can also choose which sheets will export with different formats.
-
-You can now use **Ctrl + drag** in the sheets grid to quickly fill values into adjacent rows.
+Alt
+You can now use **Alt + drag** in the sheets grid to quickly fill values into adjacent rows.
 
 Selected sheets can have revisions and status values set. 
 

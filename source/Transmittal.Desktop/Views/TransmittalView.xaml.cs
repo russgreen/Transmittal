@@ -3,6 +3,7 @@ using SfDatagrid.WPF.Extensions;
 using Syncfusion.UI.Xaml.Grid;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using Transmittal.Library.Models;
 using Transmittal.Library.Services;
 
@@ -27,7 +28,7 @@ public partial class TransmittalView : Window
 
         _viewModel.ClosingRequest += (sender, e) => this.Close();
 
-        this.sfDataGridDocuments.EnableCtrlDragFill();
+        this.sfDataGridDocuments.EnableCtrlDragFill(requiredModifiers: ModifierKeys.Alt);
     }
 
 
