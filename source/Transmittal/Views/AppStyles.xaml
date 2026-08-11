@@ -52,7 +52,7 @@
     <!-- Color -->
     <Color x:Key="Color.Accent">#FF3B7CF0</Color>
     <Color x:Key="Color.AccentStrong">#FF2461DB</Color>
-    <Color x:Key="Color.AccentSoft">#FFEAF1FE</Color>
+    <Color x:Key="Color.AccentSoft">#9fc0fb</Color>
     <Color x:Key="Color.Danger">#FFE5484D</Color>
     <Color x:Key="Color.Surface1">#FFFFFFFF</Color>
     <Color x:Key="Color.Surface2">#FFF5F6F7</Color>
@@ -109,6 +109,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bg" Property="Background" Value="{StaticResource Brush.AccentSoft}" />
                             <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
@@ -119,11 +120,8 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
     </Style>
 
-    <!-- Default Button in the app = buttonBaseStyle variant -->
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}"/>
 
     <!--<Style x:Key="ButtonPrimaryStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}">
         <Setter Property="Foreground" Value="{StaticResource Brush.White}" />
@@ -155,6 +153,43 @@
         </Setter>
     </Style>-->
 
+    <Style x:Key="ButtonImageStyle" TargetType="{x:Type Button}" >
+        <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
+        <Setter Property="Background" Value="{StaticResource ControlDefaultBackground}" />
+
+        <Setter Property="BorderBrush" Value="{StaticResource WindowBackground}"/>
+        <Setter Property="BorderThickness" Value="1" />
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               RecognizesAccessKey="True"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+      <!-- Default Button in the app = buttonBaseStyle variant -->
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonBaseStyle}"/>
+  
+    
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{StaticResource ControlDefaultForeground}" />
         <Setter Property="Background" Value="{StaticResource WindowBackground}" />

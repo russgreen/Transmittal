@@ -43,6 +43,7 @@
                   SelectedValue="{Binding CompanyID, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
                   SelectedIndex="0"/>
         <Button Grid.Row="2" Grid.Column="2" Margin="0,0,0,5" 
+                Style="{StaticResource ButtonImageStyle}"
                 x:Name="Button_AddCompany" Click="Button_AddCompany_Click">
             <Button.Background>
                 <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource AddImage}}"/>
