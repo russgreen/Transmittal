@@ -90,7 +90,8 @@
                                 <TextBlock Text="Set per sheet export formats:" Margin="0,5,10,0"
                                            Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                <Button Margin="0,0,10,0" Width="30" 
+                                        Style="{StaticResource ButtonImageStyle}"
                                         Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Command="{Binding TogglePDFCommand}"
                                         ToolTip="Set the selected sheets to export to PDF format" >
@@ -98,7 +99,8 @@
                                         <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FilePDFImage}}"/>
                                     </Button.Background>
                                 </Button>
-                                <Button Margin="0,0,10,0" Width="30" BorderThickness="0"
+                                <Button Margin="0,0,10,0" Width="30" 
+                                        Style="{StaticResource ButtonImageStyle}"
                                         Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Command="{Binding ToggleDWGCommand}"
                                         ToolTip="Set the selected sheets to export to DWG format">
@@ -106,7 +108,8 @@
                                         <ImageBrush ImageSource="{Binding Mode=OneWay, Source={StaticResource FileDWGImage}}"/>
                                     </Button.Background>
                                 </Button>
-                                <Button Padding="10,1,10,1" Width="30" BorderThickness="0"
+                                <Button Padding="10,1,10,1" Width="30" 
+                                        Style="{StaticResource ButtonImageStyle}"
                                         Visibility="{Binding EnablePerSheetExportFormats, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Command="{Binding ToggleDWFCommand}"
                                         ToolTip="Set the selected sheets to export to DWF format">
@@ -419,6 +422,7 @@
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
+                            Style="{StaticResource ButtonImageStyle}"
                             IsEnabled="{Binding IsChecked, ElementName=RecordIssue}" 
                             Click="Button_AddToDirectory_Click" >
                         <Button.Background>

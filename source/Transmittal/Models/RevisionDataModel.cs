@@ -36,9 +36,9 @@ public class RevisionDataModel
 #if REVIT2022_OR_GREATER
         SequenceId = r.RevisionNumberingSequenceId;
 
-        using (var revisionNumberingSequence = (RevisionNumberingSequence)App.RevitDocument.GetElement(r.RevisionNumberingSequenceId))
+        using (var revisionNumberingSequence = App.RevitDocument.GetElement(r.RevisionNumberingSequenceId) as RevisionNumberingSequence)
         {
-            SequenceName = revisionNumberingSequence.SequenceName;
+            SequenceName = revisionNumberingSequence?.SequenceName ?? string.Empty;
         }
 #else
         Numbering = r.NumberType;

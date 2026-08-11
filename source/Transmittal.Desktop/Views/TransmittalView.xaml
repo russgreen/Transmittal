@@ -42,6 +42,7 @@
                     </Grid.RowDefinitions>
 
                     <Button x:Name="Button_AddPackage" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
+                            Style="{StaticResource ButtonImageStyle}"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Click="Button_AddPackage_Click" ToolTip="Add a package to the list">
@@ -153,6 +154,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="Button_AddToDirectory" Grid.Row="0" Grid.Column="0" Width="25" Height="25" 
+                            Style="{StaticResource ButtonImageStyle}"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
                             Click="Button_AddToDirectory_Click">
