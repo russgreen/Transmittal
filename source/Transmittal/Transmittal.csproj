@@ -79,8 +79,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2027'">true</IsRepackable>
-		<!--<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>-->
+		<!--<IsRepackable Condition="$(Configuration.Contains('Release')) And '$(RevitVersion)' &lt; '2027'">true</IsRepackable>-->
+		<IsRepackable Condition="$(Configuration.Contains('Release'))">true</IsRepackable>
 		<RepackBinariesExcludes>e_sqlite3.dll;SQLitePCL*.dll;Microsoft.Data.Sqlite.dll;Syncfusion*.dll</RepackBinariesExcludes>
 	</PropertyGroup>
 	
@@ -128,7 +128,8 @@
 		<PackageReference Include="Serilog.Sinks.GoogleAnalytics" Version="1.*" />		
 		
 		<!--Repacking-->
-		<PackageReference Include="ILRepack" Version="2.0.46" Condition="'$(RevitVersion)' &lt; '2027'">
+		<!--<PackageReference Include="ILRepack" Version="2.0.46" Condition="'$(RevitVersion)' &lt; '2027'">-->
+		<PackageReference Include="ILRepack" Version="2.0.46" >
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
