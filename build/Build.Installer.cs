@@ -1,18 +1,12 @@
 using Fallout.Common;
-using Fallout.Common.CI;
-using Fallout.Common.Execution;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Common.Tooling;
-using Fallout.Common.Utilities.Collections;
-using Fallout.Common.ProjectModel;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using static Fallout.Common.EnvironmentInfo;
 using static Fallout.Common.IO.PathConstruction;
 
 partial class Build : FalloutBuild

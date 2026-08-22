@@ -1,15 +1,7 @@
 using Fallout.Common;
-using Fallout.Common.CI;
-using Fallout.Common.Execution;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
-using Fallout.Common.Tooling;
-using Fallout.Common.Utilities.Collections;
 using Fallout.Common.ProjectModel;
-using System;
-using System.Linq;
-using static Fallout.Common.EnvironmentInfo;
-using static Fallout.Common.IO.PathConstruction;
 
 partial class Build : FalloutBuild
 {
@@ -26,10 +18,5 @@ partial class Build : FalloutBuild
     Solution Solution;
 
     public static int Main () => Execute<Build>(x => x.Clean);
-
-    //[Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    //readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-
-
 
 }

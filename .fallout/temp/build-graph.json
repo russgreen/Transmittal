@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "falloutVersion": "10.4.0.15",
+  "targets": [
+    {
+      "name": "Clean",
+      "description": null,
+      "declaredIn": "Build",
+      "default": true,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [],
+      "triggers": [
+        "Compile"
+      ]
+    },
+    {
+      "name": "Compile",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Clean"
+      ],
+      "triggers": [
+        "Sign"
+      ]
+    },
+    {
+      "name": "Installer",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Sign"
+      ],
+      "triggers": []
+    },
+    {
+      "name": "Sign",
+      "description": null,
+      "declaredIn": "Build",
+      "default": false,
+      "listed": true,
+      "dependsOn": [],
+      "after": [],
+      "triggeredBy": [
+        "Compile"
+      ],
+      "triggers": [
+        "Installer"
+      ]
+    }
+  ]
+}
