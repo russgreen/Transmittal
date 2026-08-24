@@ -97,6 +97,19 @@ public class NamingExtensionsTests
     }
 
     [Test]
+    public async Task ParseFilename_ShouldReplaceExtTagWithUppercaseExtension()
+    {
+        // Arrange
+        var filenameFilter = "<ProjNo>-<Ext>";
+
+        // Act
+        var result = filenameFilter.ParseFilename("0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "A101", "Drawing Sheet", "P01", "S3", "", ".pdf");
+
+        // Assert
+        await Assert.That(result).IsEqualTo("0001-PDF");
+    }
+
+    [Test]
     public async Task RemoveIllegalCharacters_ShouldRemoveIllegalCharactersFromInputString()
     {
         // Arrange

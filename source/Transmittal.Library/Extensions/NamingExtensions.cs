@@ -101,32 +101,36 @@ public static class NamingExtensions
     /// <param name="status2">The status description</param>
     /// <returns></returns>
     public static string ParseFilename(this string filenameFilter, string projNo, string projId, string projName, string originator, 
-        string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
+       string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription, string ext = null)
      {
         string fileName = filenameFilter;
         var now = DateTime.Now;
+       var normalizedExt = string.IsNullOrWhiteSpace(ext)
+           ? null
+           : ext.Trim().TrimStart('.').ToUpperInvariant();
 
-        var replacements = new Dictionary<string, string>
-        {
-            { "<Originator>", originator },
-            { "<Volume>", volume },
-            { "<Level>", level },
-            { "<Type>", type },
-            { "<Role>", role },
-            { "<ProjId>", projId },
-            { "<ProjNo>", projNo },
-            { "<ProjName>", projName },
-            { "<SheetNo>", sheetNo },
-            { "<SheetName>", sheetName.Dehumanize() },
-            { "<SheetName2>", sheetName },
-            { "<Rev>", rev },
-            { "<Status>", status },
-            { "<StatusDescription>", statusDescription },
-            { "<DateDD>", now.ToStringDD() },
-            { "<DateMM>", now.ToStringMM() },
-            { "<DateYY>", now.ToStringYY() },
-            { "<DateYYYY>", now.Year.ToString() }
-        };
+       var replacements = new Dictionary<string, string>
+       {
+           { "<Originator>", originator },
+           { "<Volume>", volume },
+           { "<Level>", level },
+           { "<Type>", type },
+           { "<Role>", role },
+           { "<ProjId>", projId },
+           { "<ProjNo>", projNo },
+           { "<ProjName>", projName },
+           { "<SheetNo>", sheetNo },
+           { "<SheetName>", sheetName.Dehumanize() },
+           { "<SheetName2>", sheetName },
+           { "<Rev>", rev },
+           { "<Status>", status },
+           { "<StatusDescription>", statusDescription },
+           { "<Ext>", normalizedExt },
+           { "<DateDD>", now.ToStringDD() },
+           { "<DateMM>", now.ToStringMM() },
+           { "<DateYY>", now.ToStringYY() },
+           { "<DateYYYY>", now.Year.ToString() }
+       };
 
         foreach (var replacement in replacements)
         {

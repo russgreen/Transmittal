@@ -23,6 +23,7 @@ Tag strings are case sensitive
 | \<Status> | &#10003; |  | Custom parameter for ISO19650 status code (Sheet)  |
 | \<StatusDescription> | &#10003; |  | Custom parameter for status description  (Sheet)  |
 | \<Rev> | &#10003; |  | The Revit current sheet revision value |
+| \<Ext> | &#10003; |  | The file extension in upper case for use when the file type needs to be in the file name |
 | \<DateYY> | &#10003; | &#10003; | The issue date as a 2 digit year  |
 | \<DateYYYY> | &#10003; | &#10003; | The issue date as a 4 digit year |
 | \<DateMM> | &#10003; | &#10003; | The issue date as a 2 digit month number |
