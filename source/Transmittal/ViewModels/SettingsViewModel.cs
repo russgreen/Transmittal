@@ -36,7 +36,7 @@ internal partial class SettingsViewModel : BaseViewModel, IParameterGuidRequeste
     private readonly IDataConnection _dataConnection;
 
     public List<string> FolderNameParts => new() { "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>", "<Format>", "<Package>", "<SheetCollection>", "%UserProfile%", "%OneDriveConsumer%", "%OneDriveCommercial%" };
-    public List<string> FileNameParts => ["<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>"];
+    public List<string> FileNameParts => ["<ProjNo>", "<ProjId>", "<Originator>", "<Volume>", "<Level>", "<Type>", "<Role>", "<ProjName>", "<SheetNo>", "<SheetName>", "<SheetName2>", "<Status>", "<StatusDescription>", "<Rev>", "<Ext>", "<DateYY>", "<DateYYYY>", "<DateMM>", "<DateDD>"];
     
     public string ProjectNumber;
     public string Originator;

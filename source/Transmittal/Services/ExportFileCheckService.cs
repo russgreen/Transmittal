@@ -52,34 +52,67 @@ internal class ExportFileCheckService : IExportFileCheckService
                     continue;
                 }
 
-                var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
-                    _settingsService.GlobalSettings.ProjectNumber,
-                    _settingsService.GlobalSettings.ProjectIdentifier,
-                    _settingsService.GlobalSettings.ProjectName,
-                    sheet.DrgOriginator,
-                    sheet.DrgVolume,
-                    sheet.DrgLevel,
-                    sheet.DrgType,
-                    sheet.DrgRole,
-                    sheet.DrgNumber,
-                    sheet.DrgName,
-                    sheet.DrgRev,
-                    sheet.DrgStatus,
-                    sheet.DrgStatusDescription);
-
                 if (exportPdf)
                 {
-                    results.Add(CreateResult(sheet, ExportFormatType.PDF, fileName, ".pdf"));
+                    var pdfFileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        sheet.DrgOriginator,
+                        sheet.DrgVolume,
+                        sheet.DrgLevel,
+                        sheet.DrgType,
+                        sheet.DrgRole,
+                        sheet.DrgNumber,
+                        sheet.DrgName,
+                        sheet.DrgRev,
+                        sheet.DrgStatus,
+                        sheet.DrgStatusDescription,
+                        ".pdf");
+
+                    results.Add(CreateResult(sheet, ExportFormatType.PDF, pdfFileName, ".pdf"));
                 }
 
                 if (exportDwg)
                 {
-                    results.Add(CreateResult(sheet, ExportFormatType.DWG, fileName, ".dwg"));
+                    var dwgFileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        sheet.DrgOriginator,
+                        sheet.DrgVolume,
+                        sheet.DrgLevel,
+                        sheet.DrgType,
+                        sheet.DrgRole,
+                        sheet.DrgNumber,
+                        sheet.DrgName,
+                        sheet.DrgRev,
+                        sheet.DrgStatus,
+                        sheet.DrgStatusDescription,
+                        ".dwg");
+
+                    results.Add(CreateResult(sheet, ExportFormatType.DWG, dwgFileName, ".dwg"));
                 }
 
                 if (exportDwf)
                 {
-                    results.Add(CreateResult(sheet, ExportFormatType.DWF, fileName, ".dwf"));
+                    var dwfFileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        sheet.DrgOriginator,
+                        sheet.DrgVolume,
+                        sheet.DrgLevel,
+                        sheet.DrgType,
+                        sheet.DrgRole,
+                        sheet.DrgNumber,
+                        sheet.DrgName,
+                        sheet.DrgRev,
+                        sheet.DrgStatus,
+                        sheet.DrgStatusDescription,
+                        ".dwf");
+
+                    results.Add(CreateResult(sheet, ExportFormatType.DWF, dwfFileName, ".dwf"));
                 }
             }
 

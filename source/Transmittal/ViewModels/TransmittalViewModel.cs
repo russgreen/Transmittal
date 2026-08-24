@@ -1318,7 +1318,65 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 var views = new ViewSet();
                 views.Insert(sheet);
 
-                string fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                bool exportPdf = EnablePerSheetExportFormats ? drawingSheet.ExportPDF == true : ExportPDF;
+                bool exportDwg = EnablePerSheetExportFormats ? drawingSheet.ExportDWG == true : ExportDWG;
+                bool exportDwf = EnablePerSheetExportFormats ? drawingSheet.ExportDWF == true : ExportDWF;
+
+                string pdfFileName = exportPdf
+                    ? _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        drawingSheet.DrgOriginator,
+                        drawingSheet.DrgVolume,
+                        drawingSheet.DrgLevel,
+                        drawingSheet.DrgType,
+                        drawingSheet.DrgRole,
+                        sheet.SheetNumber,
+                        drawingSheet.DrgName,
+                        drawingSheet.DrgRev,
+                        drawingSheet.DrgStatus,
+                        drawingSheet.DrgStatusDescription,
+                        "pdf")
+                    : null;
+
+                string dwgFileName = exportDwg
+                    ? _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        drawingSheet.DrgOriginator,
+                        drawingSheet.DrgVolume,
+                        drawingSheet.DrgLevel,
+                        drawingSheet.DrgType,
+                        drawingSheet.DrgRole,
+                        sheet.SheetNumber,
+                        drawingSheet.DrgName,
+                        drawingSheet.DrgRev,
+                        drawingSheet.DrgStatus,
+                        drawingSheet.DrgStatusDescription,
+                        "dwg")
+                    : null;
+
+                string dwfFileName = exportDwf
+                    ? _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
+                        _settingsService.GlobalSettings.ProjectNumber,
+                        _settingsService.GlobalSettings.ProjectIdentifier,
+                        _settingsService.GlobalSettings.ProjectName,
+                        drawingSheet.DrgOriginator,
+                        drawingSheet.DrgVolume,
+                        drawingSheet.DrgLevel,
+                        drawingSheet.DrgType,
+                        drawingSheet.DrgRole,
+                        sheet.SheetNumber,
+                        drawingSheet.DrgName,
+                        drawingSheet.DrgRev,
+                        drawingSheet.DrgStatus,
+                        drawingSheet.DrgStatusDescription,
+                        "dwf")
+                    : null;
+
+                var displayFileName = pdfFileName ?? dwgFileName ?? dwfFileName ?? _settingsService.GlobalSettings.FileNameFilter.ParseFilename(
                     _settingsService.GlobalSettings.ProjectNumber,
                     _settingsService.GlobalSettings.ProjectIdentifier,
                     _settingsService.GlobalSettings.ProjectName,
@@ -1333,14 +1391,10 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                     drawingSheet.DrgStatus,
                     drawingSheet.DrgStatusDescription);
 
-                DrawingSheetProgressLabel = $"Processing sheet : {fileName}";
+                DrawingSheetProgressLabel = $"Processing sheet : {displayFileName}";
                 SheetTaskProcessed = 0;
                 SheetTaskProgressLabel = string.Empty;
                 SendProgressMessage(totalSheets);
-
-                bool exportPdf = EnablePerSheetExportFormats ? drawingSheet.ExportPDF == true : ExportPDF;
-                bool exportDwg = EnablePerSheetExportFormats ? drawingSheet.ExportDWG == true : ExportDWG;
-                bool exportDwf = EnablePerSheetExportFormats ? drawingSheet.ExportDWF == true : ExportDWF;
 
                 exportPdf = UseExistingFileIfRequested(drawingSheet, Enums.ExportFormatType.PDF, exportPdf, "PDF", totalSheets);
                 exportDwg = UseExistingFileIfRequested(drawingSheet, Enums.ExportFormatType.DWG, exportDwg, "DWG", totalSheets);
@@ -1348,7 +1402,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportPdf)
                 {
-                    ExportSheetToPDF(drawingSheet, views, fileName, totalSheets);
+                    ExportSheetToPDF(drawingSheet, views, pdfFileName ?? displayFileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1360,7 +1414,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportDwg)
                 {
-                    ExportSheetToDWG(drawingSheet, views, fileName, totalSheets);
+                    ExportSheetToDWG(drawingSheet, views, dwgFileName ?? displayFileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1372,7 +1426,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
                 if (exportDwf)
                 {
-                    ExportSheetToDWF(drawingSheet, sheet, views, fileName, totalSheets);
+                    ExportSheetToDWF(drawingSheet, sheet, views, dwfFileName ?? displayFileName, totalSheets);
                 }
 
                 if (AbortFlag) 
@@ -1390,10 +1444,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 DrawingSheetsProcessed += 1;
                 SendProgressMessage(targetSheets.Count);
             }
-
-            CurrentStepProgressLabel = "Recording transmittal...";
-            SendProgressMessage(targetSheets.Count);
-
+            
             if (SendFileTransfer)
             {
                 SendFilesToTransfer();
@@ -1401,6 +1452,9 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
             if (RecordTransmittal)
             {
+                CurrentStepProgressLabel = "Recording transmittal...";
+                SendProgressMessage(targetSheets.Count);
+
                 RecordTransmittalInDatabase(targetSheets);
                 CurrentStepProgressLabel = "Displaying report...";
                 SendProgressMessage(targetSheets.Count);
@@ -1807,7 +1861,8 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                                 document.DrgName,
                                 document.DrgRev,
                                 document.DrgStatus,
-                                document.DrgStatusDescription);
+                                document.DrgStatusDescription,
+                                fileInfo.Extension);
 
             document.FileName = $"{fileName}{fileInfo.Extension}";
 
@@ -1918,47 +1973,55 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void SendFilesToTransfer()
     {
-        _logger.LogInformation("Adding {count} exported files to file transfer service upload", _exportedFiles.Count);
-
-        if (_exportedFiles.Count == 0)
+        try
         {
-            return;
-        }
+            _logger.LogInformation("Adding {count} exported files to file transfer service upload", _exportedFiles.Count);
 
-        var filesForTransfer = new List<string>();
+            if (_exportedFiles.Count == 0)
+            {
+                return;
+            }
 
-        filesForTransfer.AddRange(_exportedFiles
-            .Where(x => x.FilePath != null)
-            .Select(x => x.FilePath)
-            .ToList());
-           
+            var filesForTransfer = new List<string>();
 
-        if(_additionalExportFiles.Count > 0)
-        {
-            filesForTransfer.AddRange(_additionalExportFiles);
-        }
+            filesForTransfer.AddRange(_exportedFiles
+                .Where(x => x.FilePath != null)
+                .Select(x => x.FilePath)
+                .ToList());
 
-        var transferManifestPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Transmittal", "transmittal-manifest.json");
-        var transferManifestContent = JsonSerializer.Serialize(filesForTransfer);
-        System.IO.File.WriteAllText(transferManifestPath, transferManifestContent);
+
+            if (_additionalExportFiles.Count > 0)
+            {
+                filesForTransfer.AddRange(_additionalExportFiles);
+            }
+
+            var transferManifestPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Transmittal", "transmittal-manifest.json");
+            var transferManifestContent = JsonSerializer.Serialize(filesForTransfer);
+            System.IO.File.WriteAllText(transferManifestPath, transferManifestContent);
 
 #if DEBUG
-        var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
+            var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var newPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(currentPath, @"..\..\..\"));
 
-        var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\Debug", "Transmittal.Desktop.exe");
+            var pathToExe = System.IO.Path.Combine(newPath, @$"Transmittal.Desktop\bin\Debug", "Transmittal.Desktop.exe");
 #else
         var pathToExe = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Transmittal", "Transmittal.Desktop.exe");
 #endif
 
-        ProcessStartInfo processStartInfo = new ProcessStartInfo
-        {
-            FileName = pathToExe,
-            Arguments = "\"--filetransfer\""
-        };
+            ProcessStartInfo processStartInfo = new ProcessStartInfo
+            {
+                FileName = pathToExe,
+                Arguments = "\"--filetransfer\""
+            };
 
-        Process.Start(processStartInfo);
+            Process.Start(processStartInfo);
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+        }
+        
     }
 
     private void OpenExplorerToExportedFilesLocations()
