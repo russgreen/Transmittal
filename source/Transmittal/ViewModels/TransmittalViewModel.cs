@@ -293,6 +293,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         SelectedDrawingSheets.CollectionChanged += SelectedDrawingSheets_CollectionChanged;
 
         DrawingSheets = GetDrawingSheets();
+        CheckForDuplicateSheetNumbers();
         foreach (var drawingSheet in DrawingSheets)
         {
             drawingSheet.PropertyChanged += DrawingSheet_PropertyChanged;
@@ -623,6 +624,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
         sheets.OfClass(typeof(ViewSheet));
         if (!sheets.Any())
         {
+            DisplayMessage = string.Empty;
             return drawingSheets;
         }
 
@@ -714,6 +716,12 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
             return;
         }
 
+        if (e.PropertyName == nameof(DrawingSheetModel.DrgType) ||
+            e.PropertyName == nameof(DrawingSheetModel.DrgNumber))
+        {
+            CheckForDuplicateSheetNumbers();
+        }
+
         if (!SelectedDrawingSheets.Contains(drawingSheet))
         {
             return;
@@ -785,8 +793,39 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                 }
             }
         }
-    }    
-    
+    }
+
+    private void CheckForDuplicateSheetNumbers()
+    {
+        var duplicateSheetKeys = DrawingSheets
+            .Where(x => !string.IsNullOrWhiteSpace(x.DrgType) && !string.IsNullOrWhiteSpace(x.DrgNumber))
+            .GroupBy(x => $"{x.DrgType.Trim()}|{x.DrgNumber.Trim()}", StringComparer.OrdinalIgnoreCase)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var sheet in DrawingSheets)
+        {
+            sheet.IsDuplicateSheet = duplicateSheetKeys.Contains($"{sheet.DrgType?.Trim() ?? string.Empty}|{sheet.DrgNumber?.Trim() ?? string.Empty}");
+        }
+
+        if (duplicateSheetKeys.Count > 0)
+        {
+            var duplicateDescriptions = DrawingSheets
+                .Where(x => x.IsDuplicateSheet)
+                .Select(x => $"{x.DrgType} {x.DrgNumber}")
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            DisplayMessage = $"Warning: duplicate drawing sheets detected for {string.Join(", ", duplicateDescriptions)}.";
+        }
+        else
+        {
+            DisplayMessage = string.Empty;
+        }
+    }
+
     public void StatusComplete(DocumentStatusModel model)
     {
         //get the sheets in the model

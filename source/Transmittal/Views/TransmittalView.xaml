@@ -138,7 +138,22 @@
                                            NavigationMode="Cell" 
                                            SelectionMode="Extended"
                                            GridValidationMode="InView" 
-                                           CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >                        
+                                           CurrentCellValidated="sfDataGridSheets_CurrentCellValidated" >
+
+                        <syncfusion:SfDataGrid.Resources>
+                            <Style x:Key="DuplicateSheetGridCellStyle"
+                                TargetType="{x:Type syncfusion:GridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsDuplicateSheet}" Value="True">
+                                        <Setter Property="Background" Value="#FFF8D7DA" />
+                                        <Setter Property="Foreground" Value="#FF8B1E1E" />
+                                        <Setter Property="BorderBrush" Value="#FFB22234" />
+                                        <Setter Property="BorderThickness" Value="1" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </syncfusion:SfDataGrid.Resources>
+
                         <syncfusion:SfDataGrid.SortColumnDescriptions>
                             <syncfusion:SortColumnDescription ColumnName="DrgNumber" SortDirection="Ascending" />
                         </syncfusion:SfDataGrid.SortColumnDescriptions>
@@ -173,12 +188,12 @@
                                 IsHidden="{Binding EnablePerSheetExportFormats, Converter={StaticResource InverseBooleanConverter}}"
                                 ValueBinding="{Binding ExportDWF, Converter={StaticResource BoolToDWFIconConverter}}"/>
                             
-                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" AllowEditing="False"  />
+                            <syncfusion:GridTextColumn MappingName="DrgNumber" HeaderText="Number" Width="100" AllowEditing="False" CellStyle="{StaticResource DuplicateSheetGridCellStyle}" />
                             <syncfusion:GridTextColumn MappingName="DrgRev" HeaderText="Revision" Width="50" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgName" HeaderText="Name" Width="250" />
                             <syncfusion:GridTextColumn MappingName="DrgVolume" HeaderText="Volume / Functional" Width="50" />
                             <syncfusion:GridTextColumn MappingName="DrgLevel" HeaderText="Level / Spatial" Width="50" />
-                            <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" />
+                            <syncfusion:GridTextColumn MappingName="DrgType" HeaderText="Type" Width="50" CellStyle="{StaticResource DuplicateSheetGridCellStyle}"/>
                             <syncfusion:GridTextColumn MappingName="DrgStatus" HeaderText="Status" Width="50" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgStatusDescription" HeaderText="Status Description" Width="120" AllowEditing="False"/>
                             <syncfusion:GridTextColumn MappingName="DrgPackage" HeaderText="Package" Width="120" />
@@ -410,8 +425,8 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -519,14 +534,14 @@
                     </StackPanel>
 
                     <Button Grid.Row="6" Grid.Column="1" Width="150" Margin="5"
-                Content="Add to distribution"
-                ToolTip="Add new contact to the project directory"
-                IsEnabled="{Binding HasDirectoryEntriesSelected}"
-                Command="{Binding AddToDistribitionCommand}"/>
+                        Content="Add to distribution"
+                        ToolTip="Add new contact to the project directory"
+                        IsEnabled="{Binding HasDirectoryEntriesSelected}"
+                        Command="{Binding AddToDistribitionCommand}"/>
 
                     <Button Grid.Row="7" Grid.Column="1" Width="150" Margin="5" Padding="5,1,5,1"
-                IsEnabled="{Binding HasDistributionEntriesSelected}"
-                Command="{Binding RemoveFromDistributionCommand}">
+                        IsEnabled="{Binding HasDistributionEntriesSelected}"
+                        Command="{Binding RemoveFromDistributionCommand}">
                         <TextBlock Text="Remove from distribution" TextWrapping="Wrap" />
                     </Button>
 
