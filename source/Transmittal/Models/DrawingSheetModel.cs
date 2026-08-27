@@ -12,6 +12,9 @@ public partial class DrawingSheetModel : TransmittalItemModel
     public string RevNotes { get; set; }
 
     [ObservableProperty]
+    private bool _isDuplicateSheet;
+
+    [ObservableProperty]
     private bool? _exportPDF = null;
 
     [ObservableProperty]
