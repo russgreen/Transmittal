@@ -7,7 +7,10 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
-        Title="Revisions"  Width="800" SizeToContent="Height"
+        Title="Revisions"  
+        Width="800"
+        MinWidth="800" MinHeight="400" 
+        SizeToContent="Height"
         WindowStyle="ToolWindow" 
         WindowStartupLocation="CenterOwner">
     
@@ -26,7 +29,7 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition MinHeight="300" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 

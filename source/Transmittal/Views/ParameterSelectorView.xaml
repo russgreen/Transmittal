@@ -7,7 +7,10 @@
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels" 
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         mc:Ignorable="d"
-        Title="Select Parameter" Height="450" Width="300">
+        Title="Select Parameter" 
+        Width="300"
+        MinHeight="450" MinWidth="300"
+        SizeToContent="Height">
 
     <Window.Resources>
         <ResourceDictionary>
