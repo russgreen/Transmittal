@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:Transmittal.Views"
         xmlns:viewModels="clr-namespace:Transmittal.ViewModels"  
         mc:Ignorable="d"
-        Title="New Company" Width="400" SizeToContent="Height">
+        Title="New Company" 
+        Width="400"
+        MinWidth="400" MinHeight="300"
+        SizeToContent="Height">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -28,7 +31,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
-            <RowDefinition MinHeight="75" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
