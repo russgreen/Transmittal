@@ -28,7 +28,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="75" />
+            <RowDefinition MinHeight="75" />
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>

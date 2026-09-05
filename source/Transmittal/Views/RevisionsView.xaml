@@ -26,7 +26,7 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition Height="300" />
+            <RowDefinition MinHeight="300" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
