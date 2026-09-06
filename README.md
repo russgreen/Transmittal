@@ -153,8 +153,8 @@ The solution uses multiple build configurations for different Revit versions:
 
 ## Building the Solution
 
-### Automated Build (NUKE)
-The solution uses [NUKE](https://nuke.build/) for automated builds:
+### Automated Build (FALLOUT)
+The solution uses [FALLOUT](https://fallout.build/) for automated builds:
 
 ### Build Targets
 - **Clean**: Remove build artifacts
