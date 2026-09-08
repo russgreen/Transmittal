@@ -32,7 +32,7 @@ internal static class Host
         var userName = Environment.UserName.Replace("\\", "_").Replace("/", "_");
         var machineName = Environment.MachineName.Replace("\\", "_").Replace("/", "_");
         var cultureInfo = Thread.CurrentThread.CurrentCulture;
-        var regionInfo = new RegionInfo(cultureInfo.LCID);
+        var regionInfo = new RegionInfo(cultureInfo.Name);
         var clientId = ClientIdProvider.GetOrCreateClientId();
 
         var loggerConfigTransmittal = new LoggerConfiguration()
