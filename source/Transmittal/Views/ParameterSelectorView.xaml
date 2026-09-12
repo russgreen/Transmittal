@@ -30,18 +30,8 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         
-        <syncfusion:SfDataGrid Grid.Row="0" Margin="0,10,0,5"
-                               ItemsSource="{Binding Parameters}" 
-                               SelectedItem="{Binding SelectedParameter}"
-                               ColumnSizer="AutoLastColumnFill"
-                               AllowEditing="False"
-                               SelectionMode="Single">
-            <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn MappingName="Name" HeaderText="Name" MinimumWidth="200" />
-                <syncfusion:GridTextColumn MappingName="Guid" HeaderText="GUID" MinimumWidth="200" />
-            </syncfusion:SfDataGrid.Columns>
-        </syncfusion:SfDataGrid>
-
+        <ContentControl x:Name="sfDataGridParameterGridHost" Grid.Row="0" Margin="0,10,0,5" />
+        
             <StackPanel Grid.Row="1" Grid.ColumnSpan="2" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Right" >

@@ -51,18 +51,7 @@
 
         </Grid>
 
-        <syncfusion:SfDataGrid Grid.Row="1" Margin="0,10,0,5"
-                               x:Name="sfDataGridRevisions"
-                               ItemsSource="{Binding Revisions}" 
-                               SelectedItem="{Binding SelectedRevision,Mode=TwoWay}"
-                               AutoGenerateColumns="True" 
-                               AllowGrouping="False" 
-                               AllowResizingColumns="True" 
-                               AllowFiltering="False"
-                               NavigationMode="Row" 
-                               SelectionMode="Single" 
-                               GridValidationMode="InView" >
-        </syncfusion:SfDataGrid>
+        <ContentControl x:Name="sfDataGridRevisionsHost" Grid.Row="1" Margin="0,10,0,5" />
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" >
             <Button Content="Apply to Selected Sheets"  
