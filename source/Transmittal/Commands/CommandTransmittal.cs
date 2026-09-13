@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
+using Nice3point.Revit.Toolkit.Helpers;
 using Serilog.Context;
 using System.Diagnostics;
 using Transmittal.Exceptions;
@@ -60,15 +61,18 @@ public class CommandTransmittal : ExternalCommand
 
             try
             {
-                if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
+                using (ResolveHelper.BeginAssemblyResolveScope<App>())
                 {
-                    var settingsView = new Views.SettingsView();
-                    settingsView.ShowDialog();
-                }
-                else
-                {
-                    var transmittalView = new Views.TransmittalView();
-                    transmittalView.ShowDialog();
+                    if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
+                    {
+                        var settingsView = new Views.SettingsView();
+                        settingsView.ShowDialog();
+                    }
+                    else
+                    {
+                        var transmittalView = new Views.TransmittalView();
+                        transmittalView.ShowDialog();
+                    }
                 }
             }
             catch (SchemaVersionTooNewException ex)

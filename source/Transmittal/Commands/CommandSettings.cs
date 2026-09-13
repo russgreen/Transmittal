@@ -4,6 +4,7 @@ using Autodesk.Revit.UI;
 using Microsoft.Extensions.Logging;
 using Nice3point.Revit.Toolkit;
 using Nice3point.Revit.Toolkit.External;
+using Nice3point.Revit.Toolkit.Helpers;
 using Serilog.Context;
 using Transmittal.Exceptions;
 using Transmittal.Services;
@@ -27,8 +28,11 @@ internal class CommandSettings : ExternalCommand
 
         try
         {
-            var newView = new Views.SettingsView();
-            newView.ShowDialog();
+            using (ResolveHelper.BeginAssemblyResolveScope<App>())
+            {
+                var newView = new Views.SettingsView();
+                newView.ShowDialog();
+            }
         }
         catch (SchemaVersionTooNewException ex)
         {
