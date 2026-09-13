@@ -1,6 +1,7 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using Transmittal.Library.Services;
 using Transmittal.Requesters;
@@ -14,10 +15,9 @@ public partial class RevisionsView : Window
     private readonly RevisionsViewModel _viewModel;
     private readonly ISettingsService _settingsService = Host.GetService<ISettingsService>();
 
-
     public RevisionsView()
     {
-        
+
     }
 
     public RevisionsView(IRevisionRequester caller)
@@ -34,20 +34,37 @@ public partial class RevisionsView : Window
 
     private void BuildDataGrid()
     {
-        this.sfDataGridRevisions.Columns.Clear();
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Sequence", HeaderText = "Sequence", Width = 80 });
-#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Numbering", HeaderText = "Numbering", Width = 100 });
-#else
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "SequenceName", HeaderText = "Numbering", Width = 100 });
-#endif
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "RevDate", HeaderText = "Date", Width = 80 }); //, Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern , CustomPattern = _settingsService.GlobalSettings.DateFormatString });
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Description", HeaderText = "Description",  MinimumWidth = 100 });
-        this.sfDataGridRevisions.Columns.Add(new GridCheckBoxColumn() { MappingName = "Issued", HeaderText = "Issued", Width = 60 });
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedBy", HeaderText = "Issued By", Width = 80 });
-        this.sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedTo", HeaderText = "Issued To", Width = 80 });
+        var sfDataGridRevisions = new SfDataGrid
+        {
+            AutoGenerateColumns = true,
+            AllowGrouping = false,
+            AllowResizingColumns = true,
+            AllowFiltering = false,
+            NavigationMode = NavigationMode.Row,
+            SelectionMode =  GridSelectionMode.Single,
+            GridValidationMode = GridValidationMode.InView,
+            Margin = new Thickness(0, 0, 0, 0)
+        };
 
-        this.sfDataGridRevisions.SelectionController = new GridSelectionControllerExt(sfDataGridRevisions);
+        sfDataGridRevisions.SetBinding(SfDataGrid.ItemsSourceProperty, new Binding(nameof(RevisionsViewModel.Revisions)));
+        sfDataGridRevisions.SetBinding(SfDataGrid.SelectedItemProperty, new Binding(nameof(RevisionsViewModel.SelectedRevision)) { Mode = BindingMode.TwoWay });
+
+        sfDataGridRevisions.Columns.Clear();
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Sequence", HeaderText = "Sequence", Width = 80 });
+#if REVIT2018 || REVIT2019 || REVIT2020 || REVIT2021
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Numbering", HeaderText = "Numbering", Width = 100 });
+#else
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "SequenceName", HeaderText = "Numbering", Width = 100 });
+#endif
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "RevDate", HeaderText = "Date", Width = 80 }); //, Pattern = Syncfusion.Windows.Shared.DateTimePattern.CustomPattern , CustomPattern = _settingsService.GlobalSettings.DateFormatString });
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "Description", HeaderText = "Description",  MinimumWidth = 100 });
+        sfDataGridRevisions.Columns.Add(new GridCheckBoxColumn() { MappingName = "Issued", HeaderText = "Issued", Width = 60 });
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedBy", HeaderText = "Issued By", Width = 80 });
+        sfDataGridRevisions.Columns.Add(new GridTextColumn() { MappingName = "IssuedTo", HeaderText = "Issued To", Width = 80 });
+
+        sfDataGridRevisions.SelectionController = new GridSelectionControllerExt(sfDataGridRevisions);
+
+        sfDataGridRevisionsHost.Content = sfDataGridRevisions;
     }
 
     private void ButtonAddRevision_Click(object sender, RoutedEventArgs e)
@@ -77,9 +94,10 @@ public partial class RevisionsView : Window
             }
         }
 
-        this.sfDataGridRevisions.SearchHelper.SearchBrush = Brushes.Green;
-        this.sfDataGridRevisions.SearchHelper.AllowFiltering = true;
-        this.sfDataGridRevisions.SearchHelper.Search(this.TextBoxSearch.Text);
+        var sfDataGridRevisions = sfDataGridRevisionsHost.Content as SfDataGrid;
+        sfDataGridRevisions.SearchHelper.SearchBrush = Brushes.Green;
+        sfDataGridRevisions.SearchHelper.AllowFiltering = true;
+        sfDataGridRevisions.SearchHelper.Search(TextBoxSearch.Text);
     }
 }
 

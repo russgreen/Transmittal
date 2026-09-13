@@ -29,11 +29,82 @@ public partial class SettingsView : Window
         _viewModel = Host.GetService<ViewModels.SettingsViewModel>();
         _dataConnection = Host.GetService<IDataConnection>();
         _logger = Host.GetService<ILogger<SettingsView>>();
-        DataContext = _viewModel;   
+        DataContext = _viewModel;
+
+        BuildDataGrids();
 
         _viewModel.ClosingRequest += (sender, e) => this.Close();
     }
-    
+
+    private void BuildDataGrids()
+    {
+        // Built here in code, not in XAML: the compiled BAML for this window would
+        // otherwise bake in a reference to Syncfusion.SfGrid.WPF that WPF's
+        // AssemblyLoadContext-unaware XAML resolver can mis-resolve to a different
+        // add-in's isolated copy (see the comment in MainView.xaml). Constructing the
+        // type directly in C# resolves it through the normal, correctly-isolated CLR
+        // assembly loader instead.
+        var sfDataGridFormats = new Syncfusion.UI.Xaml.Grid.SfDataGrid
+        {
+            AutoGenerateColumns = false,
+            AllowGrouping = false,
+            AllowEditing = true,
+            AllowDeleting = true,
+            AllowResizingColumns = true,
+            SelectionMode = Syncfusion.UI.Xaml.Grid.GridSelectionMode.Single,
+            GridValidationMode = Syncfusion.UI.Xaml.Grid.GridValidationMode.InEdit,
+            AddNewRowPosition = Syncfusion.UI.Xaml.Grid.AddNewRowPosition.Bottom,
+            ColumnSizer = Syncfusion.UI.Xaml.Grid.GridLengthUnitType.AutoWithLastColumnFill,
+
+            Columns =
+            {
+                new Syncfusion.UI.Xaml.Grid.GridTextColumn()
+                {
+                    MappingName = nameof(IssueFormatModel.Code),
+                    HeaderText = "Code",
+                    Width = 50
+                },
+                new Syncfusion.UI.Xaml.Grid.GridTextColumn()
+                {
+                    MappingName = nameof(IssueFormatModel.Description),
+                    HeaderText = "Description"
+                }
+            }
+        };
+        sfDataGridFormats.SetBinding(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, new System.Windows.Data.Binding(nameof(SettingsViewModel.IssueFormats)));
+        sfDataGridFormatsHost.Content = sfDataGridFormats;
+
+
+        var sfDataGridStatuses = new Syncfusion.UI.Xaml.Grid.SfDataGrid
+        {
+            AutoGenerateColumns = false,
+            AllowGrouping = false,
+            AllowEditing = true,
+            AllowDeleting = true,
+            AllowResizingColumns = true,
+            SelectionMode = Syncfusion.UI.Xaml.Grid.GridSelectionMode.Single,
+            GridValidationMode = Syncfusion.UI.Xaml.Grid.GridValidationMode.InEdit,
+            AddNewRowPosition = Syncfusion.UI.Xaml.Grid.AddNewRowPosition.Bottom,
+            ColumnSizer = Syncfusion.UI.Xaml.Grid.GridLengthUnitType.AutoWithLastColumnFill,
+            Columns =
+            {
+                new Syncfusion.UI.Xaml.Grid.GridTextColumn()
+                {
+                    MappingName = nameof(DocumentStatusModel.Code),
+                    HeaderText = "Code",
+                    Width = 50
+                },
+                new Syncfusion.UI.Xaml.Grid.GridTextColumn()
+                {
+                    MappingName = nameof(DocumentStatusModel.Description),
+                    HeaderText = "Description"
+                }
+            }
+        };
+        sfDataGridStatuses.SetBinding(Syncfusion.UI.Xaml.Grid.SfDataGrid.ItemsSourceProperty, new System.Windows.Data.Binding(nameof(SettingsViewModel.DocumentStatuses)));
+        sfDataGridStatusesHost.Content = sfDataGridStatuses;    
+    }
+
     private void buttonFolderBrowse_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new VistaFolderBrowserDialog
