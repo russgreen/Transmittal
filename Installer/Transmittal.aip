@@ -103,15 +103,19 @@
     <ROW Component="ClosedXML.Parser.dll" ComponentId="{AB7C95FF-92AD-4539-9348-CA60A42613C0}" Directory_="APPDIR" Attributes="0" KeyPath="ClosedXML.Parser.dll"/>
     <ROW Component="ClosedXML.dll" ComponentId="{5496A006-B2B9-4AA6-B106-E25FD03ED9D5}" Directory_="APPDIR" Attributes="0" KeyPath="ClosedXML.dll"/>
     <ROW Component="CommunityToolkit.Mvvm.dll" ComponentId="{093E0F76-C5C8-4B80-8F69-6E1E4BE47FB2}" Directory_="APPDIR" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll"/>
+    <ROW Component="CommunityToolkit.Mvvm.dll_1" ComponentId="{F31FAF9C-FE1D-4CA4-8B81-069FB9D0D506}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="CommunityToolkit.Mvvm.dll_1"/>
     <ROW Component="CurrentVersion" ComponentId="{F6370944-48C2-4C57-BAD4-66B68154ACE6}" Directory_="APPDIR" Attributes="260" KeyPath="CurrentVersion"/>
     <ROW Component="Dapper.dll" ComponentId="{3C785166-CE81-4DA3-B8CD-E82E4AA925BC}" Directory_="APPDIR" Attributes="0" KeyPath="Dapper.dll"/>
+    <ROW Component="Dapper.dll_1" ComponentId="{59DA53C3-CA02-4806-9F83-17C57F96B2B8}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Dapper.dll_1"/>
     <ROW Component="DocumentFormat.OpenXml.Framework.dll" ComponentId="{7617F6D4-AF43-4CEC-84AC-24093B7D7F98}" Directory_="APPDIR" Attributes="0" KeyPath="DocumentFormat.OpenXml.Framework.dll"/>
     <ROW Component="DocumentFormat.OpenXml.dll" ComponentId="{514EA4C7-884C-4732-8C32-44B80419989D}" Directory_="APPDIR" Attributes="0" KeyPath="DocumentFormat.OpenXml.dll"/>
     <ROW Component="ExcelNumberFormat.dll" ComponentId="{47FFD11F-B0E8-4C20-8382-D5B37E993779}" Directory_="APPDIR" Attributes="0" KeyPath="ExcelNumberFormat.dll"/>
     <ROW Component="Humanizer.dll" ComponentId="{09766062-CF5D-49EC-B900-53B2879A3BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Humanizer.dll"/>
+    <ROW Component="Humanizer.dll_1" ComponentId="{17BC0738-E0F7-4CBF-A0FE-0E939F92FAD5}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Humanizer.dll_1"/>
     <ROW Component="LICENSE" ComponentId="{F44B8269-DB86-4488-BAEE-11B7FD10E3A6}" Directory_="node_Dir" Attributes="0" KeyPath="LICENSE" Type="0"/>
     <ROW Component="Microsoft" ComponentId="{90D2D416-9ADB-4757-A4EF-3230BF67C888}" Directory_="APPDIR" Attributes="260" KeyPath="Microsoft"/>
     <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll" ComponentId="{64E0409F-0A2B-469D-8DF0-9C117A80C95E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll"/>
+    <ROW Component="Microsoft.Bcl.AsyncInterfaces.dll_1" ComponentId="{8DD73E27-6543-4DB1-822B-BC0FAA6C7470}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Bcl.AsyncInterfaces.dll_1"/>
     <ROW Component="Microsoft.Bcl.Cryptography.dll" ComponentId="{517113D6-E093-434F-838A-A626BDA18F01}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Bcl.Cryptography.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.VisualBasic.dll" ComponentId="{E97648E2-B936-4F9A-9044-3B40556A4634}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.VisualBasic.dll"/>
     <ROW Component="Microsoft.CodeAnalysis.dll" ComponentId="{09A090EF-4261-458F-8C10-346707A073CA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.CodeAnalysis.dll"/>
@@ -123,35 +127,63 @@
     <ROW Component="Microsoft.Data.Sqlite.dll_5" ComponentId="{EA0DB056-E970-4DF8-BE9B-F808BFBE955E}" Directory_="Transmittal_2_Dir" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll_5"/>
     <ROW Component="Microsoft.Data.Sqlite.dll_6" ComponentId="{24334E8D-5509-4D76-B31F-5A9E6CB78CFD}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll_6"/>
     <ROW Component="Microsoft.Data.Sqlite.dll_7" ComponentId="{B6FD3127-369C-41CE-A12A-FE8F941DF6FF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Data.Sqlite.dll_7"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{AC7B32C7-5E03-48FE-9E88-95C2343866C7}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{8A84DFB4-711E-4961-B582-D7779487476D}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{D2D77E70-766F-452C-A281-CBCAD9A1FB5D}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{D6FF9468-719E-40AA-B50A-21D8785F7B17}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{D5173DD3-2598-4830-8FE0-DCD8E23FC8FC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{56000B73-693B-4418-BB3E-585588F2F3A6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{F1B29580-9C1B-45BD-83F4-51810C554737}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{E3755756-72D3-4361-9124-E63FD095DC2A}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.dll_1" ComponentId="{CEAB8E87-C2BB-440B-A7BB-C49D15FD3807}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll_1"/>
     <ROW Component="Microsoft.Extensions.Configuration_1_.Abstractions.dll" ComponentId="{AE1C7610-C5F7-4876-B198-DC8BE37FED46}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration_1_.Binder.dll" ComponentId="{365B895E-E277-4584-9561-9CFE6A04B14A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.Binder.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration_1_.CommandLine.dll" ComponentId="{A66B7301-1B60-4163-83D2-F7A01DA15993}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration_1_.EnvironmentVariables.dll" ComponentId="{A35F0D71-B296-40AF-8C2C-50B291F67172}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration_1_.FileExtensions.dll" ComponentId="{E98E7237-9597-459D-AF1A-DD7DAA2CD0B8}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration_1_.Json.dll" ComponentId="{0055BAB9-85EB-481E-B66C-737E0026931F}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration_1_.UserSecrets.dll" ComponentId="{7EDD71F2-5897-42B2-BBDF-ECD7DE3A4969}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Configuration_1_.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInj_1_ection.Abstractions.dll" ComponentId="{91AF3B7A-9D66-4FF6-9144-A74B89AB63E3}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInj_1_ection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInj_2_ection.dll" ComponentId="{F2BE14E0-9E0C-4FE5-A248-EAB3B3FA36FA}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInj_1_ection.dll"/>
     <ROW Component="Microsoft.Extensions.DependencyInjec_1_tion.dll" ComponentId="{6922EDC4-93D9-48AE-BC02-77A2AD1C6306}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
     <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{4EC506AD-15F7-4167-AC76-4859AD63F792}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.Diagnostics.Abs_1_tractions.dll" ComponentId="{84B92D88-A4A1-4781-A600-70E8553EDA5E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abs_1_tractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.Abstractions.dll" ComponentId="{3BE72050-AD93-4920-93DA-4A1F8525FD45}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Diagnostics.dll" ComponentId="{1F1A7279-E4BD-4C27-8B91-696C93AAB518}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll"/>
     <ROW Component="Microsoft.Extensions.Diagnostics.dll_1" ComponentId="{413C957D-ED2A-407E-BAE5-C026D1CAA5E6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Diagnostics.dll_1"/>
     <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{30B0A8AC-AD4C-4895-981C-67DFCB2EE9B6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{7926D276-7D6C-4BF4-BAEF-04960512CECE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders_1_.Abstractions.dll" ComponentId="{3BE09B12-BA99-46B4-BDDC-9E7092C4E0D7}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders_1_.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders_1_.Physical.dll" ComponentId="{75E2C85C-D0F9-4873-ABE7-3F00A274ED04}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders_1_.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlo_1_bbing.dll" ComponentId="{063EB6B2-C20F-4F22-9369-6A0761B5C749}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlo_1_bbing.dll"/>
     <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{D990B8E7-7CC4-460A-AD69-30CD9EBB9BBD}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstr_1_actions.dll" ComponentId="{DC9D91A5-83DF-487B-946F-9AFF84911FF9}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstr_1_actions.dll"/>
     <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{61E070A0-C892-4F84-8B1F-9214AB36282B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{3178B567-3189-4729-BCD1-B0E3C60DE632}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll_1" ComponentId="{65AF489A-A497-4405-8699-A1AAD2D0DCBD}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll_1"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstr_1_actions.dll" ComponentId="{0A56062B-A5D8-444B-8E6F-2968541F0A2D}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstr_1_actions.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{94F2F8C3-0B22-4533-8889-1CED7E63EDCF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Confi_1_guration.dll" ComponentId="{52718740-0F6D-463A-8B8D-A3E8E3A81B66}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Confi_1_guration.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{39449A39-C92A-49D3-8EEE-289170D4B3DB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Conso_1_le.dll" ComponentId="{12312624-F0EF-4724-A283-C6B8BDE4B706}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Conso_1_le.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{927C32CD-D4E7-4A08-B876-4EE077576872}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{AB44F65C-0D5F-4672-9EC7-8E0FE109E423}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll_1" ComponentId="{669103EC-FCC5-4BC3-96C3-CA30819BE874}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll_1"/>
     <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{E17C3231-8D05-4FFC-B4E2-24B2288FF2CE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{CE65EFA6-57E8-4442-BB5B-B242628884BE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Event_1_Log.dll" ComponentId="{E6641E76-4E90-494A-8D9F-6284499A54AF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Event_1_Log.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Event_1_Source.dll" ComponentId="{386DC7FD-4BEC-4C73-9066-50A430600DDD}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Event_1_Source.dll"/>
     <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{6570E370-FBFD-4B40-9F15-2ABFF55E9230}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll_1" ComponentId="{0D6EE0E7-7226-4408-87E7-672DFC587209}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll_1"/>
     <ROW Component="Microsoft.Extensions.ObjectPool.dll" ComponentId="{C6E8A7B3-E2C1-4FCB-8579-314AD7FCB185}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.ObjectPool.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.Confi_1_gurationExtensions.dll" ComponentId="{4C1B6E86-DC33-4923-A398-383281A708E1}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.Confi_1_gurationExtensions.dll"/>
     <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{1EF073D3-DB64-4686-AE31-12E7295A5855}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
     <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{C06A4040-A4F0-4768-8A65-FF384BE312F3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll_1" ComponentId="{C0351150-690D-44C0-BE95-3BC54419FD7D}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll_1"/>
     <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{4808B4B3-5334-4E53-8409-C63BCC4FC5A2}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll_1" ComponentId="{9835286D-5A2C-465B-878E-4BA0943D74D0}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll_1"/>
     <ROW Component="Microsoft.Playwright.dll" ComponentId="{BDB9B44D-5636-4464-BEBA-AF0DFFF87BE9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Playwright.dll"/>
+    <ROW Component="Microsoft.Playwright.dll_1" ComponentId="{1BE436CE-3D1D-427C-A88A-0DCAB9819037}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Playwright.dll_1"/>
     <ROW Component="Microsoft.ReportViewer.Common.dll" ComponentId="{868DFE6A-9C99-4799-91F9-9545451A93C2}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.ReportViewer.Common.dll"/>
     <ROW Component="Microsoft.ReportViewer.DataVisualization.dll" ComponentId="{C0328A34-A430-489D-8A2E-D2B16B868F7C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.ReportViewer.DataVisualization.dll"/>
     <ROW Component="Microsoft.ReportViewer.ProcessingObjectModel.dll" ComponentId="{02BC6905-2CEC-47F7-927C-D4C89B227C2C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.ReportViewer.ProcessingObjectModel.dll"/>
@@ -159,7 +191,11 @@
     <ROW Component="Microsoft.Web.WebView2.Core.dll" ComponentId="{AEC76551-4ED3-4956-9202-7B186BF31A15}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Core.dll"/>
     <ROW Component="Microsoft.Web.WebView2.Wpf.dll" ComponentId="{17175C02-B1DE-4418-A576-EEC4B0DB2036}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Web.WebView2.Wpf.dll"/>
     <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{2C021B1F-3CD0-4987-8135-2F405BEC41C7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
+    <ROW Component="Microsoft.Xaml.Behaviors.dll_1" ComponentId="{9129AEC9-E877-47F0-AB4F-93082875DCDC}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll_1"/>
     <ROW Component="NewValue" ComponentId="{26B3A65C-CED2-4733-9890-DAC343310E1C}" Directory_="APPDIR" Attributes="260" KeyPath="NewValue"/>
+    <ROW Component="Nice3point.Revit.Extensions.dll" ComponentId="{1158F7DD-1AFD-4039-96D8-2FCFB66BDA33}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Nice3point.Revit.Extensions.dll"/>
+    <ROW Component="Nice3point.Revit.Toolkit.dll" ComponentId="{CB06D3E1-DC96-42E2-93E1-83920D7A9815}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Nice3point.Revit.Toolkit.dll"/>
+    <ROW Component="Ookii.Dialogs.Wpf.dll" ComponentId="{ED23D3FD-B14C-484E-9F80-74BF123E8EC4}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Ookii.Dialogs.Wpf.dll"/>
     <ROW Component="ProductInformation" ComponentId="{5D20DA40-74F6-46D4-92E5-34EEBC435006}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ProjectDirectory.rdlc" ComponentId="{D1A78914-9F2F-4E1A-B46E-F00220C02B30}" Directory_="ReportTemplates_Dir" Attributes="0" KeyPath="ProjectDirectory.rdlc" Type="0"/>
     <ROW Component="RBush.dll" ComponentId="{BCFE60CA-2554-4C33-A052-D2A9316A3AE3}" Directory_="APPDIR" Attributes="0" KeyPath="RBush.dll"/>
@@ -191,14 +227,23 @@
     <ROW Component="SQLitePCLRaw.provider.e_sqlite3.dll_2" ComponentId="{27C900F9-1C04-4A56-8E5F-2E2CEEE4371A}" Directory_="Transmittal_5_Dir" Attributes="0" KeyPath="SQLitePCLRaw.provider.e_sqlite3.dll_2"/>
     <ROW Component="SQLitePCLRaw.provider.e_sqlite3.dll_3" ComponentId="{6F3BCC10-705C-4952-B72C-386BB3D988F3}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="SQLitePCLRaw.provider.e_sqlite3.dll_3"/>
     <ROW Component="Serilog.Extensions.Hosting.dll" ComponentId="{0FC36EE5-4076-4ECF-87E3-92AB6A5FE9E8}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Hosting.dll"/>
+    <ROW Component="Serilog.Extensions.Hosting.dll_1" ComponentId="{5BA2520C-10AA-46AC-88B6-10DFCB23BAEF}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Extensions.Hosting.dll_1"/>
     <ROW Component="Serilog.Extensions.Logging.dll" ComponentId="{275AA67B-9274-46D2-B6EC-604E0ABC5823}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Extensions.Logging.dll"/>
+    <ROW Component="Serilog.Extensions.Logging.dll_1" ComponentId="{1F1F2AED-6C43-42EB-90EC-BBF405DBE4F3}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Extensions.Logging.dll_1"/>
     <ROW Component="Serilog.Sinks.Async.dll" ComponentId="{5861BE45-AB39-4258-A779-2E860403E6D7}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Async.dll"/>
+    <ROW Component="Serilog.Sinks.Async.dll_1" ComponentId="{CF5BBD5D-68D6-49E3-8953-9C5672842B2C}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Sinks.Async.dll_1"/>
     <ROW Component="Serilog.Sinks.Debug.dll" ComponentId="{5E41B977-77B8-4A2A-ACCA-9AE188D1A3D6}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll"/>
+    <ROW Component="Serilog.Sinks.Debug.dll_1" ComponentId="{A825887A-934F-4419-ADB1-C89D4F6E9EFC}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Sinks.Debug.dll_1"/>
     <ROW Component="Serilog.Sinks.File.dll" ComponentId="{A75A8398-9AF2-42FE-83B3-D78BDC416FF2}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.File.dll"/>
+    <ROW Component="Serilog.Sinks.File.dll_1" ComponentId="{5C45632A-D646-4332-BF27-DE8AC3DF9C57}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Sinks.File.dll_1"/>
     <ROW Component="Serilog.Sinks.GoogleAnalytics.dll" ComponentId="{9E5AE4D0-44AE-42D9-9FC6-A0767ECC39C8}" Directory_="APPDIR" Attributes="256" KeyPath="Serilog.Sinks.GoogleAnalytics.dll"/>
+    <ROW Component="Serilog.Sinks.GoogleAnalytics.dll_1" ComponentId="{54AEE1E7-7FAD-4D89-8F8A-401013F188B1}" Directory_="Transmittal_6_Dir" Attributes="256" KeyPath="Serilog.Sinks.GoogleAnalytics.dll_1"/>
     <ROW Component="Serilog.Sinks.PeriodicBatching.dll" ComponentId="{FBD4AAE0-ABA1-47C8-A491-DC619494B421}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.Sinks.PeriodicBatching.dll"/>
+    <ROW Component="Serilog.Sinks.PeriodicBatching.dll_1" ComponentId="{FFE2B1D3-85B3-43A3-95C0-2EB071647F67}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.Sinks.PeriodicBatching.dll_1"/>
     <ROW Component="Serilog.dll" ComponentId="{9F739BA8-C0FA-46CD-BA80-9CC1D324AE51}" Directory_="APPDIR" Attributes="0" KeyPath="Serilog.dll"/>
+    <ROW Component="Serilog.dll_1" ComponentId="{A6CE40F3-89C4-43B2-90B5-37BA7BE8A376}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="Serilog.dll_1"/>
     <ROW Component="SfDatagrid.WPF.Extensions.dll" ComponentId="{CFBB3F7F-173D-4E8B-BF71-699999245ABD}" Directory_="APPDIR" Attributes="256" KeyPath="SfDatagrid.WPF.Extensions.dll"/>
+    <ROW Component="SfDatagrid.WPF.Extensions.dll_1" ComponentId="{E49DA74E-B784-4FBA-BE4E-021E24BB9FF2}" Directory_="Transmittal_6_Dir" Attributes="256" KeyPath="SfDatagrid.WPF.Extensions.dll_1"/>
     <ROW Component="Shell" ComponentId="{EAF5D4D5-E4E7-482F-B149-5E6ECCBCCA06}" Directory_="APPDIR" Attributes="260" KeyPath="Shell"/>
     <ROW Component="SixLabors.Fonts.dll" ComponentId="{2DD3BA3B-7117-4194-A067-53FF51F70C75}" Directory_="APPDIR" Attributes="0" KeyPath="SixLabors.Fonts.dll"/>
     <ROW Component="Syncfusion.Compression.Base.dll" ComponentId="{DD883321-052E-4B65-AAC1-53EE59066416}" Directory_="Transmittal_Dir" Attributes="0" KeyPath="Syncfusion.Compression.Base.dll"/>
@@ -263,6 +308,7 @@
     <ROW Component="System.IO.Packaging.dll" ComponentId="{7F4CDEB6-6B1D-4710-9FC1-DDE3F942CAA2}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Packaging.dll"/>
     <ROW Component="System.IO.Pipelines.dll" ComponentId="{19F30D04-7183-4D06-9525-884BD5FA927D}" Directory_="APPDIR" Attributes="0" KeyPath="System.IO.Pipelines.dll"/>
     <ROW Component="System.Management.dll" ComponentId="{A39115FB-82C5-4855-AA8D-7C06E64CDC55}" Directory_="APPDIR" Attributes="0" KeyPath="System.Management.dll"/>
+    <ROW Component="System.Management.dll_1" ComponentId="{7944B20B-BCB3-4258-B94D-1974EB78AC57}" Directory_="Transmittal_6_Dir" Attributes="0" KeyPath="System.Management.dll_1"/>
     <ROW Component="System.Security.Cryptography.Pkcs.dll" ComponentId="{11C845A7-C1B3-455B-9773-A45EC6224930}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Pkcs.dll"/>
     <ROW Component="System.Security.Cryptography.Xml.dll" ComponentId="{5F719FC0-DF06-4837-9067-EBA3DF5EFACF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Security.Cryptography.Xml.dll"/>
     <ROW Component="System.ServiceModel.Duplex.dll" ComponentId="{00DA1B9C-2EAB-41CD-BEDF-05C9B5BD5F27}" Directory_="APPDIR" Attributes="0" KeyPath="System.ServiceModel.Duplex.dll"/>
@@ -278,6 +324,7 @@
     <ROW Component="Transmittal.Desktop.exe" ComponentId="{518C98AF-F70D-4888-A2E3-4D7E7B9CC798}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Desktop.exe"/>
     <ROW Component="Transmittal.Desktop.runtimeconfig.json" ComponentId="{5F2FF946-6630-42B1-925A-1CC1536A5B74}" Directory_="APPDIR" Attributes="0" KeyPath="Transmittal.Desktop.runtimeconfig.json" Type="0"/>
     <ROW Component="Transmittal.Library.dll" ComponentId="{66BCDFC2-8228-4212-B1EC-82447F046839}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Library.dll"/>
+    <ROW Component="Transmittal.Library.dll_1" ComponentId="{7B14433C-E8FA-444B-8A56-14C8C5FEB180}" Directory_="Transmittal_6_Dir" Attributes="256" KeyPath="Transmittal.Library.dll_1"/>
     <ROW Component="Transmittal.Reports.OpenXML.dll" ComponentId="{3170A961-6862-47F0-9406-7D850EEAF496}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Reports.OpenXML.dll"/>
     <ROW Component="Transmittal.Reports.dll" ComponentId="{0194DCD9-3ABA-4A69-BE12-E191C824BAC7}" Directory_="APPDIR" Attributes="256" KeyPath="Transmittal.Reports.dll"/>
     <ROW Component="Transmittal.addin" ComponentId="{E1F058D6-29AC-4555-97E3-9E2AD43AA6CD}" Directory_="__Dir" Attributes="0" KeyPath="Transmittal.addin_1" Type="0"/>
@@ -676,6 +723,55 @@
     <ROW File="protocol.d.ts" Component_="protocol.d.ts" FileName="PROTOC~1.TS|protocol.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\protocol.d.ts" SelfReg="false"/>
     <ROW File="structs.d.ts" Component_="protocol.d.ts" FileName="STRUCT~1.TS|structs.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\structs.d.ts" SelfReg="false"/>
     <ROW File="types.d.ts" Component_="protocol.d.ts" FileName="TYPESD~1.TS|types.d.ts" Attributes="0" SourcePath="..\source\Transmittal.Desktop\bin\Release\.playwright\package\types\types.d.ts" SelfReg="false"/>
+    <ROW File="Ookii.Dialogs.Wpf.dll" Component_="Ookii.Dialogs.Wpf.dll" FileName="OOKIID~1.DLL|Ookii.Dialogs.Wpf.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Ookii.Dialogs.Wpf.dll" SelfReg="false"/>
+    <ROW File="Serilog.dll_1" Component_="Serilog.dll_1" FileName="Serilog.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Hosting.dll_1" Component_="Serilog.Extensions.Hosting.dll_1" FileName="SERILO~1.DLL|Serilog.Extensions.Hosting.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Serilog.Extensions.Logging.dll_1" Component_="Serilog.Extensions.Logging.dll_1" FileName="SERILO~2.DLL|Serilog.Extensions.Logging.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Async.dll_1" Component_="Serilog.Sinks.Async.dll_1" FileName="SERILO~3.DLL|Serilog.Sinks.Async.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Sinks.Async.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.Debug.dll_1" Component_="Serilog.Sinks.Debug.dll_1" FileName="SERILO~4.DLL|Serilog.Sinks.Debug.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Sinks.Debug.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.File.dll_1" Component_="Serilog.Sinks.File.dll_1" FileName="SERILO~5.DLL|Serilog.Sinks.File.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Sinks.File.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.GoogleAnalytics.dll_1" Component_="Serilog.Sinks.GoogleAnalytics.dll_1" FileName="SERILO~6.DLL|Serilog.Sinks.GoogleAnalytics.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Sinks.GoogleAnalytics.dll" SelfReg="false"/>
+    <ROW File="Serilog.Sinks.PeriodicBatching.dll_1" Component_="Serilog.Sinks.PeriodicBatching.dll_1" FileName="SERILO~7.DLL|Serilog.Sinks.PeriodicBatching.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Serilog.Sinks.PeriodicBatching.dll" SelfReg="false"/>
+    <ROW File="SfDatagrid.WPF.Extensions.dll_1" Component_="SfDatagrid.WPF.Extensions.dll_1" FileName="SFDATA~1.DLL|SfDatagrid.WPF.Extensions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\SfDatagrid.WPF.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Management.dll_1" Component_="System.Management.dll_1" FileName="SYSTEM~1.DLL|System.Management.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\System.Management.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Library.dll_1" Component_="Transmittal.Library.dll_1" FileName="TRANSM~2.DLL|Transmittal.Library.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Transmittal.Library.dll" SelfReg="false"/>
+    <ROW File="Transmittal.Library.pdb_1" Component_="Transmittal.Library.dll_1" FileName="TRANSM~1.PDB|Transmittal.Library.pdb" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Transmittal.Library.pdb" SelfReg="false"/>
+    <ROW File="AnalyticsSettings.json_1" Component_="AnalyticsSettings.json" FileName="ANALYT~1.JSO|AnalyticsSettings.json" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\AnalyticsSettings.json" SelfReg="false"/>
+    <ROW File="CommunityToolkit.Mvvm.dll_1" Component_="CommunityToolkit.Mvvm.dll_1" FileName="COMMUN~1.DLL|CommunityToolkit.Mvvm.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\CommunityToolkit.Mvvm.dll" SelfReg="false"/>
+    <ROW File="Dapper.dll_1" Component_="Dapper.dll_1" FileName="Dapper.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Dapper.dll" SelfReg="false"/>
+    <ROW File="Humanizer.dll_1" Component_="Humanizer.dll_1" FileName="HUMANI~1.DLL|Humanizer.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Humanizer.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Bcl.AsyncInterfaces.dll_1" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1" FileName="MICROS~2.DLL|Microsoft.Bcl.AsyncInterfaces.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Bcl.AsyncInterfaces.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration_1_.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration_1_.EnvironmentVariables.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration_1_.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration_1_.FileExtensions.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration_1_.Json.dll" Component_="Microsoft.Extensions.Configuration_1_.Json.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration_1_.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration_1_.UserSecrets.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInj_1_ection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInj_1_ection.Abstractions.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInj_1_ection.dll" Component_="Microsoft.Extensions.DependencyInj_2_ection.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.Abstractions.dll" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.Diagnostics.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Diagnostics.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Diagnostics.dll" Component_="Microsoft.Extensions.Diagnostics.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Diagnostics.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Diagnostics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders_1_.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders_1_.Abstractions.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders_1_.Physical.dll" Component_="Microsoft.Extensions.FileProviders_1_.Physical.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlo_1_bbing.dll" Component_="Microsoft.Extensions.FileSystemGlo_1_bbing.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstr_1_actions.dll" Component_="Microsoft.Extensions.Hosting.Abstr_1_actions.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll_1" Component_="Microsoft.Extensions.Hosting.dll_1" FileName="MICRO~19.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstr_1_actions.dll" Component_="Microsoft.Extensions.Logging.Abstr_1_actions.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Confi_1_guration.dll" Component_="Microsoft.Extensions.Logging.Confi_1_guration.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Conso_1_le.dll" Component_="Microsoft.Extensions.Logging.Conso_1_le.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll_1" Component_="Microsoft.Extensions.Logging.Debug.dll_1" FileName="MICRO~23.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll_1" Component_="Microsoft.Extensions.Logging.dll_1" FileName="MICRO~24.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Event_1_Log.dll" Component_="Microsoft.Extensions.Logging.Event_1_Log.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Event_1_Source.dll" Component_="Microsoft.Extensions.Logging.Event_1_Source.dll" FileName="MICRO~26.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.Confi_1_gurationExtensions.dll" Component_="Microsoft.Extensions.Options.Confi_1_gurationExtensions.dll" FileName="MICRO~27.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll_1" Component_="Microsoft.Extensions.Options.dll_1" FileName="MICRO~28.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll_1" Component_="Microsoft.Extensions.Primitives.dll_1" FileName="MICRO~29.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Playwright.dll_1" Component_="Microsoft.Playwright.dll_1" FileName="MICRO~30.DLL|Microsoft.Playwright.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Playwright.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Xaml.Behaviors.dll_1" Component_="Microsoft.Xaml.Behaviors.dll_1" FileName="MICRO~31.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
+    <ROW File="Nice3point.Revit.Extensions.dll" Component_="Nice3point.Revit.Extensions.dll" FileName="NICE3P~1.DLL|Nice3point.Revit.Extensions.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Nice3point.Revit.Extensions.dll" SelfReg="false"/>
+    <ROW File="Nice3point.Revit.Toolkit.dll" Component_="Nice3point.Revit.Toolkit.dll" FileName="NICE3P~2.DLL|Nice3point.Revit.Toolkit.dll" Attributes="0" SourcePath="..\source\Transmittal\bin\Release R27\Nice3point.Revit.Toolkit.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -1012,6 +1108,53 @@
     <ROW Feature_="MainFeature" Component_="codeMirrorModuleLEHpjmcn.js"/>
     <ROW Feature_="MainFeature" Component_="codeMirrorModule.DYBRYzYX.css"/>
     <ROW Feature_="MainFeature" Component_="protocol.d.ts"/>
+    <ROW Feature_="MainFeature" Component_="Ookii.Dialogs.Wpf.dll"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Hosting.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Extensions.Logging.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Async.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.Debug.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.File.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.GoogleAnalytics.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Serilog.Sinks.PeriodicBatching.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="SfDatagrid.WPF.Extensions.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Management.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Transmittal.Library.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="CommunityToolkit.Mvvm.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Dapper.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Humanizer.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Bcl.AsyncInterfaces.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.EnvironmentVariables.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration_1_.UserSecrets.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInj_1_ection.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInj_2_ection.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Diagnostics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders_1_.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders_1_.Physical.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileSystemGlo_1_bbing.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.Abstr_1_actions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Abstr_1_actions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Confi_1_guration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Conso_1_le.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Debug.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Event_1_Log.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Event_1_Source.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.Confi_1_gurationExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Primitives.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Playwright.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Xaml.Behaviors.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Nice3point.Revit.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Nice3point.Revit.Toolkit.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="Transmittal.exe" SourcePath="..\source\Transmittal.Desktop\Transmittal.ico" Index="0"/>
