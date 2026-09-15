@@ -8,6 +8,7 @@ using Nice3point.Revit.Toolkit.External;
 using Nice3point.Revit.Toolkit.Helpers;
 using Serilog.Context;
 using System.Diagnostics;
+using System.Windows;
 using Transmittal.Exceptions;
 using Transmittal.Library.Services;
 using Transmittal.Services;
@@ -29,6 +30,8 @@ public class CommandTransmittal : ExternalCommand
 
         App.CachedUiApp = RevitContext.UiApplication;
         App.RevitDocument = RevitContext.ActiveDocument;
+        var documentTitle = App.RevitDocument?.Title ?? "<unknown>";
+        var activeViewName = RevitContext.ActiveView?.Name ?? "<unknown>";
 
         try
         {
@@ -53,6 +56,7 @@ public class CommandTransmittal : ExternalCommand
             else if (taskDialogResult == TaskDialogResult.Cancel)
             {
                 // cancel clicked
+                _logger.LogInformation("User cancelled transmittal launch. Document={DocumentTitle}, ActiveView={ActiveViewName}", documentTitle, activeViewName);
                 return;
             }
 
@@ -63,22 +67,27 @@ public class CommandTransmittal : ExternalCommand
             {
                 using (ResolveHelper.BeginAssemblyResolveScope<App>())
                 {
-                    if (_settingsServiceRvt.GetSettingsRvt(App.RevitDocument) == false)
+                    var hasSettings = _settingsServiceRvt.GetSettingsRvt(App.RevitDocument);
+                    var dialogType = hasSettings ? nameof(Views.TransmittalView) : nameof(Views.SettingsView);
+                    _logger.LogInformation("Preparing to show {DialogType}. Document={DocumentTitle}, ActiveView={ActiveViewName}, SettingsPresent={SettingsPresent}", dialogType, documentTitle, activeViewName, hasSettings);
+
+                    Window dialog = hasSettings ? new Views.TransmittalView() : new Views.SettingsView();
+                    try
                     {
-                        var settingsView = new Views.SettingsView();
-                        settingsView.ShowDialog();
+                        dialog.ShowDialog();
+                        _logger.LogInformation("Closed {DialogType}. Document={DocumentTitle}, ActiveView={ActiveViewName}", dialogType, documentTitle, activeViewName);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        var transmittalView = new Views.TransmittalView();
-                        transmittalView.ShowDialog();
+                        _logger.LogError(ex, "Failed to show {DialogType}. Document={DocumentTitle}, ActiveView={ActiveViewName}, SettingsPresent={SettingsPresent}", dialogType, documentTitle, activeViewName, hasSettings);
+                        throw;
                     }
                 }
             }
             catch (SchemaVersionTooNewException ex)
             {
                 // Newer schema detected - user needs to upgrade app, don't show settings
-                _logger.LogError(ex, "Document schema version too new");
+                _logger.LogError(ex, "Document schema version too new. Document={DocumentTitle}, ActiveView={ActiveViewName}", documentTitle, activeViewName);
                 return;
             }
 
@@ -87,7 +96,7 @@ public class CommandTransmittal : ExternalCommand
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error");
+            _logger.LogError(ex, "Error while executing {CommandName}. Document={DocumentTitle}, ActiveView={ActiveViewName}", nameof(CommandTransmittal), documentTitle, activeViewName);
             
             return;
         }
