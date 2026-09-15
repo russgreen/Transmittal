@@ -3,9 +3,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
+using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.GoogleAnalytics;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Transmittal.Library.DataAccess;
@@ -97,6 +99,19 @@ internal static class Host
         }
 
         Log.Logger = loggerConfigTransmittal.CreateLogger();
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            var ex = args.ExceptionObject as Exception;
+            if (ex is not null)
+            {
+                Log.Logger.Fatal(ex, "Unhandled AppDomain exception. IsTerminating={IsTerminating}", args.IsTerminating);
+            }
+            else
+            {
+                Log.Logger.Fatal("Unhandled AppDomain exception. IsTerminating={IsTerminating}; Object={ExceptionObject}", args.IsTerminating, args.ExceptionObject);
+            }
+        };
 
         _host = Microsoft.Extensions.Hosting.Host
             .CreateDefaultBuilder()
