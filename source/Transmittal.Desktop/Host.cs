@@ -64,7 +64,7 @@ internal static class Host
                 opts.FlushPeriod = TimeSpan.FromSeconds(1);
                 opts.BatchSizeLimit = 1;
                 opts.MaxEventsPerRequest = 1;
-                opts.IncludePredicate = e => e.Properties.ContainsKey("UsageTracking");
+                opts.IncludePredicate = e => e.Properties.ContainsKey("UsageTracking") || e.Level == LogEventLevel.Fatal;
 
                 opts.GlobalParams["app_version"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
                 opts.GlobalParams["app_country"] = regionInfo.EnglishName;
@@ -106,6 +106,15 @@ internal static class Host
             {
                 Log.Logger.Fatal("Unhandled AppDomain exception. IsTerminating={IsTerminating}; Object={ExceptionObject}", args.IsTerminating, args.ExceptionObject);
             }
+            // Last chance to flush the sink
+            Log.CloseAndFlush();
+        };
+
+        System.Windows.Application.Current.DispatcherUnhandledException += (_, e) =>
+        {
+            Log.Logger.Fatal(e.Exception, "Unhandled WPF dispatcher exception");
+            e.Handled = true; // keep app alive
+            Log.CloseAndFlush(); // flush batched sink
         };
 
         _host = Microsoft.Extensions.Hosting.Host

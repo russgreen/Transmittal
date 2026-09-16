@@ -68,6 +68,7 @@ internal static class Host
                  opts.BatchSizeLimit = 1;
                  opts.MaxEventsPerRequest = 1;
                  opts.IncludePredicate = e => e.Properties.ContainsKey("UsageTracking");
+                 opts.IncludePredicate = e => e.Level == LogEventLevel.Fatal;
 
                  opts.GlobalParams["app_version"] = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
                  opts.GlobalParams["app_country"] = regionInfo.EnglishName;
