@@ -268,6 +268,15 @@ public sealed class SettingsServiceRvtV2SchemaMigrationTests : RevitApiTest
             throw new NotImplementedException();
         }
 
+        public List<string> GetMostRecentlyUsedFiles()
+        {
+            return new List<string>();
+        }
+
+        public void RegisterMostRecentlyUsedFile(string dbFilePath)
+        {
+        }
+
         public void BeginTransaction(string dbFilePath)
         {
             throw new NotImplementedException();

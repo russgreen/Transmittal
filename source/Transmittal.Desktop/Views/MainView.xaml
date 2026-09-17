@@ -24,9 +24,10 @@
 
     <StackPanel Margin="10" Orientation="Vertical">
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <Menu Background="{x:Null}" >
+            <Menu Background="{x:Null}"  >
 
-                <MenuItem x:Name="menuItemMain" Width="25" Height="25" Padding="0,0,0,0"   >
+                <MenuItem x:Name="menuItemMain" Width="25" Height="25" Padding="0,0,0,0" 
+                          SubmenuOpened="MenuItemMain_SubmenuOpened">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Menu.png" Stretch="Uniform" Width="25" Height="25" Margin="-10,-10,-10,-10" />
                     </MenuItem.Icon>

@@ -102,6 +102,17 @@ public class SQLiteDataAccessTests
     }
 
     [Test]
+    public async Task GetMostRecentlyUsedFiles_ShouldTrackOpenedDatabaseFiles()
+    {
+        await Task.Run(() => _dataAccess.CreateDatabaseSchema(_dbPath));
+        _dataAccess.RegisterMostRecentlyUsedFile(_dbPath);
+
+        var recentFiles = _dataAccess.GetMostRecentlyUsedFiles();
+
+        await Assert.That(recentFiles).Contains(_dbPath);
+    }
+
+    [Test]
     public async Task GetDatabaseVersion_ShouldReturnZeroForNewDatabase()
     {
         using (var conn = OpenConnection(_dbPath))

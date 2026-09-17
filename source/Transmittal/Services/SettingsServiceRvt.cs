@@ -224,6 +224,8 @@ internal class SettingsServiceRvt : ISettingsServiceRvt
 
             if (databaseExists)
             {
+                _dataConnection.RegisterMostRecentlyUsedFile(databaseFile);
+
                 if (checkConnection == true)
                 {
                     return _dataConnection.CheckConnection(databaseFile);
