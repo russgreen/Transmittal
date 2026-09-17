@@ -173,6 +173,8 @@ internal class SettingsServiceRvtV2 : ISettingsServiceRvt
             return false;
         }
 
+        _dataConnection.RegisterMostRecentlyUsedFile(databaseFile);
+
         return !checkConnection || _dataConnection.CheckConnection(databaseFile);
     }
 

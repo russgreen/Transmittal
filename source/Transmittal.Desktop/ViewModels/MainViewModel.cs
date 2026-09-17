@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Transmittal.Library.DataAccess;
 using Transmittal.Library.Enums;
 using Transmittal.Library.Services;
 using Transmittal.Library.ViewModels;
@@ -12,6 +13,7 @@ internal partial class MainViewModel : BaseViewModel
 {
     private readonly ISettingsService _settingsService;
     private readonly ISoftwareUpdateService _softwareUpdateService;
+    private readonly IDataConnection _dataConnection;
 
     public string WindowTitle { get; private set; }
 
@@ -31,27 +33,30 @@ internal partial class MainViewModel : BaseViewModel
     private string _message;
 
     [ObservableProperty]
-    private List<string> _mostRecentlyUsedFiles;
+    private List<string> _mostRecentlyUsedFiles = new();
 
     public MainViewModel()
     {
         // design time constructor
         _settingsService = null;
         _softwareUpdateService = null;
+        _dataConnection = null;
     }
 
     public MainViewModel(ISettingsService settingsService,
-        ISoftwareUpdateService softwareUpdateService)
+        ISoftwareUpdateService softwareUpdateService,
+        IDataConnection dataConnection)
     {
         _settingsService = settingsService;
         _softwareUpdateService = softwareUpdateService;
+        _dataConnection = dataConnection;
 
         var informationVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         WindowTitle = $"Transmittal {informationVersion}";
 
         SetParameterValues();
 
-        MostRecentlyUsedFiles = GetMostRecentlyUsedFiles();
+        //MostRecentlyUsedFiles = GetMostRecentlyUsedFiles();
     }
 
     //don't want this to run every time the app launches
@@ -91,33 +96,41 @@ internal partial class MainViewModel : BaseViewModel
     {
         var recentFiles = new List<string>();
 
-        var path = Environment.GetFolderPath(Environment.SpecialFolder.Recent);
-
-        var directory = new DirectoryInfo(path);
-        var shortcutFiles = directory.GetFiles("*.tdb.lnk")
-            .OrderByDescending(f => f.LastWriteTimeUtc)
-            .Take(10)
-            .ToList();
-
-        if (shortcutFiles.Count < 1)
+        if (_dataConnection != null)
         {
-            return recentFiles;
+            recentFiles.AddRange(_dataConnection.GetMostRecentlyUsedFiles()
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .Where(File.Exists)
+                .Distinct(StringComparer.OrdinalIgnoreCase));
         }
 
-        dynamic script = CreateComInstance("Wscript.Shell");
 
-        foreach (var file in shortcutFiles)
-        {
-            dynamic sc = script.CreateShortcut(file.FullName);
-            recentFiles.Add(sc.TargetPath);
-            Marshal.FinalReleaseComObject(sc);
-        }
-        Marshal.FinalReleaseComObject(script);
-
-        return recentFiles;
+        return recentFiles.Take(10).ToList();
     }
 
-    private object CreateComInstance(string progId)
+    private static string GetShortcutTargetPath(string shortcutPath)
+    {
+        try
+        {
+            dynamic shell = CreateComInstance("Wscript.Shell");
+            if (shell == null)
+            {
+                return string.Empty;
+            }
+
+            dynamic shortcut = shell.CreateShortcut(shortcutPath);
+            var targetPath = shortcut.TargetPath as string;
+            Marshal.FinalReleaseComObject(shortcut);
+            Marshal.FinalReleaseComObject(shell);
+            return targetPath ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    private static object CreateComInstance(string progId)
     {
         Type type = Type.GetTypeFromProgID(progId);
         if (type == null)

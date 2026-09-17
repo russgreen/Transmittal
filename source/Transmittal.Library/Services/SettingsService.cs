@@ -34,6 +34,8 @@ public class SettingsService : ISettingsService
         {
             if (File.Exists(GlobalSettings.DatabaseFile.ParsePathWithEnvironmentVariables()))
             {
+                _connection.RegisterMostRecentlyUsedFile(GlobalSettings.DatabaseFile);
+
                 string sql = "SELECT * FROM Settings WHERE ID = 1;";
 
                 var dbSettings = _connection.LoadData<SettingsModel, dynamic>(

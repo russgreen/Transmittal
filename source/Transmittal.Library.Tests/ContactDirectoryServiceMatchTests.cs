@@ -104,6 +104,8 @@ public class ContactDirectoryServiceMatchTests
         public bool CheckConnection(string dbFilePath) => true;
         public T CreateData<T, U>(string dbFilePath, string sqlStatement, T model, U parameters, string keyPropertyName) => model;
         public void SaveData<T>(string dbFilePath, string sqlStatement, T data) { }
+        public List<string> GetMostRecentlyUsedFiles() => new();
+        public void RegisterMostRecentlyUsedFile(string dbFilePath) { }
         public void BeginTransaction(string dbFilePath) { }
         public void CommitTransaction() { }
         public void RollbackTransaction() { }

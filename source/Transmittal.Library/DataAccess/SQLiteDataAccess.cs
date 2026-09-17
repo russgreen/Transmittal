@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
 using System.IO;
+using System.Text.Json;
 using System.Windows.Markup;
 using Transmittal.Library.Extensions;
 using Transmittal.Library.Messages;
@@ -14,6 +15,7 @@ namespace Transmittal.Library.DataAccess;
 
 public class SQLiteDataAccess : IDataConnection
 {
+    private static readonly object _recentFilesLock = new();
     private readonly ILogger<SQLiteDataAccess> _logger;
     private readonly IMessageBoxService _messageBox;
 
@@ -21,6 +23,13 @@ public class SQLiteDataAccess : IDataConnection
     private SqliteTransaction _transaction;
 
     private const int _latestSchemaVersion = 4;
+    private const int _maxMostRecentlyUsedFiles = 10;
+
+    private sealed class RecentDatabaseEntry
+    {
+        public string FilePath { get; set; } = string.Empty;
+        public DateTime LastUsedUtc { get; set; }
+    }
 
     public SQLiteDataAccess(ILogger<SQLiteDataAccess> logger, 
         IMessageBoxService messageBox)
@@ -31,11 +40,14 @@ public class SQLiteDataAccess : IDataConnection
 
     public bool CheckConnection(string dbFilePath)
     {
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};Mode=ReadOnly;"))
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
+
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={resolvedPath};Mode=ReadOnly;"))
         {
             try
             {
                 dbConnection.Open();
+                RegisterMostRecentlyUsedFile(resolvedPath);
                 return true;
             }
             catch (SqliteException ex)
@@ -44,6 +56,121 @@ public class SQLiteDataAccess : IDataConnection
                 return false;
             }
         }
+    }
+
+    public List<string> GetMostRecentlyUsedFiles()
+    {
+        try
+        {
+            var recentEntries = LoadRecentDatabaseEntries();
+            return recentEntries
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.FilePath))
+                .Where(entry => File.Exists(entry.FilePath))
+                .GroupBy(entry => entry.FilePath, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.OrderByDescending(entry => entry.LastUsedUtc).First())
+                .OrderByDescending(entry => entry.LastUsedUtc)
+                .Select(entry => entry.FilePath)
+                .Take(_maxMostRecentlyUsedFiles)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Unable to read recent database files from the local MRU store.");
+            return new List<string>();
+        }
+    }
+
+    public void RegisterMostRecentlyUsedFile(string dbFilePath)
+    {
+        if (string.IsNullOrWhiteSpace(dbFilePath))
+        {
+            return;
+        }
+
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
+        if (string.IsNullOrWhiteSpace(resolvedPath) || !File.Exists(resolvedPath))
+        {
+            return;
+        }
+
+        var extension = Path.GetExtension(resolvedPath);
+        if (!string.Equals(extension, ".tdb", StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        lock (_recentFilesLock)
+        {
+            var recentEntries = LoadRecentDatabaseEntries();
+            var normalisedPath = Path.GetFullPath(resolvedPath);
+            var existingEntry = recentEntries.FirstOrDefault(entry =>
+                string.Equals(entry.FilePath, normalisedPath, StringComparison.OrdinalIgnoreCase));
+
+            if (existingEntry == null)
+            {
+                recentEntries.Add(new RecentDatabaseEntry
+                {
+                    FilePath = normalisedPath,
+                    LastUsedUtc = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                existingEntry.LastUsedUtc = DateTime.UtcNow;
+            }
+
+            var filteredEntries = recentEntries
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.FilePath) && File.Exists(entry.FilePath))
+                .GroupBy(entry => entry.FilePath, StringComparer.OrdinalIgnoreCase)
+                .Select(group => new RecentDatabaseEntry
+                {
+                    FilePath = group.Key,
+                    LastUsedUtc = group.Max(item => item.LastUsedUtc)
+                })
+                .OrderByDescending(entry => entry.LastUsedUtc)
+                .Take(_maxMostRecentlyUsedFiles)
+                .ToList();
+
+            SaveRecentDatabaseEntries(filteredEntries);
+        }
+    }
+
+    private static string GetRecentDatabaseStorePath()
+    {
+        var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var transmittalFolder = Path.Combine(localAppDataFolder, "Transmittal");
+        Directory.CreateDirectory(transmittalFolder);
+        return Path.Combine(transmittalFolder, "RecentDatabases.json");
+    }
+
+    private List<RecentDatabaseEntry> LoadRecentDatabaseEntries()
+    {
+        var storePath = GetRecentDatabaseStorePath();
+        if (!File.Exists(storePath))
+        {
+            return new List<RecentDatabaseEntry>();
+        }
+
+        var content = File.ReadAllText(storePath);
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return new List<RecentDatabaseEntry>();
+        }
+
+        var entries = JsonSerializer.Deserialize<List<RecentDatabaseEntry>>(content);
+        if (entries == null)
+        {
+            return new List<RecentDatabaseEntry>();
+        }
+
+        return entries;
+    }
+
+    private static void SaveRecentDatabaseEntries(List<RecentDatabaseEntry> entries)
+    {
+        var storePath = GetRecentDatabaseStorePath();
+        var serialised = JsonSerializer.Serialize(entries, new JsonSerializerOptions { WriteIndented = false });
+        File.WriteAllText(storePath, serialised);
     }
 
     public T CreateData<T, U>(string dbFilePath, string sqlStatement, T model, U parameters, string keyPropertyName)
@@ -69,6 +196,7 @@ public class SQLiteDataAccess : IDataConnection
                     // Set the key property of the model
                     model.GetType().GetProperty(keyPropertyName).SetValue(model, recordId);
 
+                    RegisterMostRecentlyUsedFile(dbFilePath);
                     return model; // Success, return the model
                 }
             }
@@ -107,16 +235,19 @@ public class SQLiteDataAccess : IDataConnection
      
     public IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters)
     {
-        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={dbFilePath.ParsePathWithEnvironmentVariables()};Mode=ReadOnly;"))
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
+        using (IDbConnection dbConnection = new SqliteConnection($"Data Source={resolvedPath};Mode=ReadOnly;"))
         {
             dbConnection.Open();
             var rows = dbConnection.Query<T>(sqlStatement, parameters);
+            RegisterMostRecentlyUsedFile(resolvedPath);
             return rows;
         }
     }
 
     public void SaveData<T>(string dbFilePath, string sqlStatement, T data)
     {
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
         int maxRetries = 3; // Maximum number of retries
         int retryDelay = 1000; // Delay between retries in milliseconds
         int attempt = 0;
@@ -134,6 +265,7 @@ public class SQLiteDataAccess : IDataConnection
                     dbConnection.Execute("PRAGMA busy_timeout = 10000;"); // Wait up to 10 seconds
 
                     dbConnection.Execute(sqlStatement, data);
+                    RegisterMostRecentlyUsedFile(resolvedPath);
                     return; // Success, exit the method
                 }
             }
@@ -217,6 +349,8 @@ public class SQLiteDataAccess : IDataConnection
 
     public void UpgradeDatabase(string dbFilePath)
     {
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
+        dbFilePath = resolvedPath;
         int currentVersion = GetDatabaseVersion(dbFilePath);
         _logger.LogInformation("Current database version: {Version}", currentVersion);
 
@@ -261,6 +395,8 @@ public class SQLiteDataAccess : IDataConnection
             _messageBox.ShowOk("Database upgrade", "The selected database is read-only and cannot be upgraded. Please remove read-only permissions and try again.");
             return;
         }
+
+        RegisterMostRecentlyUsedFile(dbFilePath);
     }
 
     private void RunLegacyUpgrade(string dbFilePath)
@@ -407,9 +543,11 @@ public class SQLiteDataAccess : IDataConnection
 
     public void CreateDatabaseSchema(string dbFilePath)
     {
-        ApplySchemaV3(dbFilePath);
-        ApplySchemaV4(dbFilePath);
-        SetDatabaseVersion(dbFilePath, 4);
+        var resolvedPath = dbFilePath.ParsePathWithEnvironmentVariables();
+        ApplySchemaV3(resolvedPath);
+        ApplySchemaV4(resolvedPath);
+        SetDatabaseVersion(resolvedPath, 4);
+        RegisterMostRecentlyUsedFile(resolvedPath);
         _logger.LogInformation("Database schema v4 created and version set to 4");
     }
 

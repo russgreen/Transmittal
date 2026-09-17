@@ -11,6 +11,8 @@ public interface IDataConnection
     IEnumerable<T> LoadData<T, U>(string dbFilePath, string sqlStatement, U parameters);
     void SaveData<T>(string dbFilePath, string sqlStatement, T data);
 
+    List<string> GetMostRecentlyUsedFiles();
+    void RegisterMostRecentlyUsedFile(string dbFilePath);
 
     // Transaction support
     void BeginTransaction(string dbFilePath);

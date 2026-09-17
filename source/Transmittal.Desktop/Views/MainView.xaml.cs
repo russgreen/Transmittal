@@ -193,6 +193,12 @@ namespace Transmittal.Desktop.Views
             {
                 MessageBox.Show("The file does not exist.  It may have been moved or deleted.", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }   
+        }
+
+
+        private void MenuItemMain_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            _viewModel.UpdateMRUCommand.Execute(null);
+        }
     }
 }
