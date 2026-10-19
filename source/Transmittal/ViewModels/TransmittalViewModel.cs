@@ -942,6 +942,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
                         AddAdditionalRevisionsToSheet(sheet, model.Sequence.ToString());
 
                         sheetModel.DrgRev = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION).AsString();
+                        sheetModel.RevDate = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DATE).AsString();                        
                         sheetModel.RevNotes = sheet.get_Parameter(BuiltInParameter.SHEET_CURRENT_REVISION_DESCRIPTION).AsString();
                     }
                 }
@@ -955,7 +956,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
     {
         _logger.LogDebug("UpdateSelectedSheet {sheetModel}", sheetModel);
 
-        Transaction trans = new(App.RevitDocument, "Update sheet parameter values");
+        var trans = new Transaction(App.RevitDocument, "Update sheet parameter values");
         var failOpt = trans.GetFailureHandlingOptions();
         failOpt.SetFailuresPreprocessor(new WarningSwallower());
         trans.SetFailureHandlingOptions(failOpt);
@@ -1007,7 +1008,7 @@ internal partial class TransmittalViewModel : BaseViewModel, IStatusRequester, I
 
     private void AddAdditionalRevisionsToSheet(ViewSheet sheet, string revSeq)
     {
-        Transaction trans = new(App.RevitDocument, "Add Revision to Sheet");
+        var trans = new Transaction(App.RevitDocument, "Add Revision to Sheet");
         var failOpt = trans.GetFailureHandlingOptions();
         failOpt.SetFailuresPreprocessor(new WarningSwallower());
         trans.SetFailureHandlingOptions(failOpt);
