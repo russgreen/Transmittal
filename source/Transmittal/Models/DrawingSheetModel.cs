@@ -8,8 +8,12 @@ public partial class DrawingSheetModel : TransmittalItemModel
 {
     public ElementId ID { get; set; }
     public string IssueDate { get; set; }
-    public string RevDate { get; set; }
-    public string RevNotes { get; set; }
+
+    [ObservableProperty]
+    private string _revDate;
+
+    [ObservableProperty]
+    private string _revNotes;
 
     [ObservableProperty]
     private bool _isDuplicateSheet;
