@@ -98,7 +98,7 @@ Transmittal/
 │   └── Transmittal.Library.Tests/        # Unit Tests (.NET 8)
 ├── build/                                # NUKE Build System
 ├── docs/                                 # Documentation (GitHub Pages)
-├── Installer/                            # Advanced Installer Project
+├── installer/                            # WiX installer project
 └── Directory.Build.props                 # Shared MSBuild Properties
 ```
 
@@ -162,7 +162,7 @@ The solution uses [FALLOUT](https://fallout.build/) for automated builds:
 - **Compile**: Build all projects
 - **Test**: Run unit tests
 - **Sign**: Code sign assemblies (requires certificates)
-- **Installer**: Create MSI installer using Advanced Installer
+- **Installer**: Create and sign the MSI installer using WiX (`installer/Transmittal.Setup.wixproj`)
 
 ## Installation
 

@@ -1,0 +1,159 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:netfx="http://wixtoolset.org/schemas/v4/wxs/netfx">
+
+  <!--
+    The UpgradeCode MUST remain the same as the Advanced Installer based installers (Transmittal.aip)
+    so that this package upgrades existing installations. The ProductCode is generated for every build.
+  -->
+  <Package Name="Transmittal"
+           Manufacturer="Russ Green"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="F31AFEA8-2419-4915-9D65-7A2EE7F3F07A"
+           Language="1033"
+           Scope="perMachine">
+
+    <SummaryInformation Description="Transmittal installer" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <netfx:DotNetCompatibilityCheck Id="DotNet8Desktop"
+                                    Property="DOTNET8DESKTOP"
+                                    RuntimeType="desktop"
+                                    Version="8.0.0"
+                                    RollForward="latestMinor"
+                                    Platform="x64" />
+    <Launch Condition="Installed OR DOTNET8DESKTOP = &quot;0&quot;"
+            Message="[ProductName] requires the .NET 8 Desktop Runtime (x64). Please install it from https://dotnet.microsoft.com/download/dotnet/8.0 and run this installer again." />
+
+    <Icon Id="Transmittal.ico" SourceFile="$(var.SourceRoot)Transmittal.Desktop\Transmittal.ico" />
+    <Property Id="ARPPRODUCTICON" Value="Transmittal.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://russgreen.github.io/Transmittal/" />
+    <Property Id="ARPCOMMENTS" Value="Transmittal is a tool to assist in consistently creating and recording document transmittals." />
+
+    <!-- Re-use the location of a previous installation (including those made by the Advanced Installer package) -->
+    <Property Id="INSTALLFOLDER">
+      <RegistrySearch Id="PreviousInstallFolder" Root="HKLM" Key="Software\Russ Green\Transmittal" Name="Path" Type="directory" Bitness="always64" />
+    </Property>
+
+    <!-- UI -->
+    <WixVariable Id="WixUIBannerBmp" Value="transmittal_banner.png" />
+    <WixVariable Id="WixUIDialogBmp" Value="transmittal_background.png" />
+    <UIRef Id="WixUI_Transmittal" />
+
+    <!-- Install locations -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Transmittal">
+        <Directory Id="ReportTemplatesFolder" Name="Report Templates" />
+        <Directory Id="ResourcesFolder" Name="Resources" />
+      </Directory>
+
+      <!-- Revit 2027 and later is installed under Program Files -->
+      <Directory Id="PfAutodeskFolder" Name="Autodesk">
+        <Directory Id="PfRevitFolder" Name="Revit">
+          <Directory Id="PfRevitAddinsFolder" Name="Addins">
+            <Directory Id="Revit2027Addins" Name="2027">
+              <Directory Id="Revit2027App" Name="Transmittal" />
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="CommonAppDataFolder">
+      <Directory Id="AutodeskFolder" Name="Autodesk">
+        <Directory Id="RevitFolder" Name="Revit">
+          <Directory Id="RevitAddinsFolder" Name="Addins">
+            <?foreach Rel in 21;22;23;24;25;26?>
+            <Directory Id="Revit20$(Rel)Addins" Name="20$(Rel)">
+              <Directory Id="Revit20$(Rel)App" Name="Transmittal" />
+            </Directory>
+            <?endforeach?>
+          </Directory>
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <Feature Id="MainFeature" Title="Transmittal" Level="1" AllowAbsent="no">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentGroupRef Id="ReportTemplates" />
+      <ComponentGroupRef Id="Resources" />
+      <ComponentGroupRef Id="AppRegistry" />
+      <ComponentGroupRef Id="RevitAddins" />
+    </Feature>
+
+    <!-- Desktop application -->
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Component Id="TransmittalDesktopExe">
+        <File Id="TransmittalDesktopExe" Source="$(var.SourceRoot)Transmittal.Desktop\bin\Release\Transmittal.Desktop.exe" KeyPath="yes">
+          <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="Transmittal" WorkingDirectory="INSTALLFOLDER" Icon="Transmittal.ico" />
+        </File>
+
+        <ProgId Id="Transmittal.Database" Description="Transmittal Database File" Icon="TransmittalDesktopExe" IconIndex="0">
+          <Extension Id="tdb">
+            <Verb Id="open" Command="Open" TargetFile="TransmittalDesktopExe" Argument="&quot;--database=%1&quot;" />
+          </Extension>
+        </ProgId>
+      </Component>
+
+      <Files Include="$(var.SourceRoot)Transmittal.Desktop\bin\Release\**">
+        <Exclude Files="$(var.SourceRoot)Transmittal.Desktop\bin\Release\Transmittal.Desktop.exe" />
+      </Files>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ReportTemplates" Directory="ReportTemplatesFolder">
+      <Files Include="$(var.SourceRoot)Transmittal.Reports.OpenXML\Reports\*" />
+      <Files Include="$(var.SourceRoot)Transmittal.Reports\Reports\*" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="Resources" Directory="ResourcesFolder">
+      <Component>
+        <File Source="$(var.RepoRoot)ImportTemplate.json" />
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="AppRegistry" Directory="INSTALLFOLDER">
+      <Component Id="ProductInformation">
+        <RegistryValue Root="HKLM" Key="Software\Russ Green\Transmittal" Name="Path" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\Russ Green\Transmittal" Name="Version" Type="string" Value="[ProductVersion]" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Revit add-ins, one set of files per supported Revit version -->
+    <ComponentGroup Id="RevitAddins">
+      <?foreach Rel in 21;22;23;24;25;26?>
+      <ComponentGroupRef Id="Revit20$(Rel)" />
+      <?endforeach?>
+      <ComponentGroupRef Id="Revit2027" />
+    </ComponentGroup>
+
+    <?foreach Rel in 21;22;23;24;25;26?>
+    <ComponentGroup Id="Revit20$(Rel)">
+      <Component Id="Revit20$(Rel)Addin" Directory="Revit20$(Rel)Addins">
+        <?if $(Rel) = 26?>
+        <File Id="Revit20$(Rel)AddinFile" Name="Transmittal.addin" Source="$(var.SourceRoot)Transmittal\Transmittal_Isolated.addin" />
+        <?else?>
+        <File Id="Revit20$(Rel)AddinFile" Name="Transmittal.addin" Source="$(var.SourceRoot)Transmittal\Transmittal.addin" />
+        <?endif?>
+      </Component>
+      <Files Include="$(var.SourceRoot)Transmittal\bin\Release R$(Rel)\**" Directory="Revit20$(Rel)App">
+        <Exclude Files="$(var.SourceRoot)Transmittal\bin\Release R$(Rel)\.playwright\**" />
+        <Exclude Files="$(var.SourceRoot)Transmittal\bin\Release R$(Rel)\playwright.ps1" />
+      </Files>
+    </ComponentGroup>
+    <?endforeach?>
+
+    <ComponentGroup Id="Revit2027">
+      <Component Id="Revit2027Addin" Directory="Revit2027Addins">
+        <File Id="Revit2027AddinFile" Name="Transmittal.addin" Source="$(var.SourceRoot)Transmittal\Transmittal_Isolated.addin" />
+      </Component>
+      <Files Include="$(var.SourceRoot)Transmittal\bin\Release R27\**" Directory="Revit2027App">
+        <Exclude Files="$(var.SourceRoot)Transmittal\bin\Release R27\.playwright\**" />
+        <Exclude Files="$(var.SourceRoot)Transmittal\bin\Release R27\playwright.ps1" />
+      </Files>
+    </ComponentGroup>
+  </Package>
+</Wix>
