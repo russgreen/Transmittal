@@ -1,13 +1,14 @@
 using Fallout.Common;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
+using Fallout.Common.Tools.DotNet;
 using Serilog;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using static Fallout.Common.IO.PathConstruction;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build : FalloutBuild
 {
@@ -16,16 +17,18 @@ partial class Build : FalloutBuild
         .OnlyWhenStatic(() => GitRepository.IsOnMainOrMasterBranch())
         .Executes(() =>
         {
-            var aipProjectPath = Path.Combine(RootDirectory, @"Installer\Transmittal.aip");
-            //var version = Solution.Transmittal.GetProperty("Version");
+            var wixProjectPath = Path.Combine(RootDirectory, @"installer\Transmittal.Setup.wixproj");
             var version = GetProjectVersion(Path.Combine(RootDirectory, @"Directory.Build.props"));
 
-            Log.Information("AIP : {aipProjectPath}", aipProjectPath);
+            Log.Information("WiX project : {wixProjectPath}", wixProjectPath);
             Log.Information("Version : {version}", version);
 
-            AdvancedInstallerCLI($"/edit {aipProjectPath} /SetVersion {version}");
-            AdvancedInstallerCLI($"/edit {aipProjectPath} /SetProductCode -langid 1033");
-            AdvancedInstallerCLI($"/build {aipProjectPath}");
+            // the product version comes from Directory.Build.props and a new ProductCode is generated for every build
+            // the UpgradeCode never changes so the new MSI upgrades earlier installations
+            DotNetBuild(settings => settings
+                .SetProjectFile(wixProjectPath)
+                .SetConfiguration(Configuration.Release)
+                .SetVerbosity(DotNetVerbosity.minimal));
 
             SignMSI(version);
         });
@@ -56,10 +59,10 @@ partial class Build : FalloutBuild
 
     static void SignMSI(string version)
     {
-        var aipOutputPath = Path.Combine(RootDirectory, @"Installer\Transmittal-SetupFiles");
-        Log.Information(aipOutputPath);
+        var msiOutputPath = Path.Combine(RootDirectory, @"installer\Transmittal-SetupFiles");
+        Log.Information(msiOutputPath);
 
-        var msiPath = Directory.GetFiles(aipOutputPath, $"*{version}.msi").FirstOrDefault();
+        var msiPath = Directory.GetFiles(msiOutputPath, $"*{version}.msi").FirstOrDefault();
         Log.Information(msiPath);
 
         if (File.Exists(msiPath))
@@ -70,50 +73,5 @@ partial class Build : FalloutBuild
         {
             Log.Error("MSI file not found.");
         }
-    }
-
-
-    static void AdvancedInstallerCLI(string args)
-    {
-        Log.Information("Command args {args}", args);
-
-        var applicationPath = GetAdvancedInstallerPath();
-        var applicationFullPath = Path.Combine(applicationPath, "AdvancedInstaller.com");
-
-        var p = new ProcessStartInfo();
-        p.WorkingDirectory = applicationPath;
-        p.FileName = applicationFullPath;
-        p.Arguments = args;
-
-        var process = Process.Start(p);
-        process.WaitForExit();
-
-        if (process.ExitCode != 0)
-        {
-            throw new Exception("Advanced Installer CLI failed.");
-        }
-    }
-
-    static string GetAdvancedInstallerPath()
-    {
-        var programFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-        var caphyonPath = Path.Combine(programFilesPath, "Caphyon");
-
-        var latestVersion = Directory.GetDirectories(caphyonPath)
-            .Select(Path.GetFileName)
-            .Where(x => x.StartsWith("Advanced Installer")) // Ensure we only consider Advanced Installer directories
-            .Select(x => new { Path = x, Version = new Version(x.Substring("Advanced Installer ".Length)) }) // Extract the version number from the directory name
-            .OrderByDescending(x => x.Version) // Sort by version number
-            .FirstOrDefault();
-
-        if (latestVersion == null)
-        {
-            throw new Exception("Advanced Installer is not installed.");
-        }
-
-        var advancedInstallerPath = Path.Combine(caphyonPath, latestVersion.Path, "bin", "x86");
-        Log.Information(advancedInstallerPath);
-
-        return advancedInstallerPath;
     }
 }

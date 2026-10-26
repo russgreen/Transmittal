@@ -353,10 +353,8 @@ MigrationBackup/
 SyncfusionKey.txt
 BoldReportsKey.txt
 
-# Advanced Installer
-Installer/*.back.aip
-Installer/Transmittal-cache/*
-Installer/Transmittal-SetupFiles/*
+# WiX installer
+installer/*-SetupFiles/
 
 # misc solution stuff
 Testing
