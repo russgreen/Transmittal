@@ -1,8 +1,7 @@
 ﻿# Transmittal
 
 ![Revit Version](https://img.shields.io/badge/Revit%20Version-2021_--_2024-blue.svg) ![.NET](https://img.shields.io/badge/.NET-4.8-blue.svg) <br>
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2025_--_2026-blue.svg) ![.NET](https://img.shields.io/badge/.NET-8-blue.svg) <br>
-![Revit Version](https://img.shields.io/badge/Revit%20Version-2027-blue.svg) ![.NET](https://img.shields.io/badge/.NET-10-blue.svg) 
+![Revit Version](https://img.shields.io/badge/Revit%20Version-2025_--_2027-blue.svg) ![.NET](https://img.shields.io/badge/.NET-10-blue.svg) <br>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/russgreen/transmittal) ![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)
 
@@ -63,24 +62,20 @@ Transmittal is a comprehensive document management solution for Autodesk® Revit
 - **PDF Support**: PDF24 printer (freeware) required for Revit 2021 only
   - Download: https://download.pdf24.org/pdf24-creator-11.11.1-x64.msi
 
-### For Revit 2025-2026
-- **Operating System**: Windows 10/11 (64-bit)
-- **Framework**: .NET 8
-- **Revit**: Autodesk Revit 2025 or 2026
-
-### For Revit 2027
+### For Revit 2025-2027
 - **Operating System**: Windows 10/11 (64-bit)
 - **Framework**: .NET 10
-- **Revit**: Autodesk Revit 2027
+- **Revit**: Autodesk Revit 2025, 2026, or 2027
+
 
 ### For Desktop Application
 - **Operating System**: Windows 10/11 (64-bit)
-- **Framework**: .NET 8
+- **Framework**: .NET 10
 - **Database**: SQLite (embedded)
 
 ### For Browser Application
 - **Operating System**: Windows 10/11 (64-bit)
-- **Framework**: .NET 8
+- **Framework**: .NET 10
 - **WebView2**: Microsoft Edge WebView2 Runtime 
 
 ## Solution Architecture
@@ -90,12 +85,12 @@ The solution consists of multiple projects targeting different .NET frameworks a
 ```
 Transmittal/
 ├── source/
-│   ├── Transmittal/                      # Revit Add-in (.NET Framework 4.8 / .NET 8 / .NET 10)
-│   ├── Transmittal.Desktop/              # Standalone WPF Application (.NET 8)
-│   ├── Transmittal.Browser/              # Browser Application for File Uploads (.NET 8)
+│   ├── Transmittal/                      # Revit Add-in (.NET Framework 4.8 / .NET 10)
+│   ├── Transmittal.Desktop/              # Standalone WPF Application (.NET 10)
+│   ├── Transmittal.Browser/              # Browser Application for File Uploads (.NET 10)
 │   ├── Transmittal.Library/              # Shared Core Library (Multi-target)
-│   ├── Transmittal.Reports/              # Report Generation (.NET 8)
-│   └── Transmittal.Library.Tests/        # Unit Tests (.NET 8)
+│   ├── Transmittal.Reports/              # Report Generation (.NET 10)
+│   └── Transmittal.Library.Tests/        # Unit Tests (.NET 10)
 ├── build/                                # NUKE Build System
 ├── docs/                                 # Documentation (GitHub Pages)
 ├── installer/                            # WiX installer project
@@ -147,8 +142,8 @@ The solution uses multiple build configurations for different Revit versions:
 - **Debug/Release R22**: Revit 2022 (.NET Framework 4.8)
 - **Debug/Release R23**: Revit 2023 (.NET Framework 4.8)
 - **Debug/Release R24**: Revit 2024 (.NET Framework 4.8)
-- **Debug/Release R25**: Revit 2025 (.NET 8)
-- **Debug/Release R26**: Revit 2026 (.NET 8)
+- **Debug/Release R25**: Revit 2025 (.NET 10)
+- **Debug/Release R26**: Revit 2026 (.NET 10)
 - **Debug/Release R27**: Revit 2027 (.NET 10)
 
 ## Building the Solution
