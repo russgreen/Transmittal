@@ -1,5 +1,7 @@
-﻿<Project Sdk="WixToolset.Sdk/5.0.2">
+﻿<Project Sdk="WixToolset.Sdk/7.0.1">
   <PropertyGroup>
+    <!-- Accepts the WiX 7 OSMF EULA (build fails with WIX7015 without it). -->
+    <AcceptEula>wix7</AcceptEula>
     <InstallerPlatform>x64</InstallerPlatform>
     <OutputName>Transmittal.$(VersionPrefix)</OutputName>
     <OutputPath>$(MSBuildProjectDirectory)\Transmittal-SetupFiles\</OutputPath>
@@ -9,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
-    <PackageReference Include="WixToolset.Netfx.wixext" Version="5.0.2" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.1" />
+    <PackageReference Include="WixToolset.Netfx.wixext" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
