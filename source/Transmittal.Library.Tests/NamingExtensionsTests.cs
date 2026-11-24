@@ -84,6 +84,7 @@ public class NamingExtensionsTests
     [Arguments("0001-ORI-ZZ-XX-DR-A-0001 P01_Drawing Sheet", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName2>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "Drawing Sheet", "P01", "S3", "")]
     [Arguments("0001-ORI-ZZ-XX-TL-A-0001 TransmittalRecord", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName>", "0001", "", "", "ORI", "ZZ", "XX", "TL", "A", "0001", "Transmittal Record", "", "", "")]
     [Arguments("0001-ORI-ZZ-XX-DR-A-0001 Drawing Sheet", "<ProjNo>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo> <Rev>_<SheetName2>", "0001", "", "", "ORI", "ZZ", "XX", "DR", "A", "0001", "Drawing Sheet", "", "", "")]
+    [Arguments("2594-ORI-26-K38-DR-A-2340-P03-S2_LevelK38WallTypesPlan", "<ProjId>-<Originator>-<Volume>-<Level>-<Type>-<Role>-<SheetNo>-<Rev>-<Status>_<SheetName>", "", "2594", "", "ORI", "26", "K38", "DR", "A", "2340", "Level K38 Wall Types Plan", "P03", "S2", "")]
     public async Task ParseFilename_ShouldReplaceTagsInFilename(string expected, string filenameFilter, string projNo, string projID, string projName, string originator, 
         string volume, string level, string type, string role, string sheetNo, string sheetName, string rev, string status, string statusDescription)
     {
