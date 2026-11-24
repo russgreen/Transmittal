@@ -85,6 +85,53 @@ internal partial class DirectoryViewModel : BaseViewModel
         WireUpCompaniesPropertyChangedEvents();
     }
 
+    /// <summary>
+    /// Reloads people and companies from the database, e.g. after an import.
+    /// Create callbacks are suppressed so the reloaded rows are not treated as new records.
+    /// </summary>
+    public void Refresh()
+    {
+        if (!HasDatabase)
+        {
+            return;
+        }
+
+        _suppressCreateCallbacks = true;
+        try
+        {
+            foreach (var person in People)
+            {
+                person.PropertyChanged -= Person_PropertyChanged;
+            }
+
+            foreach (var company in Companies)
+            {
+                company.PropertyChanged -= Company_PropertyChanged;
+            }
+
+            People.Clear();
+            foreach (var person in _contactDirectoryService.GetPeople_All())
+            {
+                person.PropertyChanged += Person_PropertyChanged;
+                People.Add(person);
+            }
+
+            Companies.Clear();
+            foreach (var company in _contactDirectoryService.GetCompanies_All())
+            {
+                company.PropertyChanged += Company_PropertyChanged;
+                Companies.Add(company);
+            }
+
+            SelectedPerson = People.FirstOrDefault();
+            SelectedCompany = null;
+        }
+        finally
+        {
+            _suppressCreateCallbacks = false;
+        }
+    }
+
     private void BuildProjectDirectory()
     {
         _projectDirectory = new();

@@ -1,6 +1,7 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using System.Windows;
+using Transmittal.Desktop.Services;
 using Transmittal.Library.Services;
 
 namespace Transmittal.Desktop.Views;
@@ -136,5 +137,40 @@ public partial class DirectoryView : Window
         e.Cancel = true;
     }
 
+    private void ImportButton_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "Transmittal Database File (*.tdb)|*.tdb",
+            Title = "Select the Transmittal database to import the directory from"
+        };
 
+        if (dialog.ShowDialog(this) != true)
+        {
+            return;
+        }
+
+        Library.Models.DirectoryImport.DirectoryImportSource source;
+        try
+        {
+            source = Host.GetService<IDirectoryImportService>().LoadSource(dialog.FileName);
+        }
+        catch (Exception ex)
+        {
+            Host.GetService<IMessageBoxService>().ShowOk("Unable to read database", ex.Message);
+            return;
+        }
+
+        if (source.Companies.Count == 0)
+        {
+            Host.GetService<IMessageBoxService>().ShowOk("Nothing to import", "The selected database does not contain any companies.");
+            return;
+        }
+
+        var importView = new ImportDirectoryView(source) { Owner = this };
+        if (importView.ShowDialog() == true)
+        {
+            _viewModel.Refresh();
+        }
+    }
 }

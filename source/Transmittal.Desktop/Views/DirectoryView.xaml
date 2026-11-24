@@ -43,6 +43,15 @@
                     <TextBlock Margin="3,0,0,0">History</TextBlock>
                 </StackPanel>
             </Button>
+            
+           <Button IsEnabled="{Binding HasDatabase}"
+                   Margin="0,0,5,0"
+                    ToolTip="Import Directory" Click="ImportButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Import.png" Width="18" />
+                    <TextBlock Margin="3,0,0,0">Import</TextBlock>
+                </StackPanel>
+            </Button>
         </ToolBar>
 
         <TabControl Grid.Row="1" Margin="5" >
