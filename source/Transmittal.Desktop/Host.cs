@@ -142,6 +142,7 @@ internal static class Host
 
             services.AddTransient<IDataConnection, SQLiteDataAccess>();
             services.AddTransient<IContactDirectoryService, ContactDirectoryService>();
+            services.AddTransient<IDirectoryImportService, DirectoryImportService>();
             services.AddTransient<ITransmittalService, TransmittalService>();
             services.AddTransient<IFileTransferService, FileTransferService>();
 
@@ -149,6 +150,7 @@ internal static class Host
             services.AddTransient<TransmittalViewModel>();
             services.AddTransient<ArchiveViewModel>();
             services.AddTransient<DirectoryViewModel>();
+            services.AddTransient<ImportDirectoryViewModel>();
             services.AddTransient<AboutViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<ICallingViewModelFactory, CallingViewModelFactory>();

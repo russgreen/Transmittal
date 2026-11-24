@@ -28,6 +28,7 @@
 		<None Remove="Resources\Duplicate.png" />
 		<None Remove="Resources\GreenCheck.png" />
 		<None Remove="Resources\Hyperlink.png" />
+		<None Remove="Resources\Import.png" />
 		<None Remove="Resources\Information.png" />
 		<None Remove="Resources\Menu.png" />
 		<None Remove="Resources\New.png" />
@@ -50,6 +51,7 @@
 		<Resource Include="Resources\Duplicate.png" />
 		<Resource Include="Resources\GreenCheck.png" />
 		<Resource Include="Resources\Hyperlink.png" />
+		<Resource Include="Resources\Import.png" />
 		<Resource Include="Resources\Information.png" />
 		<Resource Include="Resources\Menu.png" />
 		<Resource Include="Resources\New.png" />
