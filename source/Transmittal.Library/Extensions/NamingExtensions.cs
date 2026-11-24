@@ -120,7 +120,7 @@ public static class NamingExtensions
            { "<ProjNo>", projNo },
            { "<ProjName>", projName },
            { "<SheetNo>", sheetNo },
-           { "<SheetName>", sheetName.Dehumanize() },
+           { "<SheetName>", sheetName.Dehumanize().Replace(" ", "")  },
            { "<SheetName2>", sheetName },
            { "<Rev>", rev },
            { "<Status>", status },
