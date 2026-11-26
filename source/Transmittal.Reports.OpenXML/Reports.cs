@@ -139,38 +139,18 @@ public class Reports : IReportsService
             .ThenBy(x => x.ID)
             .ToList();
 
-        var fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
-            _settingsService.GlobalSettings.ProjectIdentifier,
-            _settingsService.GlobalSettings.ProjectName,
-            _settingsService.GlobalSettings.Originator,
-                _settingsService.GlobalSettings.TransmittalSummaryVolume,
-                _settingsService.GlobalSettings.TransmittalSummaryLevel,
-            _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
-            _settingsService.GlobalSettings.Role,
-            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber,
-            "TransmittalSummary",
-            null, null, null);
-
-        if (!string.IsNullOrEmpty(personName))
-        {
-            fileName = _settingsService.GlobalSettings.FileNameFilter.ParseFilename(_settingsService.GlobalSettings.ProjectNumber,
-            _settingsService.GlobalSettings.ProjectIdentifier,
-            _settingsService.GlobalSettings.ProjectName,
-            _settingsService.GlobalSettings.Originator,
-                _settingsService.GlobalSettings.TransmittalSummaryVolume,
-                _settingsService.GlobalSettings.TransmittalSummaryLevel,
-            _settingsService.GlobalSettings.TransmittalSummaryDocumentTypeCode,
-            _settingsService.GlobalSettings.Role,
-            _settingsService.GlobalSettings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID),
-            $"TransmittalSummary_{personName}",
-            null, null, null);
-        }
-
         var folderPath = _settingsService.GlobalSettings.IssueSheetStore.ParsePathWithEnvironmentVariables();
         var workbook = TryLoadTemplate("TransmittalSummary.xlsx") ?? new XLWorkbook();
         var worksheet = GetOrCreateWorksheet(workbook, "Summary");
 
-        var commonContext = BuildCommonTokenContext("Transmittal Summary", null);
+        // Opt-in: the revision only advances for the full summary, and only when the template uses {{Revision}}.
+        var revision = transmittals == null && string.IsNullOrEmpty(personName)
+            ? ResolveSummaryRevision(workbook, orderedTransmittals)
+            : null;
+
+        var fileName = BuildSummaryFileName(personName, personID, revision);
+
+        var commonContext = BuildCommonTokenContext("Transmittal Summary", null, revision);
         ApplyTemplateTokens(workbook, commonContext, new[] { "DateYear", "DateMonth", "DateDay" });
         ApplyCommonHeaderHeuristics(worksheet, "Transmittal Summary", null);
 
@@ -497,7 +477,79 @@ public class Reports : IReportsService
         }
     }
 
-    private Dictionary<string, string> BuildCommonTokenContext(string reportTitle, DateTime? transmittalDate)
+    /// <summary>
+    /// Builds the summary file name. A revision only appears where the filter has a &lt;Rev&gt; token.
+    /// </summary>
+    private string BuildSummaryFileName(string personName, int personID, string revision)
+    {
+        var settings = _settingsService.GlobalSettings;
+        var hasPerson = !string.IsNullOrEmpty(personName);
+
+        return settings.FileNameFilter.ParseFilename(settings.ProjectNumber,
+            settings.ProjectIdentifier,
+            settings.ProjectName,
+            settings.Originator,
+            settings.TransmittalSummaryVolume,
+            settings.TransmittalSummaryLevel,
+            settings.TransmittalSummaryDocumentTypeCode,
+            settings.Role,
+            hasPerson
+                ? settings.TransmittalSummaryFirstNumber.BuildTransmittalSheetNumber(personID)
+                : settings.TransmittalSummaryFirstNumber,
+            hasPerson ? $"TransmittalSummary_{personName}" : "TransmittalSummary",
+            revision, null, null);
+    }
+
+    private string ResolveSummaryRevision(XLWorkbook workbook, List<TransmittalModel> transmittals)
+    {
+        var databaseFile = _settingsService.GlobalSettings.DatabaseFile;
+        if (string.IsNullOrWhiteSpace(databaseFile)
+            || databaseFile == "[NONE]"
+            || !WorkbookUsesToken(workbook, "Revision"))
+        {
+            return null;
+        }
+
+        return SummaryRevisionTracker.GetRevision(transmittals, databaseFile);
+    }
+
+    private static bool WorkbookUsesToken(XLWorkbook workbook, string tokenName)
+    {
+        foreach (var worksheet in workbook.Worksheets)
+        {
+            var used = worksheet.RangeUsed();
+            if (used == null)
+            {
+                continue;
+            }
+
+            foreach (var cell in used.Cells())
+            {
+                if (cell.DataType != XLDataType.Text)
+                {
+                    continue;
+                }
+
+                var text = cell.GetString();
+                if (string.IsNullOrEmpty(text) || !text.Contains("{{", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                foreach (Match match in TokenRegex.Matches(text))
+                {
+                    if (string.Equals(match.Groups["name"].Value, tokenName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private Dictionary<string, string> BuildCommonTokenContext(string reportTitle, DateTime? transmittalDate, string revision = null)
     {
         var projectDisplay = BuildProjectDisplay();
         var now = DateTime.Now;
@@ -512,6 +564,7 @@ public class Reports : IReportsService
             ["ClientName"] = _settingsService.GlobalSettings.ClientName ?? string.Empty,
             ["ReportTitle"] = reportTitle,
             ["ReportDate"] = now.ToString("D"),
+            ["Revision"] = revision ?? string.Empty,
             ["TransmittalDate"] = transmittalDate?.ToString("D") ?? string.Empty,
             ["DateYear"] = (transmittalDate ?? now).Year.ToString(),
             ["DateMonth"] = (transmittalDate ?? now).Month.ToString(),

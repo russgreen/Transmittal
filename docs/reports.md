@@ -168,6 +168,22 @@ If these tokens are not found, the engine falls back to detecting rows labeled `
 - Use `{{PersonName}}`, `{{CompanyName}}`, etc. tokens in the `DistributionListData` row for dynamic recipient fields
 - If using `TransmittalFormatData`, place it on a row that aligns with your transmittal date columns (typically above or below the date rows)
 - Leave visual space around the matrix regions to accommodate row/column growth
+
+**Automatic summary revision (optional):**
+Place `{{Revision}}` in the template (for example in the title block) to opt in. The revision only advances when the full summary (the **Summary** button) is generated and the transmittal data has changed since the previous generation: a transmittal added or deleted, or any item or distribution edited. Generating again with no changes keeps the same revision. Summary Range and per-person reports never change the revision and show it blank. Templates without `{{Revision}}` are unaffected.
+
+The state is stored in a small `<database name>.summaryrevision.json` file beside the project database, so no database or Revit settings change is involved. It is created the first time the summary is generated and can be edited by hand:
+
+| Field | Meaning |
+|-------|---------|
+| `Prefix` | Optional text before the revision, e.g. `P` or `C` |
+| `Style` | `Letter` (A, B ... Z, AA ...) or `Number` (01, 02 ...) |
+| `Digits` | Zero-padding for `Number` style |
+| `Sequence` | The current revision number; edit it to bump or reset |
+
+Defaults are prefix `P` with `Number` style and 2 digits, giving `P01`, `P02` ... Other examples: prefix `C` gives `C01`; `Letter` style with no prefix gives `A`, `B` ... Changing `Prefix`, `Style` or `Digits` re-renders the current revision without incrementing it. Delete the file to restart at the first revision.
+
+The revision only appears in the generated file name if your file name filter contains a `<Rev>` token; otherwise the file name is unchanged.
 {% endraw %}
 ### Master documents template (`MasterDocumentsList.xlsx`)
 
@@ -266,6 +282,7 @@ Named ranges are essential for OpenXML templates. To create or modify them:
 - `{{ReportTitle}}` – Report title (auto-generated)
 - `{{ReportDate}}` – Report generation date
 - `{{TransmittalDate}}` – Transmittal date (when applicable)
+- `{{Revision}}` – Automatic revision of the full transmittal summary (summary template only, opt-in)
 
 **Document/Drawing tokens** (available in transmittal and master lists):
 - `{{DrgNumber}}` – Document/drawing number

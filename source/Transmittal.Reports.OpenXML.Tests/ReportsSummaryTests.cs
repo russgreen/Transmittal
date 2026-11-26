@@ -295,6 +295,126 @@ public class ReportsSummaryTests
         await Assert.That(worksheet.Cell(3, 2).GetString()).IsEqualTo("Beta");
     }
 
+    [Test]
+    public async Task ResolveSummaryRevision_TemplateWithoutToken_ReturnsNullAndWritesNoFile()
+    {
+        var folder = Path.Combine(Path.GetTempPath(), $"summary-rev-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(folder);
+        try
+        {
+            var settings = new FakeSettingsService();
+            settings.GlobalSettings.DatabaseFile = Path.Combine(folder, "project.tdb");
+            var sut = ReportsTestHelpers.CreateSut(settings);
+
+            using var workbook = new XLWorkbook();
+            workbook.AddWorksheet("Summary").Cell(1, 1).Value = "{{ReportTitle}}";
+
+            var revision = ReportsTestHelpers.InvokeInstancePrivate<string?>(
+                sut,
+                "ResolveSummaryRevision",
+                [typeof(XLWorkbook), typeof(List<TransmittalModel>)],
+                workbook,
+                new List<TransmittalModel>());
+
+            await Assert.That(revision).IsNull();
+            await Assert.That(Directory.GetFiles(folder).Length).IsEqualTo(0);
+        }
+        finally
+        {
+            Directory.Delete(folder, true);
+        }
+    }
+
+    [Test]
+    public async Task ResolveSummaryRevision_TemplateWithToken_ReturnsRevisionAndIncrementsOnChange()
+    {
+        var folder = Path.Combine(Path.GetTempPath(), $"summary-rev-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(folder);
+        try
+        {
+            var settings = new FakeSettingsService();
+            settings.GlobalSettings.DatabaseFile = Path.Combine(folder, "project.tdb");
+            var sut = ReportsTestHelpers.CreateSut(settings);
+
+            using var workbook = new XLWorkbook();
+            workbook.AddWorksheet("Summary").Cell(1, 1).Value = "Revision {{ Revision }}";
+
+            string? Resolve(List<TransmittalModel> transmittals) => ReportsTestHelpers.InvokeInstancePrivate<string?>(
+                sut,
+                "ResolveSummaryRevision",
+                [typeof(XLWorkbook), typeof(List<TransmittalModel>)],
+                workbook,
+                transmittals);
+
+            var transmittals = new List<TransmittalModel> { new() { ID = 1, TransDate = new DateTime(2024, 1, 1) } };
+
+            await Assert.That(Resolve(transmittals)).IsEqualTo("P01");
+            await Assert.That(Resolve(transmittals)).IsEqualTo("P01");
+
+            transmittals.Add(new TransmittalModel { ID = 2, TransDate = new DateTime(2024, 2, 1) });
+            await Assert.That(Resolve(transmittals)).IsEqualTo("P02");
+        }
+        finally
+        {
+            Directory.Delete(folder, true);
+        }
+    }
+
+    [Test]
+    public async Task BuildCommonTokenContext_IncludesRevision()
+    {
+        var sut = ReportsTestHelpers.CreateSut();
+
+        var context = ReportsTestHelpers.InvokeInstancePrivate<Dictionary<string, string>>(
+            sut,
+            "BuildCommonTokenContext",
+            [typeof(string), typeof(DateTime?), typeof(string)],
+            "Transmittal Summary",
+            null!,
+            "P03");
+
+        await Assert.That(context["Revision"]).IsEqualTo("P03");
+    }
+
+    [Test]
+    public async Task BuildSummaryFileName_WithRevisionAndRevToken_UsesToken()
+    {
+        var settings = new FakeSettingsService();
+        settings.GlobalSettings.FileNameFilter = "<ProjNo>-<SheetName>-<Rev>";
+        var sut = ReportsTestHelpers.CreateSut(settings);
+
+        var fileName = ReportsTestHelpers.InvokeInstancePrivate<string>(
+            sut, "BuildSummaryFileName", [typeof(string), typeof(int), typeof(string)], null!, 0, "P03");
+
+        await Assert.That(fileName).IsEqualTo("0001-TransmittalSummary-P03");
+    }
+
+    [Test]
+    public async Task BuildSummaryFileName_WithRevisionAndNoRevToken_DoesNotAppendRevision()
+    {
+        var settings = new FakeSettingsService();
+        settings.GlobalSettings.FileNameFilter = "<ProjNo>-<SheetName>";
+        var sut = ReportsTestHelpers.CreateSut(settings);
+
+        var fileName = ReportsTestHelpers.InvokeInstancePrivate<string>(
+            sut, "BuildSummaryFileName", [typeof(string), typeof(int), typeof(string)], null!, 0, "P03");
+
+        await Assert.That(fileName).IsEqualTo("0001-TransmittalSummary");
+    }
+
+    [Test]
+    public async Task BuildSummaryFileName_WithoutRevision_HasNoRevisionSuffix()
+    {
+        var settings = new FakeSettingsService();
+        settings.GlobalSettings.FileNameFilter = "<ProjNo>-<SheetName>";
+        var sut = ReportsTestHelpers.CreateSut(settings);
+
+        var fileName = ReportsTestHelpers.InvokeInstancePrivate<string>(
+            sut, "BuildSummaryFileName", [typeof(string), typeof(int), typeof(string)], null!, 0, null!);
+
+        await Assert.That(fileName).IsEqualTo("0001-TransmittalSummary");
+    }
+
     private sealed class SortRow
     {
         public string Group { get; set; } = string.Empty;
